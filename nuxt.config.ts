@@ -2,7 +2,10 @@
 export default defineNuxtConfig({
 	compatibilityDate: "2025-07-15",
 	devtools: { enabled: true },
-
+	logLevel: "verbose",
+	devServer: {
+		host: "blueprints.test",
+	},
 	nitro: {
 		preset: "cloudflare_module",
 
@@ -20,7 +23,7 @@ export default defineNuxtConfig({
 		"@nuxtjs/seo",
 	],
 	i18n: {
-		strategy: "prefix_except_default",
+		strategy: "prefix",
 		detectBrowserLanguage: {
 			useCookie: true,
 			cookieKey: "talos_i18n_redirected",
@@ -113,5 +116,8 @@ export default defineNuxtConfig({
 				language: "vi",
 			},
 		],
+	},
+	sanctum: {
+		baseUrl: process.env.API_URL,
 	},
 });

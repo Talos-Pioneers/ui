@@ -1,7 +1,7 @@
 <script setup>
-definePageMeta({
-    title: 'pages.title.top' // set resource key
-})
+// definePageMeta({
+//     title: 'pages.title.top' // set resource key
+// })
 
 const { locale, locales, t } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
@@ -9,12 +9,20 @@ const switchLocalePath = useSwitchLocalePath()
 const availableLocales = computed(() => {
     return locales.value.filter(i => i.code !== locale.value)
 })
+
+const email = ref('');
+const { login, user } = useSanctumAuth();
+const submit = async () => {
+    await login({
+        email: email.value,
+    });
+}
+
 </script>
 
 <template>
     <div>
-        <p>{{ t('pages.top.description') }}</p>
-        <p>{{ t('pages.top.languages') }}</p>
+        <p>Current Locale: {{ locale }}</p>
         <nav>
             <template v-for="(locale, index) in availableLocales" :key="locale.code">
                 <span v-if="index"> | </span>
@@ -23,5 +31,10 @@ const availableLocales = computed(() => {
                 </NuxtLink>
             </template>
         </nav>
+        <p>User: {{ user }}</p>
+        <form @submit.prevent="submit">
+            <input type="email" v-model="email" placeholder="Email" />
+            <button type="submit">Login</button>
+        </form>
     </div>
 </template>
