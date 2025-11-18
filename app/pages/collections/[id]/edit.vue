@@ -1,4 +1,7 @@
 <script setup lang="ts">
+definePageMeta({
+    middleware: ['sanctum:auth'],
+});
 const { id } = useRoute().params;
 </script>
 

@@ -9,6 +9,6 @@ const submit = async () => {
 
 <template>
     <div>
-        <h1>Create Blueprint</h1>
+        <h1>Create Collection</h1>
     </div>
 </template>

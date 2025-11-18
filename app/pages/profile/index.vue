@@ -1,8 +1,13 @@
 <script setup lang="ts">
+import ProfileEdit from '~/components/auth/ProfileEdit.vue';
+
+definePageMeta({
+    middleware: ['sanctum:auth'],
+});
 </script>
 
 <template>
     <div>
-        <h1>Profile</h1>
+        <ProfileEdit />
     </div>
 </template>
