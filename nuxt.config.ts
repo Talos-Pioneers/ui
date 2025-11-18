@@ -1,3 +1,5 @@
+import tailwindcss from "@tailwindcss/vite";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	compatibilityDate: "2025-07-15",
@@ -5,6 +7,10 @@ export default defineNuxtConfig({
 	logLevel: "verbose",
 	devServer: {
 		host: "blueprints.test",
+	},
+	css: ["~/assets/css/tailwind.css"],
+	vite: {
+		plugins: [tailwindcss()],
 	},
 	nitro: {
 		preset: "cloudflare_module",
@@ -21,6 +27,7 @@ export default defineNuxtConfig({
 		"nuxt-auth-sanctum",
 		"nuxt-sanctum-precognition",
 		"@nuxtjs/seo",
+		"shadcn-nuxt",
 	],
 	i18n: {
 		strategy: "prefix",
