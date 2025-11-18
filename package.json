@@ -12,6 +12,7 @@
     "cf-typegen": "wrangler types"
   },
   "dependencies": {
+    "@nuxt/fonts": "^0.12.1",
     "@nuxtjs/i18n": "^10.2.0",
     "@nuxtjs/seo": "^3.2.2",
     "class-variance-authority": "^0.7.1",
