@@ -9,14 +9,7 @@ const switchLocalePath = useSwitchLocalePath()
 const availableLocales = computed(() => {
     return locales.value.filter(i => i.code !== locale.value)
 })
-
-const email = ref('');
-const { login, user } = useSanctumAuth();
-const submit = async () => {
-    await login({
-        email: email.value,
-    });
-}
+const { user } = useSanctumAuth();
 
 </script>
 
@@ -32,9 +25,6 @@ const submit = async () => {
             </template>
         </nav>
         <p>User: {{ user }}</p>
-        <form @submit.prevent="submit">
-            <input type="email" v-model="email" placeholder="Email" />
-            <button type="submit">Login</button>
-        </form>
+        <AuthLoginForm />
     </div>
 </template>

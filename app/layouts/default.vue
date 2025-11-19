@@ -2,8 +2,8 @@
 const route = useRoute()
 const { t } = useI18n()
 const head = useLocaleHead()
-const title = computed(() => t(route.meta.title ?? 'TBD', t('layouts.title'))
-);
+// const title = computed(() => t(route.meta.title ?? 'TBD', t('layouts.title'))
+// );
 </script>
 
 <template>
@@ -11,7 +11,7 @@ const title = computed(() => t(route.meta.title ?? 'TBD', t('layouts.title'))
         <Html :lang="head.htmlAttrs.lang" :dir="head.htmlAttrs.dir">
 
         <Head>
-            <Title>{{ title }}</Title>
+            <!-- <Title>{{ title }}</Title> -->
             <template v-for="link in head.link" :key="link.key">
                 <Link :id="link.key" :rel="link.rel" :href="link.href" :hreflang="link.hreflang" />
             </template>
