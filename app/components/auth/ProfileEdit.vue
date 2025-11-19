@@ -13,7 +13,6 @@ type ProfileResponse = {
     }
 }
 
-const profile = ref<ProfileResponse['user'] | null>(null);
 const loading = ref(true);
 const successMessage = ref<string | null>(null);
 
@@ -23,21 +22,13 @@ const form = usePrecognitionForm<Schema>('put', '/api/v1/profile', {
 });
 
 const state = form.fields;
-
-// Fetch initial profile data
-const fetchProfile = async () => {
-    loading.value = true;
-    const { data, status, error, refresh } = await useSanctumFetch<ProfileResponse>('/api/v1/profile');
+const { data, status, error, refresh } = await useSanctumFetch<ProfileResponse>('/api/v1/profile');
+const profile = computed(() => data.value?.user ?? null);
+watchEffect(() => {
     if (status.value === 'success') {
-        profile.value = data.value?.user ?? null;
-        state.username = profile.value?.username ?? '';
+        state.username = data.value?.user?.username ?? '';
     }
-    if (status.value === 'error' || error.value) {
-        console.log(error.value);
-
-    }
-    loading.value = false;
-};
+});
 
 // Handle form submission
 const handleSubmit = async () => {
@@ -49,25 +40,19 @@ const handleSubmit = async () => {
         const hasErrors = Object.keys(form.errors).length > 0;
         if (!hasErrors) {
             successMessage.value = 'Profile updated successfully.';
-            // Refresh profile data
-            await fetchProfile();
+            refresh();
         }
     } catch (error) {
         console.error('Failed to update profile:', error);
     }
 };
-
-// Fetch profile on mount
-onMounted(() => {
-    fetchProfile();
-});
 </script>
 
 <template>
     <div>
         <h1>Profile Edit</h1>
 
-        <div v-if="loading">
+        <div v-if="status === 'pending'">
             <p>Loading profile...</p>
         </div>
 
