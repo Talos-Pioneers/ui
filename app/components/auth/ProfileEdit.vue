@@ -13,7 +13,6 @@ type ProfileResponse = {
     }
 }
 
-const loading = ref(true);
 const successMessage = ref<string | null>(null);
 
 // Initialize form with empty values (will be populated after fetch)
