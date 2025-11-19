@@ -18,6 +18,7 @@ export type Blueprint = {
 	gallery: BlueprintGalleryItem[];
 	likes_count: number;
 	copies_count: number;
+	comments_count: number;
 	is_liked: boolean;
 	created_at: string;
 	updated_at: string;
