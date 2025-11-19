@@ -21,6 +21,7 @@ const head = useLocaleHead()
         </Head>
 
         <Body>
+            <Header />
             <slot />
         </Body>
 
