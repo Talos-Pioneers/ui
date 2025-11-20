@@ -23,7 +23,7 @@ const head = useLocaleHead()
         </Head>
 
         <Body>
-            <!-- <Header /> -->
+            <Header />
             <slot />
         </Body>
 

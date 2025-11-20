@@ -11,18 +11,20 @@ interface Props extends PrimitiveProps {
   variant?: ButtonVariants["variant"]
   size?: ButtonVariants["size"]
   class?: HTMLAttributes["class"]
-  rounded?: ButtonVariants["rounded"]
+  rounded?: ButtonVariants["rounded"],
+  withWave?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   as: "button",
+  withWave: true,
 })
 </script>
 
 <template>
   <Primitive data-slot="button" :as="as" :as-child="asChild"
     :class="cn(buttonVariants({ variant, size, rounded }), props.class)"
-    :style="{ backgroundImage: `url(${buttonWaveImage})` }">
+    :style="{ backgroundImage: withWave ? `url(${buttonWaveImage})` : undefined }">
     <slot />
   </Primitive>
 </template>

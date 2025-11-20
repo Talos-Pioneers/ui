@@ -26,10 +26,6 @@ const { user } = useSanctumAuth();
             </template>
         </nav>
         <p>User: {{ user }}</p>
-        <AuthLoginForm />
-
         <br>
-
-        <Button variant="secondary">Sign In</Button>
     </div>
 </template>

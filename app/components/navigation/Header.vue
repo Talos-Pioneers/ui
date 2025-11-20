@@ -1,46 +1,43 @@
 <script setup lang="ts">
+import { Button } from '~/components/ui/button'
+import { useLoginModal } from '~/composables/useLoginModal'
+import Logo from '../icons/Logo.vue';
+import LoginIcon from '../icons/LoginIcon.vue';
+
 const { isAuthenticated } = useSanctumAuth();
+const { open } = useLoginModal();
 </script>
 <template>
-    <header>
+    <header class="flex items-center h-16.5 px-7.5">
         <div>
-            <NuxtLink to="/">
+            <NuxtLinkLocale to="/">
                 <Logo />
-            </NuxtLink>
+            </NuxtLinkLocale>
         </div>
-        <nav>
-            <ul>
+        <nav class="ml-7.5">
+            <ul class="flex items-center gap-7.5">
                 <li>
-                    <NuxtLink to="/blueprints">
+                    <NuxtLinkLocale to="/">
                         Blueprints
-                    </NuxtLink>
+                    </NuxtLinkLocale>
                 </li>
                 <li>
-                    <NuxtLink to="/collections">
+                    <NuxtLinkLocale to="/collections">
                         Collections
-                    </NuxtLink>
-                </li>
-                <li>
-                    <NuxtLink to="/privacy-policy">
-                        Privacy Policy
-                    </NuxtLink>
-                </li>
-                <li>
-                    <NuxtLink to="/about">
-                        About
-                    </NuxtLink>
-                </li>
-                <li>
-                    <NuxtLink to="/contact">
-                        Contact
-                    </NuxtLink>
+                    </NuxtLinkLocale>
                 </li>
             </ul>
         </nav>
-        <div>
-            <LanguageSwitcher />
+        <div class="ml-auto">
+            <!-- <LanguageSwitcher /> -->
             <template v-if="!isAuthenticated">
-                <!-- TODO: Login Form Modal -->
+                <Button class="w-40 px-4.5 justify-between" @click="open" variant="default">
+                    <span class="flex items-center gap-2.5">
+                        <LoginIcon class="h-5" />
+                        <span class="h-3.5 w-px bg-cool-gray-50"></span>
+                    </span>
+                    Sign In
+                </Button>
             </template>
             <template v-else>
                 <!-- TODO: Profile Menu -->
