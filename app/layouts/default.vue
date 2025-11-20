@@ -1,4 +1,6 @@
 <script setup>
+import Header from '~/components/navigation/Header.vue';
+
 const route = useRoute()
 const { t } = useI18n()
 const head = useLocaleHead()
@@ -21,7 +23,7 @@ const head = useLocaleHead()
         </Head>
 
         <Body>
-            <Header />
+            <!-- <Header /> -->
             <slot />
         </Body>
 

@@ -5,11 +5,13 @@ import type { ButtonVariants } from "."
 import { Primitive } from "reka-ui"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "."
+import buttonWaveImage from '@/assets/img/button-waves.png';
 
 interface Props extends PrimitiveProps {
   variant?: ButtonVariants["variant"]
   size?: ButtonVariants["size"]
   class?: HTMLAttributes["class"]
+  rounded?: ButtonVariants["rounded"]
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -18,12 +20,9 @@ const props = withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <Primitive
-    data-slot="button"
-    :as="as"
-    :as-child="asChild"
-    :class="cn(buttonVariants({ variant, size }), props.class)"
-  >
+  <Primitive data-slot="button" :as="as" :as-child="asChild"
+    :class="cn(buttonVariants({ variant, size, rounded }), props.class)"
+    :style="{ backgroundImage: `url(${buttonWaveImage})` }">
     <slot />
   </Primitive>
 </template>

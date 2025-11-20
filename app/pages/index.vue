@@ -3,6 +3,7 @@
 //     title: 'pages.title.top' // set resource key
 // })
 
+import { Button } from '~/components/ui/button';
 const { locale, locales, t } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
 
@@ -26,5 +27,9 @@ const { user } = useSanctumAuth();
         </nav>
         <p>User: {{ user }}</p>
         <AuthLoginForm />
+
+        <br>
+
+        <Button variant="secondary">Sign In</Button>
     </div>
 </template>
