@@ -27,6 +27,8 @@ export const buttonVariants = cva(
 				icon: "size-9",
 				"icon-sm": "size-8",
 				"icon-lg": "size-10",
+				"responsive-icon":
+					"size-10 md:h-11.5 md:px-4 md:py-2 md:has-[>svg]:px-3",
 			},
 			rounded: {
 				default:

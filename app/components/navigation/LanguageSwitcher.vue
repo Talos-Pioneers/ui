@@ -18,18 +18,16 @@ const currentLocale = computed(() => {
 <template>
     <DropdownMenu>
         <DropdownMenuTrigger as-child>
-            <Button variant="secondary" class="w-40 px-4.5 justify-between hidden md:flex">
-                <span class="flex items-center gap-2.5">
+            <Button variant="secondary" class="md:w-40 md:px-4.5 md:justify-between" size="responsive-icon">
+                <LanguageIcon class="h-5 block md:hidden" />
+                <span class="items-center gap-2.5 hidden md:flex">
                     <LanguageIcon class="h-5" />
                     <span class="h-3.5 w-px bg-cool-gray-50"></span>
                 </span>
-                <span class="flex items-center">
+                <span class="items-center hidden md:flex">
                     <span>{{ currentLocale?.name ?? currentLocale?.code }}</span>
                     <ChevronIcon class="w-4.5 h-4.5 mt-0.5" />
                 </span>
-            </Button>
-            <Button class="md:hidden" variant="secondary" size="icon-lg">
-                <LanguageIcon class="h-5" />
             </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent class="w-40 rounded-2xl">

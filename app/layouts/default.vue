@@ -6,6 +6,7 @@ const { t } = useI18n()
 const head = useLocaleHead()
 // const title = computed(() => t(route.meta.title ?? 'TBD', t('layouts.title'))
 // );
+import LoginDialog from '~/components/auth/LoginDialog.vue'
 </script>
 
 <template>
@@ -25,6 +26,7 @@ const head = useLocaleHead()
         <Body>
             <Header />
             <slot />
+            <LoginDialog />
         </Body>
 
         </Html>

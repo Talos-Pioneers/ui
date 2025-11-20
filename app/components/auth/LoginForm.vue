@@ -35,7 +35,7 @@ const submit = async () => {
                 <span class="opacity-50">[</span> LOG IN <span class="opacity-50">]</span>
             </h1>
             <!-- Placeholder for special font glyphs -->
-            <div class="text-sm text-[#706f6c] dark:text-[#A1A09A] font-special">
+            <div class="text-sm text-[#706f6c] dark:text-[#A1A09A] font-sarkaz">
                 <!-- Special font glyphs will be rendered here -->
                 <span class="opacity-0">placeholder</span>
             </div>

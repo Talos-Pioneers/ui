@@ -35,7 +35,9 @@
 	--sidebar-accent-foreground: oklch(0.251 0.0095 219.8651);
 	--sidebar-border: oklch(0.9257 0.0126 255.5081);
 	--sidebar-ring: oklch(0.7147 0.1211 194.7836);
-	--font-sans: Inter;
+	--font-sans: "HarmonyOS_Sans", sans-serif;
+	--font-secondary: "DM Sans", sans-serif;
+	--font-sarkaz: "EndfieldByButan", sans-serif;
 	--font-serif: serif;
 	--font-mono: monospace;
 	--radius: 0rem;
@@ -65,6 +67,20 @@
 	--shadow-2xl: 0rem 0.125rem 0px 0rem hsl(195 12.1212% 12.9412% / 0.13);
 	--tracking-normal: 0rem;
 	/* --spacing: 0.25rem; */
+}
+
+/* Locale-specific primary font overrides */
+html[lang="zh-CN"],
+html[lang="ko"] {
+	--font-sans: "HarmonyOS_Sans", "HarmonyOS_Sans_SC", sans-serif;
+}
+
+html[lang="zh-TW"] {
+	--font-sans: "HarmonyOS_Sans", "HarmonyOS_Sans_TC", sans-serif;
+}
+
+html[lang="ja"] {
+	--font-sans: "Noto Sans JP", sans-serif;
 }
 
 .dark {
@@ -100,7 +116,9 @@
 	--sidebar-accent-foreground: oklch(1 0 0);
 	--sidebar-border: oklch(0.4222 0.0193 227.4184);
 	--sidebar-ring: oklch(0.7147 0.1211 194.7836);
-	--font-sans: Inter;
+	--font-sans: "HarmonyOS_Sans", sans-serif;
+	--font-secondary: "DM Sans", sans-serif;
+	--font-sarkaz: "EndfieldByButan", sans-serif;
 	--font-serif: serif;
 	--font-mono: monospace;
 	--radius: 0rem;
@@ -165,6 +183,8 @@
 	--color-sidebar-ring: var(--sidebar-ring);
 
 	--font-sans: var(--font-sans);
+	--font-secondary: var(--font-secondary);
+	--font-sarkaz: var(--font-sarkaz);
 	--font-mono: var(--font-mono);
 	--font-serif: var(--font-serif);
 
@@ -200,6 +220,7 @@
 
 body {
 	letter-spacing: var(--tracking-normal);
+	font-family: var(--font-sans);
 }
 
 @layer base {
@@ -208,5 +229,14 @@ body {
 	}
 	body {
 		@apply bg-background text-foreground;
+	}
+}
+
+@layer utilities {
+	.font-secondary {
+		font-family: var(--font-secondary);
+	}
+	.font-sarkaz {
+		font-family: var(--font-sarkaz);
 	}
 }

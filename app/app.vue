@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import LoginDialog from '~/components/auth/LoginDialog.vue'
+import { ConfigProvider } from 'reka-ui';
+
+const useIdFunction = () => useId()
 </script>
 
 <template>
-  <NuxtLoadingIndicator />
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
-  <LoginDialog />
+  <ConfigProvider :use-id="useIdFunction">
+    <NuxtLayout>
+      <!-- <NuxtLoadingIndicator /> -->
+      <NuxtPage />
+    </NuxtLayout>
+  </ConfigProvider>
 </template>
