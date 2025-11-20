@@ -17,15 +17,14 @@ const { user } = useSanctumAuth();
 <template>
     <div>
         <p>Current Locale: {{ locale }}</p>
-        <nav>
+        <!-- <nav>
             <template v-for="(locale, index) in availableLocales" :key="locale.code">
                 <span v-if="index"> | </span>
                 <NuxtLink :to="switchLocalePath(locale.code)">
                     {{ locale.name ?? locale.code }}
                 </NuxtLink>
             </template>
-        </nav>
-        <p>User: {{ user }}</p>
-        <br>
+</nav>
+<br> -->
     </div>
 </template>
