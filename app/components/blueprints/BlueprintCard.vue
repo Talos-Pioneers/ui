@@ -13,6 +13,7 @@ import LikesIcon from '../icons/LikesIcon.vue';
 import CommentsIcon from '../icons/CommentsIcon.vue';
 import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '~/components/ui/dropdown-menu';
+import ReportButton from '~/components/ReportButton.vue';
 
 const props = defineProps<{
     blueprint: Blueprint;
@@ -27,6 +28,8 @@ const emit = defineEmits<{
 const { copy, copied } = useClipboard();
 
 const { locale } = useI18n();
+
+const dropdownOpen = ref(false);
 
 const previewImage = computed(() => {
     return props.blueprint.gallery && props.blueprint.gallery.length > 0 && props.blueprint.gallery[0]
@@ -65,6 +68,10 @@ const handleAuthorClick = () => {
     if (props.blueprint.creator) {
         emit('filter-author', props.blueprint.creator.id);
     }
+};
+
+const handleReported = () => {
+    dropdownOpen.value = false;
 };
 </script>
 
@@ -155,7 +162,7 @@ const handleAuthorClick = () => {
                             <p>Open external link</p>
                         </TooltipContent>
                     </Tooltip>
-                    <DropdownMenu>
+                    <DropdownMenu v-model:open="dropdownOpen">
                         <Tooltip>
                             <TooltipTrigger as-child>
                                 <DropdownMenuTrigger as-child>
@@ -170,9 +177,15 @@ const handleAuthorClick = () => {
                             </TooltipContent>
                         </Tooltip>
                         <DropdownMenuContent>
-                            <DropdownMenuItem>
-                                Report Blueprint
-                            </DropdownMenuItem>
+                            <ReportButton reportable-type="App\Models\Blueprint" :reportable-id="blueprint.id"
+                                item-name="blueprint" @reported="handleReported">
+                                <template #default="{ handleReport, isReporting }">
+                                    <DropdownMenuItem @click="handleReport" :disabled="isReporting">
+                                        <span v-if="isReporting">Reporting...</span>
+                                        <span v-else>Report Blueprint</span>
+                                    </DropdownMenuItem>
+                                </template>
+                            </ReportButton>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
