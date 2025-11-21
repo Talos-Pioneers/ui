@@ -7,6 +7,7 @@ const head = useLocaleHead()
 // const title = computed(() => t(route.meta.title ?? 'TBD', t('layouts.title'))
 // );
 import LoginDialog from '~/components/auth/LoginDialog.vue'
+import RegisterDialog from '~/components/auth/RegisterDialog.vue'
 </script>
 
 <template>
@@ -27,6 +28,7 @@ import LoginDialog from '~/components/auth/LoginDialog.vue'
             <Header />
             <slot />
             <LoginDialog />
+            <RegisterDialog />
         </Body>
 
         </Html>

@@ -11,6 +11,7 @@ const email = ref('');
 const config = useSanctumConfig();
 const { locale } = useI18n()
 const { close } = useLoginModal()
+const { open: openRegister } = useRegisterModal()
 
 const googleUrl = `${config.baseUrl}/auth/google/redirect?locale=${locale.value}`;
 const discordUrl = `${config.baseUrl}/auth/discord/redirect?locale=${locale.value}`;
@@ -64,9 +65,9 @@ const submit = async () => {
 
         <!-- Links Section -->
         <div class="flex justify-between mb-4 text-sm">
-            <NuxtLinkLocale to="/register" class="text-[#1b1b18] dark:text-[#EDEDEC] hover:underline">
+            <button @click="close(); openRegister()" class="text-[#1b1b18] dark:text-[#EDEDEC] hover:underline">
                 Register
-            </NuxtLinkLocale>
+            </button>
             <NuxtLinkLocale to="/privacy-policy" class="text-[#1b1b18] dark:text-[#EDEDEC] hover:underline">
                 Privacy Policy
             </NuxtLinkLocale>
