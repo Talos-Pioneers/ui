@@ -88,6 +88,22 @@ const filterEntries = computed(() => {
 		return value !== null && value !== '' && (Array.isArray(value) ? value.length > 0 : true);
 	});
 });
+
+// Handle filter events from BlueprintCard
+const handleTagFilter = (tagId: string) => {
+	const currentTags = (queryFilters.filters['tags.id'] as string[]) || [];
+	if (!currentTags.includes(tagId)) {
+		queryFilters.setFilter('tags.id', [...currentTags, tagId]);
+	}
+};
+
+const handleRegionFilter = (region: string) => {
+	queryFilters.setFilter('region', region);
+};
+
+const handleAuthorFilter = (authorId: string) => {
+	queryFilters.setFilter('author_id', Number(authorId));
+};
 </script>
 
 <template>
@@ -139,7 +155,8 @@ const filterEntries = computed(() => {
 
 		<!-- Blueprints Grid -->
 		<div v-if="status === 'success'" class="blueprints-grid">
-			<BlueprintCard v-for="blueprint in blueprints" :key="blueprint.id" :blueprint="blueprint" />
+			<BlueprintCard v-for="blueprint in blueprints" :key="blueprint.id" :blueprint="blueprint"
+				@filter-tag="handleTagFilter" @filter-region="handleRegionFilter" @filter-author="handleAuthorFilter" />
 
 			<div v-if="blueprints.length === 0" class="empty-state">
 				<p>No blueprints found.</p>
@@ -163,66 +180,3 @@ const filterEntries = computed(() => {
 		</div>
 	</div>
 </template>
-
-<style scoped>
-.blueprint-list {
-	@apply space-y-6;
-}
-
-.filters-section {
-	@apply flex flex-col gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg;
-}
-
-.sort-controls {
-	@apply flex items-center gap-2;
-}
-
-.sort-controls label {
-	@apply font-medium;
-}
-
-.sort-controls select {
-	@apply px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700;
-}
-
-.sort-controls button {
-	@apply px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700;
-}
-
-.active-filters {
-	@apply flex flex-wrap items-center gap-2;
-}
-
-.filter-tag {
-	@apply px-2 py-1 text-sm bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-md hover:bg-blue-200 dark:hover:bg-blue-800;
-}
-
-.clear-all {
-	@apply px-2 py-1 text-sm bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded-md hover:bg-red-200 dark:hover:bg-red-800;
-}
-
-.loading,
-.error {
-	@apply p-4 text-center;
-}
-
-.error {
-	@apply text-red-600 dark:text-red-400;
-}
-
-.blueprints-grid {
-	@apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
-}
-
-.empty-state {
-	@apply col-span-full text-center p-8 text-gray-500 dark:text-gray-400;
-}
-
-.pagination {
-	@apply flex items-center justify-center gap-4;
-}
-
-.pagination button {
-	@apply px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed;
-}
-</style>

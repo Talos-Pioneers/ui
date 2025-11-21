@@ -39,6 +39,7 @@ export type BlueprintItem = {
 };
 
 export type BlueprintTag = {
+	id: string;
 	name: string;
 	slug: string;
 	type: string;
