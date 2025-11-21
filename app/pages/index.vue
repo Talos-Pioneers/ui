@@ -16,7 +16,6 @@ const { user } = useSanctumAuth();
 
 <template>
     <div>
-        <p>Current Locale: {{ locale }}</p>
         <!-- <nav>
             <template v-for="(locale, index) in availableLocales" :key="locale.code">
                 <span v-if="index"> | </span>

@@ -4,7 +4,8 @@ import { Button } from '~/components/ui/button'
 import MailIcon from '~/components/icons/MailIcon.vue'
 import GoogleIcon from '~/components/icons/GoogleIcon.vue'
 import DiscordIcon from '~/components/icons/DiscordIcon.vue'
-import buttonWaveImage from '@/assets/img/button-waves.png'
+import inputPattern from '@/assets/img/input-pattern.svg'
+import waveBg from '@/assets/img/wave-bg.svg'
 
 const email = ref('');
 const config = useSanctumConfig();
@@ -24,6 +25,7 @@ const submit = async () => {
         const err = useSanctumError(error)
         console.log(err);
     }
+
 }
 </script>
 
@@ -31,13 +33,15 @@ const submit = async () => {
     <div class="relative w-full max-w-md">
         <!-- Title Section -->
         <div class="text-center mb-6">
-            <h1 class="text-2xl font-bold text-[#1b1b18] dark:text-[#EDEDEC] mb-2">
-                <span class="opacity-50">[</span> LOG IN <span class="opacity-50">]</span>
+            <h1
+                class="text-[2rem] h-8 font-secondary flex justify-center items-center gap-5 font-black text-cool-gray-90 mb-2">
+                <span class="text-cool-gray-40 font-sans">[</span> LOG IN <span
+                    class="text-cool-gray-40 font-sans">]</span>
             </h1>
             <!-- Placeholder for special font glyphs -->
-            <div class="text-sm text-[#706f6c] dark:text-[#A1A09A] font-sarkaz">
+            <div class="text-sm text-cool-gray-40 font-sarkaz">
                 <!-- Special font glyphs will be rendered here -->
-                <span class="opacity-0">placeholder</span>
+                <span>LOG IN</span>
             </div>
         </div>
 
@@ -47,8 +51,7 @@ const submit = async () => {
                 <div class="absolute left-3 top-1/2 -translate-y-1/2">
                     <MailIcon />
                 </div>
-                <Input v-model="email" type="email" placeholder="Enter email address"
-                    class="pl-10 h-12 rounded-lg bg-white dark:bg-[#161615] border border-[#e3e3e0] dark:border-[#3E3E3A] text-[#1b1b18] dark:text-[#EDEDEC] placeholder:text-[#706f6c] dark:placeholder:text-[#A1A09A]" />
+                <Input class="pl-10" v-model="email" type="email" placeholder="Enter email address" />
             </div>
         </div>
 
@@ -74,11 +77,11 @@ const submit = async () => {
 
         <!-- Social Login Buttons -->
         <div class="flex flex-col gap-3">
-            <Button as="a" :href="googleUrl" variant="outline" rounded="base" :withWave="false">
+            <Button class="bg-transparent" as="a" :href="googleUrl" variant="outline" rounded="base" :withWave="false">
                 <GoogleIcon />
                 <span class="text-[#1b1b18] dark:text-[#EDEDEC] font-medium">Log in with Google</span>
             </Button>
-            <Button as="a" :href="discordUrl" variant="outline" rounded="base" :withWave="false">
+            <Button class="bg-transparent" as="a" :href="discordUrl" variant="outline" rounded="base" :withWave="false">
                 <DiscordIcon />
                 <span class="text-[#1b1b18] dark:text-[#EDEDEC] font-medium">Log in with Discord</span>
             </Button>

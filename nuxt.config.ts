@@ -135,21 +135,18 @@ export default defineNuxtConfig({
 			{
 				name: "HarmonyOS_Sans",
 				provider: "local",
-				src: "/fonts/HarmonyOS_Sans/HarmonyOS_Sans_Regular.ttf",
 				weights: [100, 300, 400, 500, 700, 900],
 				fallbacks: ["sans-serif"],
 			},
 			{
 				name: "HarmonyOS_Sans_SC",
 				provider: "local",
-				src: "/fonts/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Regular.ttf",
 				weights: [100, 300, 400, 500, 700, 900],
 				fallbacks: ["sans-serif"],
 			},
 			{
 				name: "HarmonyOS_Sans_TC",
 				provider: "local",
-				src: "/fonts/HarmonyOS_Sans_TC/HarmonyOS_Sans_TC_Regular.ttf",
 				weights: [100, 300, 400, 500, 700, 900],
 				fallbacks: ["sans-serif"],
 			},
