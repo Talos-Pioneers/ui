@@ -14,6 +14,10 @@ import CommentsIcon from '../icons/CommentsIcon.vue';
 import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '~/components/ui/dropdown-menu';
 import ReportButton from '~/components/ReportButton.vue';
+import NotFoundImage from '~/assets/img/not-found-placeholder.png';
+import { toast } from 'vue-sonner'
+import { Button } from '../ui/button';
+
 
 const props = defineProps<{
     blueprint: Blueprint;
@@ -39,19 +43,7 @@ const previewImage = computed(() => {
 
 const copyBlueprintCode = async () => {
     await copy(props.blueprint.code);
-};
-
-const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString(locale.value, {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-    });
-};
-
-const formatNumber = (num: number): string => {
-    return formatValuation(num, { locale: locale.value });
+    toast.success('Blueprint code copied to clipboard');
 };
 
 const handleTagClick = (tagId: string) => {
@@ -77,53 +69,50 @@ const handleReported = () => {
 
 <template>
     <div
-        class="blueprint-card group overflow-hidden rounded-lg bg-white dark:bg-[var(--color-cool-gray-90)] shadow-sm hover:shadow-md transition-shadow">
+        class="blueprint-card group grid grid-rows-[auto_1fr] rounded-b-[8px] border-cool-gray-20 border bg-white hover:border-cool-gray-40 transition-colors">
         <!-- Header Section with Preview Image -->
-        <div class="relative aspect-4/3 bg-cool-gray-90 overflow-hidden">
-            <div v-if="previewImage" class="w-full h-full">
+        <div class="relative aspect-video bg-cool-gray-90 overflow-hidden">
+            <NuxtLinkLocale v-if="previewImage" to="/blueprints/{{ blueprint.id }}" class="w-full h-full">
                 <img :src="previewImage" :alt="blueprint.title" class="w-full h-full object-cover" />
-            </div>
-            <div v-else class="w-full h-full flex items-center justify-center relative">
-                <div class="absolute inset-0 bg-cool-gray-90"></div>
-                <div class="absolute inset-0 bg-[url('@/assets/img/input-pattern.svg')] opacity-10"></div>
-                <div class="relative z-10 flex flex-col items-center justify-center">
-                    <div class="absolute w-32 h-32 rounded-full border border-cool-gray-30 opacity-20"></div>
-                    <span class="relative text-white text-4xl font-bold">NOT FOUND</span>
-                </div>
-                <div class="absolute bottom-4 right-4 z-10">
-                    <CopyIcon class="w-5 h-5 text-cool-gray-30" />
-                </div>
-            </div>
-            <div v-if="previewImage" class="absolute bottom-4 right-4 z-10">
+            </NuxtLinkLocale>
+            <NuxtLinkLocale v-else to="/blueprints/{{ blueprint.id }}"
+                class="w-full h-full flex items-center justify-center relative">
+                <img :src="NotFoundImage" :alt="blueprint.title" class="w-full h-full object-cover" />
+            </NuxtLinkLocale>
+            <div class="absolute bottom-4 right-4 z-10">
                 <button @click="copyBlueprintCode"
-                    class="p-2 bg-white/80 dark:bg-cool-gray-90/80 rounded hover:bg-white transition-colors"
+                    class="p-2 bg-cool-gray-80 border border-cool-gray-60 hover:border-cool-gray-80 rounded-full hover:bg-white transition-colors cursor-pointer"
                     :title="copied ? 'Copied!' : 'Copy blueprint code'">
-                    <CopyIcon class="w-5 h-5 text-cool-gray-70" />
+                    <CopyIcon class="w-5 h-5 text-cool-gray-30 hover:text-cool-gray-80 transition-colors" />
                 </button>
             </div>
         </div>
 
         <!-- Content Section -->
-        <div class="p-4 space-y-3 bg-white dark:bg-cool-gray-90 rounded-b-lg">
+        <div class="p-4 flex flex-col gap-3 bg-white dark:bg-cool-gray-90 rounded-b-lg h-full">
             <!-- Title and Author -->
             <div>
-                <h2 class="text-xl font-bold text-cool-gray-90 mb-1 line-clamp-2">
-                    {{ blueprint.title }}
-                </h2>
+                <NuxtLinkLocale to="/blueprints/{{ blueprint.id }}" class="block">
+                    <h2 class="text-xl font-bold text-cool-gray-90 mb-1 line-clamp-2">
+                        {{ blueprint.title }}
+                    </h2>
+                </NuxtLinkLocale>
                 <div class="flex items-center justify-between gap-2">
-                    <p v-if="blueprint.creator" @click="handleAuthorClick"
-                        class="text-sm text-cool-gray-70 cursor-pointer hover:text-cool-gray-90 transition-colors">
-                        by {{ blueprint.creator.name }}
-                    </p>
+                    <button v-if="blueprint.creator" @click="handleAuthorClick"
+                        class="group/author text-sm text-cool-gray-70 cursor-pointer transition-colors">
+                        by <span
+                            class="group-hover/author:text-cool-gray-100 group-hover/author:underline transition-colors">{{
+                                blueprint.creator.name }}</span>
+                    </button>
                     <p v-else class="text-sm text-cool-gray-70">by Unknown</p>
                     <div class="flex items-center gap-3 text-xs text-cool-gray-60">
                         <div class="flex items-center gap-1">
                             <ClockIcon class="w-4 h-4" />
-                            <span>{{ formatDate(blueprint.created_at) }}</span>
+                            <span>{{ useFormatDate(blueprint.created_at) }}</span>
                         </div>
                         <div class="flex items-center gap-1">
                             <CalendarIcon class="w-4 h-4" />
-                            <span>{{ formatDate(blueprint.updated_at) }}</span>
+                            <span>{{ useFormatDate(blueprint.updated_at) }}</span>
                         </div>
                     </div>
                 </div>
@@ -131,20 +120,21 @@ const handleReported = () => {
 
             <!-- Region and Actions -->
             <div class="flex items-center justify-between">
-                <div v-if="blueprint.region" @click="handleRegionClick"
-                    class="flex items-center gap-1.5 text-sm text-cool-gray-80 cursor-pointer hover:text-cool-gray-90 transition-colors">
-                    <RegionIcon class="w-4 h-4" />
-                    <span>{{ blueprint.region }}</span>
+                <div @click="handleRegionClick"
+                    class="group/region flex items-center gap-1.5 text-sm font-medium text-cool-gray-80 cursor-pointer transition-colors">
+                    <RegionIcon class="w-5 h-5" />
+                    <span
+                        class="group-hover/region:text-cool-gray-100 group-hover/region:underline transition-colors">{{
+                            blueprint.region ?? 'Any'
+                        }}</span>
                 </div>
-                <div v-else class="flex-1"></div>
                 <div class="flex items-center gap-1">
                     <Tooltip>
                         <TooltipTrigger as-child>
-                            <button
-                                class="p-1.5 hover:bg-cool-gray-20 dark:hover:bg-cool-gray-80 rounded transition-colors"
-                                title="Add to Collection">
-                                <AddCollectionIcon class="w-4 h-4 text-cool-gray-70" />
-                            </button>
+                            <Button class="before:border-none rounded-lg" size="icon-sm" title="Add to Collection"
+                                variant="ghost">
+                                <AddCollectionIcon class="size-7.5" />
+                            </Button>
                         </TooltipTrigger>
                         <TooltipContent>
                             <p>Add to Collection</p>
@@ -152,30 +142,21 @@ const handleReported = () => {
                     </Tooltip>
                     <Tooltip>
                         <TooltipTrigger as-child>
-                            <button
-                                class="p-1.5 hover:bg-cool-gray-20 dark:hover:bg-cool-gray-80 rounded transition-colors"
-                                title="Open external link">
-                                <ShareIcon class="w-4 h-4 text-cool-gray-70" />
-                            </button>
+                            <Button class="before:border-none rounded-lg" size="icon-sm" title="Open external link"
+                                variant="ghost">
+                                <ShareIcon class="size-7.5" />
+                            </Button>
                         </TooltipTrigger>
                         <TooltipContent>
                             <p>Open external link</p>
                         </TooltipContent>
                     </Tooltip>
                     <DropdownMenu v-model:open="dropdownOpen">
-                        <Tooltip>
-                            <TooltipTrigger as-child>
-                                <DropdownMenuTrigger as-child>
-                                    <button class="p-1.5 hover:bg-cool-gray-20 rounded transition-colors"
-                                        title="More options">
-                                        <VerticalElipsis class="w-4 h-4 text-cool-gray-70" />
-                                    </button>
-                                </DropdownMenuTrigger>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>More options</p>
-                            </TooltipContent>
-                        </Tooltip>
+                        <DropdownMenuTrigger as-child>
+                            <Button class="before:border-none rounded-lg" size="icon-sm" variant="ghost">
+                                <VerticalElipsis class="size-7.5" />
+                            </Button>
+                        </DropdownMenuTrigger>
                         <DropdownMenuContent>
                             <ReportButton reportable-type="App\Models\Blueprint" :reportable-id="blueprint.id"
                                 item-name="blueprint" @reported="handleReported">
@@ -194,29 +175,29 @@ const handleReported = () => {
             <!-- Statistics -->
             <div class="flex items-center gap-4 text-sm text-cool-gray-80">
                 <div class="flex items-center gap-1.5">
-                    <CopiesIcon class="w-4 h-4" />
-                    <span>{{ formatNumber(blueprint.copies_count) }}</span>
+                    <CopiesIcon class="w-4" />
+                    <span>{{ useFormatCompactNumber(blueprint.copies_count) }}</span>
                 </div>
                 <div class="flex items-center gap-1.5">
-                    <LikesIcon class="w-4 h-4" />
-                    <span>{{ formatNumber(blueprint.likes_count) }}</span>
+                    <LikesIcon class="w-4" />
+                    <span>{{ useFormatCompactNumber(blueprint.likes_count) }}</span>
                 </div>
-                <div class="flex items-center gap-1.5">
-                    <CommentsIcon class="w-4 h-4" />
-                    <span>{{ formatNumber(blueprint.comments_count) }}</span>
+                <div class="flex items-center gap-1.5 ml-auto">
+                    <CommentsIcon class="w-6" />
+                    <span>{{ useFormatCompactNumber(blueprint.comments_count) }}</span>
                 </div>
             </div>
 
             <!-- Tags -->
-            <div class="flex items-center gap-2 flex-wrap">
-                <button v-if="blueprint.tags.length > 0" @click="handleTagClick(blueprint?.tags?.[0]?.id ?? '')"
-                    class="px-2 py-1 text-xs font-medium bg-cool-gray-20 text-cool-gray-90 rounded hover:bg-cool-gray-30 transition-colors cursor-pointer">
-                    {{ blueprint?.tags?.[0]?.name }}
-                </button>
-                <template v-for="(tag, index) in blueprint.tags.slice(1)" :key="tag.slug">
-                    <span class="text-cool-gray-60 text-xs">|</span>
+            <div class="group/tags flex items-center gap-2 flex-wrap border-t border-cool-gray-20 mt-auto pt-5 pb-3">
+                <span
+                    class="px-2 py-1 text-sm border border-cool-gray-30 group-hover/tags:border-cool-gray-100 transition-colors">
+                    Blueprint
+                </span>
+                <template v-for="(tag, index) in blueprint.tags" :key="tag.slug">
+                    <span class="text-cool-gray-60 text-sm">|</span>
                     <span @click="handleTagClick(tag.id)"
-                        class="text-xs text-cool-gray-80 cursor-pointer hover:text-cool-gray-90 transition-colors">
+                        class="text-sm text-cool-gray-80 cursor-pointer hover:text-cool-gray-100 hover:underline transition-colors">
                         {{ tag.name }}
                     </span>
                 </template>

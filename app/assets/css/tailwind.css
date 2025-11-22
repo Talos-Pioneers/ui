@@ -209,6 +209,7 @@ html[lang="ja"] {
 	--tracking-wider: calc(var(--tracking-normal) + 0.05em);
 	--tracking-widest: calc(var(--tracking-normal) + 0.1em);
 
+	--color-cool-gray-100: hsla(0, 0%, 0%, 1);
 	--color-cool-gray-90: hsla(0, 0%, 15%, 1);
 	--color-cool-gray-80: hsla(0, 0%, 27%, 1);
 	--color-cool-gray-70: hsla(0, 0%, 36%, 1);

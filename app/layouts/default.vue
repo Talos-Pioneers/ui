@@ -1,4 +1,5 @@
 <script setup>
+import 'vue-sonner/style.css'
 import Header from '~/components/navigation/Header.vue';
 
 const route = useRoute()
@@ -9,6 +10,7 @@ const head = useLocaleHead()
 import LoginDialog from '~/components/auth/LoginDialog.vue'
 import RegisterDialog from '~/components/auth/RegisterDialog.vue'
 import { TooltipProvider } from '~/components/ui/tooltip';
+import { Toaster } from '~/components/ui/sonner';
 </script>
 
 <template>
@@ -27,6 +29,7 @@ import { TooltipProvider } from '~/components/ui/tooltip';
 
         <Body>
             <TooltipProvider>
+                <Toaster />
                 <Header />
                 <slot />
                 <LoginDialog />

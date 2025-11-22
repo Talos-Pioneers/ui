@@ -191,7 +191,7 @@ const handleAuthorFilter = (authorId: string) => {
 		</div>
 
 		<!-- Blueprints Grid -->
-		<div v-if="status === 'success'" class="grid grid-cols-3 gap-4 mx-7.5">
+		<div v-if="status === 'success'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-7.5">
 			<BlueprintCard v-for="blueprint in blueprints" :key="blueprint.id" :blueprint="blueprint"
 				@filter-tag="handleTagFilter" @filter-region="handleRegionFilter" @filter-author="handleAuthorFilter" />
 
