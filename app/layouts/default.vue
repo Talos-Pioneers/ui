@@ -8,6 +8,7 @@ const head = useLocaleHead()
 // );
 import LoginDialog from '~/components/auth/LoginDialog.vue'
 import RegisterDialog from '~/components/auth/RegisterDialog.vue'
+import { TooltipProvider } from '~/components/ui/tooltip';
 </script>
 
 <template>
@@ -25,10 +26,12 @@ import RegisterDialog from '~/components/auth/RegisterDialog.vue'
         </Head>
 
         <Body>
-            <Header />
-            <slot />
-            <LoginDialog />
-            <RegisterDialog />
+            <TooltipProvider>
+                <Header />
+                <slot />
+                <LoginDialog />
+                <RegisterDialog />
+            </TooltipProvider>
         </Body>
 
         </Html>

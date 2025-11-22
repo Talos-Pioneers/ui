@@ -41,7 +41,7 @@ const navigationItems = [
         <div class="ml-auto flex items-center gap-2">
             <LanguageSwitcher />
             <template v-if="!isAuthenticated">
-                <Button class="w-40 px-4.5 justify-between hidden md:flex" @click="open" variant="default">
+                <Button class="min-w-40 px-4.5 justify-between hidden md:flex" @click="open" variant="default">
                     <span class="flex items-center gap-2.5">
                         <LoginIcon class="h-5" />
                         <span class="h-3.5 w-px bg-cool-gray-50"></span>

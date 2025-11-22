@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useQueryFilters } from '~/composables/useQueryFilters';
 import type { Blueprint } from '~/models/blueprint';
+import BlueprintCard from './BlueprintCard.vue';
 
 type BlueprintListResponse = {
 	data: Blueprint[];
@@ -21,12 +22,12 @@ type BlueprintListResponse = {
 };
 
 // Configure filters and sorting for blueprints
-const queryFilters = useQueryFilters({
+const { filters, sort, setFilter, clearFilter, clearAllFilters, hasActiveFilters, setSort, toggleSort, resetSort, isSortDescending, reset, query } = useQueryFilters({
 	filters: {
 		region: { type: 'string' },
 		version: { type: 'string' },
 		is_anonymous: { type: 'boolean' },
-		author_id: { type: 'number' },
+		author_id: { type: 'string' },
 		facility: { type: 'array' },
 		item_input: { type: 'array' },
 		item_output: { type: 'array' },
@@ -40,33 +41,20 @@ const queryFilters = useQueryFilters({
 	},
 });
 
-// Get current page from route query
-const route = useRoute();
-const currentPage = computed(() => {
-	const page = route.query.page;
-	return page ? Number(page) : 1;
-});
-
-// Watch for query changes and fetch blueprints
-const queryParams = computed(() => {
-	const params = queryFilters.buildQuery();
-	if (currentPage.value > 1) {
-		params.page = String(currentPage.value);
+const { data, status, error, refresh } = await useSanctumFetch<BlueprintListResponse>(
+	'/api/v1/blueprints',
+	() => ({
+		method: 'get',
+		query: query.value,
+	}),
+	{
+		watch: [query],
 	}
-	return params;
-});
+);
 
-const { data, status, error, refresh } = await useSanctumFetch<BlueprintListResponse>('/api/v1/blueprints', {
-	query: queryParams,
-});
 
+const pagination = ref<BlueprintListResponse['meta'] | null>(null);
 const blueprints = computed(() => data.value?.data ?? []);
-const pagination = computed(() => data.value?.meta ?? null);
-
-// Refresh when query params change
-watch(queryParams, () => {
-	refresh();
-}, { deep: true });
 
 // Sort options
 const sortOptions = [
@@ -77,66 +65,60 @@ const sortOptions = [
 	{ value: 'copies_count', label: 'Copies' },
 ];
 
-const currentSortLabel = computed(() => {
-	const option = sortOptions.find(opt => opt.value === queryFilters.getSortField.value);
-	return option?.label ?? 'Created Date';
-});
-
 // Get filter entries for iteration
 const filterEntries = computed(() => {
-	return Object.entries(queryFilters.filters).filter(([key, value]) => {
+	return Object.entries(filters.value).filter(([key, value]) => {
 		return value !== null && value !== '' && (Array.isArray(value) ? value.length > 0 : true);
 	});
 });
 
 // Handle filter events from BlueprintCard
 const handleTagFilter = (tagId: string) => {
-	const currentTags = (queryFilters.filters['tags.id'] as string[]) || [];
+	const currentTags = (filters.value['tags.id'] as string[]) || [];
 	if (!currentTags.includes(tagId)) {
-		queryFilters.setFilter('tags.id', [...currentTags, tagId]);
+		setFilter('tags.id', [...currentTags, tagId]);
 	}
 };
 
 const handleRegionFilter = (region: string) => {
-	queryFilters.setFilter('region', region);
+	setFilter('region', region);
 };
 
 const handleAuthorFilter = (authorId: string) => {
-	queryFilters.setFilter('author_id', Number(authorId));
+	setFilter('author_id', authorId);
 };
 </script>
 
 <template>
 	<div class="blueprint-list">
 		<!-- Filters and Sorting Controls -->
+		<pre>{{ filters }}</pre>
+		<pre>{{ sort }}</pre>
+		<pre>{{ query }}</pre>
 		<div class="filters-section">
 			<div class="sort-controls">
 				<label for="sort-select">Sort by:</label>
-				<select id="sort-select" :value="queryFilters.getSortField.value"
-					@change="queryFilters.toggleSort(($event.target as HTMLSelectElement).value)">
+				<select id="sort-select" :value="sort" @change="toggleSort(($event.target as HTMLSelectElement).value)">
 					<option v-for="option in sortOptions" :key="option.value" :value="option.value">
-						{{ option.label }} {{ queryFilters.isSortDescending.value && queryFilters.getSortField.value ===
+						{{ option.label }} {{ isSortDescending && sort ===
 							option.value ? '(Desc)' : '' }}
 					</option>
 				</select>
-				<button v-if="queryFilters.isSortDescending.value"
-					@click="queryFilters.setSort(queryFilters.getSortField.value, false)" title="Sort ascending">
+				<button v-if="isSortDescending" @click="toggleSort(sort)" title="Sort ascending">
 					↑
 				</button>
-				<button v-else @click="queryFilters.setSort(queryFilters.getSortField.value, true)"
-					title="Sort descending">
+				<button v-else @click="toggleSort(sort)" title="Sort descending">
 					↓
 				</button>
 			</div>
 
-			<div v-if="queryFilters.hasActiveFilters.value" class="active-filters">
+			<div v-if="hasActiveFilters" class="active-filters">
 				<span>Active filters:</span>
-				<button v-for="[key, value] in filterEntries" :key="key" @click="queryFilters.clearFilter(key)"
-					class="filter-tag">
+				<button v-for="[key, value] in filterEntries" :key="key" @click="clearFilter(key)" class="filter-tag">
 					{{ key }}: {{ Array.isArray(value) ? value.join(', ') : value }}
 					×
 				</button>
-				<button @click="queryFilters.clearAllFilters()" class="clear-all">
+				<button @click="clearAllFilters(true)" class="clear-all">
 					Clear all
 				</button>
 			</div>
@@ -154,7 +136,7 @@ const handleAuthorFilter = (authorId: string) => {
 		</div>
 
 		<!-- Blueprints Grid -->
-		<div v-if="status === 'success'" class="blueprints-grid">
+		<div v-if="status === 'success'" class="grid grid-cols-3 gap-4 mx-7.5">
 			<BlueprintCard v-for="blueprint in blueprints" :key="blueprint.id" :blueprint="blueprint"
 				@filter-tag="handleTagFilter" @filter-region="handleRegionFilter" @filter-author="handleAuthorFilter" />
 
@@ -165,16 +147,14 @@ const handleAuthorFilter = (authorId: string) => {
 
 		<!-- Pagination -->
 		<div v-if="pagination && pagination.last_page > 1" class="pagination">
-			<button :disabled="currentPage <= 1"
-				@click="navigateTo({ query: { ...route.query, page: currentPage - 1 } })">
+			<button :disabled="currentPage <= 1" @click="currentPage = currentPage - 1">
 				Previous
 			</button>
 			<span>
 				Page {{ pagination.current_page }} of {{ pagination.last_page }}
 				({{ pagination.total }} total)
 			</span>
-			<button :disabled="currentPage >= pagination.last_page"
-				@click="navigateTo({ query: { ...route.query, page: currentPage + 1 } })">
+			<button :disabled="currentPage >= pagination.last_page" @click="currentPage = currentPage + 1">
 				Next
 			</button>
 		</div>
