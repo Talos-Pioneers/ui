@@ -145,6 +145,10 @@ export function useQueryFilters<T extends QueryFiltersConfig>(config: T) {
 		}
 	};
 
+	const { query } = useRoute();
+	buildFiltersFromQuery(query as Record<string, string>);
+	buildSortFromQuery(query as Record<string, string>);
+
 	return {
 		filters,
 		setFilter,

@@ -43,8 +43,6 @@ const { filters, sort, setFilter, clearFilter, clearAllFilters, hasActiveFilters
 
 const { query } = useRoute();
 const activeQuery = ref<Record<string, string>>(toRaw(query) as Record<string, string>);
-buildFiltersFromQuery(activeQuery.value);
-buildSortFromQuery(activeQuery.value);
 const { data, status, error, refresh } = await useSanctumFetch<BlueprintListResponse>(
 	'/api/v1/blueprints',
 	() => ({
