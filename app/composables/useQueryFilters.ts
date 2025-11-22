@@ -114,6 +114,16 @@ export function useQueryFilters<T extends QueryFiltersConfig>(config: T) {
 			{} as Record<string, string>
 		);
 	});
+	// update the nuxt router query params when the query changes
+	watch(
+		query,
+		() => {
+			useRouter().replace({
+				query: query.value,
+			});
+		},
+		{ deep: true }
+	);
 
 	return {
 		filters,
