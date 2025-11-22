@@ -41,8 +41,37 @@ const { filters, sort, setFilter, clearFilter, clearAllFilters, hasActiveFilters
 	},
 });
 
-const { query } = useRoute();
-const activeQuery = ref<Record<string, string>>(toRaw(query) as Record<string, string>);
+const route = useRoute();
+const { query } = route;
+
+// Pagination state - initialize from route query
+const currentPage = ref<number>(Number(query.page) || 1);
+const perPage = ref<number>(Number(query.per_page) || 25);
+
+// Sync pagination state when route query changes (e.g., browser back/forward)
+watch(() => route.query, (newQuery) => {
+	const newPage = Number(newQuery.page) || 1;
+	const newPerPage = Number(newQuery.per_page) || 25;
+	if (newPage !== currentPage.value) {
+		currentPage.value = newPage;
+	}
+	if (newPerPage !== perPage.value) {
+		perPage.value = newPerPage;
+	}
+});
+
+// Build active query with filters, sort, and pagination
+const activeQuery = computed(() => {
+	const queryParams = { ...computedQuery.value };
+	if (currentPage.value > 1) {
+		queryParams.page = String(currentPage.value);
+	}
+	if (perPage.value !== 25) {
+		queryParams.per_page = String(perPage.value);
+	}
+	return queryParams;
+});
+
 const { data, status, error, refresh } = await useSanctumFetch<BlueprintListResponse>(
 	'/api/v1/blueprints',
 	() => ({
@@ -53,13 +82,37 @@ const { data, status, error, refresh } = await useSanctumFetch<BlueprintListResp
 		watch: [activeQuery],
 	}
 );
-watch(computedQuery, () => {
-	activeQuery.value = computedQuery.value;
+
+// Extract pagination data from response
+const pagination = computed(() => data.value?.meta ?? null);
+const blueprints = computed(() => data.value?.data ?? []);
+
+// Sync currentPage with API response (in case API adjusts the page)
+watch(pagination, (newPagination) => {
+	if (newPagination && newPagination.current_page !== currentPage.value) {
+		currentPage.value = newPagination.current_page;
+	}
+});
+
+// Reset to page 1 when filters or sort change
+watch(filters, () => {
+	if (currentPage.value > 1) {
+		currentPage.value = 1;
+	}
 }, { deep: true });
 
+watch(sort, () => {
+	if (currentPage.value > 1) {
+		currentPage.value = 1;
+	}
+});
 
-const pagination = ref<BlueprintListResponse['meta'] | null>(null);
-const blueprints = computed(() => data.value?.data ?? []);
+// Update route query when pagination changes
+watch([currentPage, perPage], () => {
+	useRouter().replace({
+		query: activeQuery.value,
+	});
+});
 
 // Sort options
 const sortOptions = [
@@ -97,9 +150,6 @@ const handleAuthorFilter = (authorId: string) => {
 <template>
 	<div class="blueprint-list">
 		<!-- Filters and Sorting Controls -->
-		<pre>{{ filters }}</pre>
-		<pre>{{ sort }}</pre>
-		<pre>{{ activeQuery }}</pre>
 		<div class="filters-section">
 			<div class="sort-controls">
 				<label for="sort-select">Sort by:</label>
@@ -152,14 +202,15 @@ const handleAuthorFilter = (authorId: string) => {
 
 		<!-- Pagination -->
 		<div v-if="pagination && pagination.last_page > 1" class="pagination">
-			<button :disabled="currentPage <= 1" @click="currentPage = currentPage - 1">
+			<button :disabled="pagination.current_page <= 1" @click="currentPage = pagination.current_page - 1">
 				Previous
 			</button>
 			<span>
 				Page {{ pagination.current_page }} of {{ pagination.last_page }}
 				({{ pagination.total }} total)
 			</span>
-			<button :disabled="currentPage >= pagination.last_page" @click="currentPage = currentPage + 1">
+			<button :disabled="pagination.current_page >= pagination.last_page"
+				@click="currentPage = pagination.current_page + 1">
 				Next
 			</button>
 		</div>
