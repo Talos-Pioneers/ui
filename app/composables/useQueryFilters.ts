@@ -81,7 +81,8 @@ export function useQueryFilters<T extends QueryFiltersConfig>(config: T) {
 		resetSort();
 	};
 
-	const buildFilterQuery = (query: Record<string, string>) => {
+	const computedQuery = computed(() => {
+		const query = {} as Record<string, string>;
 		for (const [key, value] of Object.entries(filters.value)) {
 			const filterConfig = config.filters[key];
 			if (
@@ -101,29 +102,48 @@ export function useQueryFilters<T extends QueryFiltersConfig>(config: T) {
 				query[`filter[${key}]`] = String(value);
 			}
 		}
-		return query;
-	};
-	const buildSortQuery = (query: Record<string, string>) => {
+
 		query.sort = sortDirection.value === "desc" ? `-${sort.value}` : sort.value;
+
 		return query;
-	};
-	const query = computed(() => {
-		const queryBuilders = [buildFilterQuery, buildSortQuery];
-		return queryBuilders.reduce(
-			(acc, builder) => builder(acc),
-			{} as Record<string, string>
-		);
 	});
 	// update the nuxt router query params when the query changes
 	watch(
-		query,
+		filters,
 		() => {
 			useRouter().replace({
-				query: query.value,
+				query: computedQuery.value,
 			});
 		},
 		{ deep: true }
 	);
+	watch(sort, () => {
+		useRouter().replace({
+			query: computedQuery.value,
+		});
+	});
+	const buildFiltersFromQuery = (query: Record<string, string>) => {
+		for (const [key, value] of Object.entries(query)) {
+			if (key.startsWith("filter[")) {
+				const filterKey = key.replace("filter[", "").replace("]", "");
+				const filterConfig = config.filters[filterKey];
+				if (filterConfig) {
+					if (filterConfig.type === "array") {
+						filters.value[filterKey] = value.split(",");
+					} else if (filterConfig.type === "boolean") {
+						filters.value[filterKey] = value === "1";
+					} else {
+						filters.value[filterKey] = value;
+					}
+				}
+			}
+		}
+	};
+	const buildSortFromQuery = (query: Record<string, string>) => {
+		if (query.sort) {
+			setSort(query.sort.replace("-", ""), query.sort.startsWith("-"));
+		}
+	};
 
 	return {
 		filters,
@@ -139,7 +159,10 @@ export function useQueryFilters<T extends QueryFiltersConfig>(config: T) {
 		isSortDescending,
 
 		reset,
-		query,
+
+		computedQuery,
+		buildFiltersFromQuery,
+		buildSortFromQuery,
 	};
 }
 

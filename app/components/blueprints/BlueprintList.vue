@@ -22,7 +22,7 @@ type BlueprintListResponse = {
 };
 
 // Configure filters and sorting for blueprints
-const { filters, sort, setFilter, clearFilter, clearAllFilters, hasActiveFilters, setSort, toggleSort, resetSort, isSortDescending, reset, query } = useQueryFilters({
+const { filters, sort, setFilter, clearFilter, clearAllFilters, hasActiveFilters, setSort, toggleSort, resetSort, isSortDescending, reset, computedQuery, buildFiltersFromQuery, buildSortFromQuery } = useQueryFilters({
 	filters: {
 		region: { type: 'string' },
 		version: { type: 'string' },
@@ -41,16 +41,23 @@ const { filters, sort, setFilter, clearFilter, clearAllFilters, hasActiveFilters
 	},
 });
 
+const { query } = useRoute();
+const activeQuery = ref<Record<string, string>>(toRaw(query) as Record<string, string>);
+buildFiltersFromQuery(activeQuery.value);
+buildSortFromQuery(activeQuery.value);
 const { data, status, error, refresh } = await useSanctumFetch<BlueprintListResponse>(
 	'/api/v1/blueprints',
 	() => ({
 		method: 'get',
-		query: query.value,
+		query: activeQuery.value,
 	}),
 	{
-		watch: [query],
+		watch: [activeQuery],
 	}
 );
+watch(computedQuery, () => {
+	activeQuery.value = computedQuery.value;
+}, { deep: true });
 
 
 const pagination = ref<BlueprintListResponse['meta'] | null>(null);
@@ -94,7 +101,7 @@ const handleAuthorFilter = (authorId: string) => {
 		<!-- Filters and Sorting Controls -->
 		<pre>{{ filters }}</pre>
 		<pre>{{ sort }}</pre>
-		<pre>{{ query }}</pre>
+		<pre>{{ activeQuery }}</pre>
 		<div class="filters-section">
 			<div class="sort-controls">
 				<label for="sort-select">Sort by:</label>
