@@ -1,15 +1,7 @@
 <script setup lang="ts">
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext, PaginationEllipsis } from '~/components/ui/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
-
-type PaginationMeta = {
-	current_page: number;
-	from: number | null;
-	last_page: number;
-	per_page: number;
-	to: number | null;
-	total: number;
-};
+import type { PaginationMeta } from '~/models/blueprint';
 
 const props = withDefaults(defineProps<{
 	pagination: PaginationMeta | null;
