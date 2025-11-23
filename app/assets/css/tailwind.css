@@ -219,6 +219,8 @@ html[lang="ja"] {
 	--color-cool-gray-30: hsla(0, 0%, 80%, 1);
 	--color-cool-gray-20: hsla(0, 0%, 89%, 1);
 	--color-cool-gray-10: hsla(0, 0%, 95%, 1);
+	--color-region-valley: hsla(65, 88%, 46%, 1);
+	--color-region-wuling: hsla(48, 100%, 50%, 1);
 }
 
 body {
@@ -245,6 +247,7 @@ body {
 		height: 100%;
 		opacity: 0.2;
 		background-image: url("@/assets/img/wave-bg.svg");
+		pointer-events: none;
 	}
 }
 

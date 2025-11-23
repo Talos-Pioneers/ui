@@ -21,7 +21,7 @@ const navigationItems = [
 ]
 </script>
 <template>
-    <header class="flex items-center h-16.5 px-7.5 border-b border-cool-gray-20">
+    <header class="sticky top-0 z-40 bg-white flex items-center h-16.5 px-7.5 border-b border-cool-gray-20">
         <div>
             <NuxtLinkLocale to="/">
                 <Logo class="hidden md:block" />

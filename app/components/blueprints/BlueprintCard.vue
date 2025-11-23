@@ -69,7 +69,7 @@ const handleReported = () => {
 
 <template>
     <div
-        class="blueprint-card group grid grid-rows-[auto_1fr] rounded-b-[8px] border-cool-gray-20 border bg-white hover:border-cool-gray-40 transition-colors">
+        class="blueprint-card group grid grid-rows-[auto_1fr] rounded-b-[8px] border-cool-gray-20 border bg-white hover:border-cool-gray-40 transition-colors overflow-hidden">
         <!-- Header Section with Preview Image -->
         <div class="relative aspect-video bg-cool-gray-90 overflow-hidden">
             <NuxtLinkLocale v-if="previewImage" to="/blueprints/{{ blueprint.id }}" class="w-full h-full">
@@ -81,9 +81,10 @@ const handleReported = () => {
             </NuxtLinkLocale>
             <div class="absolute bottom-4 right-4 z-10">
                 <button @click="copyBlueprintCode"
-                    class="p-2 bg-cool-gray-80 border border-cool-gray-60 hover:border-cool-gray-80 rounded-full hover:bg-white transition-colors cursor-pointer"
+                    class="group/copy-button p-2 bg-cool-gray-80 border border-cool-gray-60 hover:border-cool-gray-80 rounded-full hover:bg-white transition-colors cursor-pointer"
                     :title="copied ? 'Copied!' : 'Copy blueprint code'">
-                    <CopyIcon class="w-5 h-5 text-cool-gray-30 hover:text-cool-gray-80 transition-colors" />
+                    <CopyIcon
+                        class="w-5 h-5 text-cool-gray-30 group-hover/copy-button:text-cool-gray-80 transition-colors" />
                 </button>
             </div>
         </div>

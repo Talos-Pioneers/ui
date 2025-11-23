@@ -1,7 +1,31 @@
 <script setup lang="ts">
 import { useQueryFilters } from '~/composables/useQueryFilters';
 import type { Blueprint } from '~/models/blueprint';
+import type { Facility } from '~/models/facility';
+import type { Item } from '~/models/item';
+import type { Tag } from '~/models/tag';
 import BlueprintCard from './BlueprintCard.vue';
+import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarGroupContent, SidebarTrigger, SidebarInset } from '~/components/ui/sidebar';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
+import { Checkbox } from '~/components/ui/checkbox';
+import { Combobox, ComboboxInput, ComboboxItem, ComboboxList, ComboboxTrigger, ComboboxEmpty, ComboboxViewport } from '~/components/ui/combobox';
+import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover';
+import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext, PaginationEllipsis } from '~/components/ui/pagination';
+import { Button } from '~/components/ui/button';
+import { Input } from '~/components/ui/input';
+import RegionValleyIcon from '../icons/RegionValleyIcon.vue';
+import RegionWulingIcon from '../icons/RegionWulingIcon.vue';
+import CloseIcon from '../icons/CloseIcon.vue';
+import SearchIcon from '../icons/SearchIcon.vue';
+import { ChevronDown } from 'lucide-vue-next';
+import MainBanner from '../banners/MainBanner.vue';
+import { useSidebar } from '@/components/ui/sidebar'
+
+const props = withDefaults(defineProps<{
+	showSidebar?: boolean;
+}>(), {
+	showSidebar: true,
+});
 
 type BlueprintListResponse = {
 	data: Blueprint[];
@@ -22,7 +46,7 @@ type BlueprintListResponse = {
 };
 
 // Configure filters and sorting for blueprints
-const { filters, sort, setFilter, clearFilter, clearAllFilters, hasActiveFilters, setSort, toggleSort, resetSort, isSortDescending, reset, computedQuery, buildFiltersFromQuery, buildSortFromQuery } = useQueryFilters({
+const { filters, sort, setFilter, clearFilter, clearAllFilters, hasActiveFilters, setSort, toggleSort, isSortDescending, computedQuery } = useQueryFilters({
 	filters: {
 		region: { type: 'string' },
 		version: { type: 'string' },
@@ -114,8 +138,18 @@ watch([currentPage, perPage], () => {
 	});
 });
 
+// Fetch filter data (only when sidebar is enabled)
+const { data: facilitiesData } = props.showSidebar ? await useSanctumFetch<{ data: Facility[] }>('/api/v1/facilities') : { data: ref(null) };
+const { data: itemsData } = props.showSidebar ? await useSanctumFetch<{ data: Item[] }>('/api/v1/items') : { data: ref(null) };
+const { data: tagsData } = props.showSidebar ? await useSanctumFetch<{ data: Tag[] }>('/api/v1/tags') : { data: ref(null) };
+
+const facilities = computed(() => facilitiesData.value?.data ?? []);
+const items = computed(() => itemsData.value?.data ?? []);
+const tags = computed(() => tagsData.value?.data ?? []);
+
 // Sort options
 const sortOptions = [
+	{ value: 'created_at', label: 'Relevancy' },
 	{ value: 'created_at', label: 'Created Date' },
 	{ value: 'updated_at', label: 'Updated Date' },
 	{ value: 'title', label: 'Title' },
@@ -123,11 +157,87 @@ const sortOptions = [
 	{ value: 'copies_count', label: 'Copies' },
 ];
 
-// Get filter entries for iteration
-const filterEntries = computed(() => {
-	return Object.entries(filters.value).filter(([key, value]) => {
-		return value !== null && value !== '' && (Array.isArray(value) ? value.length > 0 : true);
+const currentSortLabel = computed(() => {
+	const sortField = sort.value.replace(/^-/, '');
+	const option = sortOptions.find(opt => opt.value === sortField);
+	return option?.label ?? 'Relevancy';
+});
+
+// Game version options
+const versionOptions = [
+	{ value: '', label: 'All' },
+	{ value: 'cbt_3', label: 'CBT 3' },
+];
+
+// Tier options
+const tierOptions = [
+	{ value: '', label: 'All' },
+	{ value: 'I', label: 'Tier I' },
+	{ value: 'II', label: 'Tier II' },
+	{ value: 'III', label: 'Tier III' },
+	{ value: 'IV', label: 'Tier IV' },
+];
+
+// Region options
+const regionOptions = [
+	{ value: 'valley_iv', label: 'Valley IV', icon: RegionValleyIcon },
+	{ value: 'wuling', label: 'Wuling', icon: RegionWulingIcon },
+];
+
+// Format active filters for display
+const activeFilterTags = computed(() => {
+	const filterTags: Array<{ key: string; value: any }> = [];
+
+	Object.entries(filters.value).forEach(([key, value]) => {
+		if (value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
+			return;
+		}
+
+		if (key === 'region') {
+			const region = regionOptions.find(r => r.value === value);
+			filterTags.push({ key, value: region?.label ?? String(value) });
+			return;
+		}
+		if (key === 'version') {
+			const version = versionOptions.find(v => v.value === value);
+			filterTags.push({ key, value: version?.label ?? String(value) });
+			return;
+		}
+
+		if (key === 'tags.id' && Array.isArray(value)) {
+			for (const item of value) {
+				const tag = tags.value.find(t => t.id === item);
+				filterTags.push({ key, value: tag?.name ?? String(item) });
+			}
+			return;
+		}
+
+		if (key === 'facility' && Array.isArray(value)) {
+			for (const item of value) {
+				const facility = facilities.value.find(f => f.slug === item);
+				filterTags.push({ key, value: facility?.name ?? String(item) });
+			}
+			return;
+		}
+
+		if (key === 'item_input' && Array.isArray(value)) {
+			for (const item of value) {
+				const factoryItem = items.value.find(i => i.slug === item);
+				filterTags.push({ key, value: factoryItem?.name ?? String(item) });
+			}
+			return;
+		}
+
+		if (key === 'item_output' && Array.isArray(value)) {
+			for (const item of value) {
+				const factoryItem = items.value.find(i => i.slug === item);
+				filterTags.push({ key, value: factoryItem?.name ?? String(item) });
+			}
+			return;
+		}
 	});
+
+	return filterTags;
 });
 
 // Handle filter events from BlueprintCard
@@ -145,74 +255,366 @@ const handleRegionFilter = (region: string) => {
 const handleAuthorFilter = (authorId: string) => {
 	setFilter('author_id', authorId);
 };
+
+// Handle tag checkbox toggle
+const toggleTagFilter = (tagId: string) => {
+	const currentTags = (filters.value['tags.id'] as string[]) || [];
+	if (currentTags.includes(tagId)) {
+		setFilter('tags.id', currentTags.filter(id => id !== tagId));
+	} else {
+		setFilter('tags.id', [...currentTags, tagId]);
+	}
+};
+
+// Handle combobox selections
+const handleFacilitySelect = (facilitySlug: string) => {
+	const currentFacilities = (filters.value.facility as string[]) || [];
+	if (!currentFacilities.includes(facilitySlug)) {
+		setFilter('facility', [...currentFacilities, facilitySlug]);
+	}
+};
+
+const handleItemInputSelect = (itemSlug: string) => {
+	const currentItems = (filters.value.item_input as string[]) || [];
+	if (!currentItems.includes(itemSlug)) {
+		setFilter('item_input', [...currentItems, itemSlug]);
+	}
+};
+
+const handleItemOutputSelect = (itemSlug: string) => {
+	const currentItems = (filters.value.item_output as string[]) || [];
+	if (!currentItems.includes(itemSlug)) {
+		setFilter('item_output', [...currentItems, itemSlug]);
+	}
+};
+
+// Navigation helpers
+const navigateToPage = (page: number) => {
+	currentPage.value = page;
+};
+
+const getPageNumbers = computed(() => {
+	if (!pagination.value) return [];
+
+	const current = pagination.value.current_page;
+	const last = pagination.value.last_page;
+	const pages: (number | 'ellipsis')[] = [];
+
+	if (last <= 7) {
+		for (let i = 1; i <= last; i++) {
+			pages.push(i);
+		}
+	} else {
+		pages.push(1);
+		if (current > 3) {
+			pages.push('ellipsis');
+		}
+		for (let i = Math.max(2, current - 1); i <= Math.min(last - 1, current + 1); i++) {
+			pages.push(i);
+		}
+		if (current < last - 2) {
+			pages.push('ellipsis');
+		}
+		pages.push(last);
+	}
+
+	return pages;
+});
+
+const { open: sidebarOpen, toggleSidebar } = useSidebar()
 </script>
 
 <template>
-	<div class="blueprint-list">
-		<!-- Filters and Sorting Controls -->
-		<div class="filters-section">
-			<div class="sort-controls">
-				<label for="sort-select">Sort by:</label>
-				<select id="sort-select" :value="sort" @change="toggleSort(($event.target as HTMLSelectElement).value)">
-					<option v-for="option in sortOptions" :key="option.value" :value="option.value">
-						{{ option.label }} {{ isSortDescending && sort ===
-							option.value ? '(Desc)' : '' }}
-					</option>
-				</select>
-				<button v-if="isSortDescending" @click="toggleSort(sort)" title="Sort ascending">
-					↑
-				</button>
-				<button v-else @click="toggleSort(sort)" title="Sort descending">
-					↓
-				</button>
+	<div class="flex h-screen w-full">
+		<Sidebar class="top-(--header-height) h-[calc(100svh-var(--header-height))]!">
+			<SidebarContent>
+				<SidebarGroup>
+					<SidebarGroupContent>
+						<div class="flex flex-col gap-2 px-2">
+							<button
+								class="text-left text-sm text-sidebar-foreground/70 hover:text-sidebar-foreground transition-colors">
+								All
+							</button>
+							<button
+								class="text-left text-sm text-sidebar-foreground/70 hover:text-sidebar-foreground transition-colors">
+								PAC
+							</button>
+							<button class="text-left text-sm text-sidebar-foreground underline">
+								Sub-PAC
+							</button>
+						</div>
+					</SidebarGroupContent>
+				</SidebarGroup>
+
+				<SidebarGroup>
+					<SidebarGroupLabel>Filters</SidebarGroupLabel>
+					<SidebarGroupContent>
+						<!-- Region Filter -->
+						<div class="px-2 py-3 space-y-2">
+							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Region</label>
+							<div class="flex gap-2">
+								<button v-for="region in regionOptions" :key="region.value"
+									@click="setFilter('region', filters.region === region.value ? null : region.value)"
+									:class="[
+										'flex-1 flex flex-col items-center justify-center gap-2 p-3 rounded border transition-colors',
+										filters.region === region.value
+											? 'bg-primary border-primary text-primary-foreground'
+											: 'bg-sidebar border-sidebar-border hover:bg-sidebar-accent'
+									]">
+									<component :is="region.icon" class="w-6 h-6" />
+									<span class="text-xs font-medium">{{ region.label }}</span>
+								</button>
+							</div>
+						</div>
+
+						<!-- Game Version -->
+						<!-- <div class="px-2 py-3 space-y-2">
+							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Game
+								Version</label>
+							<Select :model-value="filters.version || ''"
+								@update:model-value="setFilter('version', $event || null)">
+								<SelectTrigger class="w-full">
+									<SelectValue placeholder="All" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem v-for="option in versionOptions" :key="option.value"
+										:value="option.value">
+										{{ option.label }}
+									</SelectItem>
+								</SelectContent>
+							</Select>
+						</div> -->
+
+						<!-- Tier
+						<div class="px-2 py-3 space-y-2">
+							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Tier</label>
+							<Select :model-value="filters.tier || ''"
+								@update:model-value="setFilter('tier', $event || null)">
+								<SelectTrigger class="w-full">
+									<SelectValue placeholder="All" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem v-for="option in tierOptions" :key="option.value"
+										:value="option.value">
+										{{ option.label }}
+									</SelectItem>
+								</SelectContent>
+							</Select>
+						</div> -->
+
+						<!-- Categories (Tags) -->
+						<div class="px-2 py-3 space-y-2">
+							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Categories</label>
+							<div class="space-y-2 max-h-48 overflow-y-auto">
+								<label v-for="tag in tags" :key="tag.id"
+									class="flex items-center gap-2 cursor-pointer hover:bg-sidebar-accent/50 rounded px-2 py-1.5 transition-colors">
+									<Checkbox :checked="(filters['tags.id'] as string[] || []).includes(tag.id)"
+										@update:checked="toggleTagFilter(tag.id)" />
+									<span class="text-sm text-sidebar-foreground">{{ tag.name }}</span>
+								</label>
+							</div>
+						</div>
+
+						<!-- Facilities Used -->
+						<div class="px-2 py-3 space-y-2">
+							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Facilities
+								Used</label>
+							<Popover>
+								<PopoverTrigger as-child>
+									<Button variant="outline" class="w-full justify-between">
+										<span class="text-muted-foreground">Search</span>
+										<ChevronDown class="size-4 opacity-50" />
+									</Button>
+								</PopoverTrigger>
+								<PopoverContent class="w-[300px] p-0">
+									<Combobox>
+										<ComboboxInput placeholder="Search facilities..." />
+										<ComboboxList>
+											<ComboboxViewport>
+												<ComboboxEmpty>No facilities found.</ComboboxEmpty>
+												<ComboboxItem v-for="facility in facilities" :key="facility.id"
+													:value="facility.slug"
+													@select="handleFacilitySelect(facility.slug)">
+													{{ facility.name }}
+												</ComboboxItem>
+											</ComboboxViewport>
+										</ComboboxList>
+									</Combobox>
+								</PopoverContent>
+							</Popover>
+						</div>
+
+						<!-- Input Products -->
+						<div class="px-2 py-3 space-y-2">
+							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Input
+								Products</label>
+							<Popover>
+								<PopoverTrigger as-child>
+									<Button variant="outline" class="w-full justify-between">
+										<span class="text-muted-foreground">Search</span>
+										<ChevronDown class="size-4 opacity-50" />
+									</Button>
+								</PopoverTrigger>
+								<PopoverContent class="w-[300px] p-0">
+									<Combobox>
+										<ComboboxInput placeholder="Search items..." />
+										<ComboboxList>
+											<ComboboxViewport>
+												<ComboboxEmpty>No items found.</ComboboxEmpty>
+												<ComboboxItem v-for="item in items" :key="item.id" :value="item.slug"
+													@select="handleItemInputSelect(item.slug)">
+													{{ item.name }}
+												</ComboboxItem>
+											</ComboboxViewport>
+										</ComboboxList>
+									</Combobox>
+								</PopoverContent>
+							</Popover>
+						</div>
+
+						<!-- Output Products -->
+						<div class="px-2 py-3 space-y-2">
+							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Output
+								Products</label>
+							<Popover>
+								<PopoverTrigger as-child>
+									<Button variant="outline" class="w-full justify-between">
+										<span class="text-muted-foreground">Search</span>
+										<ChevronDown class="size-4 opacity-50" />
+									</Button>
+								</PopoverTrigger>
+								<PopoverContent class="w-[300px] p-0">
+									<Combobox>
+										<ComboboxInput placeholder="Search items..." />
+										<ComboboxList>
+											<ComboboxViewport>
+												<ComboboxEmpty>No items found.</ComboboxEmpty>
+												<ComboboxItem v-for="item in items" :key="item.id" :value="item.slug"
+													@select="handleItemOutputSelect(item.slug)">
+													{{ item.name }}
+												</ComboboxItem>
+											</ComboboxViewport>
+										</ComboboxList>
+									</Combobox>
+								</PopoverContent>
+							</Popover>
+						</div>
+					</SidebarGroupContent>
+				</SidebarGroup>
+			</SidebarContent>
+		</Sidebar>
+
+		<SidebarInset>
+			<!-- Main Content -->
+			<div class="flex flex-col">
+				<!-- Banner Section -->
+				<MainBanner />
+
+				<!-- Content Area -->
+				<div class="wave-bg bg-cool-gray-10 before:bg-size-[400px]">
+					<div class="container mx-auto px-4 py-6">
+						<!-- Controls Bar -->
+						<div class="flex flex-col gap-4 mb-8">
+							<Button variant="outline" size="sm" @click="toggleSidebar"
+								class="before:hidden w-fit bg-transparent">
+								{{ sidebarOpen ? 'Hide Filters' : 'Show Filters' }}
+							</Button>
+
+							<Input placeholder="Search for any tag..." class="w-full bg-white" />
+
+							<!-- Search Bar (placeholder) -->
+							<!-- <div class="flex-1 max-w-md">
+									
+								</div> -->
+
+							<!-- Active Filters -->
+							<div v-if="hasActiveFilters" class="flex items-center gap-2 flex-wrap">
+								<button v-for="tag in activeFilterTags" :key="tag.key"
+									@click="clearFilter(tag.key, tag.value)"
+									class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cool-gray-20 dark:bg-cool-gray-80 text-cool-gray-90 dark:text-cool-gray-10 text-sm hover:bg-cool-gray-30 dark:hover:bg-cool-gray-70 transition-colors">
+									<span>{{ tag.value }}</span>
+									<CloseIcon class="w-3 h-3" />
+								</button>
+								<Button variant="ghost" size="sm" @click="clearAllFilters(true)" class="text-sm">
+									Clear All
+								</Button>
+							</div>
+
+							<!-- Result Count and Sort -->
+							<!-- <div class="flex items-center gap-4">
+								<span class="text-sm text-muted-foreground whitespace-nowrap">
+									{{ pagination?.total ?? 0 }} Blueprints found
+								</span>
+								<div class="flex items-center gap-2">
+									<Select :model-value="sort.replace(/^-/, '')"
+										@update:model-value="(val) => toggleSort(typeof val === 'string' ? val : 'created_at')">
+										<SelectTrigger class="w-[180px]">
+											<SelectValue :placeholder="currentSortLabel" />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem v-for="option in sortOptions" :key="option.value"
+												:value="option.value">
+												{{ option.label }}
+											</SelectItem>
+										</SelectContent>
+									</Select>
+									<Button variant="ghost" size="icon" @click="toggleSort(sort.replace(/^-/, ''))"
+										:title="isSortDescending ? 'Sort ascending' : 'Sort descending'">
+										{{ isSortDescending ? '↑' : '↓' }}
+									</Button>
+								</div>
+							</div> -->
+						</div>
+
+						<!-- Loading State -->
+						<div v-if="status === 'pending'" class="flex items-center justify-center py-12">
+							<p class="text-muted-foreground">Loading blueprints...</p>
+						</div>
+
+						<!-- Error State -->
+						<div v-if="status === 'error'" class="flex flex-col items-center justify-center py-12">
+							<p class="text-destructive mb-2">Error loading blueprints:</p>
+							<pre class="text-sm text-muted-foreground">{{ error }}</pre>
+						</div>
+
+						<!-- Blueprints Grid -->
+						<div v-if="status === 'success'"
+							class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+							<BlueprintCard v-for="blueprint in blueprints" :key="blueprint.id" :blueprint="blueprint"
+								@filter-tag="handleTagFilter" @filter-region="handleRegionFilter"
+								@filter-author="handleAuthorFilter" />
+
+							<div v-if="blueprints.length === 0"
+								class="col-span-full flex items-center justify-center py-12">
+								<p class="text-muted-foreground">No blueprints found.</p>
+							</div>
+						</div>
+
+						<!-- Pagination -->
+						<div v-if="pagination && pagination.last_page > 1" class="flex justify-center">
+							<Pagination :total="pagination.total" :items-per-page="pagination.per_page"
+								:page="pagination.current_page" @update:page="navigateToPage">
+								<template #default="{ page, pageCount }">
+									<PaginationContent>
+										<PaginationPrevious :disabled="pagination.current_page <= 1"
+											@click="navigateToPage(pagination.current_page - 1)" />
+										<template v-for="pageNum in getPageNumbers" :key="pageNum">
+											<PaginationEllipsis v-if="pageNum === 'ellipsis'" />
+											<PaginationItem v-else :value="pageNum"
+												:is-active="pageNum === pagination.current_page"
+												@click="navigateToPage(pageNum)">
+												{{ pageNum }}
+											</PaginationItem>
+										</template>
+										<PaginationNext :disabled="pagination.current_page >= pagination.last_page"
+											@click="navigateToPage(pagination.current_page + 1)" />
+									</PaginationContent>
+								</template>
+							</Pagination>
+						</div>
+					</div>
+				</div>
 			</div>
-
-			<div v-if="hasActiveFilters" class="active-filters">
-				<span>Active filters:</span>
-				<button v-for="[key, value] in filterEntries" :key="key" @click="clearFilter(key)" class="filter-tag">
-					{{ key }}: {{ Array.isArray(value) ? value.join(', ') : value }}
-					×
-				</button>
-				<button @click="clearAllFilters(true)" class="clear-all">
-					Clear all
-				</button>
-			</div>
-		</div>
-
-		<!-- Loading State -->
-		<div v-if="status === 'pending'" class="loading">
-			Loading blueprints...
-		</div>
-
-		<!-- Error State -->
-		<div v-if="status === 'error'" class="error">
-			<p>Error loading blueprints:</p>
-			<pre>{{ error }}</pre>
-		</div>
-
-		<!-- Blueprints Grid -->
-		<div v-if="status === 'success'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-7.5">
-			<BlueprintCard v-for="blueprint in blueprints" :key="blueprint.id" :blueprint="blueprint"
-				@filter-tag="handleTagFilter" @filter-region="handleRegionFilter" @filter-author="handleAuthorFilter" />
-
-			<div v-if="blueprints.length === 0" class="empty-state">
-				<p>No blueprints found.</p>
-			</div>
-		</div>
-
-		<!-- Pagination -->
-		<div v-if="pagination && pagination.last_page > 1" class="pagination">
-			<button :disabled="pagination.current_page <= 1" @click="currentPage = pagination.current_page - 1">
-				Previous
-			</button>
-			<span>
-				Page {{ pagination.current_page }} of {{ pagination.last_page }}
-				({{ pagination.total }} total)
-			</span>
-			<button :disabled="pagination.current_page >= pagination.last_page"
-				@click="currentPage = pagination.current_page + 1">
-				Next
-			</button>
-		</div>
+		</SidebarInset>
 	</div>
 </template>

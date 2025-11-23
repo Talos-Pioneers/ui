@@ -11,6 +11,7 @@ import LoginDialog from '~/components/auth/LoginDialog.vue'
 import RegisterDialog from '~/components/auth/RegisterDialog.vue'
 import { TooltipProvider } from '~/components/ui/tooltip';
 import { Toaster } from '~/components/ui/sonner';
+import { SidebarProvider } from '~/components/ui/sidebar';
 </script>
 
 <template>
@@ -30,8 +31,12 @@ import { Toaster } from '~/components/ui/sonner';
         <Body>
             <TooltipProvider>
                 <Toaster />
-                <Header />
-                <slot />
+                <div class="[--header-height:calc(--spacing(16.5))]">
+                    <SidebarProvider :default-open="false" storage-key="filter-sidebar" class="flex flex-col">
+                        <Header />
+                        <slot />
+                    </SidebarProvider>
+                </div>
                 <LoginDialog />
                 <RegisterDialog />
             </TooltipProvider>

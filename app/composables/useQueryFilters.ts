@@ -33,8 +33,14 @@ export function useQueryFilters<T extends QueryFiltersConfig>(config: T) {
 		filters.value[key] = value;
 	};
 
-	const clearFilter = (key: string) => {
-		filters.value[key] = null;
+	const clearFilter = (key: string, value?: any) => {
+		if (value) {
+			filters.value[key] = filters.value[key].filter(
+				(item: any) => item !== value
+			);
+		} else {
+			filters.value[key] = null;
+		}
 	};
 
 	const clearAllFilters = (forceEmpty = false) => {
@@ -65,7 +71,7 @@ export function useQueryFilters<T extends QueryFiltersConfig>(config: T) {
 	};
 
 	const toggleSort = (field: string) => {
-		setSort(field, sortDirection.value === "desc" ? true : false);
+		setSort(field, sortDirection.value !== "desc");
 	};
 
 	const resetSort = () => {
@@ -122,6 +128,12 @@ export function useQueryFilters<T extends QueryFiltersConfig>(config: T) {
 			query: computedQuery.value,
 		});
 	});
+	watch(sortDirection, () => {
+		useRouter().replace({
+			query: computedQuery.value,
+		});
+	});
+
 	const buildFiltersFromQuery = (query: Record<string, string>) => {
 		for (const [key, value] of Object.entries(query)) {
 			if (key.startsWith("filter[")) {
@@ -169,169 +181,3 @@ export function useQueryFilters<T extends QueryFiltersConfig>(config: T) {
 		buildSortFromQuery,
 	};
 }
-
-// /**
-//  * Composable for managing filters and sorting
-//  * Works with Laravel QueryBuilder format: filter[key]=value and sort=field
-//  */
-// export function useQueryFilters<T extends QueryFiltersConfig>(config: T) {
-// 	// Initialize filter refs from defaults
-// 	const filters = reactive<Record<string, any>>({});
-// 	const sort = ref<string>(config.sort.default);
-
-// 	// Initialize filters from config defaults
-// 	for (const [key, filterConfig] of Object.entries(config.filters)) {
-// 		if (filterConfig.default !== undefined) {
-// 			filters[key] = filterConfig.default;
-// 		} else {
-// 			filters[key] = filterConfig.type === "array" ? [] : null;
-// 		}
-// 	}
-
-// 	/**
-// 	 * Set a filter value
-// 	 */
-// 	const setFilter = (key: string, value: any) => {
-// 		if (key in filters) {
-// 			filters[key] = value;
-// 		}
-// 	};
-
-// 	/**
-// 	 * Clear a specific filter
-// 	 */
-// 	const clearFilter = (key: string) => {
-// 		if (key in filters) {
-// 			const filterConfig = config.filters[key];
-// 			filters[key] =
-// 				filterConfig?.default ?? (filterConfig?.type === "array" ? [] : null);
-// 		}
-// 	};
-
-// 	/**
-// 	 * Clear all filters
-// 	 */
-// 	const clearAllFilters = () => {
-// 		for (const [key, filterConfig] of Object.entries(config.filters)) {
-// 			filters[key] =
-// 				filterConfig?.default ?? (filterConfig?.type === "array" ? [] : null);
-// 		}
-// 	};
-
-// 	/**
-// 	 * Set sort field and direction
-// 	 */
-// 	const setSort = (field: string, descending = false) => {
-// 		sort.value = descending ? `-${field}` : field;
-// 	};
-
-// 	/**
-// 	 * Toggle sort direction for current field
-// 	 */
-// 	const toggleSort = (field: string) => {
-// 		const currentField = sort.value.replace(/^-/, "");
-// 		if (currentField === field) {
-// 			// Toggle direction (if descending, make ascending, and vice versa)
-// 			setSort(field, !sort.value.startsWith("-"));
-// 		} else {
-// 			// Set new field ascending
-// 			setSort(field, false);
-// 		}
-// 	};
-
-// 	/**
-// 	 * Reset to defaults
-// 	 */
-// 	const reset = () => {
-// 		clearAllFilters();
-// 		sort.value = config.sort.default;
-// 	};
-
-// 	/**
-// 	 * Build query parameters for API requests
-// 	 * Returns object compatible with ofetch/useSanctumFetch query option
-// 	 */
-// 	const buildQuery = (): Record<string, string> => {
-// 		const query: Record<string, string> = {};
-
-// 		// Get plain values from reactive filters
-// 		const plainFilters = toRaw(filters);
-
-// 		// Add filters
-// 		for (const [key, value] of Object.entries(plainFilters)) {
-// 			if (
-// 				value !== null &&
-// 				value !== undefined &&
-// 				value !== "" &&
-// 				(Array.isArray(value) ? value.length > 0 : true)
-// 			) {
-// 				const filterConfig = config.filters[key];
-// 				if (filterConfig) {
-// 					if (filterConfig.type === "array") {
-// 						if (Array.isArray(value) && value.length > 0) {
-// 							query[`filter[${key}]`] = value.join(",");
-// 						}
-// 					} else if (filterConfig.type === "boolean") {
-// 						query[`filter[${key}]`] = value ? "1" : "0";
-// 					} else {
-// 						query[`filter[${key}]`] = String(value);
-// 					}
-// 				}
-// 			}
-// 		}
-
-// 		// Add sort (get plain value from ref)
-// 		const sortValue = toValue(sort);
-// 		if (sortValue) {
-// 			query.sort = sortValue;
-// 		}
-
-// 		return query;
-// 	};
-
-// 	/**
-// 	 * Get current sort field (without direction prefix)
-// 	 */
-// 	const getSortField = computed(() => {
-// 		return sort.value.replace(/^-/, "");
-// 	});
-
-// 	/**
-// 	 * Check if sort is descending
-// 	 */
-// 	const isSortDescending = computed(() => {
-// 		return sort.value.startsWith("-");
-// 	});
-
-// 	/**
-// 	 * Check if any filters are active
-// 	 */
-// 	const hasActiveFilters = computed(() => {
-// 		return Object.entries(filters).some(([key, value]) => {
-// 			const filterConfig = config.filters[key];
-// 			const defaultValue =
-// 				filterConfig?.default ?? (filterConfig?.type === "array" ? [] : null);
-// 			return (
-// 				value !== defaultValue &&
-// 				value !== null &&
-// 				value !== "" &&
-// 				(Array.isArray(value) ? value.length > 0 : true)
-// 			);
-// 		});
-// 	});
-
-// 	return {
-// 		filters: readonly(filters),
-// 		sort: readonly(sort),
-// 		setFilter,
-// 		clearFilter,
-// 		clearAllFilters,
-// 		setSort,
-// 		toggleSort,
-// 		reset,
-// 		buildQuery,
-// 		getSortField,
-// 		isSortDescending,
-// 		hasActiveFilters,
-// 	};
-// }
