@@ -99,13 +99,11 @@ export function useQueryFilters<T extends QueryFiltersConfig>(config: T) {
 			) {
 				if (filterConfig.type === "array") {
 					query[`filter[${key}]`] = value.join(",");
-					return query;
-				}
-				if (filterConfig.type === "boolean") {
+				} else if (filterConfig.type === "boolean") {
 					query[`filter[${key}]`] = value ? "1" : "0";
-					return query;
+				} else {
+					query[`filter[${key}]`] = String(value);
 				}
-				query[`filter[${key}]`] = String(value);
 			}
 		}
 

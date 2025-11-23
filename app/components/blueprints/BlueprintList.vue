@@ -10,6 +10,7 @@ import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarGroupC
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
 import { Checkbox } from '~/components/ui/checkbox';
 import { Combobox } from '~/components/ui/combobox';
+import { SearchableTagsInput } from '~/components/ui/tags-input';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
@@ -91,25 +92,48 @@ const toggleTagFilter = (tagId: string) => {
 	}
 };
 
-// Handle combobox selections
-const handleFacilitySelect = (facilitySlug: string) => {
-	const currentFacilities = (props.filters.facility as string[]) || [];
-	if (!currentFacilities.includes(facilitySlug)) {
-		emit('update:filter', 'facility', [...currentFacilities, facilitySlug]);
-	}
+// Check if tag is selected
+const isTagSelected = (tagId: string) => {
+	const currentTags = (props.filters['tags.id'] as string[]) || [];
+	return currentTags.includes(tagId);
 };
-const handleItemInputSelect = (itemSlug: string) => {
-	const currentItems = (props.filters.item_input as string[]) || [];
-	if (!currentItems.includes(itemSlug)) {
-		emit('update:filter', 'item_input', [...currentItems, itemSlug]);
-	}
-};
-const handleItemOutputSelect = (itemSlug: string) => {
-	const currentItems = (props.filters.item_output as string[]) || [];
-	if (!currentItems.includes(itemSlug)) {
-		emit('update:filter', 'item_output', [...currentItems, itemSlug]);
-	}
-};
+
+// Group tags by type
+const groupedTags = computed(() => {
+	const groups = {
+		blueprint_tags: [] as Tag[],
+		blueprint_tier: [] as Tag[],
+		blueprint_type: [] as Tag[],
+	};
+
+	props.tags.forEach(tag => {
+		if (tag.type === 'blueprint_tags') {
+			groups.blueprint_tags.push(tag);
+		} else if (tag.type === 'blueprint_tier') {
+			groups.blueprint_tier.push(tag);
+		} else if (tag.type === 'blueprint_type') {
+			groups.blueprint_type.push(tag);
+		}
+	});
+
+	return groups;
+});
+
+// Computed models for TagsInput components
+const facilitiesModel = computed({
+	get: () => (props.filters.facility as string[]) || [],
+	set: (value: string[]) => emit('update:filter', 'facility', value),
+});
+
+const itemInputModel = computed({
+	get: () => (props.filters.item_input as string[]) || [],
+	set: (value: string[]) => emit('update:filter', 'item_input', value),
+});
+
+const itemOutputModel = computed({
+	get: () => (props.filters.item_output as string[]) || [],
+	set: (value: string[]) => emit('update:filter', 'item_output', value),
+});
 const handleSortChange = (val: any) => {
 	const field = typeof val === 'string' ? val : (Array.isArray(val) && val.length > 0 ? val[0] : 'created_at');
 	if (typeof field === 'string') {
@@ -186,13 +210,40 @@ const { open: sidebarOpen, toggleSidebar } = useSidebar();
 							</div>
 						</div>
 
-						<!-- Categories (Tags) -->
-						<div class="px-2 py-3 space-y-2">
-							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Categories</label>
+						<!-- Tags Section -->
+						<div v-if="groupedTags.blueprint_tags.length > 0" class="px-2 py-3 space-y-2">
+							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Tags</label>
 							<div class="space-y-2 max-h-48 overflow-y-auto">
-								<label v-for="tag in tags" :key="tag.id"
-									class="flex items-center gap-2 cursor-pointer hover:bg-sidebar-accent/50 rounded px-2 py-1.5 transition-colors">
-									<Checkbox />
+								<label v-for="tag in groupedTags.blueprint_tags" :key="tag.id"
+									class="flex items-center gap-2 cursor-pointer hover:bg-sidebar-accent/50 rounded px-2 py-1.5 transition-colors"
+									@click="toggleTagFilter(tag.id)">
+									<Checkbox :checked="isTagSelected(tag.id)" />
+									<span class="text-sm text-sidebar-foreground">{{ tag.name }}</span>
+								</label>
+							</div>
+						</div>
+
+						<!-- Tier Section -->
+						<div v-if="groupedTags.blueprint_tier.length > 0" class="px-2 py-3 space-y-2">
+							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Tier</label>
+							<div class="space-y-2 max-h-48 overflow-y-auto">
+								<label v-for="tag in groupedTags.blueprint_tier" :key="tag.id"
+									class="flex items-center gap-2 cursor-pointer hover:bg-sidebar-accent/50 rounded px-2 py-1.5 transition-colors"
+									@click="toggleTagFilter(tag.id)">
+									<Checkbox :checked="isTagSelected(tag.id)" />
+									<span class="text-sm text-sidebar-foreground">{{ tag.name }}</span>
+								</label>
+							</div>
+						</div>
+
+						<!-- Type Section -->
+						<div v-if="groupedTags.blueprint_type.length > 0" class="px-2 py-3 space-y-2">
+							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Type</label>
+							<div class="space-y-2 max-h-48 overflow-y-auto">
+								<label v-for="tag in groupedTags.blueprint_type" :key="tag.id"
+									class="flex items-center gap-2 cursor-pointer hover:bg-sidebar-accent/50 rounded px-2 py-1.5 transition-colors"
+									@click="toggleTagFilter(tag.id)">
+									<Checkbox :checked="isTagSelected(tag.id)" />
 									<span class="text-sm text-sidebar-foreground">{{ tag.name }}</span>
 								</label>
 							</div>
@@ -202,25 +253,27 @@ const { open: sidebarOpen, toggleSidebar } = useSidebar();
 						<div class="px-2 py-3 space-y-2">
 							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Facilities
 								Used</label>
-							<Combobox
-								:items="facilities.map(facility => ({ value: facility.slug, label: facility.name }))"
-								placeholder="Search facilities..." />
+							<SearchableTagsInput v-model="facilitiesModel"
+								:options="facilities.map(f => ({ value: f.slug, label: f.name }))"
+								placeholder="Search facilities..." class="w-full" />
 						</div>
 
 						<!-- Input Products -->
 						<div class="px-2 py-3 space-y-2">
 							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Input
 								Products</label>
-							<Combobox :items="items.map(item => ({ value: item.slug, label: item.name }))"
-								placeholder="Search items..." />
+							<SearchableTagsInput v-model="itemInputModel"
+								:options="items.map(i => ({ value: i.slug, label: i.name }))"
+								placeholder="Search input items..." class="w-full" />
 						</div>
 
 						<!-- Output Products -->
 						<div class="px-2 py-3 space-y-2">
 							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Output
 								Products</label>
-							<Combobox :items="items.map(item => ({ value: item.slug, label: item.name }))"
-								placeholder="Search items..." />
+							<SearchableTagsInput v-model="itemOutputModel"
+								:options="items.map(i => ({ value: i.slug, label: i.name }))"
+								placeholder="Search output items..." class="w-full" />
 						</div>
 					</SidebarGroupContent>
 				</SidebarGroup>
