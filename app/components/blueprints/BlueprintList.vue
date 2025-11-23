@@ -5,12 +5,12 @@ import type { Facility } from '~/models/facility';
 import type { Item } from '~/models/item';
 import type { Tag } from '~/models/tag';
 import BlueprintCard from './BlueprintCard.vue';
+import BlueprintPagination from './BlueprintPagination.vue';
 import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarGroupContent, SidebarTrigger, SidebarInset } from '~/components/ui/sidebar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
 import { Checkbox } from '~/components/ui/checkbox';
 import { Combobox, ComboboxInput, ComboboxItem, ComboboxList, ComboboxTrigger, ComboboxEmpty, ComboboxViewport } from '~/components/ui/combobox';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover';
-import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext, PaginationEllipsis } from '~/components/ui/pagination';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import RegionValleyIcon from '../icons/RegionValleyIcon.vue';
@@ -288,39 +288,6 @@ const handleItemOutputSelect = (itemSlug: string) => {
 	}
 };
 
-// Navigation helpers
-const navigateToPage = (page: number) => {
-	currentPage.value = page;
-};
-
-const getPageNumbers = computed(() => {
-	if (!pagination.value) return [];
-
-	const current = pagination.value.current_page;
-	const last = pagination.value.last_page;
-	const pages: (number | 'ellipsis')[] = [];
-
-	if (last <= 7) {
-		for (let i = 1; i <= last; i++) {
-			pages.push(i);
-		}
-	} else {
-		pages.push(1);
-		if (current > 3) {
-			pages.push('ellipsis');
-		}
-		for (let i = Math.max(2, current - 1); i <= Math.min(last - 1, current + 1); i++) {
-			pages.push(i);
-		}
-		if (current < last - 2) {
-			pages.push('ellipsis');
-		}
-		pages.push(last);
-	}
-
-	return pages;
-});
-
 const { open: sidebarOpen, toggleSidebar } = useSidebar()
 </script>
 
@@ -528,16 +495,47 @@ const { open: sidebarOpen, toggleSidebar } = useSidebar()
 								</div> -->
 
 							<!-- Active Filters -->
-							<div v-if="hasActiveFilters" class="flex items-center gap-2 flex-wrap">
-								<button v-for="tag in activeFilterTags" :key="tag.key"
-									@click="clearFilter(tag.key, tag.value)"
-									class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cool-gray-20 dark:bg-cool-gray-80 text-cool-gray-90 dark:text-cool-gray-10 text-sm hover:bg-cool-gray-30 dark:hover:bg-cool-gray-70 transition-colors">
-									<span>{{ tag.value }}</span>
-									<CloseIcon class="w-3 h-3" />
-								</button>
-								<Button variant="ghost" size="sm" @click="clearAllFilters(true)" class="text-sm">
-									Clear All
-								</Button>
+							<div class="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+								<div v-if="hasActiveFilters" class="flex items-center gap-2 flex-wrap">
+									<button v-for="tag in activeFilterTags" :key="tag.key"
+										@click="clearFilter(tag.key, tag.value)"
+										class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cool-gray-20 dark:bg-cool-gray-80 text-cool-gray-90 dark:text-cool-gray-10 text-sm hover:bg-cool-gray-30 dark:hover:bg-cool-gray-70 transition-colors">
+										<span>{{ tag.value }}</span>
+										<CloseIcon class="w-3 h-3" />
+									</button>
+									<Button variant="ghost" size="sm" @click="clearAllFilters(true)" class="text-sm">
+										Clear All
+									</Button>
+								</div>
+								<div v-else></div>
+								<span class="text-sm text-muted-foreground whitespace-nowrap">
+									{{ pagination?.total ?? 0 }} Blueprints found
+								</span>
+							</div>
+
+							<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+								<div class="flex items-center gap-2">
+									<label class="text-sm text-muted-foreground whitespace-nowrap">Sort by</label>
+									<Select :model-value="sort.replace(/^-/, '')"
+										@update:model-value="(val) => toggleSort(typeof val === 'string' ? val : 'created_at')">
+										<SelectTrigger class="w-[180px]">
+											<SelectValue :placeholder="currentSortLabel" />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem v-for="option in sortOptions" :key="option.value"
+												:value="option.value">
+												{{ option.label }}
+											</SelectItem>
+										</SelectContent>
+									</Select>
+									<Button class="rounded" variant="ghost" size="icon-sm"
+										@click="toggleSort(sort.replace(/^-/, ''))"
+										:title="isSortDescending ? 'Sort ascending' : 'Sort descending'">
+										{{ isSortDescending ? '↑' : '↓' }}
+									</Button>
+								</div>
+								<BlueprintPagination v-model:current-page="currentPage" v-model:per-page="perPage"
+									:pagination="pagination" :show-per-page-selector="true" />
 							</div>
 
 							<!-- Result Count and Sort -->
@@ -590,27 +588,10 @@ const { open: sidebarOpen, toggleSidebar } = useSidebar()
 							</div>
 						</div>
 
-						<!-- Pagination -->
-						<div v-if="pagination && pagination.last_page > 1" class="flex justify-center">
-							<Pagination :total="pagination.total" :items-per-page="pagination.per_page"
-								:page="pagination.current_page" @update:page="navigateToPage">
-								<template #default="{ page, pageCount }">
-									<PaginationContent>
-										<PaginationPrevious :disabled="pagination.current_page <= 1"
-											@click="navigateToPage(pagination.current_page - 1)" />
-										<template v-for="pageNum in getPageNumbers" :key="pageNum">
-											<PaginationEllipsis v-if="pageNum === 'ellipsis'" />
-											<PaginationItem v-else :value="pageNum"
-												:is-active="pageNum === pagination.current_page"
-												@click="navigateToPage(pageNum)">
-												{{ pageNum }}
-											</PaginationItem>
-										</template>
-										<PaginationNext :disabled="pagination.current_page >= pagination.last_page"
-											@click="navigateToPage(pagination.current_page + 1)" />
-									</PaginationContent>
-								</template>
-							</Pagination>
+						<div class="flex justify-end">
+							<!-- Pagination -->
+							<BlueprintPagination v-model:current-page="currentPage" v-model:per-page="perPage"
+								:pagination="pagination" :show-per-page-selector="false" />
 						</div>
 					</div>
 				</div>
