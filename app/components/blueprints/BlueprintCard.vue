@@ -72,10 +72,10 @@ const handleReported = () => {
         class="blueprint-card group grid grid-rows-[auto_1fr] rounded-b-[8px] border-cool-gray-20 border bg-white hover:border-cool-gray-40 transition-colors overflow-hidden">
         <!-- Header Section with Preview Image -->
         <div class="relative aspect-video bg-cool-gray-90 overflow-hidden">
-            <NuxtLinkLocale v-if="previewImage" to="/blueprints/{{ blueprint.id }}" class="w-full h-full">
+            <NuxtLinkLocale v-if="previewImage" :to="`/blueprints/${blueprint.id}`" class="w-full h-full">
                 <img :src="previewImage" :alt="blueprint.title" class="w-full h-full object-cover" />
             </NuxtLinkLocale>
-            <NuxtLinkLocale v-else to="/blueprints/{{ blueprint.id }}"
+            <NuxtLinkLocale v-else :to="`/blueprints/${blueprint.id}`"
                 class="w-full h-full flex items-center justify-center relative">
                 <img :src="NotFoundImage" :alt="blueprint.title" class="w-full h-full object-cover" />
             </NuxtLinkLocale>
@@ -93,7 +93,7 @@ const handleReported = () => {
         <div class="p-4 flex flex-col gap-3 bg-white dark:bg-cool-gray-90 rounded-b-lg h-full">
             <!-- Title and Author -->
             <div>
-                <NuxtLinkLocale to="/blueprints/{{ blueprint.id }}" class="block">
+                <NuxtLinkLocale :to="`/blueprints/${blueprint.id}`" class="block">
                     <h2 class="text-xl font-bold text-cool-gray-90 mb-1 line-clamp-2">
                         {{ blueprint.title }}
                     </h2>

@@ -28,6 +28,7 @@ export type BlueprintFacility = {
 	id: string;
 	slug: string;
 	name: string;
+	icon?: string | null;
 	quantity: number;
 };
 
@@ -35,6 +36,7 @@ export type BlueprintItem = {
 	id: string;
 	slug: string;
 	name: string;
+	icon?: string | null;
 	quantity: number;
 };
 

@@ -187,6 +187,7 @@ const regionOptions = [
 // Format active filters for display
 const activeFilterTags = computed(() => {
 	const filterTags: Array<{ key: string; value: any }> = [];
+	console.log(filters.value);
 
 	Object.entries(filters.value).forEach(([key, value]) => {
 		if (value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
@@ -206,7 +207,7 @@ const activeFilterTags = computed(() => {
 
 		if (key === 'tags.id' && Array.isArray(value)) {
 			for (const item of value) {
-				const tag = tags.value.find(t => t.id === item);
+				const tag = tags.value.find(t => t.id == item);
 				filterTags.push({ key, value: tag?.name ?? String(item) });
 			}
 			return;
@@ -214,7 +215,7 @@ const activeFilterTags = computed(() => {
 
 		if (key === 'facility' && Array.isArray(value)) {
 			for (const item of value) {
-				const facility = facilities.value.find(f => f.slug === item);
+				const facility = facilities.value.find(f => f.slug == item);
 				filterTags.push({ key, value: facility?.name ?? String(item) });
 			}
 			return;
@@ -222,7 +223,7 @@ const activeFilterTags = computed(() => {
 
 		if (key === 'item_input' && Array.isArray(value)) {
 			for (const item of value) {
-				const factoryItem = items.value.find(i => i.slug === item);
+				const factoryItem = items.value.find(i => i.slug == item);
 				filterTags.push({ key, value: factoryItem?.name ?? String(item) });
 			}
 			return;
@@ -230,7 +231,7 @@ const activeFilterTags = computed(() => {
 
 		if (key === 'item_output' && Array.isArray(value)) {
 			for (const item of value) {
-				const factoryItem = items.value.find(i => i.slug === item);
+				const factoryItem = items.value.find(i => i.slug == item);
 				filterTags.push({ key, value: factoryItem?.name ?? String(item) });
 			}
 			return;
