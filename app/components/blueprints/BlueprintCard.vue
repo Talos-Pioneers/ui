@@ -31,8 +31,6 @@ const emit = defineEmits<{
 
 const { copy, copied } = useClipboard();
 
-const { locale } = useI18n();
-
 const dropdownOpen = ref(false);
 
 const previewImage = computed(() => {
@@ -65,11 +63,13 @@ const handleAuthorClick = () => {
 const handleReported = () => {
     dropdownOpen.value = false;
 };
+
+const { handleDelete } = useBlueprintDelete();
 </script>
 
 <template>
     <div
-        class="blueprint-card group grid grid-rows-[auto_1fr] rounded-b-[8px] border-cool-gray-20 border bg-white hover:border-cool-gray-40 transition-colors overflow-hidden">
+        class="group grid grid-rows-[auto_1fr] rounded-b-[8px] border-cool-gray-20 border bg-white hover:border-cool-gray-40 transition-colors overflow-hidden">
         <!-- Header Section with Preview Image -->
         <div class="relative aspect-video bg-cool-gray-90 overflow-hidden">
             <NuxtLinkLocale v-if="previewImage" :to="`/blueprints/${blueprint.id}`" class="w-full h-full">
@@ -158,6 +158,12 @@ const handleReported = () => {
                                     </DropdownMenuItem>
                                 </template>
                             </ReportButton>
+                            <DropdownMenuItem v-if="blueprint.permissions.can_delete" @click="handleDelete(blueprint)">
+                                <span>Delete</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem v-if="blueprint.permissions.can_edit" as-child>
+                                <NuxtLinkLocale :to="`/blueprints/${blueprint.id}/edit`"></NuxtLinkLocale>
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
@@ -206,9 +212,3 @@ const handleReported = () => {
         </div>
     </div>
 </template>
-
-<style scoped>
-.blueprint-card {
-    @apply transition-all duration-200;
-}
-</style>
