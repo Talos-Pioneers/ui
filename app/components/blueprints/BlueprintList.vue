@@ -9,7 +9,7 @@ import BlueprintPagination from './BlueprintPagination.vue';
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarGroupContent, SidebarInset } from '~/components/ui/sidebar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
 import { Checkbox } from '~/components/ui/checkbox';
-import { Combobox, ComboboxInput, ComboboxItem, ComboboxList, ComboboxTrigger, ComboboxEmpty, ComboboxViewport } from '~/components/ui/combobox';
+import { Combobox } from '~/components/ui/combobox';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
@@ -54,7 +54,6 @@ const emit = defineEmits<{
 
 // Sort options
 const sortOptions = [
-	{ value: 'created_at', label: 'Relevancy' },
 	{ value: 'created_at', label: 'Created Date' },
 	{ value: 'updated_at', label: 'Updated Date' },
 	{ value: 'title', label: 'Title' },
@@ -83,6 +82,7 @@ const handleAuthorFilter = (authorId: string) => {
 
 // Handle tag checkbox toggle
 const toggleTagFilter = (tagId: string) => {
+	console.log('toggleTagFilter', tagId);
 	const currentTags = (props.filters['tags.id'] as string[]) || [];
 	if (currentTags.includes(tagId)) {
 		emit('update:filter', 'tags.id', currentTags.filter(id => id !== tagId));
@@ -98,42 +98,35 @@ const handleFacilitySelect = (facilitySlug: string) => {
 		emit('update:filter', 'facility', [...currentFacilities, facilitySlug]);
 	}
 };
-
 const handleItemInputSelect = (itemSlug: string) => {
 	const currentItems = (props.filters.item_input as string[]) || [];
 	if (!currentItems.includes(itemSlug)) {
 		emit('update:filter', 'item_input', [...currentItems, itemSlug]);
 	}
 };
-
 const handleItemOutputSelect = (itemSlug: string) => {
 	const currentItems = (props.filters.item_output as string[]) || [];
 	if (!currentItems.includes(itemSlug)) {
 		emit('update:filter', 'item_output', [...currentItems, itemSlug]);
 	}
 };
-
 const handleSortChange = (val: any) => {
 	const field = typeof val === 'string' ? val : (Array.isArray(val) && val.length > 0 ? val[0] : 'created_at');
 	if (typeof field === 'string') {
 		emit('update:sort', field, props.isSortDescending);
 	}
 };
-
 const handleSortToggle = () => {
 	const field = props.sort.replace(/^-/, '');
 	emit('update:sort', field, !props.isSortDescending);
 };
-
 const handleRegionClick = (regionValue: string) => {
 	const newValue = props.filters.region === regionValue ? null : regionValue;
 	emit('update:filter', 'region', newValue);
 };
-
 const handleClearFilter = (key: string, value?: any) => {
 	emit('clear-filter', key, value);
 };
-
 const handleClearAllFilters = () => {
 	emit('clear-all-filters');
 };
@@ -155,7 +148,7 @@ const { open: sidebarOpen, toggleSidebar } = useSidebar();
 	<div class="flex h-screen w-full">
 		<Sidebar v-if="showSidebar" class="top-(--header-height) h-[calc(100svh-var(--header-height))]!">
 			<SidebarContent>
-				<SidebarGroup>
+				<!-- <SidebarGroup>
 					<SidebarGroupContent>
 						<div class="flex flex-col gap-2 px-2">
 							<button
@@ -171,7 +164,7 @@ const { open: sidebarOpen, toggleSidebar } = useSidebar();
 							</button>
 						</div>
 					</SidebarGroupContent>
-				</SidebarGroup>
+				</SidebarGroup> -->
 
 				<SidebarGroup>
 					<SidebarGroupLabel>Filters</SidebarGroupLabel>
@@ -199,8 +192,7 @@ const { open: sidebarOpen, toggleSidebar } = useSidebar();
 							<div class="space-y-2 max-h-48 overflow-y-auto">
 								<label v-for="tag in tags" :key="tag.id"
 									class="flex items-center gap-2 cursor-pointer hover:bg-sidebar-accent/50 rounded px-2 py-1.5 transition-colors">
-									<Checkbox :checked="(filters['tags.id'] as string[] || []).includes(tag.id)"
-										@update:checked="toggleTagFilter(tag.id)" />
+									<Checkbox />
 									<span class="text-sm text-sidebar-foreground">{{ tag.name }}</span>
 								</label>
 							</div>
@@ -210,85 +202,25 @@ const { open: sidebarOpen, toggleSidebar } = useSidebar();
 						<div class="px-2 py-3 space-y-2">
 							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Facilities
 								Used</label>
-							<Popover>
-								<PopoverTrigger as-child>
-									<Button variant="outline" class="w-full justify-between">
-										<span class="text-muted-foreground">Search</span>
-										<ChevronDown class="size-4 opacity-50" />
-									</Button>
-								</PopoverTrigger>
-								<PopoverContent class="w-[300px] p-0">
-									<Combobox>
-										<ComboboxInput placeholder="Search facilities..." />
-										<ComboboxList>
-											<ComboboxViewport>
-												<ComboboxEmpty>No facilities found.</ComboboxEmpty>
-												<ComboboxItem v-for="facility in facilities" :key="facility.id"
-													:value="facility.slug"
-													@select="handleFacilitySelect(facility.slug)">
-													{{ facility.name }}
-												</ComboboxItem>
-											</ComboboxViewport>
-										</ComboboxList>
-									</Combobox>
-								</PopoverContent>
-							</Popover>
+							<Combobox
+								:items="facilities.map(facility => ({ value: facility.slug, label: facility.name }))"
+								placeholder="Search facilities..." />
 						</div>
 
 						<!-- Input Products -->
 						<div class="px-2 py-3 space-y-2">
 							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Input
 								Products</label>
-							<Popover>
-								<PopoverTrigger as-child>
-									<Button variant="outline" class="w-full justify-between">
-										<span class="text-muted-foreground">Search</span>
-										<ChevronDown class="size-4 opacity-50" />
-									</Button>
-								</PopoverTrigger>
-								<PopoverContent class="w-[300px] p-0">
-									<Combobox>
-										<ComboboxInput placeholder="Search items..." />
-										<ComboboxList>
-											<ComboboxViewport>
-												<ComboboxEmpty>No items found.</ComboboxEmpty>
-												<ComboboxItem v-for="item in items" :key="item.id" :value="item.slug"
-													@select="handleItemInputSelect(item.slug)">
-													{{ item.name }}
-												</ComboboxItem>
-											</ComboboxViewport>
-										</ComboboxList>
-									</Combobox>
-								</PopoverContent>
-							</Popover>
+							<Combobox :items="items.map(item => ({ value: item.slug, label: item.name }))"
+								placeholder="Search items..." />
 						</div>
 
 						<!-- Output Products -->
 						<div class="px-2 py-3 space-y-2">
 							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Output
 								Products</label>
-							<Popover>
-								<PopoverTrigger as-child>
-									<Button variant="outline" class="w-full justify-between">
-										<span class="text-muted-foreground">Search</span>
-										<ChevronDown class="size-4 opacity-50" />
-									</Button>
-								</PopoverTrigger>
-								<PopoverContent class="w-[300px] p-0">
-									<Combobox>
-										<ComboboxInput placeholder="Search items..." />
-										<ComboboxList>
-											<ComboboxViewport>
-												<ComboboxEmpty>No items found.</ComboboxEmpty>
-												<ComboboxItem v-for="item in items" :key="item.id" :value="item.slug"
-													@select="handleItemOutputSelect(item.slug)">
-													{{ item.name }}
-												</ComboboxItem>
-											</ComboboxViewport>
-										</ComboboxList>
-									</Combobox>
-								</PopoverContent>
-							</Popover>
+							<Combobox :items="items.map(item => ({ value: item.slug, label: item.name }))"
+								placeholder="Search items..." />
 						</div>
 					</SidebarGroupContent>
 				</SidebarGroup>

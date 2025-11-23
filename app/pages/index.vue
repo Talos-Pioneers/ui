@@ -123,7 +123,7 @@ watch([currentPage, perPage], () => {
 
 // Fetch filter data
 const { data: facilitiesData } = await useSanctumFetch<{ data: Facility[] }>('/api/v1/facilities');
-const { data: itemsData } = await useSanctumFetch<{ data: Item[] }>('/api/v1/items');
+const { data: itemsData, status: itemsStatus, error: itemsError } = await useSanctumFetch<{ data: Item[] }>('/api/v1/items');
 const { data: tagsData } = await useSanctumFetch<{ data: Tag[] }>('/api/v1/tags');
 
 const facilities = computed(() => facilitiesData.value?.data ?? []);
@@ -188,6 +188,7 @@ const activeFilterTags = computed(() => {
 
 // Handle filter events from BlueprintList
 const handleFilterUpdate = (key: string, value: any) => {
+	console.log('handleFilterUpdate', key, value);
 	setFilter(key, value);
 };
 
