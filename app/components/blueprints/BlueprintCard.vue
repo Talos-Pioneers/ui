@@ -106,16 +106,6 @@ const handleReported = () => {
                                 blueprint.creator.name }}</span>
                     </button>
                     <p v-else class="text-sm text-cool-gray-70">by Unknown</p>
-                    <div class="flex items-center gap-3 text-xs text-cool-gray-60">
-                        <div class="flex items-center gap-1">
-                            <ClockIcon class="w-4 h-4" />
-                            <span>{{ useFormatDate(blueprint.created_at) }}</span>
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <CalendarIcon class="w-4 h-4" />
-                            <span>{{ useFormatDate(blueprint.updated_at) }}</span>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -183,9 +173,19 @@ const handleReported = () => {
                     <LikesIcon class="w-4" />
                     <span>{{ useFormatCompactNumber(blueprint.likes_count) }}</span>
                 </div>
-                <div class="flex items-center gap-1.5 ml-auto">
+                <div class="flex items-center gap-1.5">
                     <CommentsIcon class="w-6" />
                     <span>{{ useFormatCompactNumber(blueprint.comments_count) }}</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs text-cool-gray-60 ml-auto">
+                    <div class="flex items-center gap-1">
+                        <ClockIcon class="w-4 h-4" />
+                        <span>{{ useFormatDate(blueprint.created_at) }}</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <CalendarIcon class="w-4 h-4" />
+                        <span>{{ useFormatDate(blueprint.updated_at) }}</span>
+                    </div>
                 </div>
             </div>
 
