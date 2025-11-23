@@ -410,7 +410,7 @@ const { handleDelete } = await useBlueprintDelete();
                                 <CarouselContent>
                                     <CarouselItem v-for="(image, index) in galleryDisplayItems" :key="index">
                                         <img :src="image.url || image.thumbnail" :alt="image.name"
-                                            class="h-[360px] w-full object-cover" />
+                                            class="w-full h-full object-center object-contain" />
                                     </CarouselItem>
                                 </CarouselContent>
                                 <CarouselPrevious class="absolute left-4 top-1/2 -translate-y-1/2" />
@@ -422,7 +422,7 @@ const { handleDelete } = await useBlueprintDelete();
                                 @click="goToSlide(index)" class="rounded-xl border transition-colors overflow-hidden"
                                 :class="activeSlide === index ? 'border-primary' : 'border-transparent hover:border-cool-gray-40'">
                                 <img :src="image.thumbnail || image.url" :alt="image.name"
-                                    class="h-20 w-full object-cover" />
+                                    class="w-full object-cover" />
                             </button>
                         </div>
                     </section>
@@ -574,7 +574,7 @@ const { handleDelete } = await useBlueprintDelete();
                                 <div class="flex items-center justify-between">
                                     <span class="text-cool-gray-60">Region</span>
                                     <span>{{regionOptions.find(r => r.value === blueprint?.region)?.label ?? 'Any'
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <span class="text-cool-gray-60">Version</span>
