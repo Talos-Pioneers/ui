@@ -221,7 +221,6 @@ const handleCopyCode = async () => {
         if (blueprintResponse.value?.data) {
             blueprintResponse.value.data.copies_count = response.copies_count;
         }
-        toast.success(response.message ?? 'Copy tracked successfully');
     } catch (error) {
         const { code } = useSanctumError(error);
         if (code === 429) {
@@ -574,7 +573,7 @@ const { handleDelete } = await useBlueprintDelete();
                                 <div class="flex items-center justify-between">
                                     <span class="text-cool-gray-60">Region</span>
                                     <span>{{regionOptions.find(r => r.value === blueprint?.region)?.label ?? 'Any'
-                                        }}</span>
+                                    }}</span>
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <span class="text-cool-gray-60">Version</span>
