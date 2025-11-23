@@ -20,6 +20,10 @@ export type Blueprint = {
 	copies_count: number;
 	comments_count: number;
 	is_liked: boolean;
+	permissions: {
+		can_edit: boolean;
+		can_delete: boolean;
+	};
 	created_at: string;
 	updated_at: string;
 };

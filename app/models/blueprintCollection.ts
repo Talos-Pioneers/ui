@@ -10,6 +10,10 @@ export type BlueprintCollection = {
 	} | null;
 	blueprints?: BlueprintCollectionBlueprint[];
 	blueprints_count?: number;
+	permissions: {
+		can_edit: boolean;
+		can_delete: boolean;
+	};
 	created_at: string;
 	updated_at: string;
 };
