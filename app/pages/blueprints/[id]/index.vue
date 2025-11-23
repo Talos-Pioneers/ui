@@ -4,7 +4,12 @@ import { toast } from 'vue-sonner';
 import { Button } from '~/components/ui/button';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '~/components/ui/carousel';
 import type { UnwrapRefCarouselApi } from '~/components/ui/carousel/interface';
+import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '~/components/ui/dropdown-menu';
 import CommentComposer from '~/components/comments/CommentComposer.vue';
+import AddCollectionIcon from '~/components/icons/AddCollectionIcon.vue';
+import ShareIcon from '~/components/icons/ShareIcon.vue';
+import VerticalElipsis from '~/components/icons/VerticalElipsis.vue';
 import CommentList from '~/components/comments/CommentList.vue';
 import CopyIcon from '~/components/icons/CopyIcon.vue';
 import LikesIcon from '~/components/icons/LikesIcon.vue';
@@ -16,6 +21,7 @@ import RegionIcon from '~/components/icons/RegionIcon.vue';
 import NotFoundImage from '~/assets/img/not-found-placeholder.png';
 import type { Blueprint, BlueprintFacility, BlueprintItem, BlueprintTag } from '~/models/blueprint';
 import type { Comment } from '~/models/comment';
+import { regionOptions } from '~/constants/blueprintOptions';
 
 type BlueprintResponse = {
     data: Blueprint;
@@ -176,7 +182,7 @@ const handleToggleLike = async () => {
 
     isTogglingLike.value = true;
     try {
-        const response = await sanctumClient(`/api/v1/blueprints/${blueprint.value.id}/like`, {
+        const response = await sanctumClient<{ liked: boolean; likes_count: number }>(`/api/v1/blueprints/${blueprint.value.id}/like`, {
             method: 'post',
         });
         if (blueprintResponse.value?.data) {
@@ -209,7 +215,7 @@ const handleCopyCode = async () => {
 
     isCopyingCode.value = true;
     try {
-        const response = await sanctumClient(`/api/v1/blueprints/${blueprint.value.id}/copy`, {
+        const response = await sanctumClient<{ copies_count: number; message: string }>(`/api/v1/blueprints/${blueprint.value.id}/copy`, {
             method: 'post',
         });
         if (blueprintResponse.value?.data) {
@@ -371,6 +377,12 @@ const blueprintLoadError = computed(() => blueprintStatus.value === 'error' ? bl
 
 const isCommentsLoading = computed(() => commentsStatus.value === 'pending' && commentsPage.value === 1 && comments.length === 0);
 const commentsLoadError = computed(() => commentsStatus.value === 'error' ? 'Unable to load comments.' : commentsError.value as string | null);
+
+const dropdownOpen = ref(false);
+const handleReported = () => {
+    dropdownOpen.value = false;
+};
+const { handleDelete } = await useBlueprintDelete();
 </script>
 
 <template>
@@ -393,7 +405,7 @@ const commentsLoadError = computed(() => commentsStatus.value === 'error' ? 'Una
                 <div class="space-y-8">
                     <section class="space-y-4">
                         <div
-                            class="relative rounded-3xl overflow-hidden border border-cool-gray-20 dark:border-cool-gray-80 bg-white dark:bg-cool-gray-95">
+                            class="relative rounded-lg overflow-hidden border border-cool-gray-20 dark:border-cool-gray-80 bg-white dark:bg-cool-gray-95">
                             <Carousel class="relative" @init-api="handleCarouselInit">
                                 <CarouselContent>
                                     <CarouselItem v-for="(image, index) in galleryDisplayItems" :key="index">
@@ -416,33 +428,68 @@ const commentsLoadError = computed(() => commentsStatus.value === 'error' ? 'Una
                     </section>
 
                     <section
-                        class="rounded-3xl border border-cool-gray-20 dark:border-cool-gray-80 bg-white dark:bg-cool-gray-95 p-6 space-y-6">
-                        <div class="flex flex-col gap-3">
-                            <div class="flex items-center justify-between gap-4 flex-wrap">
-                                <div>
-                                    <h1 class="text-3xl font-bold text-cool-gray-95 dark:text-white">{{ blueprint.title
-                                        }}</h1>
-                                    <p class="text-sm text-cool-gray-60 mt-1">
-                                        Blueprint Code:
-                                        <span class="font-mono text-cool-gray-90 dark:text-cool-gray-10">{{
-                                            blueprint.code }}</span>
-                                    </p>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <Button variant="outline" class="flex items-center gap-2" @click="handleCopyCode">
-                                        <CopyIcon class="w-4 h-4" />
-                                        Copy Code
-                                    </Button>
-                                    <Button :variant="blueprint.is_liked ? 'default' : 'outline'"
-                                        class="flex items-center gap-2" :disabled="isTogglingLike"
-                                        @click="handleToggleLike">
-                                        <LikesIcon class="w-4 h-4" />
-                                        <span v-if="isTogglingLike">Saving...</span>
-                                        <span v-else>{{ blueprint.is_liked ? 'Liked' : 'Like' }}</span>
-                                    </Button>
+                        class="rounded-lg border border-cool-gray-20 dark:border-cool-gray-80 bg-white dark:bg-cool-gray-95 p-6 space-y-6">
+                        <div class="flex items-center justify-between">
+                            <h1 class="font-bold text-3xl">{{ blueprint.title }}</h1>
+                            <div class="flex items-center gap-1">
+                                <Tooltip>
+                                    <TooltipTrigger as-child>
+                                        <Button class="before:border-none rounded-lg" size="icon-sm"
+                                            title="Add to Collection" variant="ghost">
+                                            <AddCollectionIcon class="size-7.5" />
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Add to Collection</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                                <Tooltip>
+                                    <TooltipTrigger as-child>
+                                        <Button class="before:border-none rounded-lg" size="icon-sm"
+                                            title="Open external link" variant="ghost">
+                                            <ShareIcon class="size-7.5" />
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Open external link</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                                <DropdownMenu v-model:open="dropdownOpen">
+                                    <DropdownMenuTrigger as-child>
+                                        <Button class="before:border-none rounded-lg" size="icon-sm" variant="ghost">
+                                            <VerticalElipsis class="size-7.5" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <ReportButton reportable-type="App\Models\Blueprint"
+                                            :reportable-id="blueprint.id" item-name="blueprint"
+                                            @reported="handleReported">
+                                            <template #default="{ handleReport, isReporting }">
+                                                <DropdownMenuItem @click="handleReport" :disabled="isReporting">
+                                                    <span v-if="isReporting">Reporting...</span>
+                                                    <span v-else>Report Blueprint</span>
+                                                </DropdownMenuItem>
+                                            </template>
+                                        </ReportButton>
+                                        <DropdownMenuItem v-if="blueprint.permissions.can_delete"
+                                            @click="handleDelete(blueprint)">
+                                            <span>Delete</span>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem v-if="blueprint.permissions.can_edit" as-child>
+                                            <NuxtLinkLocale :to="`/blueprints/${blueprint.id}/edit`"></NuxtLinkLocale>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center gap-3">
+                            <div class="flex items-center gap-3">
+                                <div v-for="stat in stats" :key="stat.label" class=" flex items-center gap-3">
+                                    <component :is="stat.icon" class="size-4.5 text-cool-gray-70" />
+                                    <p class="font-medium text-cool-gray-90">{{
+                                        stat.value }}</p>
                                 </div>
                             </div>
-
                             <div class="flex flex-wrap gap-4 text-sm text-cool-gray-70">
                                 <div class="flex items-center gap-2">
                                     <ClockIcon class="w-4 h-4" />
@@ -452,99 +499,20 @@ const commentsLoadError = computed(() => commentsStatus.value === 'error' ? 'Una
                                     <CalendarIcon class="w-4 h-4" />
                                     Updated {{ formattedUpdatedAt }}
                                 </div>
-                                <div class="flex items-center gap-2">
-                                    <RegionIcon class="w-4 h-4" />
-                                    {{ blueprint.region ?? 'Any region' }}
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <div v-for="stat in stats" :key="stat.label"
-                                    class="rounded-2xl border border-cool-gray-15 dark:border-cool-gray-80 bg-cool-gray-5 dark:bg-cool-gray-90 p-4 flex items-center gap-3">
-                                    <component :is="stat.icon" class="w-6 h-6 text-cool-gray-70" />
-                                    <div>
-                                        <p class="text-2xl font-semibold text-cool-gray-95 dark:text-white">{{
-                                            stat.value }}</p>
-                                        <p class="text-xs uppercase tracking-wide text-cool-gray-60">{{ stat.label }}
-                                        </p>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
+                        <hr class="border-cool-gray-20">
+
                         <div>
-                            <h2 class="text-lg font-semibold mb-3">Description</h2>
                             <p class="text-sm text-cool-gray-80 leading-relaxed whitespace-pre-line">
                                 {{ blueprint.description || 'No description provided for this blueprint.' }}
                             </p>
                         </div>
-
-                        <div v-if="blueprint.tags.length" class="space-y-3">
-                            <h3 class="text-base font-semibold">Tags</h3>
-                            <div class="flex flex-wrap gap-2">
-                                <button v-for="tag in blueprint.tags" :key="tag.id" type="button"
-                                    class="px-3 py-1.5 rounded-full border border-cool-gray-30 dark:border-cool-gray-70 text-sm hover:bg-cool-gray-10 dark:hover:bg-cool-gray-80 transition-colors"
-                                    @click="navigateToTag(tag)">
-                                    {{ tag.name }}
-                                </button>
-                            </div>
-                        </div>
                     </section>
 
                     <section
-                        class="rounded-3xl border border-cool-gray-20 dark:border-cool-gray-80 bg-white dark:bg-cool-gray-95 p-6 space-y-6">
-                        <div>
-                            <h3 class="text-lg font-semibold mb-4">Facilities Used</h3>
-                            <div v-if="blueprint.facilities?.length" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div v-for="facility in blueprint.facilities" :key="facility.id"
-                                    class="flex items-center gap-4 rounded-2xl border border-cool-gray-20 dark:border-cool-gray-80 p-4">
-                                    <img :src="buildFacilityIcon(facility)" :alt="facility.name"
-                                        class="w-16 h-16 object-contain rounded-lg bg-cool-gray-5" />
-                                    <div>
-                                        <p class="font-semibold text-cool-gray-95 dark:text-white">{{ facility.name }}
-                                        </p>
-                                        <p class="text-sm text-cool-gray-60">x{{ facility.quantity }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <p v-else class="text-sm text-muted-foreground">No facilities provided.</p>
-                        </div>
-
-                        <div>
-                            <h3 class="text-lg font-semibold mb-4">Input Products</h3>
-                            <div v-if="blueprint.item_inputs?.length" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div v-for="item in blueprint.item_inputs" :key="item.id"
-                                    class="rounded-2xl border border-cool-gray-20 dark:border-cool-gray-80 p-4 flex flex-col items-center text-center gap-3">
-                                    <img :src="buildItemIcon(item)" :alt="item.name"
-                                        class="w-16 h-16 object-contain rounded-lg bg-cool-gray-5" />
-                                    <div>
-                                        <p class="font-medium text-cool-gray-95 dark:text-white">{{ item.name }}</p>
-                                        <p class="text-sm text-cool-gray-60">x{{ item.quantity }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <p v-else class="text-sm text-muted-foreground">No input products provided.</p>
-                        </div>
-
-                        <div>
-                            <h3 class="text-lg font-semibold mb-4">Output Products</h3>
-                            <div v-if="blueprint.item_outputs?.length" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div v-for="item in blueprint.item_outputs" :key="item.id"
-                                    class="rounded-2xl border border-cool-gray-20 dark:border-cool-gray-80 p-4 flex flex-col items-center text-center gap-3">
-                                    <img :src="buildItemIcon(item)" :alt="item.name"
-                                        class="w-16 h-16 object-contain rounded-lg bg-cool-gray-5" />
-                                    <div>
-                                        <p class="font-medium text-cool-gray-95 dark:text-white">{{ item.name }}</p>
-                                        <p class="text-sm text-cool-gray-60">x{{ item.quantity }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <p v-else class="text-sm text-muted-foreground">No output products provided.</p>
-                        </div>
-                    </section>
-
-                    <section
-                        class="rounded-3xl border border-cool-gray-20 dark:border-cool-gray-80 bg-white dark:bg-cool-gray-95 p-6 space-y-6">
+                        class="rounded-lg border border-cool-gray-20 dark:border-cool-gray-80 bg-white dark:bg-cool-gray-95 p-6 space-y-6">
                         <div class="flex items-center justify-between flex-wrap gap-3">
                             <h3 class="text-xl font-semibold">Comments ({{ totalComments }})</h3>
                         </div>
@@ -582,39 +550,102 @@ const commentsLoadError = computed(() => commentsStatus.value === 'error' ? 'Una
                 </div>
 
                 <aside class="space-y-6">
-                    <div
-                        class="rounded-3xl border border-cool-gray-20 dark:border-cool-gray-80 bg-white dark:bg-cool-gray-95 p-6 space-y-5">
-                        <h3 class="text-lg font-semibold">Details</h3>
-                        <div class="space-y-3 text-sm text-cool-gray-80">
-                            <div class="flex items-center justify-between">
-                                <span class="text-cool-gray-60">Author</span>
-                                <span>{{ blueprint.creator?.name ?? 'Anonymous Pioneer' }}</span>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <span class="text-cool-gray-60">Region</span>
-                                <span>{{ blueprint.region ?? 'Any' }}</span>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <span class="text-cool-gray-60">Version</span>
-                                <span class="uppercase">{{ blueprint.version }}</span>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <span class="text-cool-gray-60">Status</span>
-                                <span class="capitalize">{{ blueprint.status }}</span>
+                    <div class="rounded-xl border border-cool-gray-20 bg-white dark:bg-cool-gray-95 p-6 space-y-5">
+                        <div class="grid grid-cols-2 gap-2.5 w-full">
+                            <Button class="w-full justify-between before:hidden" rounded="base" @click="handleCopyCode">
+                                <CopyIcon class="size-4.5" />
+                                Copy Code
+                            </Button>
+                            <Button :variant="blueprint.is_liked ? 'default' : 'outline'" rounded="base"
+                                class="w-full justify-between before:hidden" :disabled="isTogglingLike"
+                                @click="handleToggleLike">
+                                <LikesIcon class="w-4 h-4" />
+                                <span v-if="isTogglingLike">Saving...</span>
+                                <span v-else>{{ blueprint.is_liked ? 'Liked' : 'Like' }}</span>
+                            </Button>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2.5">Details</h3>
+                            <div class="space-y-3 text-sm text-cool-gray-80">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-cool-gray-60">Author</span>
+                                    <span>{{ blueprint.creator?.name ?? 'Anonymous Pioneer' }}</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-cool-gray-60">Region</span>
+                                    <span>{{regionOptions.find(r => r.value === blueprint?.region)?.label ?? 'Any'
+                                    }}</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-cool-gray-60">Version</span>
+                                    <span class="uppercase">{{ blueprint.version }}</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-cool-gray-60">Status</span>
+                                    <span class="capitalize">{{ blueprint.status }}</span>
+                                </div>
                             </div>
                         </div>
-                        <Button class="w-full" @click="handleCopyCode">
-                            Copy Code &amp; Track
-                        </Button>
-                    </div>
+                        <hr>
+                        <div v-if="blueprint.tags.length">
+                            <h3 class="text-lg font-semibold mb-2.5">Tags</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <button v-for="tag in blueprint.tags" :key="tag.id" type="button"
+                                    class="px-3 py-1.5 rounded-full border border-cool-gray-30 dark:border-cool-gray-70 text-sm hover:bg-cool-gray-10 dark:hover:bg-cool-gray-80 transition-colors"
+                                    @click="navigateToTag(tag)">
+                                    {{ tag.name }}
+                                </button>
+                            </div>
+                        </div>
+                        <hr>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2.5">Facilities Used</h3>
+                            <div v-if="blueprint.facilities?.length" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div v-for="facility in blueprint.facilities" :key="facility.id"
+                                    class="flex items-center gap-4 rounded-2xl border border-cool-gray-20 dark:border-cool-gray-80 p-4">
+                                    <img :src="buildFacilityIcon(facility)" :alt="facility.name"
+                                        class="w-16 h-16 object-contain rounded-lg bg-cool-gray-5" />
+                                    <div>
+                                        <p class="font-semibold text-cool-gray-95 dark:text-white">{{ facility.name }}
+                                        </p>
+                                        <p class="text-sm text-cool-gray-60">x{{ facility.quantity }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <p v-else class="text-sm text-muted-foreground">No facilities provided.</p>
+                        </div>
 
-                    <div
-                        class="rounded-3xl border border-cool-gray-20 dark:border-cool-gray-80 bg-white dark:bg-cool-gray-95 p-6 space-y-4">
-                        <h3 class="text-lg font-semibold">Share</h3>
-                        <p class="text-sm text-cool-gray-70">Share this blueprint with your friends.</p>
-                        <Button variant="outline" class="w-full" @click="copy(blueprint.code)">
-                            Copy Code
-                        </Button>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2.5">Input Products</h3>
+                            <div v-if="blueprint.item_inputs?.length" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div v-for="item in blueprint.item_inputs" :key="item.id"
+                                    class="rounded-2xl border border-cool-gray-20 dark:border-cool-gray-80 p-4 flex flex-col items-center text-center gap-3">
+                                    <img :src="buildItemIcon(item)" :alt="item.name"
+                                        class="w-16 h-16 object-contain rounded-lg bg-cool-gray-5" />
+                                    <div>
+                                        <p class="font-medium text-cool-gray-95 dark:text-white">{{ item.name }}</p>
+                                        <p class="text-sm text-cool-gray-60">x{{ item.quantity }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <p v-else class="text-sm text-muted-foreground">No input products provided.</p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2.5">Output Products</h3>
+                            <div v-if="blueprint.item_outputs?.length" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div v-for="item in blueprint.item_outputs" :key="item.id"
+                                    class="rounded-2xl border border-cool-gray-20 dark:border-cool-gray-80 p-4 flex flex-col items-center text-center gap-3">
+                                    <img :src="buildItemIcon(item)" :alt="item.name"
+                                        class="w-16 h-16 object-contain rounded-lg bg-cool-gray-5" />
+                                    <div>
+                                        <p class="font-medium text-cool-gray-95 dark:text-white">{{ item.name }}</p>
+                                        <p class="text-sm text-cool-gray-60">x{{ item.quantity }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <p v-else class="text-sm text-muted-foreground">No output products provided.</p>
+                        </div>
                     </div>
                 </aside>
             </div>

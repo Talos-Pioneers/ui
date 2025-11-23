@@ -64,7 +64,7 @@ const handleReported = () => {
     dropdownOpen.value = false;
 };
 
-const { handleDelete } = useBlueprintDelete();
+const { handleDelete } = await useBlueprintDelete();
 </script>
 
 <template>
