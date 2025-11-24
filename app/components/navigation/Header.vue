@@ -5,9 +5,27 @@ import Logo from '../icons/Logo.vue';
 import LoginIcon from '../icons/LoginIcon.vue';
 import LanguageSwitcher from './LanguageSwitcher.vue';
 import LogoMobileIcon from '../icons/LogoMobileIcon.vue';
+import UserIcon from '../icons/UserIcon.vue';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '~/components/ui/dropdown-menu';
 
-const { isAuthenticated } = useSanctumAuth();
+const { isAuthenticated, user, logout } = useSanctumAuth();
 const { open } = useLoginModal();
+const router = useRouter();
+
+const handleLogout = async () => {
+    try {
+        await logout();
+        await router.push('/');
+    } catch (error) {
+        console.error('Failed to logout:', error);
+    }
+};
 
 const navigationItems = [
     {
@@ -53,7 +71,34 @@ const navigationItems = [
                 </Button>
             </template>
             <template v-else>
-                <!-- TODO: Profile Menu -->
+                <DropdownMenu>
+                    <DropdownMenuTrigger as-child>
+                        <Button variant="default" size="icon-lg">
+                            <UserIcon class="h-5" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem as-child>
+                            <NuxtLinkLocale to="/profile">
+                                Edit Profile
+                            </NuxtLinkLocale>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem as-child>
+                            <NuxtLinkLocale to="/profile/blueprints">
+                                My Blueprints
+                            </NuxtLinkLocale>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem as-child>
+                            <NuxtLinkLocale to="/profile/collections">
+                                My Collections
+                            </NuxtLinkLocale>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem @click="handleLogout" variant="destructive">
+                            Logout
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </template>
         </div>
     </header>

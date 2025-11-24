@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { Input } from '~/components/ui/input';
+import { Button } from '~/components/ui/button';
+import { Label } from '~/components/ui/label';
+
 const config = useSanctumConfig();
 
 type Schema = {
@@ -48,38 +52,42 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-    <div>
-        <h1>Profile Edit</h1>
-
+    <form @submit.prevent="handleSubmit" class="space-y-6">
         <div v-if="status === 'pending'">
             <p>Loading profile...</p>
         </div>
 
-        <div v-else-if="profile">
-            <form @submit.prevent="handleSubmit">
-                <div>
-                    <label for="username">Username</label>
-                    <input type="text" id="username" v-model="state.username" placeholder="Username" />
-                    <div v-if="form.errors.username">
-                        <p v-for="error in form.errors.username" :key="error">{{ error }}</p>
-                    </div>
-                </div>
+        <template v-else-if="profile">
+            <!-- Username -->
+            <div class="space-y-2">
+                <Label for="username">Username</Label>
+                <Input id="username" v-model="state.username" placeholder="Username"
+                    :aria-invalid="!!form.errors.username" />
+                <p v-if="form.errors.username" class="text-xs text-destructive">
+                    {{ form.errors.username[0] }}
+                </p>
+            </div>
 
-                <div>
-                    <label for="email">Email</label>
-                    <input type="email" id="email" :value="profile.email" disabled placeholder="Email" />
-                    <p>Email cannot be changed</p>
-                </div>
+            <!-- Email -->
+            <div class="space-y-2">
+                <Label for="email">Email</Label>
+                <input id="email" type="email" :value="profile.email" disabled placeholder="Email"
+                    class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 h-12 md:text-sm" />
+                <p class="text-xs text-cool-gray-60">Email cannot be changed</p>
+            </div>
 
-                <div v-if="successMessage">
-                    <p>{{ successMessage }}</p>
-                </div>
+            <!-- Success Message -->
+            <div v-if="successMessage" class="text-sm text-green-600">
+                {{ successMessage }}
+            </div>
 
-                <button type="submit" :disabled="form.processing">
+            <!-- Submit Button -->
+            <div class="flex justify-end pt-4">
+                <Button type="submit" :disabled="form.processing" class="min-w-[120px]">
                     <span v-if="form.processing">Updating...</span>
                     <span v-else>Update Profile</span>
-                </button>
-            </form>
-        </div>
-    </div>
+                </Button>
+            </div>
+        </template>
+    </form>
 </template>
