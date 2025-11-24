@@ -4,7 +4,7 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "blueprints",
+	"name": "talos-pioneers",
 	"main": "./.output/server/index.mjs",
 	"compatibility_date": "2025-11-15",
 	"assets": {
@@ -13,6 +13,16 @@
 	},
 	"observability": {
 		"enabled": true
+	},
+	"routes": [
+		{
+			"pattern": "talospioneers.com",
+			"custom_domain": true
+		}
+	],
+	"vars": {
+		"BASE_URL": "https://talospioneers.com",
+		"API_URL": "https://api.talospioneers.com"
 	}
 	/**
 	 * Smart Placement
