@@ -12,7 +12,6 @@ import RegisterDialog from '~/components/auth/RegisterDialog.vue'
 import { TooltipProvider } from '~/components/ui/tooltip';
 import { Toaster } from '~/components/ui/sonner';
 import { SidebarProvider } from '~/components/ui/sidebar';
-import Footer from '~/components/navigation/Footer.vue';
 </script>
 
 <template>
