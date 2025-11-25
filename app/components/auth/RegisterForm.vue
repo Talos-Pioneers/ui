@@ -25,16 +25,14 @@ const form = usePrecognitionForm<Schema>('post', '/register', {
     email: '',
     locale: locale.value,
 })
-const state = form.fields;
 
-const submit = async () => {
-    try {
-        await form.submit();
+const submit = () => {
+    console.log(form.fields);
+    form.submit().then((response) => {
         close();
-    } catch (error) {
-        const err = useSanctumError(error)
-        console.log(err);
-    }
+    }).catch((error) => {
+        console.log(error);
+    });
 }
 </script>
 
@@ -60,7 +58,7 @@ const submit = async () => {
                 <div class="absolute left-3 top-1/2 -translate-y-1/2">
                     <UserIcon />
                 </div>
-                <Input class="pl-10" v-model="state.username" type="text" placeholder="Enter username" />
+                <Input class="pl-10" v-model="form.fields.username" type="text" placeholder="Enter username" />
             </div>
         </div>
 
@@ -70,7 +68,7 @@ const submit = async () => {
                 <div class="absolute left-3 top-1/2 -translate-y-1/2">
                     <MailIcon />
                 </div>
-                <Input class="pl-10" v-model="state.email" type="email" placeholder="Enter email address" />
+                <Input class="pl-10" v-model="form.fields.email" type="email" placeholder="Enter email address" />
             </div>
         </div>
 

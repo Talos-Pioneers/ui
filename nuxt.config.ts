@@ -144,12 +144,7 @@ export default defineNuxtConfig({
 	},
 
 	sanctum: {
-		baseUrl: "/api/sanctum",
-		serverProxy: {
-			enabled: true,
-			route: "/api/sanctum",
-			baseUrl: process.env.API_URL ?? "",
-		},
+		baseUrl: process.env.API_URL,
 	},
 
 	fonts: {
