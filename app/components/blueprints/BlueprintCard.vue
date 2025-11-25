@@ -17,6 +17,7 @@ import ReportButton from '~/components/ReportButton.vue';
 import NotFoundImage from '~/assets/img/not-found-placeholder.png';
 import { toast } from 'vue-sonner'
 import { Button } from '../ui/button';
+import { regionOptions } from '~/constants/blueprintOptions';
 
 
 const props = defineProps<{
@@ -116,32 +117,10 @@ const { handleDelete } = await useBlueprintDelete();
                     <RegionIcon class="w-5 h-5" />
                     <span
                         class="group-hover/region:text-cool-gray-100 group-hover/region:underline transition-colors">{{
-                            blueprint.region ?? 'Any'
+                            blueprint.region ? regionOptions.find((r) => r.value === blueprint.region)?.label : 'Any'
                         }}</span>
                 </div>
                 <div class="flex items-center gap-1">
-                    <Tooltip>
-                        <TooltipTrigger as-child>
-                            <Button class="before:border-none rounded-lg" size="icon-sm" title="Add to Collection"
-                                variant="ghost">
-                                <AddCollectionIcon class="size-7.5" />
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            <p>Add to Collection</p>
-                        </TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                        <TooltipTrigger as-child>
-                            <Button class="before:border-none rounded-lg" size="icon-sm" title="Open external link"
-                                variant="ghost">
-                                <ShareIcon class="size-7.5" />
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            <p>Open external link</p>
-                        </TooltipContent>
-                    </Tooltip>
                     <DropdownMenu v-model:open="dropdownOpen">
                         <DropdownMenuTrigger as-child>
                             <Button class="before:border-none rounded-lg" size="icon-sm" variant="ghost">

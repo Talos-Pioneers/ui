@@ -8,6 +8,7 @@ export default defineNuxtConfig({
 	devServer: {
 		host: "blueprints.test",
 	},
+	ssr: true,
 	css: ["~/assets/css/tailwind.css"],
 	vite: {
 		plugins: [tailwindcss()],
@@ -128,7 +129,12 @@ export default defineNuxtConfig({
 		],
 	},
 	sanctum: {
-		baseUrl: process.env.API_URL,
+		baseUrl: "/api/sanctum",
+		serverProxy: {
+			enabled: true,
+			route: "/api/sanctum",
+			baseUrl: process.env.API_URL ?? "",
+		},
 	},
 	fonts: {
 		families: [

@@ -33,9 +33,10 @@ const navigationItems = [
         to: '/',
     },
     {
-        label: 'Collections',
-        to: '/collections',
-    },
+        label: 'Create Blueprint',
+        to: '/blueprints/create',
+        auth: true,
+    }
 ]
 </script>
 <template>
@@ -49,7 +50,8 @@ const navigationItems = [
         <nav class="ml-7.5 h-full">
             <ul class="flex items-center gap-7.5 h-full">
                 <li v-for="item in navigationItems" :key="item.to" class="h-full flex items-center">
-                    <NuxtLinkLocale active-class="text-cool-gray-80 border-b-2 h-full border-black"
+                    <NuxtLinkLocale v-if="!item.auth || (item.auth && isAuthenticated)"
+                        active-class="text-cool-gray-80 border-b-2 h-full border-black"
                         class="text-cool-gray-60 hover:text-cool-gray-80 h-full flex items-center" :to="item.to">
                         {{ item.label }}
                     </NuxtLinkLocale>
@@ -86,11 +88,6 @@ const navigationItems = [
                         <DropdownMenuItem as-child>
                             <NuxtLinkLocale to="/profile/blueprints">
                                 My Blueprints
-                            </NuxtLinkLocale>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem as-child>
-                            <NuxtLinkLocale to="/profile/collections">
-                                My Collections
                             </NuxtLinkLocale>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />

@@ -2,7 +2,7 @@ export const useFormatCompactNumber = (number: number) => {
 	const { locale } = useI18n();
 
 	if (isNaN(number)) {
-		return "N/A";
+		return 0;
 	}
 
 	return new Intl.NumberFormat(locale.value, {

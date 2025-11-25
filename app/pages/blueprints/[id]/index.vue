@@ -22,6 +22,8 @@ import NotFoundImage from '~/assets/img/not-found-placeholder.png';
 import type { Blueprint, BlueprintFacility, BlueprintItem, BlueprintTag } from '~/models/blueprint';
 import type { Comment } from '~/models/comment';
 import { regionOptions } from '~/constants/blueprintOptions';
+import FacilityList from '~/components/blueprints/FacilityList.vue';
+import ItemList from '~/components/blueprints/ItemList.vue';
 
 type BlueprintResponse = {
     data: Blueprint;
@@ -118,32 +120,20 @@ const goToSlide = (index: number) => {
     galleryApi.value?.scrollTo(index);
 };
 
-const buildFacilityIcon = (facility: BlueprintFacility) => {
-    return facility.icon
-        ? `https://static.warfarin.wiki/v1/buildingimage/${facility.icon}.webp`
-        : NotFoundImage;
-};
-
-const buildItemIcon = (item: BlueprintItem) => {
-    return item.icon
-        ? `https://static.warfarin.wiki/v1/itemicon/${item.icon}.webp`
-        : NotFoundImage;
-};
-
 const stats = computed(() => {
     if (!blueprint.value) {
         return [];
     }
     return [
         {
-            label: 'Likes',
-            value: useFormatCompactNumber(blueprint.value.likes_count),
-            icon: LikesIcon,
-        },
-        {
             label: 'Copies',
             value: useFormatCompactNumber(blueprint.value.copies_count),
             icon: CopiesIcon,
+        },
+        {
+            label: 'Likes',
+            value: useFormatCompactNumber(blueprint.value.likes_count),
+            icon: LikesIcon,
         },
         {
             label: 'Comments',
@@ -223,9 +213,7 @@ const handleCopyCode = async () => {
         }
     } catch (error) {
         const { code } = useSanctumError(error);
-        if (code === 429) {
-            toast.error('You have already copied this blueprint today.');
-        } else if (code === 401) {
+        if (code === 401) {
             loginModal.open();
         } else {
             toast.error('Unable to track copy right now.');
@@ -431,28 +419,6 @@ const { handleDelete } = await useBlueprintDelete();
                         <div class="flex items-center justify-between">
                             <h1 class="font-bold text-3xl">{{ blueprint.title }}</h1>
                             <div class="flex items-center gap-1">
-                                <Tooltip>
-                                    <TooltipTrigger as-child>
-                                        <Button class="before:border-none rounded-lg" size="icon-sm"
-                                            title="Add to Collection" variant="ghost">
-                                            <AddCollectionIcon class="size-7.5" />
-                                        </Button>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        <p>Add to Collection</p>
-                                    </TooltipContent>
-                                </Tooltip>
-                                <Tooltip>
-                                    <TooltipTrigger as-child>
-                                        <Button class="before:border-none rounded-lg" size="icon-sm"
-                                            title="Open external link" variant="ghost">
-                                            <ShareIcon class="size-7.5" />
-                                        </Button>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        <p>Open external link</p>
-                                    </TooltipContent>
-                                </Tooltip>
                                 <DropdownMenu v-model:open="dropdownOpen">
                                     <DropdownMenuTrigger as-child>
                                         <Button class="before:border-none rounded-lg" size="icon-sm" variant="ghost">
@@ -573,7 +539,7 @@ const { handleDelete } = await useBlueprintDelete();
                                 <div class="flex items-center justify-between">
                                     <span class="text-cool-gray-60">Region</span>
                                     <span>{{regionOptions.find(r => r.value === blueprint?.region)?.label ?? 'Any'
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <span class="text-cool-gray-60">Version</span>
@@ -585,7 +551,7 @@ const { handleDelete } = await useBlueprintDelete();
                                 </div>
                             </div>
                         </div>
-                        <hr>
+                        <hr class="border-cool-gray-20">
                         <div v-if="blueprint.tags.length">
                             <h3 class="text-lg font-semibold mb-2.5">Tags</h3>
                             <div class="flex flex-wrap gap-2">
@@ -596,53 +562,22 @@ const { handleDelete } = await useBlueprintDelete();
                                 </button>
                             </div>
                         </div>
-                        <hr>
+                        <hr class="border-cool-gray-20">
                         <div>
                             <h3 class="text-lg font-semibold mb-2.5">Facilities Used</h3>
-                            <div v-if="blueprint.facilities?.length" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div v-for="facility in blueprint.facilities" :key="facility.id"
-                                    class="flex items-center gap-4 rounded-2xl border border-cool-gray-20 dark:border-cool-gray-80 p-4">
-                                    <img :src="buildFacilityIcon(facility)" :alt="facility.name"
-                                        class="w-16 h-16 object-contain rounded-lg bg-cool-gray-5" />
-                                    <div>
-                                        <p class="font-semibold text-cool-gray-95 dark:text-white">{{ facility.name }}
-                                        </p>
-                                        <p class="text-sm text-cool-gray-60">x{{ facility.quantity }}</p>
-                                    </div>
-                                </div>
-                            </div>
+                            <FacilityList v-if="blueprint.facilities?.length" :items="blueprint.facilities" />
                             <p v-else class="text-sm text-muted-foreground">No facilities provided.</p>
                         </div>
-
+                        <hr class="border-cool-gray-20">
                         <div>
                             <h3 class="text-lg font-semibold mb-2.5">Input Products</h3>
-                            <div v-if="blueprint.item_inputs?.length" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div v-for="item in blueprint.item_inputs" :key="item.id"
-                                    class="rounded-2xl border border-cool-gray-20 dark:border-cool-gray-80 p-4 flex flex-col items-center text-center gap-3">
-                                    <img :src="buildItemIcon(item)" :alt="item.name"
-                                        class="w-16 h-16 object-contain rounded-lg bg-cool-gray-5" />
-                                    <div>
-                                        <p class="font-medium text-cool-gray-95 dark:text-white">{{ item.name }}</p>
-                                        <p class="text-sm text-cool-gray-60">x{{ item.quantity }}</p>
-                                    </div>
-                                </div>
-                            </div>
+                            <ItemList v-if="blueprint.item_inputs?.length" :items="blueprint.item_inputs" />
                             <p v-else class="text-sm text-muted-foreground">No input products provided.</p>
                         </div>
-
+                        <hr class="border-cool-gray-20">
                         <div>
                             <h3 class="text-lg font-semibold mb-2.5">Output Products</h3>
-                            <div v-if="blueprint.item_outputs?.length" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div v-for="item in blueprint.item_outputs" :key="item.id"
-                                    class="rounded-2xl border border-cool-gray-20 dark:border-cool-gray-80 p-4 flex flex-col items-center text-center gap-3">
-                                    <img :src="buildItemIcon(item)" :alt="item.name"
-                                        class="w-16 h-16 object-contain rounded-lg bg-cool-gray-5" />
-                                    <div>
-                                        <p class="font-medium text-cool-gray-95 dark:text-white">{{ item.name }}</p>
-                                        <p class="text-sm text-cool-gray-60">x{{ item.quantity }}</p>
-                                    </div>
-                                </div>
-                            </div>
+                            <ItemList v-if="blueprint.item_outputs?.length" :items="blueprint.item_outputs" />
                             <p v-else class="text-sm text-muted-foreground">No output products provided.</p>
                         </div>
                     </div>
