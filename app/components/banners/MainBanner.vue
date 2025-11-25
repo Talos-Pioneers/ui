@@ -24,23 +24,29 @@ import BookIcon from '../icons/BookIcon.vue';
                 Complex (AIC) blueprints to each other.
             </p>
             <div class="flex gap-3 mt-6">
-                <Button class="min-w-56 justify-between before:absolute" variant="default" rounded="base">
-                    <BookIcon class="size-6" />
-                    <span class="flex gap-3 items-center text-cool-gray-100">
-                        <span>Privacy Policy</span>
-                        <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M0 10.59L4.58 6L0 1.41L1.41 0L7.41 6L1.41 12L0 10.59Z" fill="currentColor" />
-                        </svg>
-                    </span>
+                <Button as-child class="min-w-56 justify-between before:absolute" variant="default" rounded="base">
+                    <NuxtLinkLocale to="/privacy-policy">
+                        <BookIcon class="size-6" />
+                        <span class="flex gap-3 items-center text-cool-gray-100">
+                            <span>Privacy Policy</span>
+                            <svg width="8" height="12" viewBox="0 0 8 12" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 10.59L4.58 6L0 1.41L1.41 0L7.41 6L1.41 12L0 10.59Z" fill="currentColor" />
+                            </svg>
+                        </span>
+                    </NuxtLinkLocale>
                 </Button>
-                <Button class="min-w-56 justify-between" variant="outline" rounded="base">
-                    <InfoIcon class="size-6" />
-                    <span class="flex gap-3 items-center text-cool-gray-70">
-                        <span class="text-cool-gray-70">About</span>
-                        <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M0 10.59L4.58 6L0 1.41L1.41 0L7.41 6L1.41 12L0 10.59Z" fill="currentColor" />
-                        </svg>
-                    </span>
+                <Button as-child class="min-w-56 justify-between" variant="outline" rounded="base">
+                    <NuxtLinkLocale to="/about">
+                        <InfoIcon class="size-6" />
+                        <span class="flex gap-3 items-center text-cool-gray-70">
+                            <span class="text-cool-gray-70">About</span>
+                            <svg width="8" height="12" viewBox="0 0 8 12" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 10.59L4.58 6L0 1.41L1.41 0L7.41 6L1.41 12L0 10.59Z" fill="currentColor" />
+                            </svg>
+                        </span>
+                    </NuxtLinkLocale>
                 </Button>
             </div>
         </div>
