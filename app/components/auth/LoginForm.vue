@@ -6,6 +6,7 @@ import GoogleIcon from '~/components/icons/GoogleIcon.vue'
 import DiscordIcon from '~/components/icons/DiscordIcon.vue'
 import inputPattern from '@/assets/img/input-pattern.svg'
 import waveBg from '@/assets/img/wave-bg.svg'
+import { FieldError } from '../ui/field'
 
 const email = ref('');
 const config = useSanctumConfig();
@@ -16,6 +17,7 @@ const { open: openRegister } = useRegisterModal()
 const googleUrl = `${config.baseUrl}/auth/google/redirect?locale=${locale.value}`;
 const discordUrl = `${config.baseUrl}/auth/discord/redirect?locale=${locale.value}`;
 const { login } = useSanctumAuth();
+const errors = ref<{ name: string; message: string }[]>([]);
 const submit = async () => {
     try {
         await login({
@@ -24,7 +26,7 @@ const submit = async () => {
         close();
     } catch (error) {
         const err = useSanctumError(error)
-        console.log(err);
+        errors.value = err.bag;
     }
 
 }
@@ -53,6 +55,7 @@ const submit = async () => {
                     <MailIcon />
                 </div>
                 <Input class="pl-10" v-model="email" type="email" placeholder="Enter email address" />
+                <FieldError :errors="errors" />
             </div>
         </div>
 
