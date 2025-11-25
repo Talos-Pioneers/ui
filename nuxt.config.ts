@@ -5,14 +5,18 @@ export default defineNuxtConfig({
 	compatibilityDate: "2025-07-15",
 	devtools: { enabled: true },
 	logLevel: "verbose",
+
 	devServer: {
 		host: "blueprints.test",
 	},
+
 	ssr: true,
 	css: ["~/assets/css/tailwind.css"],
+
 	vite: {
 		plugins: [tailwindcss()],
 	},
+
 	nitro: {
 		preset: "cloudflare_module",
 
@@ -31,7 +35,17 @@ export default defineNuxtConfig({
 		"shadcn-nuxt",
 		"@nuxt/fonts",
 		"usemods-nuxt",
+		"@sentry/nuxt/module",
 	],
+
+	runtimeConfig: {
+		public: {
+			sentry: {
+				dsn: process.env.NUXT_PUBLIC_SENTRY_DSN,
+			},
+		},
+	},
+
 	i18n: {
 		baseUrl: process.env.BASE_URL,
 		strategy: "prefix",
@@ -128,6 +142,7 @@ export default defineNuxtConfig({
 			},
 		],
 	},
+
 	sanctum: {
 		baseUrl: "/api/sanctum",
 		serverProxy: {
@@ -136,6 +151,7 @@ export default defineNuxtConfig({
 			baseUrl: process.env.API_URL ?? "",
 		},
 	},
+
 	fonts: {
 		families: [
 			{
@@ -173,5 +189,17 @@ export default defineNuxtConfig({
 				weights: [100, 300, 400, 500, 700, 900],
 			},
 		],
+	},
+
+	sentry: {
+		sourceMapsUploadOptions: {
+			org: "talos-pioneers",
+			project: "talos-pioneers-frontend",
+			authToken: process.env.SENTRY_AUTH_TOKEN,
+		},
+	},
+
+	sourcemap: {
+		client: "hidden",
 	},
 });
