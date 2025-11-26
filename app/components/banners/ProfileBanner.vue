@@ -1,27 +1,59 @@
 <script setup lang="ts">
-import { Button } from '~/components/ui/button';
+	import { Button } from '~/components/ui/button'
 </script>
 
 <template>
 	<div class="relative block w-full h-48 md:h-64 bg-cool-gray-90">
-		<div class="relative z-10 container mx-auto px-4 py-6 flex flex-col h-full justify-center">
-			<h1 class="text-3xl md:text-4xl font-medium text-white mb-2">My Blueprints</h1>
+		<div
+			class="relative z-10 container mx-auto px-4 py-6 flex flex-col h-full justify-center"
+		>
+			<h1 class="text-3xl md:text-4xl font-medium text-white mb-2">
+				My Blueprints
+			</h1>
 			<p class="text-white/80 md:text-lg max-w-2xl mb-6">
-				Manage and organize your blueprints. Create new blueprints to share with the community.
+				Manage and organize your blueprints. Create new blueprints to
+				share with the community.
 			</p>
 			<div class="flex gap-3">
-				<Button as-child class="min-w-56 justify-between" variant="default" rounded="base">
+				<Button
+					as-child
+					class="min-w-56 justify-between"
+					variant="default"
+					size="responsive-lg"
+					rounded="base"
+				>
 					<NuxtLinkLocale to="/blueprints/create">
-						<svg class="size-6" width="24" height="24" viewBox="0 0 24 24" fill="none"
-							xmlns="http://www.w3.org/2000/svg">
-							<path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-								stroke-linejoin="round" />
+						<svg
+							class="size-6"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								d="M12 5V19M5 12H19"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							/>
 						</svg>
-						<span class="flex gap-3 items-center text-cool-gray-100">
+						<span
+							class="flex gap-3 text-sm sm:text-xl items-center text-cool-gray-100"
+						>
 							<span>Create New Blueprint</span>
-							<svg width="8" height="12" viewBox="0 0 8 12" fill="none"
-								xmlns="http://www.w3.org/2000/svg">
-								<path d="M0 10.59L4.58 6L0 1.41L1.41 0L7.41 6L1.41 12L0 10.59Z" fill="currentColor" />
+							<svg
+								width="8"
+								height="12"
+								viewBox="0 0 8 12"
+								fill="none"
+								class="fill-cool-gray-40"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M0 10.59L4.58 6L0 1.41L1.41 0L7.41 6L1.41 12L0 10.59Z"
+								/>
 							</svg>
 						</span>
 					</NuxtLinkLocale>
@@ -30,4 +62,3 @@ import { Button } from '~/components/ui/button';
 		</div>
 	</div>
 </template>
-
