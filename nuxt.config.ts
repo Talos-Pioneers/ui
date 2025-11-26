@@ -146,6 +146,10 @@ export default defineNuxtConfig({
 
 	sanctum: {
 		baseUrl: process.env.API_URL,
+		redirectIfAuthenticated: false,
+		redirect: {
+			onLogin: false,
+		},
 	},
 
 	fonts: {
