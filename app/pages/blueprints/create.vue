@@ -339,8 +339,10 @@ const submit = async () => {
                         <!-- Tags -->
                         <div class="space-y-2">
                             <Label>Tags</Label>
-                            <SearchableTagsInput v-model="tagsSlugs" :options="tagOptions" placeholder="Search..."
-                                class="w-full" />
+<!--                            <SearchableTagsInput v-model="tagsSlugs" :options="tagOptions" placeholder="Search..."-->
+<!--                                class="w-full" />-->
+                            <SearchableTagsInput v-model="tagsSlugs" :options="tagOptions"
+                                                 placeholder="Search..." class="w-full max-w-[418px]" />
                             <p v-if="form.errors.tags" class="text-xs text-destructive">
                                 {{ form.errors.tags }}
                             </p>
@@ -350,7 +352,7 @@ const submit = async () => {
                         <div class="space-y-2">
                             <Label>Facilities Used</Label>
                             <SearchableTagsInput v-model="facilitiesSlugs" :options="facilityOptions"
-                                placeholder="Search..." class="w-full" />
+                                                 placeholder="Search..." class="w-full max-w-[418px]"  />
                             <p v-if="form.errors.facilities" class="text-xs text-destructive">
                                 {{ form.errors.facilities }}
                             </p>
@@ -360,7 +362,7 @@ const submit = async () => {
                         <div class="space-y-2">
                             <Label>Input Products</Label>
                             <SearchableTagsInput v-model="itemInputsSlugs" :options="itemOptions"
-                                placeholder="Search..." class="w-full" />
+                                                 placeholder="Search..."  class="w-full max-w-[418px]" />
                             <p v-if="form.errors.item_inputs" class="text-xs text-destructive">
                                 {{ form.errors.item_inputs }}
                             </p>
@@ -370,7 +372,7 @@ const submit = async () => {
                         <div class="space-y-2">
                             <Label>Output Products</Label>
                             <SearchableTagsInput v-model="itemOutputsSlugs" :options="itemOptions"
-                                placeholder="Search..." class="w-full" />
+                                                 placeholder="Search..."  class="w-full max-w-[418px]" />
                             <p v-if="form.errors.item_outputs" class="text-xs text-destructive">
                                 {{ form.errors.item_outputs }}
                             </p>
