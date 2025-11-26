@@ -3,6 +3,7 @@ import type { Blueprint, PaginationMeta } from "~/models/blueprint";
 import type { Facility } from "~/models/facility";
 import type { Item } from "~/models/item";
 import type { Tag } from "~/models/tag";
+import type { FilterConfig, SortConfig } from "./useQueryFilters";
 
 type BlueprintListResponse = {
 	data: Blueprint[];
@@ -15,8 +16,14 @@ type BlueprintListResponse = {
 	meta: PaginationMeta;
 };
 
+type UseBlueprintQueryFilterOptions = {
+	filters?: Record<string, FilterConfig>;
+	sort?: SortConfig;
+};
+
 export const useBlueprintQueryFilter = async (
-	endpoint: string = "/api/v1/blueprints"
+	endpoint: string = "/api/v1/blueprints",
+	options?: UseBlueprintQueryFilterOptions
 ) => {
 	const {
 		filters,
@@ -30,7 +37,7 @@ export const useBlueprintQueryFilter = async (
 		isSortDescending,
 		computedQuery,
 	} = useQueryFilters({
-		filters: {
+		filters: options?.filters ?? {
 			region: { type: "string" },
 			version: { type: "string" },
 			is_anonymous: { type: "boolean" },
@@ -42,7 +49,7 @@ export const useBlueprintQueryFilter = async (
 			copies_count: { type: "number" },
 			"tags.id": { type: "array" },
 		},
-		sort: {
+		sort: options?.sort ?? {
 			default: "created_at",
 			fields: [
 				"created_at",

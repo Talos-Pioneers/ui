@@ -141,7 +141,9 @@ const { handleDelete } = await useBlueprintDelete();
                                 <span>Delete</span>
                             </DropdownMenuItem>
                             <DropdownMenuItem v-if="blueprint.permissions.can_edit" as-child>
-                                <NuxtLinkLocale :to="`/blueprints/${blueprint.id}/edit`"></NuxtLinkLocale>
+                                <NuxtLinkLocale :to="`/blueprints/${blueprint.id}/edit`">
+                                    <span>Edit</span>
+                                </NuxtLinkLocale>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

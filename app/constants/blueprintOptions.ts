@@ -19,3 +19,10 @@ export const regionOptions = [
 	{ value: 'wuling', label: 'Wuling', icon: RegionWulingIcon },
 ];
 
+export const statusOptions = [
+	{ value: '', label: 'All' },
+	{ value: 'draft', label: 'Draft' },
+	{ value: 'published', label: 'Published' },
+	{ value: 'archived', label: 'Archived' },
+];
+

@@ -35,10 +35,12 @@ const props = withDefaults(defineProps<{
 	showSidebar?: boolean;
 	loading?: boolean;
 	error?: NuxtError | string | null;
+	sortOptions?: Array<{ value: string; label: string }>;
 }>(), {
 	showSidebar: true,
 	loading: false,
 	error: null,
+	sortOptions: undefined,
 });
 
 const emit = defineEmits<{
@@ -51,7 +53,7 @@ const emit = defineEmits<{
 }>();
 
 // Sort options
-const sortOptions = [
+const defaultSortOptions = [
 	{ value: 'created_at', label: 'Created Date' },
 	{ value: 'updated_at', label: 'Updated Date' },
 	{ value: 'title', label: 'Title' },
@@ -59,9 +61,11 @@ const sortOptions = [
 	{ value: 'copies_count', label: 'Copies' },
 ];
 
+const sortOptions = computed(() => props.sortOptions ?? defaultSortOptions);
+
 const currentSortLabel = computed(() => {
 	const sortField = props.sort.replace(/^-/, '');
-	const option = sortOptions.find(opt => opt.value === sortField);
+	const option = sortOptions.value.find(opt => opt.value === sortField);
 	return option?.label ?? 'Relevancy';
 });
 const handleSortChange = (val: any) => {
