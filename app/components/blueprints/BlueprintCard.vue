@@ -1,81 +1,73 @@
 <script setup lang="ts">
-	import { useClipboard } from '@vueuse/core'
-	import type { Blueprint } from '~/models/blueprint'
-	import ClockIcon from '../icons/ClockIcon.vue'
-	import CalendarIcon from '../icons/CalendarIcon.vue'
-	import CopyIcon from '../icons/CopyIcon.vue'
-	import RegionIcon from '../icons/RegionIcon.vue'
-	import AddCollectionIcon from '../icons/AddCollectionIcon.vue'
-	import ShareIcon from '../icons/ShareIcon.vue'
-	import VerticalElipsis from '../icons/VerticalElipsis.vue'
-	import CopiesIcon from '../icons/CopiesIcon.vue'
-	import LikesIcon from '../icons/LikesIcon.vue'
-	import CommentsIcon from '../icons/CommentsIcon.vue'
-	import {
-		Tooltip,
-		TooltipContent,
-		TooltipTrigger,
-	} from '~/components/ui/tooltip'
-	import {
-		DropdownMenu,
-		DropdownMenuContent,
-		DropdownMenuItem,
-		DropdownMenuTrigger,
-	} from '~/components/ui/dropdown-menu'
-	import ReportButton from '~/components/ReportButton.vue'
-	import NotFoundImage from '~/assets/img/not-found-placeholder.png'
-	import { toast } from 'vue-sonner'
-	import { Button } from '../ui/button'
-	import { regionOptions } from '~/constants/blueprintOptions'
+import { useClipboard } from '@vueuse/core'
+import type { Blueprint } from '~/models/blueprint'
+import ClockIcon from '../icons/ClockIcon.vue'
+import CopyIcon from '../icons/CopyIcon.vue'
+import RegionIcon from '../icons/RegionIcon.vue'
+import VerticalElipsis from '../icons/VerticalElipsis.vue'
+import CopiesIcon from '../icons/CopiesIcon.vue'
+import LikesIcon from '../icons/LikesIcon.vue'
+import CommentsIcon from '../icons/CommentsIcon.vue'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '~/components/ui/dropdown-menu'
+import ReportButton from '~/components/ReportButton.vue'
+import NotFoundImage from '~/assets/img/not-found-placeholder.png'
+import { toast } from 'vue-sonner'
+import { Button } from '../ui/button'
+import { regionOptions } from '~/constants/blueprintOptions'
 
-	const props = defineProps<{
-		blueprint: Blueprint
-	}>()
+const props = defineProps<{
+	blueprint: Blueprint
+}>()
 
-	const emit = defineEmits<{
-		'filter-tag': [tagId: string]
-		'filter-region': [region: string]
-		'filter-author': [authorId: string]
-	}>()
+const emit = defineEmits<{
+	'filter-tag': [tagId: string]
+	'filter-region': [region: string]
+	'filter-author': [authorId: string]
+}>()
 
-	const { copy, copied } = useClipboard()
+const { copy, copied } = useClipboard()
 
-	const dropdownOpen = ref(false)
+const dropdownOpen = ref(false)
 
-	const previewImage = computed(() => {
-		return props.blueprint.gallery &&
-			props.blueprint.gallery.length > 0 &&
-			props.blueprint.gallery[0]
-			? props.blueprint.gallery[0].thumbnail
-			: null
-	})
+const previewImage = computed(() => {
+	return props.blueprint.gallery &&
+		props.blueprint.gallery.length > 0 &&
+		props.blueprint.gallery[0]
+		? props.blueprint.gallery[0].thumbnail
+		: null
+})
 
-	const copyBlueprintCode = async () => {
-		await copy(props.blueprint.code)
-		toast.success('Blueprint code copied to clipboard')
+const copyBlueprintCode = async () => {
+	await copy(props.blueprint.code)
+	toast.success('Blueprint code copied to clipboard')
+}
+
+const handleTagClick = (tagId: string) => {
+	emit('filter-tag', tagId)
+}
+
+const handleRegionClick = () => {
+	if (props.blueprint.region) {
+		emit('filter-region', props.blueprint.region)
 	}
+}
 
-	const handleTagClick = (tagId: string) => {
-		emit('filter-tag', tagId)
+const handleAuthorClick = () => {
+	if (props.blueprint.creator) {
+		emit('filter-author', props.blueprint.creator.id)
 	}
+}
 
-	const handleRegionClick = () => {
-		if (props.blueprint.region) {
-			emit('filter-region', props.blueprint.region)
-		}
-	}
+const handleReported = () => {
+	dropdownOpen.value = false
+}
 
-	const handleAuthorClick = () => {
-		if (props.blueprint.creator) {
-			emit('filter-author', props.blueprint.creator.id)
-		}
-	}
-
-	const handleReported = () => {
-		dropdownOpen.value = false
-	}
-
-	const { handleDelete } = await useBlueprintDelete()
+const { handleDelete } = await useBlueprintDelete()
 </script>
 
 <template>
@@ -93,7 +85,7 @@
 					:src="previewImage"
 					:alt="blueprint.title"
 					class="w-full h-full object-cover"
-				/>
+				>
 			</NuxtLinkLocale>
 			<NuxtLinkLocale
 				v-else
@@ -104,13 +96,13 @@
 					:src="NotFoundImage"
 					:alt="blueprint.title"
 					class="w-full h-full object-cover"
-				/>
+				>
 			</NuxtLinkLocale>
 			<div class="absolute bottom-2 right-2 z-10">
 				<button
-					@click="copyBlueprintCode"
 					class="group/copy-button p-2 bg-black/50 border border-cool-gray-60 hover:border-cool-gray-80 rounded-full hover:bg-white transition-colors cursor-pointer"
 					:title="copied ? 'Copied!' : 'Copy blueprint code'"
+					@click="copyBlueprintCode"
 				>
 					<CopyIcon
 						class="w-5 h-5 text-cool-gray-30 group-hover/copy-button:text-cool-gray-80 transition-colors"
@@ -138,8 +130,8 @@
 				<div class="flex items-center justify-between gap-2 h-4">
 					<button
 						v-if="blueprint.creator"
-						@click="handleAuthorClick"
 						class="group/author text-xs text-cool-gray-70 cursor-pointer transition-colors overflow-hidden text-nowrap text-ellipsis flex items-center h-4"
+						@click="handleAuthorClick"
 					>
 						<span class="leading-0">by&nbsp;</span
 						><span
@@ -172,8 +164,8 @@
 			<!-- Region and Actions -->
 			<div class="flex items-center justify-between">
 				<div
-					@click="handleRegionClick"
 					class="group/region flex items-center gap-1.5 text-sm font-medium text-cool-gray-80 cursor-pointer transition-colors"
+					@click="handleRegionClick"
 				>
 					<RegionIcon class="w-5 h-5" />
 					<span
@@ -209,8 +201,8 @@
 									#default="{ handleReport, isReporting }"
 								>
 									<DropdownMenuItem
-										@click="handleReport"
 										:disabled="isReporting"
+										@click="handleReport"
 									>
 										<span v-if="isReporting"
 											>Reporting...</span
@@ -279,8 +271,8 @@
 						>|</span
 					>
 					<span
-						@click="handleTagClick(tag.id)"
 						class="text-sm text-cool-gray-80 cursor-pointer hover:text-cool-gray-100 hover:underline transition-colors"
+						@click="handleTagClick(tag.id)"
 					>
 						{{ tag.name }}
 					</span>

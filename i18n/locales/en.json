@@ -7,5 +7,13 @@
 	"mainBanner.title": "Talos Pioneers",
 	"mainBanner.description": "Talos Pioneers is a currently work-in-progress community resource for Arknights: Endfield, acting as a means for fellow Endministrators to share their Automated Industry Complex (AIC) blueprints to each other.",
 	"mainBanner.createBlueprint": "Create a Blueprint",
-	"mainBanner.about": "About"
+	"mainBanner.about": "About",
+	"reportButton.title": "Report",
+	"reportButton.reporting": "Reporting...",
+	"reportButton.cancel": "Cancel",
+	"reportButton.submit": "Submit Report",
+	"reportButton.submitting": "Submitting...",
+	"reportButton.reasonPlaceholder": "Enter reason for reporting (optional)...",
+	"reportButton.charactersLeft": "characters left",
+	"reportButton.description": "Please provide a reason for reporting this {itemTypeName}. This information helps us review and take appropriate action."
 }
