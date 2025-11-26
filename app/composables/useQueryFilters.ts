@@ -18,6 +18,9 @@ export type QueryFiltersConfig = {
 };
 
 export function useQueryFilters<T extends QueryFiltersConfig>(config: T) {
+	const router = useRouter();
+	const route = useRoute();
+
 	const filters = ref<Record<string, any>>({});
 	const sort = ref<string>(config.sort.default);
 	const sortDirection = ref<"asc" | "desc">("asc");
@@ -36,7 +39,7 @@ export function useQueryFilters<T extends QueryFiltersConfig>(config: T) {
 	const clearFilter = (key: string, value?: any) => {
 		if (value) {
 			filters.value[key] = filters.value[key].filter(
-				(item: any) => item !== value
+				(item: any) => item != value
 			);
 		} else {
 			filters.value[key] = null;
@@ -115,19 +118,19 @@ export function useQueryFilters<T extends QueryFiltersConfig>(config: T) {
 	watch(
 		filters,
 		() => {
-			useRouter().replace({
+			router.replace({
 				query: computedQuery.value,
 			});
 		},
 		{ deep: true }
 	);
 	watch(sort, () => {
-		useRouter().replace({
+		router.replace({
 			query: computedQuery.value,
 		});
 	});
 	watch(sortDirection, () => {
-		useRouter().replace({
+		router.replace({
 			query: computedQuery.value,
 		});
 	});
@@ -155,9 +158,8 @@ export function useQueryFilters<T extends QueryFiltersConfig>(config: T) {
 		}
 	};
 
-	const { query } = useRoute();
-	buildFiltersFromQuery(query as Record<string, string>);
-	buildSortFromQuery(query as Record<string, string>);
+	buildFiltersFromQuery(route.query as Record<string, string>);
+	buildSortFromQuery(route.query as Record<string, string>);
 
 	return {
 		filters,

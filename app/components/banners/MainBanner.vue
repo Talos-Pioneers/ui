@@ -36,7 +36,7 @@ import BookIcon from '../icons/BookIcon.vue';
                         </span>
                     </NuxtLinkLocale>
                 </Button>
-                <Button as-child class="min-w-56 justify-between" variant="outline" rounded="base">
+                <Button as-child class="min-w-56 justify-between border-none" variant="outline" rounded="base">
                     <NuxtLinkLocale to="/about">
                         <InfoIcon class="size-6" />
                         <span class="flex gap-3 items-center text-cool-gray-70">

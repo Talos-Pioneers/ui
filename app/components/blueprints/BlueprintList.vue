@@ -18,6 +18,7 @@ import CloseIcon from '../icons/CloseIcon.vue';
 import { ChevronDown } from 'lucide-vue-next';
 import { useSidebar } from '@/components/ui/sidebar';
 import type { NuxtError } from '#app';
+import { CheckboxGroupRoot } from 'reka-ui';
 
 const props = withDefaults(defineProps<{
 	blueprints: Blueprint[];
@@ -29,7 +30,7 @@ const props = withDefaults(defineProps<{
 	sort: string;
 	isSortDescending: boolean;
 	hasActiveFilters: boolean;
-	activeFilterTags: Array<{ key: string; value: any }>;
+	activeFilterTags: Array<{ filterKey: string; label: string; value: any }>;
 	currentPage: number;
 	perPage: number;
 	showSidebar?: boolean;
@@ -48,9 +49,6 @@ const emit = defineEmits<{
 	'update:per-page': [perPage: number];
 	'clear-filter': [key: string, value?: any];
 	'clear-all-filters': [];
-	'filter-tag': [tagId: string];
-	'filter-region': [region: string];
-	'filter-author': [authorId: string];
 }>();
 
 // Sort options
@@ -67,93 +65,86 @@ const currentSortLabel = computed(() => {
 	const option = sortOptions.find(opt => opt.value === sortField);
 	return option?.label ?? 'Relevancy';
 });
-
-// Handle filter events from BlueprintCard
-const handleTagFilter = (tagId: string) => {
-	emit('filter-tag', tagId);
-};
-
-const handleRegionFilter = (region: string) => {
-	emit('filter-region', region);
-};
-
-const handleAuthorFilter = (authorId: string) => {
-	emit('filter-author', authorId);
-};
-
-// Handle tag checkbox toggle
-const toggleTagFilter = (tagId: string) => {
-	console.log('toggleTagFilter', tagId);
-	const currentTags = (props.filters['tags.id'] as string[]) || [];
-	if (currentTags.includes(tagId)) {
-		emit('update:filter', 'tags.id', currentTags.filter(id => id !== tagId));
-	} else {
-		emit('update:filter', 'tags.id', [...currentTags, tagId]);
-	}
-};
-
-// Check if tag is selected
-const isTagSelected = (tagId: string) => {
-	const currentTags = (props.filters['tags.id'] as string[]) || [];
-	return currentTags.includes(tagId);
-};
-
-// Group tags by type
-const groupedTags = computed(() => {
-	const groups = {
-		blueprint_tags: [] as Tag[],
-		blueprint_tier: [] as Tag[],
-		blueprint_type: [] as Tag[],
-	};
-
-	props.tags.forEach(tag => {
-		if (tag.type === 'blueprint_tags') {
-			groups.blueprint_tags.push(tag);
-		} else if (tag.type === 'blueprint_tier') {
-			groups.blueprint_tier.push(tag);
-		} else if (tag.type === 'blueprint_type') {
-			groups.blueprint_type.push(tag);
-		}
-	});
-
-	return groups;
-});
-
-// Computed models for TagsInput components
-const facilitiesModel = computed({
-	get: () => (props.filters.facility as string[]) || [],
-	set: (value: string[]) => emit('update:filter', 'facility', value),
-});
-
-const itemInputModel = computed({
-	get: () => (props.filters.item_input as string[]) || [],
-	set: (value: string[]) => emit('update:filter', 'item_input', value),
-});
-
-const itemOutputModel = computed({
-	get: () => (props.filters.item_output as string[]) || [],
-	set: (value: string[]) => emit('update:filter', 'item_output', value),
-});
 const handleSortChange = (val: any) => {
-	const field = typeof val === 'string' ? val : (Array.isArray(val) && val.length > 0 ? val[0] : 'created_at');
-	if (typeof field === 'string') {
-		emit('update:sort', field, props.isSortDescending);
-	}
-};
+	emit('update:sort', val, props.isSortDescending);
+}
 const handleSortToggle = () => {
 	const field = props.sort.replace(/^-/, '');
 	emit('update:sort', field, !props.isSortDescending);
 };
+
+// Handle filter events from BlueprintCard
+const handleTagFilter = (tagId: string) => {
+	emit('update:filter', 'tags.id', [...(props.filters['tags.id'] as string[] || []), tagId]);
+};
+const handleClearTag = (filterKey: string, value: any) => {
+	if (filterKey === 'tags.id' || filterKey === 'item_input' || filterKey === 'item_output') {
+		emit('clear-filter', filterKey, value);
+	} else {
+		emit('clear-filter', filterKey);
+	}
+};
+const handleRegionFilter = (region: string) => {
+	emit('update:filter', 'region', region);
+};
+const handleAuthorFilter = (authorId: string) => {
+	emit('update:filter', 'author_id', authorId);
+};
+
+// // Handle tag checkbox toggle
+// const toggleTagFilter = (tagId: string) => {
+// 	if (props.filters['tags.id']?.includes(tagId)) {
+// 		console.log('tagId is already in the filters', tagId);
+// 	}
+// };
+
+// const isTagSelected = (tagId: string) => {
+// 	return props.filters['tags.id']?.includes(tagId);
+// };
+
+// // Group tags by type
+const groupedTags = computed(() => {
+	const groupKeys = ['blueprint_tags', 'blueprint_tier', 'blueprint_type'] as const;
+	const groups: Record<typeof groupKeys[number], Tag[]> = {
+		blueprint_tags: [],
+		blueprint_tier: [],
+		blueprint_type: [],
+	};
+
+	for (const tag of props.tags) {
+		if (groupKeys.includes(tag.type as typeof groupKeys[number])) {
+			groups[tag.type as keyof typeof groups].push(tag);
+		}
+	}
+
+	return groups;
+});
+
+// // Computed models for TagsInput components
+// const facilitiesModel = computed({
+// 	get: () => (props.filters.facility as string[]) || [],
+// 	set: (value: string[]) => emit('update:filter', 'facility', value),
+// });
+
+// const itemInputModel = computed({
+// 	get: () => (props.filters.item_input as string[]) || [],
+// 	set: (value: string[]) => emit('update:filter', 'item_input', value),
+// });
+
+// const itemOutputModel = computed({
+// 	get: () => (props.filters.item_output as string[]) || [],
+// 	set: (value: string[]) => emit('update:filter', 'item_output', value),
+// });
 const handleRegionClick = (regionValue: string) => {
 	const newValue = props.filters.region === regionValue ? null : regionValue;
 	emit('update:filter', 'region', newValue);
 };
-const handleClearFilter = (key: string, value?: any) => {
-	emit('clear-filter', key, value);
-};
-const handleClearAllFilters = () => {
-	emit('clear-all-filters');
-};
+// const handleClearFilter = (key: string, value?: any) => {
+// 	emit('clear-filter', key, value);
+// };
+// const handleClearAllFilters = () => {
+// 	emit('clear-all-filters');
+// };
 
 const currentPageModel = computed({
 	get: () => props.currentPage,
@@ -172,28 +163,9 @@ const { open: sidebarOpen, toggleSidebar } = useSidebar();
 	<div class="flex h-screen w-full">
 		<Sidebar v-if="showSidebar" class="top-(--header-height) h-[calc(100svh-var(--header-height))]!">
 			<SidebarContent>
-				<!-- <SidebarGroup>
-					<SidebarGroupContent>
-						<div class="flex flex-col gap-2 px-2">
-							<button
-								class="text-left text-sm text-sidebar-foreground/70 hover:text-sidebar-foreground transition-colors">
-								All
-							</button>
-							<button
-								class="text-left text-sm text-sidebar-foreground/70 hover:text-sidebar-foreground transition-colors">
-								PAC
-							</button>
-							<button class="text-left text-sm text-sidebar-foreground underline">
-								Sub-PAC
-							</button>
-						</div>
-					</SidebarGroupContent>
-				</SidebarGroup> -->
-
 				<SidebarGroup>
 					<SidebarGroupLabel>Filters</SidebarGroupLabel>
 					<SidebarGroupContent>
-						<!-- Region Filter -->
 						<div class="px-2 py-3 space-y-2">
 							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Region</label>
 							<div class="flex gap-2">
@@ -201,78 +173,57 @@ const { open: sidebarOpen, toggleSidebar } = useSidebar();
 									@click="handleRegionClick(region.value)" :class="[
 										'flex-1 flex flex-col items-center justify-center gap-2 p-3 rounded border transition-colors',
 										filters.region === region.value
-											? 'bg-primary border-primary text-primary-foreground'
+											? 'bg-primary border-primary text-cool-gray-100'
 											: 'bg-sidebar border-sidebar-border hover:bg-sidebar-accent'
 									]">
-									<component :is="region.icon" class="w-6 h-6" />
-									<span class="text-xs font-medium">{{ region.label }}</span>
+									<component :is="region.icon" class="w-6 h-6" :class="[
+										filters.region === region.value
+											? 'text-cool-gray-100'
+											: 'text-cool-gray-30'
+									]" />
+									<span class="text-xs text-cool-gray-70 font-medium">{{ region.label }}</span>
 								</button>
 							</div>
 						</div>
 
-						<!-- Tags Section -->
-						<div v-if="groupedTags.blueprint_tags.length > 0" class="px-2 py-3 space-y-2">
-							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Tags</label>
-							<div class="space-y-2 max-h-48 overflow-y-auto">
-								<label v-for="tag in groupedTags.blueprint_tags" :key="tag.id"
-									class="flex items-center gap-2 cursor-pointer hover:bg-sidebar-accent/50 rounded px-2 py-1.5 transition-colors"
-									@click="toggleTagFilter(tag.id)">
-									<Checkbox :checked="isTagSelected(tag.id)" />
-									<span class="text-sm text-sidebar-foreground">{{ tag.name }}</span>
-								</label>
+						<template v-for="group in Object.keys(groupedTags)" :key="group">
+							<div v-if="groupedTags[group as keyof typeof groupedTags].length > 0"
+								class="px-2 py-3 space-y-2">
+								<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Tags</label>
+								<div class="space-y-2 max-h-48 overflow-y-auto">
+									<CheckboxGroupRoot v-model="filters['tags.id']">
+										<label v-for="tag in groupedTags[group as keyof typeof groupedTags]"
+											:key="tag.id" :for="`tag-${tag.id}`"
+											class="flex items-center gap-2 cursor-pointer hover:bg-sidebar-accent/50 rounded px-2 py-1.5 transition-colors">
+											<Checkbox :id="`tag-${tag.id}`" :value="String(tag.id)" />
+											<span class="text-sm text-sidebar-foreground">{{ tag.name }}</span>
+										</label>
+									</CheckboxGroupRoot>
+								</div>
 							</div>
-						</div>
+						</template>
 
-						<!-- Tier Section -->
-						<div v-if="groupedTags.blueprint_tier.length > 0" class="px-2 py-3 space-y-2">
-							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Tier</label>
-							<div class="space-y-2 max-h-48 overflow-y-auto">
-								<label v-for="tag in groupedTags.blueprint_tier" :key="tag.id"
-									class="flex items-center gap-2 cursor-pointer hover:bg-sidebar-accent/50 rounded px-2 py-1.5 transition-colors"
-									@click="toggleTagFilter(tag.id)">
-									<Checkbox :checked="isTagSelected(tag.id)" />
-									<span class="text-sm text-sidebar-foreground">{{ tag.name }}</span>
-								</label>
-							</div>
-						</div>
-
-						<!-- Type Section -->
-						<div v-if="groupedTags.blueprint_type.length > 0" class="px-2 py-3 space-y-2">
-							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Type</label>
-							<div class="space-y-2 max-h-48 overflow-y-auto">
-								<label v-for="tag in groupedTags.blueprint_type" :key="tag.id"
-									class="flex items-center gap-2 cursor-pointer hover:bg-sidebar-accent/50 rounded px-2 py-1.5 transition-colors"
-									@click="toggleTagFilter(tag.id)">
-									<Checkbox :checked="isTagSelected(tag.id)" />
-									<span class="text-sm text-sidebar-foreground">{{ tag.name }}</span>
-								</label>
-							</div>
-						</div>
-
-						<!-- Facilities Used -->
 						<div class="px-2 py-3 space-y-2">
 							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Facilities
 								Used</label>
-							<SearchableTagsInput v-model="facilitiesModel"
-								:options="facilities.map(f => ({ value: f.slug, label: f.name }))"
+							<SearchableTagsInput v-model="filters.facility"
+								:options="facilities.map(f => ({ value: f.slug, label: f.name, icon: f.icon }))"
 								placeholder="Search facilities..." class="w-full" />
 						</div>
 
-						<!-- Input Products -->
 						<div class="px-2 py-3 space-y-2">
 							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Input
 								Products</label>
-							<SearchableTagsInput v-model="itemInputModel"
-								:options="items.map(i => ({ value: i.slug, label: i.name }))"
+							<SearchableTagsInput v-model="filters.item_input"
+								:options="items.map(i => ({ value: i.slug, label: i.name, icon: i.icon }))"
 								placeholder="Search input items..." class="w-full" />
 						</div>
 
-						<!-- Output Products -->
 						<div class="px-2 py-3 space-y-2">
 							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Output
 								Products</label>
-							<SearchableTagsInput v-model="itemOutputModel"
-								:options="items.map(i => ({ value: i.slug, label: i.name }))"
+							<SearchableTagsInput v-model="filters.item_output"
+								:options="items.map(i => ({ value: i.slug, label: i.name, icon: i.icon }))"
 								placeholder="Search output items..." class="w-full" />
 						</div>
 					</SidebarGroupContent>
@@ -298,16 +249,16 @@ const { open: sidebarOpen, toggleSidebar } = useSidebar();
 
 							<Input placeholder="Search for any tag..." class="w-full bg-white" />
 
-							<!-- Active Filters -->
 							<div class="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
 								<div v-if="hasActiveFilters" class="flex items-center gap-2 flex-wrap">
-									<button v-for="tag in activeFilterTags" :key="tag.key"
-										@click="handleClearFilter(tag.key, tag.value)"
+									<button v-for="tag in activeFilterTags" :key="tag.value"
+										@click="handleClearTag(tag.filterKey, tag.value)"
 										class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cool-gray-20 dark:bg-cool-gray-80 text-cool-gray-90 dark:text-cool-gray-10 text-sm hover:bg-cool-gray-30 dark:hover:bg-cool-gray-70 transition-colors">
-										<span>{{ tag.value }}</span>
+										<span>{{ tag.label }}</span>
 										<CloseIcon class="w-3 h-3" />
 									</button>
-									<Button variant="ghost" size="sm" @click="handleClearAllFilters" class="text-sm">
+									<Button variant="ghost" size="sm" @click="emit('clear-all-filters')"
+										class="text-sm">
 										Clear All
 									</Button>
 								</div>
