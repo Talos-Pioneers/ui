@@ -1,8 +1,10 @@
 <script setup lang="ts">
+// TODO: Use Precogntion to handle form validation
 import { Plus, X, GripVertical } from 'lucide-vue-next';
 import { Input } from '~/components/ui/input';
 import { Button } from '~/components/ui/button';
 import { Label } from '~/components/ui/label';
+import { Checkbox } from '~/components/ui/checkbox';
 import { SearchableTagsInput } from '~/components/ui/tags-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
 import { VueDraggable } from 'vue-draggable-plus';
@@ -26,6 +28,8 @@ type Schema = {
     title: string;
     version: string;
     description: string | null;
+    status: string;
+    is_anonymous: boolean;
     tags: number[];
     facilities: Array<{ id: number; quantity: number }>;
     item_inputs: Array<{ id: number; quantity: number }>;
@@ -39,6 +43,8 @@ const form = usePrecognitionForm<Schema>('post', '/api/v1/blueprints', {
     title: '',
     version: 'cbt_3',
     description: null,
+    status: 'draft',
+    is_anonymous: false,
     tags: [],
     facilities: [],
     item_inputs: [],
@@ -85,6 +91,9 @@ interface ImageItem {
 const imageItems = ref<ImageItem[]>([]);
 const fileInputRef = ref<HTMLInputElement | null>(null);
 
+// Loading state for form submission
+const isSubmitting = ref(false);
+
 // Handle file selection
 const handleFileSelect = (event: Event) => {
     const target = event.target as HTMLInputElement;
@@ -129,6 +138,8 @@ const prepareFormData = (): FormData => {
     formData.append('code', state.code);
     formData.append('title', state.title);
     formData.append('version', state.version);
+    formData.append('status', state.status);
+    formData.append('is_anonymous', String(state.is_anonymous));
     if (state.description) {
         formData.append('description', state.description);
     }
@@ -187,8 +198,17 @@ const prepareFormData = (): FormData => {
 };
 
 // Submit handler
-const submit = async () => {
+const submit = async (status: 'draft' | 'published' = 'draft') => {
+    if (isSubmitting.value) {
+        return;
+    }
+
     try {
+        isSubmitting.value = true;
+
+        // Set status before preparing form data
+        state.status = status;
+
         // For file uploads, we need to use FormData directly
         const formData = prepareFormData();
 
@@ -198,8 +218,13 @@ const submit = async () => {
             body: formData,
         });
 
-        toast.success('Blueprint created successfully!');
-        router.push(`/blueprints/${response.data.id}`);
+        const message = status === 'published'
+            ? 'Blueprint published successfully!'
+            : 'Draft saved successfully!';
+        toast.success(message);
+
+        // Redirect to blueprint detail page
+        await router.push(`/blueprints/${response.data.id}`);
     } catch (error: any) {
         const { isValidationError, bag } = useSanctumError(error);
 
@@ -214,6 +239,8 @@ const submit = async () => {
         } else {
             toast.error('Failed to create blueprint. Please try again.');
         }
+    } finally {
+        isSubmitting.value = false;
     }
 };
 </script>
@@ -226,7 +253,7 @@ const submit = async () => {
                     class="bg-white dark:bg-cool-gray-95 rounded-lg border border-cool-gray-20 dark:border-cool-gray-80 p-6 space-y-6">
                     <h1 class="font-bold text-3xl">Create a blueprint</h1>
 
-                    <form @submit.prevent="submit" class="space-y-6">
+                    <form @submit.prevent="() => submit('draft')" class="space-y-6">
                         <!-- Image Upload Section -->
                         <div class="space-y-2">
                             <Label>Images</Label>
@@ -339,10 +366,10 @@ const submit = async () => {
                         <!-- Tags -->
                         <div class="space-y-2">
                             <Label>Tags</Label>
-<!--                            <SearchableTagsInput v-model="tagsSlugs" :options="tagOptions" placeholder="Search..."-->
-<!--                                class="w-full" />-->
-                            <SearchableTagsInput v-model="tagsSlugs" :options="tagOptions"
-                                                 placeholder="Search..." class="w-full max-w-[418px]" />
+                            <!--                            <SearchableTagsInput v-model="tagsSlugs" :options="tagOptions" placeholder="Search..."-->
+                            <!--                                class="w-full" />-->
+                            <SearchableTagsInput v-model="tagsSlugs" :options="tagOptions" placeholder="Search..."
+                                class="w-full max-w-[418px]" />
                             <p v-if="form.errors.tags" class="text-xs text-destructive">
                                 {{ form.errors.tags }}
                             </p>
@@ -352,7 +379,7 @@ const submit = async () => {
                         <div class="space-y-2">
                             <Label>Facilities Used</Label>
                             <SearchableTagsInput v-model="facilitiesSlugs" :options="facilityOptions"
-                                                 placeholder="Search..." class="w-full max-w-[418px]"  />
+                                placeholder="Search..." class="w-full max-w-[418px]" />
                             <p v-if="form.errors.facilities" class="text-xs text-destructive">
                                 {{ form.errors.facilities }}
                             </p>
@@ -362,7 +389,7 @@ const submit = async () => {
                         <div class="space-y-2">
                             <Label>Input Products</Label>
                             <SearchableTagsInput v-model="itemInputsSlugs" :options="itemOptions"
-                                                 placeholder="Search..."  class="w-full max-w-[418px]" />
+                                placeholder="Search..." class="w-full max-w-[418px]" />
                             <p v-if="form.errors.item_inputs" class="text-xs text-destructive">
                                 {{ form.errors.item_inputs }}
                             </p>
@@ -372,16 +399,30 @@ const submit = async () => {
                         <div class="space-y-2">
                             <Label>Output Products</Label>
                             <SearchableTagsInput v-model="itemOutputsSlugs" :options="itemOptions"
-                                                 placeholder="Search..."  class="w-full max-w-[418px]" />
+                                placeholder="Search..." class="w-full max-w-[418px]" />
                             <p v-if="form.errors.item_outputs" class="text-xs text-destructive">
                                 {{ form.errors.item_outputs }}
                             </p>
                         </div>
 
-                        <!-- Submit Button -->
-                        <div class="flex justify-end pt-4">
-                            <Button type="submit" :disabled="form.processing" class="min-w-[120px]">
-                                <span v-if="form.processing">Publishing...</span>
+                        <!-- Anonymous Checkbox -->
+                        <div class="flex items-center space-x-2">
+                            <Checkbox id="is_anonymous" v-model:checked="state.is_anonymous" />
+                            <Label for="is_anonymous" class="text-sm font-normal cursor-pointer">
+                                Post anonymously
+                            </Label>
+                        </div>
+
+                        <!-- Submit Buttons -->
+                        <div class="flex justify-end gap-3 pt-4">
+                            <Button type="button" :disabled="isSubmitting" variant="outline" @click="submit('draft')"
+                                class="min-w-[120px]">
+                                <span v-if="isSubmitting && state.status === 'draft'">Saving...</span>
+                                <span v-else>Save Draft</span>
+                            </Button>
+                            <Button type="button" :disabled="isSubmitting" @click="submit('published')"
+                                class="min-w-[120px]">
+                                <span v-if="isSubmitting && state.status === 'published'">Publishing...</span>
                                 <span v-else>Publish</span>
                             </Button>
                         </div>
