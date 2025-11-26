@@ -80,7 +80,7 @@ html[lang="zh-TW"] {
 }
 
 html[lang="ja"] {
-	--font-sans: "Noto Sans JP", sans-serif;
+	--font-sans: "HarmonyOS_Sans", "Noto Sans JP", sans-serif;
 }
 
 .dark {
