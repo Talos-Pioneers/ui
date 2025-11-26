@@ -31,12 +31,14 @@ interface SearchableOption {
   label: string
   icon?: string | null
 }
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   options: SearchableOption[]
   placeholder?: string
   class?: string
   displayTags?: boolean
-}>()
+}>(), {
+  displayTags: true
+})
 
 const { contains } = useFilter({ sensitivity: 'base' })
 

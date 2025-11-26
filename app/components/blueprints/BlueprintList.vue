@@ -13,7 +13,6 @@ import { Combobox } from '~/components/ui/combobox';
 import { SearchableTagsInput } from '~/components/ui/tags-input';
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover';
 import { Button } from '~/components/ui/button';
-import { Input } from '~/components/ui/input';
 import CloseIcon from '../icons/CloseIcon.vue';
 import { ChevronDown } from 'lucide-vue-next';
 import { useSidebar } from '@/components/ui/sidebar';
@@ -157,6 +156,185 @@ const perPageModel = computed({
 });
 
 const { open: sidebarOpen, toggleSidebar } = useSidebar();
+
+// Unified filter options - combines all filterable items
+interface UnifiedFilterOption {
+	value: string; // Prefixed identifier like "region:valley_iv", "tag:123", etc.
+	label: string;
+	icon?: string | null;
+	filterKey: string; // The filter key to update: 'region', 'tags.id', 'facility', 'item_input', 'item_output'
+	originalValue: string; // The actual value to use in the filter
+}
+
+const unifiedFilterOptions = computed<UnifiedFilterOption[]>(() => {
+	const options: UnifiedFilterOption[] = [];
+
+	// Add regions
+	for (const region of regionOptions) {
+		options.push({
+			value: `region:${region.value}`,
+			label: region.label,
+			icon: null,
+			filterKey: 'region',
+			originalValue: region.value,
+		});
+	}
+
+	// Add tags (all types)
+	for (const tag of props.tags) {
+		options.push({
+			value: `tag:${tag.id}`,
+			label: tag.name,
+			icon: null,
+			filterKey: 'tags.id',
+			originalValue: String(tag.id),
+		});
+	}
+
+	// Add facilities
+	for (const facility of props.facilities) {
+		options.push({
+			value: `facility:${facility.slug}`,
+			label: facility.name,
+			icon: facility.icon,
+			filterKey: 'facility',
+			originalValue: facility.slug,
+		});
+	}
+
+	// Add input items
+	for (const item of props.items) {
+		options.push({
+			value: `item_input:${item.slug}`,
+			label: item.name,
+			icon: item.icon,
+			filterKey: 'item_input',
+			originalValue: item.slug,
+		});
+	}
+
+	// Add output items
+	for (const item of props.items) {
+		options.push({
+			value: `item_output:${item.slug}`,
+			label: item.name,
+			icon: item.icon,
+			filterKey: 'item_output',
+			originalValue: item.slug,
+		});
+	}
+
+	return options;
+});
+
+// Selected items across all filters - converts filters to unified format
+const unifiedSelectedItems = computed<string[]>(() => {
+	const selected: string[] = [];
+
+	// Add region if selected
+	if (props.filters.region) {
+		selected.push(`region:${props.filters.region}`);
+	}
+
+	// Add tags if selected
+	if (Array.isArray(props.filters['tags.id']) && props.filters['tags.id'].length > 0) {
+		for (const tagId of props.filters['tags.id']) {
+			selected.push(`tag:${tagId}`);
+		}
+	}
+
+	// Add facilities if selected
+	if (Array.isArray(props.filters.facility) && props.filters.facility.length > 0) {
+		for (const facilitySlug of props.filters.facility) {
+			selected.push(`facility:${facilitySlug}`);
+		}
+	}
+
+	// Add input items if selected
+	if (Array.isArray(props.filters.item_input) && props.filters.item_input.length > 0) {
+		for (const itemSlug of props.filters.item_input) {
+			selected.push(`item_input:${itemSlug}`);
+		}
+	}
+
+	// Add output items if selected
+	if (Array.isArray(props.filters.item_output) && props.filters.item_output.length > 0) {
+		for (const itemSlug of props.filters.item_output) {
+			selected.push(`item_output:${itemSlug}`);
+		}
+	}
+
+	return selected;
+});
+
+// Parse unified value to get filter key and original value
+const parseUnifiedValue = (value: string): { filterKey: string; originalValue: string } | null => {
+	const [prefix, ...rest] = value.split(':');
+	if (!prefix || rest.length === 0) {
+		return null;
+	}
+
+	const originalValue = rest.join(':'); // Handle values that might contain colons
+
+	switch (prefix) {
+		case 'region':
+			return { filterKey: 'region', originalValue };
+		case 'tag':
+			return { filterKey: 'tags.id', originalValue };
+		case 'facility':
+			return { filterKey: 'facility', originalValue };
+		case 'item_input':
+			return { filterKey: 'item_input', originalValue };
+		case 'item_output':
+			return { filterKey: 'item_output', originalValue };
+		default:
+			return null;
+	}
+};
+
+// Handle unified filter selection/removal
+const unifiedFilterModel = computed({
+	get: () => unifiedSelectedItems.value,
+	set: (newValues: string[]) => {
+		const oldValues = unifiedSelectedItems.value;
+
+		// Find added items
+		const added = newValues.filter(v => !oldValues.includes(v));
+		// Find removed items
+		const removed = oldValues.filter(v => !newValues.includes(v));
+
+		// Handle additions
+		for (const value of added) {
+			const parsed = parseUnifiedValue(value);
+			if (!parsed) continue;
+
+			if (parsed.filterKey === 'region') {
+				// Region is a single value, replace existing
+				emit('update:filter', parsed.filterKey, parsed.originalValue);
+			} else {
+				// Array filters: add to existing array
+				const currentArray = (props.filters[parsed.filterKey] as string[]) || [];
+				if (!currentArray.includes(parsed.originalValue)) {
+					emit('update:filter', parsed.filterKey, [...currentArray, parsed.originalValue]);
+				}
+			}
+		}
+
+		// Handle removals
+		for (const value of removed) {
+			const parsed = parseUnifiedValue(value);
+			if (!parsed) continue;
+
+			if (parsed.filterKey === 'region') {
+				// Region: clear the filter
+				emit('clear-filter', parsed.filterKey);
+			} else {
+				// Array filters: remove specific value
+				emit('clear-filter', parsed.filterKey, parsed.originalValue);
+			}
+		}
+	},
+});
 </script>
 
 <template>
@@ -247,7 +425,9 @@ const { open: sidebarOpen, toggleSidebar } = useSidebar();
 								{{ sidebarOpen ? 'Hide Filters' : 'Show Filters' }}
 							</Button>
 
-							<Input placeholder="Search for any tag..." class="w-full bg-white" />
+							<SearchableTagsInput v-model="unifiedFilterModel" :display-tags="false"
+								:options="unifiedFilterOptions.map(opt => ({ value: opt.value, label: opt.label, icon: opt.icon }))"
+								placeholder="Search for any filter..." class="w-full bg-white" />
 
 							<div class="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
 								<div v-if="hasActiveFilters" class="flex items-center gap-2 flex-wrap">
