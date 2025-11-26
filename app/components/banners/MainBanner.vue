@@ -1,11 +1,11 @@
 <script setup lang="ts">
-	import { Button } from '~/components/ui/button'
-	import backgroundImage from '@/assets/img/banners/factory1.png'
-	import BannerDivider from './BannerDivider.vue'
-	import InfoIcon from '../icons/InfoIcon.vue'
-	import BookIcon from '../icons/BookIcon.vue'
-	// background: linear-gradient(0deg, #F2F4F8, #F2F4F8),
-	// linear-gradient(180deg, rgba(0, 255, 254, 0) 52.88%, rgba(0, 255, 254, 0.5) 100%);
+import { Button } from '~/components/ui/button'
+import backgroundImage from '@/assets/img/banners/factory1.png'
+import BannerDivider from './BannerDivider.vue'
+import InfoIcon from '../icons/InfoIcon.vue'
+import BookIcon from '../icons/BookIcon.vue'
+const { t } = useI18n()
+
 </script>
 <template>
 	<div
@@ -16,22 +16,19 @@
 	>
 		<div
 			class="absolute inset-0 z-0 bg-[linear-gradient(180deg,rgba(0,255,254,0)_52.88%,rgba(0,255,254,0.5)_100%)]"
-		></div>
+		/>
 		<div
 			class="relative z-10 container mx-auto px-6 sm:px-4 py-6 flex flex-col h-full justify-center"
 		>
 			<h1
 				class="text-3xl md:text-[3.375rem]/[3.75rem] font-medium text-white mb-2"
 			>
-				Talos Pioneers
+				{{ t('mainBanner.title') }}
 			</h1>
 			<BannerDivider />
 
 			<p class="text-white md:text-lg max-w-2xl">
-				Talos Pioneers is a currently work-in-progress community
-				resource for Arknights: Endfield, acting as a means for fellow
-				Endministrators to share their Automated Industry Complex (AIC)
-				blueprints to each other.
+				{{ t('mainBanner.description') }}
 			</p>
 			<div class="flex gap-3 mt-8 items-center">
 				<Button
@@ -41,13 +38,13 @@
 					size="responsive-lg"
 					rounded="base"
 				>
-					<NuxtLinkLocale to="/privacy-policy">
+					<NuxtLinkLocale to="/blueprints/create">
 						<BookIcon class="size-4 sm:size-6" />
 						<span
 							class="flex gap-3 items-center text-cool-gray-100"
 						>
 							<span class="leading-none text-sm sm:text-xl"
-								>Privacy Policy</span
+								>{{ t('mainBanner.createBlueprint') }}</span
 							>
 							<svg
 								width="8"
@@ -76,7 +73,7 @@
 						<span class="flex gap-3 items-center text-cool-gray-70">
 							<span
 								class="text-cool-gray-70 text-sm sm:text-xl leading-none"
-								>About</span
+								>{{ t('mainBanner.about') }}</span
 							>
 							<svg
 								width="8"

@@ -94,17 +94,6 @@ const handleAuthorFilter = (authorId: string) => {
 	emit('update:filter', 'author_id', authorId);
 };
 
-// // Handle tag checkbox toggle
-// const toggleTagFilter = (tagId: string) => {
-// 	if (props.filters['tags.id']?.includes(tagId)) {
-// 		console.log('tagId is already in the filters', tagId);
-// 	}
-// };
-
-// const isTagSelected = (tagId: string) => {
-// 	return props.filters['tags.id']?.includes(tagId);
-// };
-
 // // Group tags by type
 const groupedTags = computed(() => {
 	const groupKeys = ['blueprint_tags', 'blueprint_tier', 'blueprint_type'] as const;
@@ -123,31 +112,10 @@ const groupedTags = computed(() => {
 	return groups;
 });
 
-// // Computed models for TagsInput components
-// const facilitiesModel = computed({
-// 	get: () => (props.filters.facility as string[]) || [],
-// 	set: (value: string[]) => emit('update:filter', 'facility', value),
-// });
-
-// const itemInputModel = computed({
-// 	get: () => (props.filters.item_input as string[]) || [],
-// 	set: (value: string[]) => emit('update:filter', 'item_input', value),
-// });
-
-// const itemOutputModel = computed({
-// 	get: () => (props.filters.item_output as string[]) || [],
-// 	set: (value: string[]) => emit('update:filter', 'item_output', value),
-// });
 const handleRegionClick = (regionValue: string) => {
 	const newValue = props.filters.region === regionValue ? null : regionValue;
 	emit('update:filter', 'region', newValue);
 };
-// const handleClearFilter = (key: string, value?: any) => {
-// 	emit('clear-filter', key, value);
-// };
-// const handleClearAllFilters = () => {
-// 	emit('clear-all-filters');
-// };
 
 const currentPageModel = computed({
 	get: () => props.currentPage,
@@ -342,7 +310,7 @@ const unifiedFilterModel = computed({
 </script>
 
 <template>
-	<div class="flex h-screen w-full">
+	<div class="flex w-full">
 		<Sidebar v-if="showSidebar" class="top-(--header-height) h-[calc(100svh-var(--header-height))]!">
 			<SidebarContent>
 				<SidebarGroup>
@@ -351,14 +319,16 @@ const unifiedFilterModel = computed({
 						<div class="px-2 py-3 space-y-2">
 							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Region</label>
 							<div class="flex gap-2">
-								<button v-for="region in regionOptions" :key="region.value"
-									@click="handleRegionClick(region.value)" :class="[
+								<button
+v-for="region in regionOptions" :key="region.value"
+									:class="[
 										'flex-1 flex flex-col items-center justify-center gap-2 p-3 rounded border transition-colors',
 										filters.region === region.value
 											? 'bg-primary border-primary text-cool-gray-100'
 											: 'bg-sidebar border-sidebar-border hover:bg-sidebar-accent'
-									]">
-									<component :is="region.icon" class="w-6 h-6" :class="[
+									]" @click="handleRegionClick(region.value)">
+									<component
+:is="region.icon" class="w-6 h-6" :class="[
 										filters.region === region.value
 											? 'text-cool-gray-100'
 											: 'text-cool-gray-30'
@@ -369,12 +339,14 @@ const unifiedFilterModel = computed({
 						</div>
 
 						<template v-for="group in Object.keys(groupedTags)" :key="group">
-							<div v-if="groupedTags[group as keyof typeof groupedTags].length > 0"
+							<div
+v-if="groupedTags[group as keyof typeof groupedTags].length > 0"
 								class="px-2 py-3 space-y-2">
 								<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Tags</label>
 								<div class="space-y-2 max-h-48 overflow-y-auto">
 									<CheckboxGroupRoot v-model="filters['tags.id']">
-										<label v-for="tag in groupedTags[group as keyof typeof groupedTags]"
+										<label
+v-for="tag in groupedTags[group as keyof typeof groupedTags]"
 											:key="tag.id" :for="`tag-${tag.id}`"
 											class="flex items-center gap-2 cursor-pointer hover:bg-sidebar-accent/50 rounded px-2 py-1.5 transition-colors">
 											<Checkbox :id="`tag-${tag.id}`" :value="String(tag.id)" />
@@ -388,7 +360,8 @@ const unifiedFilterModel = computed({
 						<div class="px-2 py-3 space-y-2">
 							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Facilities
 								Used</label>
-							<SearchableTagsInput v-model="filters.facility"
+							<SearchableTagsInput
+v-model="filters.facility"
 								:options="facilities.map(f => ({ value: f.slug, label: f.name, icon: f.icon }))"
 								placeholder="Search facilities..." class="w-full" />
 						</div>
@@ -396,7 +369,8 @@ const unifiedFilterModel = computed({
 						<div class="px-2 py-3 space-y-2">
 							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Input
 								Products</label>
-							<SearchableTagsInput v-model="filters.item_input"
+							<SearchableTagsInput
+v-model="filters.item_input"
 								:options="items.map(i => ({ value: i.slug, label: i.name, icon: i.icon }))"
 								placeholder="Search input items..." class="w-full" />
 						</div>
@@ -404,7 +378,8 @@ const unifiedFilterModel = computed({
 						<div class="px-2 py-3 space-y-2">
 							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Output
 								Products</label>
-							<SearchableTagsInput v-model="filters.item_output"
+							<SearchableTagsInput
+v-model="filters.item_output"
 								:options="items.map(i => ({ value: i.slug, label: i.name, icon: i.icon }))"
 								placeholder="Search output items..." class="w-full" />
 						</div>
@@ -413,103 +388,113 @@ const unifiedFilterModel = computed({
 			</SidebarContent>
 		</Sidebar>
 
-		<SidebarInset>
-			<!-- Main Content -->
-			<div class="flex flex-col">
-				<!-- Banner Section -->
-				<slot name="banner" />
+		<!-- Main Content -->
+		<div class="flex flex-col w-full">
+			<!-- Banner Section -->
+			<slot name="banner" />
 
-				<!-- Content Area -->
-				<div class="wave-bg bg-cool-gray-10 before:bg-size-[400px]">
-					<div class="container mx-auto px-4 py-6">
-						<!-- Controls Bar -->
-						<div class="flex flex-col gap-4 mb-8">
-							<Button v-if="showSidebar" variant="outline" size="sm" @click="toggleSidebar"
-								class="before:hidden w-fit bg-transparent">
-								{{ sidebarOpen ? 'Hide Filters' : 'Show Filters' }}
-							</Button>
+			<!-- Content Area -->
+			<div class="wave-bg bg-cool-gray-10 before:bg-size-[400px]">
+				<div class="container mx-auto px-4 py-6">
+					<!-- Controls Bar -->
+					<div class="flex flex-col gap-4 mb-8">
+						<Button
+v-if="showSidebar" variant="outline" size="sm" class="before:hidden w-fit bg-transparent"
+							@click="toggleSidebar">
+							{{ sidebarOpen ? 'Hide Filters' : 'Show Filters' }}
+						</Button>
 
-							<SearchableTagsInput v-model="unifiedFilterModel" :display-tags="false"
-								:options="unifiedFilterOptions.map(opt => ({ value: opt.value, label: opt.label, icon: opt.icon }))"
-								placeholder="Search for any filter..." class="w-full bg-white" />
+						<SearchableTagsInput
+v-model="unifiedFilterModel" :display-tags="false"
+							:options="unifiedFilterOptions.map(opt => ({ value: opt.value, label: opt.label, icon: opt.icon }))"
+							placeholder="Search for any filter..." class="w-full bg-white" />
 
-							<div class="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
-								<div v-if="hasActiveFilters" class="flex items-center gap-2 flex-wrap">
-									<button v-for="tag in activeFilterTags" :key="tag.value"
-										@click="handleClearTag(tag.filterKey, tag.value)"
-										class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cool-gray-20 dark:bg-cool-gray-80 text-cool-gray-90 dark:text-cool-gray-10 text-sm hover:bg-cool-gray-30 dark:hover:bg-cool-gray-70 transition-colors">
-										<span>{{ tag.label }}</span>
-										<CloseIcon class="w-3 h-3" />
-									</button>
-									<Button variant="ghost" size="sm" @click="emit('clear-all-filters')"
-										class="text-sm">
-										Clear All
-									</Button>
-								</div>
-								<div v-else></div>
-								<span class="text-sm text-muted-foreground whitespace-nowrap">
-									{{ pagination?.total ?? 0 }} Blueprints found
-								</span>
+						<div class="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+							<div v-if="hasActiveFilters" class="flex items-center gap-2 flex-wrap">
+								<button
+v-for="tag in activeFilterTags" :key="tag.value"
+									class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cool-gray-20 dark:bg-cool-gray-80 text-cool-gray-90 dark:text-cool-gray-10 text-sm hover:bg-cool-gray-30 dark:hover:bg-cool-gray-70 transition-colors"
+									@click="handleClearTag(tag.filterKey, tag.value)">
+									<span>{{ tag.label }}</span>
+									<CloseIcon class="w-3 h-3" />
+								</button>
+								<Button
+variant="ghost" size="sm" class="text-sm"
+									@click="emit('clear-all-filters')">
+									Clear All
+								</Button>
 							</div>
+							<div v-else/>
+							<span class="text-sm text-muted-foreground whitespace-nowrap">
+								{{ pagination?.total ?? 0 }} Blueprints found
+							</span>
+						</div>
 
-							<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-								<div class="flex items-center gap-2">
-									<label class="text-sm text-muted-foreground whitespace-nowrap">Sort by</label>
-									<Select :model-value="sort.replace(/^-/, '')"
-										@update:model-value="handleSortChange">
-										<SelectTrigger class="w-[180px]">
-											<SelectValue :placeholder="currentSortLabel" />
-										</SelectTrigger>
-										<SelectContent>
-											<SelectItem v-for="option in sortOptions" :key="option.value"
-												:value="option.value">
-												{{ option.label }}
-											</SelectItem>
-										</SelectContent>
-									</Select>
-									<Button class="rounded" variant="ghost" size="icon-sm" @click="handleSortToggle"
-										:title="isSortDescending ? 'Sort ascending' : 'Sort descending'">
-										{{ isSortDescending ? '↑' : '↓' }}
-									</Button>
-								</div>
-								<BlueprintPagination v-model:current-page="currentPageModel"
-									v-model:per-page="perPageModel" :pagination="pagination"
-									:show-per-page-selector="true" />
+						<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+							<div class="flex items-center gap-2">
+								<label class="text-sm text-muted-foreground whitespace-nowrap">Sort by</label>
+								<Select
+:model-value="sort.replace(/^-/, '')"
+									@update:model-value="handleSortChange">
+									<SelectTrigger class="w-[180px]">
+										<SelectValue :placeholder="currentSortLabel" />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem
+v-for="option in sortOptions" :key="option.value"
+											:value="option.value">
+											{{ option.label }}
+										</SelectItem>
+									</SelectContent>
+								</Select>
+								<Button
+class="rounded" variant="ghost" size="icon-sm" :title="isSortDescending ? 'Sort ascending' : 'Sort descending'"
+									@click="handleSortToggle">
+									{{ isSortDescending ? '↑' : '↓' }}
+								</Button>
 							</div>
+							<BlueprintPagination
+v-model:current-page="currentPageModel"
+								v-model:per-page="perPageModel" :pagination="pagination"
+								:show-per-page-selector="true" />
 						</div>
+					</div>
 
-						<!-- Loading State -->
-						<div v-if="loading" class="flex items-center justify-center py-12">
-							<p class="text-muted-foreground">Loading blueprints...</p>
+					<!-- Loading State -->
+					<div v-if="loading" class="flex items-center justify-center py-12">
+						<p class="text-muted-foreground">Loading blueprints...</p>
+					</div>
+
+					<!-- Error State -->
+					<div v-if="error" class="flex flex-col items-center justify-center py-12">
+						<p class="text-destructive mb-2">Error loading blueprints:</p>
+						<pre class="text-sm text-muted-foreground">{{ error }}</pre>
+					</div>
+
+					<!-- Blueprints Grid -->
+					<div
+v-if="!loading && !error"
+						class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+						<BlueprintCard
+v-for="blueprint in blueprints" :key="blueprint.id" :blueprint="blueprint"
+							@filter-tag="handleTagFilter" @filter-region="handleRegionFilter"
+							@filter-author="handleAuthorFilter" />
+
+						<div
+v-if="blueprints.length === 0"
+							class="col-span-full flex items-center justify-center py-12">
+							<p class="text-muted-foreground">No blueprints found.</p>
 						</div>
+					</div>
 
-						<!-- Error State -->
-						<div v-if="error" class="flex flex-col items-center justify-center py-12">
-							<p class="text-destructive mb-2">Error loading blueprints:</p>
-							<pre class="text-sm text-muted-foreground">{{ error }}</pre>
-						</div>
-
-						<!-- Blueprints Grid -->
-						<div v-if="!loading && !error"
-							class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-							<BlueprintCard v-for="blueprint in blueprints" :key="blueprint.id" :blueprint="blueprint"
-								@filter-tag="handleTagFilter" @filter-region="handleRegionFilter"
-								@filter-author="handleAuthorFilter" />
-
-							<div v-if="blueprints.length === 0"
-								class="col-span-full flex items-center justify-center py-12">
-								<p class="text-muted-foreground">No blueprints found.</p>
-							</div>
-						</div>
-
-						<div class="flex justify-end">
-							<!-- Pagination -->
-							<BlueprintPagination v-model:current-page="currentPageModel" v-model:per-page="perPageModel"
-								:pagination="pagination" :show-per-page-selector="false" />
-						</div>
+					<div class="flex justify-end">
+						<!-- Pagination -->
+						<BlueprintPagination
+v-model:current-page="currentPageModel" v-model:per-page="perPageModel"
+							:pagination="pagination" :show-per-page-selector="false" />
 					</div>
 				</div>
 			</div>
-		</SidebarInset>
+		</div>
 	</div>
 </template>

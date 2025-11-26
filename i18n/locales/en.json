@@ -1,5 +1,11 @@
 {
 	"hello": "Hello",
 	"pages.home.title": "Talos Pioneers",
-	"pages.home.description": "Talos Pioneers is a currently work-in-progress community resource for Arknights: Endfield, acting as a means for fellow Endministrators to share their Automated Industry Complex (AIC) blueprints to each other."
+	"pages.home.description": "Talos Pioneers is a currently work-in-progress community resource for Arknights: Endfield, acting as a means for fellow Endministrators to share their Automated Industry Complex (AIC) blueprints to each other.",
+	"footer.about": "About",
+	"footer.privacyPolicy": "Privacy Policy",
+	"mainBanner.title": "Talos Pioneers",
+	"mainBanner.description": "Talos Pioneers is a currently work-in-progress community resource for Arknights: Endfield, acting as a means for fellow Endministrators to share their Automated Industry Complex (AIC) blueprints to each other.",
+	"mainBanner.createBlueprint": "Create a Blueprint",
+	"mainBanner.about": "About"
 }

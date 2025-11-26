@@ -1,17 +1,19 @@
 <script setup>
 import 'vue-sonner/style.css'
 import Header from '~/components/navigation/Header.vue';
+import Footer from '~/components/navigation/Footer.vue';
+import LoginDialog from '~/components/auth/LoginDialog.vue'
+import RegisterDialog from '~/components/auth/RegisterDialog.vue'
+import { TooltipProvider } from '~/components/ui/tooltip';
+import { Toaster } from '~/components/ui/sonner';
+import { SidebarProvider, SidebarInset } from '~/components/ui/sidebar';
 
 const route = useRoute()
 const { t } = useI18n()
 const head = useLocaleHead()
 // const title = computed(() => t(route.meta.title ?? 'TBD', t('layouts.title'))
 // );
-import LoginDialog from '~/components/auth/LoginDialog.vue'
-import RegisterDialog from '~/components/auth/RegisterDialog.vue'
-import { TooltipProvider } from '~/components/ui/tooltip';
-import { Toaster } from '~/components/ui/sonner';
-import { SidebarProvider } from '~/components/ui/sidebar';
+
 </script>
 
 <template>
@@ -31,10 +33,15 @@ import { SidebarProvider } from '~/components/ui/sidebar';
         <Body>
             <TooltipProvider>
                 <Toaster />
-                <div class="[--header-height:calc(--spacing(16.5))]">
-                    <SidebarProvider :default-open="false" storage-key="filter-sidebar" class="flex flex-col">
+                <div class="[--header-height:calc(--spacing(16.5))] flex flex-col min-h-screen">
+                    <SidebarProvider :default-open="false" storage-key="filter-sidebar" class="flex flex-col flex-1">
                         <Header />
-                        <slot />
+                        <SidebarInset>
+                            <div class="flex-1">
+                                <slot />
+                                <Footer />
+                            </div>
+                        </SidebarInset>
                     </SidebarProvider>
                 </div>
                 <LoginDialog />
