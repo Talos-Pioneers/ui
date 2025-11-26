@@ -35,6 +35,7 @@ const props = defineProps<{
   options: SearchableOption[]
   placeholder?: string
   class?: string
+  displayTags?: boolean
 }>()
 
 const { contains } = useFilter({ sensitivity: 'base' })
@@ -54,12 +55,14 @@ const filteredOptions = computed(() =>
   <ComboboxRoot v-model="modelValue" multiple ignore-filter :class="cn('relative', props.class)">
     <ComboboxAnchor>
       <TagsInput v-model="modelValue" delimiter="">
-        <TagsInputItem v-for="item in modelValue" :key="item.toString()" :value="item.toString()">
-          <span class="py-0.5 px-2 text-sm rounded bg-transparent">{{props.options.find(opt => opt.value ===
-            item)?.label ?? "balls"}}</span>
-          <!-- turns out you can just not use TagsInputItemText lol -->
-          <TagsInputItemDelete />
-        </TagsInputItem>
+        <template v-if="props.displayTags">
+          <TagsInputItem v-for="item in modelValue" :key="item.toString()" :value="item.toString()">
+            <span class="py-0.5 px-2 text-sm rounded bg-transparent">{{props.options.find(opt => opt.value ===
+              item)?.label ?? "balls"}}</span>
+            <!-- turns out you can just not use TagsInputItemText lol -->
+            <TagsInputItemDelete />
+          </TagsInputItem>
+        </template>
 
         <ComboboxInput v-model="query" as-child>
           <TagsInputInput :placeholder="placeholder ?? 'Search...'"
