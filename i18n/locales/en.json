@@ -78,7 +78,7 @@
 	"pages.privacy.authenticationEmail": "Email and Password: We use magic links sent to your email address for passwordless authentication.",
 	"pages.privacy.authenticationOAuth": "OAuth Providers: You can sign in using Discord or Google. When you choose to authenticate via OAuth, the provider shares certain information with us (such as your email address and profile picture) in accordance with their privacy policies.",
 	"pages.privacy.cookiesTitle": "Cookies & Session Management",
-	"pages.privacy.cookiesText": "We use Laravel Sanctum for session management, which uses cookies to maintain your authentication state. These cookies are essential for the platform to function properly and allow you to remain logged in across sessions. You can control cookies through your browser settings, but disabling cookies may affect your ability to use certain features of our platform.",
+	"pages.privacy.cookiesText": "We use cookies to maintain your authentication state. These cookies are essential for the platform to function properly and allow you to remain logged in across sessions. You can control cookies through your browser settings, but disabling cookies may affect your ability to use certain features of our platform.",
 	"pages.privacy.contentModerationTitle": "Content Moderation",
 	"pages.privacy.contentModerationText": "To maintain a safe and respectful community, we use automated content moderation powered by OpenAI's moderation API. This system reviews blueprint titles, descriptions, images, and comments to identify potentially harmful or inappropriate content. Content that violates our community guidelines may be automatically flagged or removed.",
 	"pages.privacy.dataStorageTitle": "Data Storage & Security",

@@ -215,7 +215,7 @@ useHead({
 							:href="feedbackUrl"
 							target="_blank"
 							rel="noopener noreferrer"
-							class="inline-flex items-center gap-2 text-primary hover:text-primary/80 hover:underline transition-colors"
+							class="inline-flex items-center gap-2 text-cool-gray-80 hover:text-cool-gray-80 hover:underline transition-colors"
 						>
 							{{ t('pages.privacy.contactLink') }}
 							<svg
