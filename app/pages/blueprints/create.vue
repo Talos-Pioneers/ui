@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// TODO: Use Precogntion to handle form validation
 import {Plus, X, GripVertical} from 'lucide-vue-next';
 import {Input} from '~/components/ui/input';
 import {Button} from '~/components/ui/button';
@@ -19,8 +18,6 @@ definePageMeta({
 });
 
 const router = useRouter();
-const config = useSanctumConfig();
-const sanctumClient = useSanctumClient();
 
 // Form schema matching StoreBlueprintRequest
 type Schema = {
@@ -52,8 +49,6 @@ const form = usePrecognitionForm<Schema>('post', '/api/v1/blueprints', {
   gallery: [],
 });
 
-const state = form.fields;
-
 // Fetch facilities, items, and tags
 const {data: facilitiesData} = await useSanctumFetch<{ data: Facility[] }>('/api/v1/facilities');
 const {data: itemsData} = await useSanctumFetch<{ data: Item[] }>('/api/v1/items');
@@ -65,11 +60,19 @@ const tags = computed(() => tagsData.value?.data ?? []);
 
 // Map to options for SearchableTagsInput (using slugs as values)
 const facilityOptions = computed(() =>
-    facilities.value.map(f => ({value: f.slug, label: f.name}))
+    facilities.value.map(f => ({
+      value: f.slug,
+      label: f.name,
+      icon: `https://static.warfarin.wiki/v1/itemicon/${f.icon}.webp`,
+    }))
 );
 
 const itemOptions = computed(() =>
-    items.value.map(i => ({value: i.slug, label: i.name}))
+    items.value.map(i => ({
+      value: i.slug,
+      label: i.name,
+      icon: `https://static.warfarin.wiki/v1/itemicon/${i.icon}.webp`,
+    }))
 );
 
 const tagOptions = computed(() =>
@@ -113,6 +116,10 @@ const handleFileSelect = (event: Event) => {
       };
       reader.readAsDataURL(file);
     });
+
+    // Sync files to form.fields.gallery and validate
+    syncGalleryToForm();
+    form.validate('gallery');
   }
   // Reset input
   if (target) {
@@ -123,75 +130,101 @@ const handleFileSelect = (event: Event) => {
 // Remove image
 const removeImage = (index: number) => {
   imageItems.value.splice(index, 1);
+  syncGalleryToForm();
+  form.forgetError('gallery');
 };
 
 // Handle image reordering
 const handleImageReorder = (newOrder: ImageItem[]) => {
   imageItems.value = newOrder;
+  syncGalleryToForm();
 };
 
-// Convert slugs to IDs and prepare form data
-const prepareFormData = (): FormData => {
-  const formData = new FormData();
+// Sync imageItems to form.fields.gallery (maintain order - first image = thumbnail)
+const syncGalleryToForm = () => {
+  form.fields.gallery = imageItems.value.map(item => item.file);
+};
 
-  // Basic fields
-  formData.append('code', state.code);
-  formData.append('title', state.title);
-  formData.append('version', state.version);
-  formData.append('status', state.status);
-  formData.append('is_anonymous', String(state.is_anonymous));
-  if (state.description) {
-    formData.append('description', state.description);
-  }
-
+// Sync slugs to IDs and update form fields before submission
+const syncFormFields = () => {
   // Convert tag slugs to IDs
-  const tagIds = tagsSlugs.value
+  form.fields.tags = tagsSlugs.value
       .map(slug => tags.value.find(t => t.slug === slug)?.id)
       .filter((id): id is string => id !== undefined)
       .map(id => Number(id));
-  tagIds.forEach(id => {
-    formData.append('tags[]', String(id));
-  });
 
   // Convert facility slugs to IDs with quantities (default to 1)
-  const facilitiesData = facilitiesSlugs.value
+  form.fields.facilities = facilitiesSlugs.value
       .map(slug => {
         const facility = facilities.value.find(f => f.slug === slug);
         return facility ? {id: Number(facility.id), quantity: 1} : null;
       })
       .filter((f): f is { id: number; quantity: number } => f !== null);
-  facilitiesData.forEach((facility, index) => {
+
+  // Convert item input slugs to IDs with quantities (default to 1)
+  form.fields.item_inputs = itemInputsSlugs.value
+      .map(slug => {
+        const item = items.value.find(i => i.slug === slug);
+        return item ? {id: Number(item.id), quantity: 1} : null;
+      })
+      .filter((i): i is { id: number; quantity: number } => i !== null);
+
+  // Convert item output slugs to IDs with quantities (default to 1)
+  form.fields.item_outputs = itemOutputsSlugs.value
+      .map(slug => {
+        const item = items.value.find(i => i.slug === slug);
+        return item ? {id: Number(item.id), quantity: 1} : null;
+      })
+      .filter((i): i is { id: number; quantity: number } => i !== null);
+
+  // Sync gallery files (maintain order - first image = thumbnail)
+  syncGalleryToForm();
+
+  // Ensure is_anonymous remains boolean
+  form.fields.is_anonymous = Boolean(form.fields.is_anonymous);
+};
+
+// Create FormData in the format Laravel expects for nested arrays
+const createFormData = (): FormData => {
+  const formData = new FormData();
+
+  // Basic fields
+  formData.append('code', form.fields.code);
+  formData.append('title', form.fields.title);
+  formData.append('version', form.fields.version);
+  formData.append('status', form.fields.status);
+  formData.append('is_anonymous', form.fields.is_anonymous ? '1' : '0');
+  
+  if (form.fields.description) {
+    formData.append('description', form.fields.description);
+  }
+
+  // Tags - Laravel expects tags[] format
+  form.fields.tags.forEach(id => {
+    formData.append('tags[]', String(id));
+  });
+
+  // Facilities - Laravel expects facilities[0][id] and facilities[0][quantity] format
+  form.fields.facilities.forEach((facility, index) => {
     formData.append(`facilities[${index}][id]`, String(facility.id));
     formData.append(`facilities[${index}][quantity]`, String(facility.quantity));
   });
 
-  // Convert item input slugs to IDs with quantities (default to 1)
-  const itemInputsData = itemInputsSlugs.value
-      .map(slug => {
-        const item = items.value.find(i => i.slug === slug);
-        return item ? {id: Number(item.id), quantity: 1} : null;
-      })
-      .filter((i): i is { id: number; quantity: number } => i !== null);
-  itemInputsData.forEach((item, index) => {
+  // Item inputs - Laravel expects item_inputs[0][id] and item_inputs[0][quantity] format
+  form.fields.item_inputs.forEach((item, index) => {
     formData.append(`item_inputs[${index}][id]`, String(item.id));
     formData.append(`item_inputs[${index}][quantity]`, String(item.quantity));
   });
 
-  // Convert item output slugs to IDs with quantities (default to 1)
-  const itemOutputsData = itemOutputsSlugs.value
-      .map(slug => {
-        const item = items.value.find(i => i.slug === slug);
-        return item ? {id: Number(item.id), quantity: 1} : null;
-      })
-      .filter((i): i is { id: number; quantity: number } => i !== null);
-  itemOutputsData.forEach((item, index) => {
+  // Item outputs - Laravel expects item_outputs[0][id] and item_outputs[0][quantity] format
+  form.fields.item_outputs.forEach((item, index) => {
     formData.append(`item_outputs[${index}][id]`, String(item.id));
     formData.append(`item_outputs[${index}][quantity]`, String(item.quantity));
   });
 
-  // Add gallery images - Laravel expects gallery[] format
-  imageItems.value.forEach((item) => {
-    formData.append('gallery[]', item.file);
+  // Gallery files - Laravel expects gallery[] format
+  form.fields.gallery.forEach(file => {
+    formData.append('gallery[]', file);
   });
 
   return formData;
@@ -206,13 +239,17 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
   try {
     isSubmitting.value = true;
 
-    // Set status before preparing form data
-    state.status = status;
+    // Set status
+    form.fields.status = status;
 
-    // For file uploads, we need to use FormData directly
-    const formData = prepareFormData();
+    // Sync all form fields (slugs to IDs, files, etc.)
+    syncFormFields();
 
-    // Use Sanctum client to submit FormData
+    // Create FormData in Laravel's expected format
+    const formData = createFormData();
+
+    // Use Sanctum client directly with FormData since Precognition doesn't handle nested arrays correctly
+    const sanctumClient = useSanctumClient();
     const response = await sanctumClient<{ data: { id: string } }>('/api/v1/blueprints', {
       method: 'POST',
       body: formData,
@@ -224,18 +261,40 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
     toast.success(message);
 
     // Redirect to blueprint detail page
-    await router.push(`/blueprints/${response.data.id}`);
-  } catch (error: any) {
+    if (response.data?.id) {
+      await router.push(`/blueprints/${response.data.id}`);
+    }
+  } catch (error) {
     const {isValidationError, bag} = useSanctumError(error);
 
     if (isValidationError) {
-      // Precognition will automatically set errors, but we can show a toast
-      const firstError = bag[0];
-      if (firstError) {
-        toast.error(firstError.message || 'Please fix the validation errors.');
-      } else {
-        toast.error('Please fix the validation errors.');
-      }
+      // Manually populate form.errors from validation errors
+      const validationErrors: Record<string, string[]> = {};
+      bag.forEach(err => {
+        const field = err.name;
+        if (field) {
+          if (validationErrors[field]) {
+            validationErrors[field].push(err.message);
+          } else {
+            validationErrors[field] = [err.message];
+          }
+        }
+      });
+      
+      // Update form.errors by clearing and reassigning
+      // Use Object.keys to get all current error keys and clear them
+      const currentErrorKeys = Object.keys(form.errors);
+      currentErrorKeys.forEach(key => {
+        // Use form's forgetError method if available, otherwise clear manually
+        if (typeof form.forgetError === 'function') {
+          form.forgetError(key as keyof typeof form.fields);
+        }
+      });
+      
+      // Assign new errors
+      Object.assign(form.errors, validationErrors);
+
+      toast.error('Please fix the validation errors.');
     } else {
       toast.error('Failed to create blueprint. Please try again.');
     }
@@ -253,13 +312,24 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
             class="bg-white dark:bg-cool-gray-95 rounded-lg border border-cool-gray-20 dark:border-cool-gray-80 p-6 space-y-6">
           <h1 class="font-bold text-3xl">Create a blueprint</h1>
 
-          <form @submit.prevent="() => submit('draft')" class="space-y-6">
+          <!-- Validation Errors Alert -->
+          <div v-if="form.hasErrors" class="bg-destructive/10 border border-destructive/20 rounded-lg p-4 space-y-2">
+            <p class="text-sm font-medium text-destructive">Please fix the following errors:</p>
+            <ul class="list-disc list-inside text-sm text-destructive space-y-1">
+              <li v-for="(error, field) in form.errors" :key="field">
+                <strong>{{ field }}:</strong> {{ Array.isArray(error) ? error[0] : error }}
+              </li>
+            </ul>
+          </div>
+
+          <form class="space-y-6" @submit.prevent="() => submit('draft')">
             <!-- Image Upload Section -->
             <div class="space-y-2">
               <Label>Images</Label>
               <div class="space-y-4">
                 <!-- Upload Area -->
-                <div v-if="imageItems.length === 0"
+                <div
+v-if="imageItems.length === 0"
                      class="border-2 border-dashed border-cool-gray-30 dark:border-cool-gray-70 rounded-lg p-8 flex items-center justify-center cursor-pointer hover:border-primary transition-colors"
                      @click="fileInputRef?.click()">
                   <div class="text-center">
@@ -269,27 +339,33 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
                 </div>
 
                 <!-- Image Gallery with Drag and Drop -->
-                <VueDraggable v-if="imageItems.length > 0" v-model="imageItems" :animation="200"
+                <VueDraggable
+v-if="imageItems.length > 0" v-model="imageItems" :animation="200"
                               handle=".drag-handle" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
                               @update:model-value="handleImageReorder">
-                  <div v-for="(item, index) in imageItems" :key="index"
+                  <div
+v-for="(item, index) in imageItems" :key="index"
                        class="relative group aspect-square rounded-lg overflow-hidden border border-cool-gray-20 dark:border-cool-gray-80">
-                    <img :src="item.preview" :alt="`Preview ${index + 1}`"
-                         class="w-full h-full object-cover"/>
+                    <img
+:src="item.preview" :alt="`Preview ${index + 1}`"
+                         class="w-full h-full object-cover">
                     <div
                         class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2">
-                      <button type="button"
+                      <button
+type="button"
                               class="drag-handle cursor-grab active:cursor-grabbing p-2 bg-white/90 rounded hover:bg-white transition-colors"
                               @mousedown.stop>
                         <GripVertical class="size-4 text-cool-gray-90"/>
                       </button>
-                      <button type="button"
+                      <button
+type="button"
                               class="p-2 bg-white/90 rounded hover:bg-white transition-colors"
                               @click="removeImage(index)">
                         <X class="size-4 text-cool-gray-90"/>
                       </button>
                     </div>
-                    <div v-if="index === 0"
+                    <div
+v-if="index === 0"
                          class="absolute top-2 left-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded">
                       Thumbnail
                     </div>
@@ -297,18 +373,23 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
                 </VueDraggable>
 
                 <!-- Add More Images Button -->
-                <button v-if="imageItems.length > 0" type="button"
+                <button
+v-if="imageItems.length > 0" type="button"
                         class="flex items-center gap-2 px-4 py-2 border border-cool-gray-30 dark:border-cool-gray-70 rounded-lg hover:border-primary transition-colors text-sm"
                         @click="fileInputRef?.click()">
                   <Plus class="size-4"/>
                   Add more images
                 </button>
 
-                <input ref="fileInputRef" type="file" accept="image/*" multiple class="hidden"
-                       @change="handleFileSelect"/>
+                <input
+ref="fileInputRef" type="file" accept="image/*" multiple class="hidden"
+                       @change="handleFileSelect">
 
                 <p class="text-xs text-cool-gray-60">
                   The first image in the gallery will be used as a thumbnail.
+                </p>
+                <p v-if="form.errors.gallery" class="text-xs text-destructive">
+                  {{ Array.isArray(form.errors.gallery) ? form.errors.gallery[0] : form.errors.gallery }}
                 </p>
               </div>
             </div>
@@ -316,50 +397,57 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
             <!-- Title -->
             <div class="space-y-2">
               <Label for="title">Title</Label>
-              <Input id="title" v-model="state.title" placeholder="Title"
-                     :aria-invalid="!!form.errors.title"/>
+              <Input
+id="title" v-model="form.fields.title" placeholder="Title"
+                     :aria-invalid="!!form.errors.title"
+                     @change="form.validate('title')"/>
               <p v-if="form.errors.title" class="text-xs text-destructive">
-                {{ form.errors.title }}
+                {{ Array.isArray(form.errors.title) ? form.errors.title[0] : form.errors.title }}
               </p>
             </div>
 
             <!-- Description -->
             <div class="space-y-2">
               <Label for="description">Description</Label>
-              <textarea id="description" v-model="state.description" rows="6"
+              <textarea
+id="description" v-model="form.fields.description" rows="6"
                         class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
-                        placeholder="Description" :aria-invalid="!!form.errors.description"/>
+                        placeholder="Description" :aria-invalid="!!form.errors.description"
+                        @change="form.validate('description')"/>
               <p v-if="form.errors.description" class="text-xs text-destructive">
-                {{ form.errors.description }}
+                {{ Array.isArray(form.errors.description) ? form.errors.description[0] : form.errors.description }}
               </p>
             </div>
 
             <!-- Share Code -->
             <div class="space-y-2">
               <Label for="code">Share Code</Label>
-              <Input id="code" v-model="state.code" placeholder="Enter blueprint code..."
-                     :aria-invalid="!!form.errors.code"/>
+              <Input
+id="code" v-model="form.fields.code" placeholder="Enter blueprint code..."
+                     :aria-invalid="!!form.errors.code"
+                     @change="form.validate('code')"/>
               <p v-if="form.errors.code" class="text-xs text-destructive">
-                {{ form.errors.code }}
+                {{ Array.isArray(form.errors.code) ? form.errors.code[0] : form.errors.code }}
               </p>
             </div>
 
             <!-- Version -->
             <div class="space-y-2">
               <Label for="version">Version</Label>
-              <Select v-model="state.version">
-                <SelectTrigger id="version">
+              <Select v-model="form.fields.version" @update:model-value="form.validate('version')">
+                <SelectTrigger id="version" :aria-invalid="!!form.errors.version">
                   <SelectValue placeholder="Select a version..."/>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem v-for="option in versionOptions.filter(opt => opt.value)"
+                  <SelectItem
+v-for="option in versionOptions.filter(opt => opt.value)"
                               :key="option.value" :value="option.value">
                     {{ option.label }}
                   </SelectItem>
                 </SelectContent>
               </Select>
               <p v-if="form.errors.version" class="text-xs text-destructive">
-                {{ form.errors.version }}
+                {{ Array.isArray(form.errors.version) ? form.errors.version[0] : form.errors.version }}
               </p>
             </div>
 
@@ -368,61 +456,74 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
               <Label>Tags</Label>
               <!--                            <SearchableTagsInput v-model="tagsSlugs" :options="tagOptions" placeholder="Search..."-->
               <!--                                class="w-full" />-->
-              <SearchableTagsInput v-model="tagsSlugs" :options="tagOptions" placeholder="Search..."
+              <SearchableTagsInput
+v-model="tagsSlugs" :options="tagOptions" placeholder="Search..."
                                    class="w-full max-w-[418px]"/>
               <p v-if="form.errors.tags" class="text-xs text-destructive">
-                {{ form.errors.tags }}
+                {{ Array.isArray(form.errors.tags) ? form.errors.tags[0] : form.errors.tags }}
               </p>
             </div>
 
             <!-- Facilities Used -->
             <div class="space-y-2">
               <Label>Facilities Used</Label>
-              <SearchableTagsInput v-model="facilitiesSlugs" :options="facilityOptions"
+              <SearchableTagsInput
+v-model="facilitiesSlugs" :options="facilityOptions"
                                    placeholder="Search..." class="w-full max-w-[418px]"/>
               <p v-if="form.errors.facilities" class="text-xs text-destructive">
-                {{ form.errors.facilities }}
+                {{ Array.isArray(form.errors.facilities) ? form.errors.facilities[0] : form.errors.facilities }}
               </p>
             </div>
 
             <!-- Input Products -->
             <div class="space-y-2">
               <Label>Input Products</Label>
-              <SearchableTagsInput v-model="itemInputsSlugs" :options="itemOptions"
+              <SearchableTagsInput
+v-model="itemInputsSlugs" :options="itemOptions"
                                    placeholder="Search..." class="w-full max-w-[418px]"/>
               <p v-if="form.errors.item_inputs" class="text-xs text-destructive">
-                {{ form.errors.item_inputs }}
+                {{ Array.isArray(form.errors.item_inputs) ? form.errors.item_inputs[0] : form.errors.item_inputs }}
               </p>
             </div>
 
             <!-- Output Products -->
             <div class="space-y-2">
               <Label>Output Products</Label>
-              <SearchableTagsInput v-model="itemOutputsSlugs" :options="itemOptions"
+              <SearchableTagsInput
+v-model="itemOutputsSlugs" :options="itemOptions"
                                    placeholder="Search..." class="w-full max-w-[418px]"/>
               <p v-if="form.errors.item_outputs" class="text-xs text-destructive">
-                {{ form.errors.item_outputs }}
+                {{ Array.isArray(form.errors.item_outputs) ? form.errors.item_outputs[0] : form.errors.item_outputs }}
               </p>
             </div>
 
             <!-- Anonymous Checkbox -->
-            <div class="flex items-center space-x-2">
-              <Checkbox id="is_anonymous" v-model:checked="state.is_anonymous"/>
-              <Label for="is_anonymous" class="text-sm font-normal cursor-pointer">
-                Post anonymously
-              </Label>
+            <div class="space-y-2">
+              <div class="flex items-center space-x-2">
+                <Checkbox
+id="is_anonymous" v-model:checked="form.fields.is_anonymous"
+                          @update:checked="form.validate('is_anonymous')"/>
+                <Label for="is_anonymous" class="text-sm font-normal cursor-pointer">
+                  Post anonymously
+                </Label>
+              </div>
+              <p v-if="form.errors.is_anonymous" class="text-xs text-destructive">
+                {{ Array.isArray(form.errors.is_anonymous) ? form.errors.is_anonymous[0] : form.errors.is_anonymous }}
+              </p>
             </div>
 
             <!-- Submit Buttons -->
             <div class="flex justify-end gap-3 pt-4">
-              <Button type="button" :disabled="isSubmitting" variant="outline" @click="submit('draft')"
-                      class="min-w-[120px]">
-                <span v-if="isSubmitting && state.status === 'draft'">Saving...</span>
+              <Button
+type="button" :disabled="isSubmitting" variant="outline" class="min-w-[120px]"
+                      @click="submit('draft')">
+                <span v-if="isSubmitting && form.fields.status === 'draft'">Saving...</span>
                 <span v-else>Save Draft</span>
               </Button>
-              <Button type="button" :disabled="isSubmitting" @click="submit('published')"
-                      class="min-w-[120px]">
-                <span v-if="isSubmitting && state.status === 'published'">Publishing...</span>
+              <Button
+type="button" :disabled="isSubmitting" class="min-w-[120px]"
+                      @click="submit('published')">
+                <span v-if="isSubmitting && form.fields.status === 'published'">Publishing...</span>
                 <span v-else>Publish</span>
               </Button>
             </div>
