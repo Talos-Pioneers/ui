@@ -151,16 +151,32 @@ const handlePerPageUpdate = (perPageValue: number) => {
 	perPage.value = perPageValue
 }
 
+const currentUrl = computed(() => {
+	if (import.meta.server) {
+		const requestURL = useRequestURL()
+		return requestURL.href
+	}
+	return window.location.href
+})
+
+const ogImage = computed(() => {
+	if (import.meta.server) {
+		const requestURL = useRequestURL()
+		return `${requestURL.origin}/logo.png`
+	}
+	return `${window.location.origin}/logo.png`
+})
+
 useHead({
 	title: t('pages.home.title'),
 	meta: [
 		{
-			property: 'og:title',
-			content: t('pages.home.title'),
-		},
-		{
 			name: 'description',
 			content: t('pages.home.description'),
+		},
+		{
+			property: 'og:title',
+			content: t('pages.home.title'),
 		},
 		{
 			property: 'og:description',
@@ -168,7 +184,35 @@ useHead({
 		},
 		{
 			property: 'og:image',
-			content: '/logo.png',
+			content: ogImage.value,
+		},
+		{
+			property: 'og:url',
+			content: currentUrl.value,
+		},
+		{
+			property: 'og:type',
+			content: 'website',
+		},
+		{
+			property: 'og:site_name',
+			content: t('pages.home.siteName'),
+		},
+		{
+			name: 'twitter:card',
+			content: 'summary_large_image',
+		},
+		{
+			name: 'twitter:title',
+			content: t('pages.home.title'),
+		},
+		{
+			name: 'twitter:description',
+			content: t('pages.home.description'),
+		},
+		{
+			name: 'twitter:image',
+			content: ogImage.value,
 		},
 	],
 })

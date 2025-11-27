@@ -49,6 +49,7 @@ type CommentListResponse = {
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 const loginModal = useLoginModal()
 const { user, isAuthenticated } = useSanctumAuth()
 const sanctumClient = useSanctumClient()
@@ -67,11 +68,53 @@ const {
 
 const blueprint = computed(() => blueprintResponse.value?.data ?? null)
 
+const currentUrl = computed(() => {
+	if (import.meta.server) {
+		const requestURL = useRequestURL()
+		return requestURL.href
+	}
+	return window.location.href
+})
+
+const ogImage = computed(() => {
+	if (!blueprint.value?.gallery || blueprint.value.gallery.length === 0) {
+		// Return absolute URL for logo
+		if (import.meta.server) {
+			const requestURL = useRequestURL()
+			return `${requestURL.origin}/logo.png`
+		}
+		return `${window.location.origin}/logo.png`
+	}
+	const firstImage = blueprint.value.gallery[0]
+	const imageUrl = firstImage.url || firstImage.thumbnail || '/logo.png'
+	// If image URL is already absolute, return it; otherwise make it absolute
+	if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+		return imageUrl
+	}
+	if (import.meta.server) {
+		const requestURL = useRequestURL()
+		return `${requestURL.origin}${imageUrl}`
+	}
+	return `${window.location.origin}${imageUrl}`
+})
+
+const seoDescription = computed(() => {
+	if (!blueprint.value) {
+		return t('pages.blueprints.detail.descriptionFallback')
+	}
+	const description = blueprint.value.description
+		? blueprint.value.description.substring(0, 200)
+		: ''
+	return description
+		? t('pages.blueprints.detail.description', { description })
+		: t('pages.blueprints.detail.descriptionFallback')
+})
+
 watchEffect(() => {
 	if (blueprintStatus.value == 'success' && !blueprint.value) {
 		throw createError({
 			statusCode: 404,
-			statusMessage: 'Blueprint not found',
+			statusMessage: t('pages.blueprints.detail.notFound'),
 		})
 	}
 	if(blueprintError.value) {
@@ -83,11 +126,64 @@ watchEffect(() => {
 	if (!blueprint.value) {
 		throw createError({
 			statusCode: 404,
-			statusMessage: 'Blueprint not found',
+			statusMessage: t('pages.blueprints.detail.notFound'),
 		})
 	}
+	
+	const siteName = t('pages.blueprints.detail.siteName')
+	const title = t('pages.blueprints.detail.title', { title: blueprint.value.title })
+	const description = seoDescription.value
+	const image = ogImage.value
+	const url = currentUrl.value
+	
 	useHead({
-		title: `${blueprint.value?.title} • Talos Pioneers`,
+		title,
+		meta: [
+			{
+				name: 'description',
+				content: description,
+			},
+			{
+				property: 'og:title',
+				content: title,
+			},
+			{
+				property: 'og:description',
+				content: description,
+			},
+			{
+				property: 'og:image',
+				content: image,
+			},
+			{
+				property: 'og:url',
+				content: url,
+			},
+			{
+				property: 'og:type',
+				content: 'website',
+			},
+			{
+				property: 'og:site_name',
+				content: siteName,
+			},
+			{
+				name: 'twitter:card',
+				content: 'summary_large_image',
+			},
+			{
+				name: 'twitter:title',
+				content: title,
+			},
+			{
+				name: 'twitter:description',
+				content: description,
+			},
+			{
+				name: 'twitter:image',
+				content: image,
+			},
+		],
 	})
 })
 
@@ -445,7 +541,7 @@ const isCommentsLoading = computed(
 )
 const commentsLoadError = computed(() =>
 	commentsStatus.value === 'error'
-		? 'Unable to load comments.'
+		? t('pages.blueprints.detail.commentsError')
 		: (commentsError.value as string | null)
 )
 
@@ -463,20 +559,20 @@ const { handleDelete } = await useBlueprintDelete()
 				v-if="isBlueprintLoading"
 				class="py-20 text-center text-muted-foreground"
 			>
-				Loading blueprint details...
+				{{ t('pages.blueprints.detail.loading') }}
 			</div>
 
 			<div v-else-if="blueprintLoadError" class="py-20 text-center">
 				<p class="text-destructive mb-4">
-					Unable to load this blueprint.
+					{{ t('pages.blueprints.detail.error') }}
 				</p>
 				<Button variant="outline" @click="refreshBlueprint"
-					>Try again</Button
+					>{{ t('pages.blueprints.detail.tryAgain') }}</Button
 				>
 			</div>
 
 			<div v-else-if="!blueprint" class="py-20 text-center">
-				<p class="text-muted-foreground">Blueprint not found.</p>
+				<p class="text-muted-foreground">{{ t('pages.blueprints.detail.notFound') }}</p>
 			</div>
 
 			<div
@@ -572,10 +668,10 @@ const { handleDelete } = await useBlueprintDelete()
 													@click="handleReport"
 												>
 													<span v-if="isReporting"
-														>Reporting...</span
+														>{{ t('reportButton.reporting') }}</span
 													>
 													<span v-else
-														>Report Blueprint</span
+														>{{ t('pages.blueprints.detail.reportBlueprint') }}</span
 													>
 												</DropdownMenuItem>
 											</template>
@@ -586,7 +682,7 @@ const { handleDelete } = await useBlueprintDelete()
 											"
 											@click="handleDelete(blueprint)"
 										>
-											<span>Delete</span>
+											<span>{{ t('pages.blueprints.detail.delete') }}</span>
 										</DropdownMenuItem>
 										<DropdownMenuItem
 											v-if="
@@ -596,7 +692,9 @@ const { handleDelete } = await useBlueprintDelete()
 										>
 											<NuxtLinkLocale
 												:to="`/blueprints/${blueprint.id}/edit`"
-											/>
+											>
+												{{ t('pages.blueprints.detail.edit') }}
+											</NuxtLinkLocale>
 										</DropdownMenuItem>
 									</DropdownMenuContent>
 								</DropdownMenu>
@@ -623,11 +721,11 @@ const { handleDelete } = await useBlueprintDelete()
 							>
 								<div class="flex items-center gap-2">
 									<ClockIcon class="w-4 h-4" />
-									Created {{ formattedCreatedAt }}
+									{{ t('pages.blueprints.detail.created') }} {{ formattedCreatedAt }}
 								</div>
 								<div class="flex items-center gap-2">
 									<CalendarIcon class="w-4 h-4" />
-									Updated {{ formattedUpdatedAt }}
+									{{ t('pages.blueprints.detail.updated') }} {{ formattedUpdatedAt }}
 								</div>
 							</div>
 						</div>
@@ -640,7 +738,7 @@ const { handleDelete } = await useBlueprintDelete()
 							>
 								{{
 									blueprint.description ||
-									'No description provided for this blueprint.'
+									t('pages.blueprints.detail.noDescription')
 								}}
 							</p>
 						</div>
@@ -653,18 +751,18 @@ const { handleDelete } = await useBlueprintDelete()
 							class="flex items-center justify-between flex-wrap gap-3"
 						>
 							<h3 class="text-xl font-semibold">
-								Comments ({{ totalComments }})
+								{{ t('pages.blueprints.detail.comments') }} ({{ totalComments }})
 							</h3>
 						</div>
 
 						<div v-if="editingCommentId" class="space-y-3">
 							<h4 class="text-sm font-semibold">
-								Editing your comment
+								{{ t('pages.blueprints.detail.editingComment') }}
 							</h4>
 							<CommentComposer
 								v-model="editingContent"
 								:is-submitting="isSubmittingComment"
-								submit-label="Save Changes"
+								:submit-label="t('pages.blueprints.detail.saveChanges')"
 								:error="commentErrorMessage"
 								@submit="saveCommentEdit"
 							/>
@@ -672,7 +770,7 @@ const { handleDelete } = await useBlueprintDelete()
 								variant="ghost"
 								size="sm"
 								@click="cancelEdit"
-								>Cancel</Button
+								>{{ t('pages.blueprints.detail.cancel') }}</Button
 							>
 						</div>
 						<div v-else>
@@ -688,10 +786,10 @@ const { handleDelete } = await useBlueprintDelete()
 								class="rounded-2xl border border-dashed border-cool-gray-30 dark:border-cool-gray-70 p-6 text-center space-y-3"
 							>
 								<p class="text-sm text-cool-gray-70">
-									Sign in to join the conversation.
+									{{ t('pages.blueprints.detail.signInToComment') }}
 								</p>
 								<Button @click="loginModal.open"
-									>Sign In to Comment</Button
+									>{{ t('pages.blueprints.detail.signInToCommentButton') }}</Button
 								>
 							</div>
 						</div>
@@ -714,9 +812,9 @@ const { handleDelete } = await useBlueprintDelete()
 								@click="loadMoreComments"
 							>
 								<span v-if="commentsStatus === 'pending'"
-									>Loading...</span
+									>{{ t('pages.blueprints.detail.loadingComments') }}</span
 								>
-								<span v-else>Load more comments</span>
+								<span v-else>{{ t('pages.blueprints.detail.loadMoreComments') }}</span>
 							</Button>
 						</div>
 					</section>
@@ -733,7 +831,7 @@ const { handleDelete } = await useBlueprintDelete()
 								@click="handleCopyCode"
 							>
 								<CopyIcon class="size-4.5" />
-								Copy Code
+								{{ t('pages.blueprints.detail.copyCode') }}
 							</Button>
 							<Button
 								:variant="
@@ -745,39 +843,39 @@ const { handleDelete } = await useBlueprintDelete()
 								@click="handleToggleLike"
 							>
 								<LikesIcon class="w-4 h-4" />
-								<span v-if="isTogglingLike">Saving...</span>
+								<span v-if="isTogglingLike">{{ t('pages.blueprints.detail.saving') }}</span>
 								<span v-else>{{
-									blueprint.is_liked ? 'Liked' : 'Like'
+									blueprint.is_liked ? t('pages.blueprints.detail.liked') : t('pages.blueprints.detail.like')
 								}}</span>
 							</Button>
 						</div>
 						<div>
 							<h3 class="text-lg font-semibold mb-2.5">
-								Details
+								{{ t('pages.blueprints.detail.details') }}
 							</h3>
 							<div class="space-y-3 text-sm text-cool-gray-80">
 								<div class="flex items-center justify-between">
 									<span class="text-cool-gray-60"
-										>Author</span
+										>{{ t('pages.blueprints.detail.author') }}</span
 									>
 									<span>{{
 										blueprint.creator?.name ??
-										'Anonymous Pioneer'
+										t('pages.blueprints.detail.anonymousPioneer')
 									}}</span>
 								</div>
 								<div class="flex items-center justify-between">
 									<span class="text-cool-gray-60"
-										>Region</span
+										>{{ t('pages.blueprints.detail.region') }}</span
 									>
 									<span>{{
 										regionOptions.find(
 											(r) => r.value === blueprint?.region
-										)?.label ?? 'Any'
+										)?.label ?? t('pages.blueprints.detail.regionAny')
 									}}</span>
 								</div>
 								<div class="flex items-center justify-between">
 									<span class="text-cool-gray-60"
-										>Version</span
+										>{{ t('pages.blueprints.detail.version') }}</span
 									>
 									<span class="uppercase">{{
 										blueprint.version
@@ -785,7 +883,7 @@ const { handleDelete } = await useBlueprintDelete()
 								</div>
 								<div class="flex items-center justify-between">
 									<span class="text-cool-gray-60"
-										>Status</span
+										>{{ t('pages.blueprints.detail.status') }}</span
 									>
 									<span class="capitalize">{{
 										blueprint.status
@@ -795,7 +893,7 @@ const { handleDelete } = await useBlueprintDelete()
 						</div>
 						<hr class="border-cool-gray-20" >
 						<div v-if="blueprint.tags.length">
-							<h3 class="text-lg font-semibold mb-2.5">Tags</h3>
+							<h3 class="text-lg font-semibold mb-2.5">{{ t('pages.blueprints.detail.tags') }}</h3>
 							<div class="flex flex-wrap gap-2">
 								<button
 									v-for="tag in blueprint.tags"
@@ -811,40 +909,40 @@ const { handleDelete } = await useBlueprintDelete()
 						<hr class="border-cool-gray-20" >
 						<div>
 							<h3 class="text-lg font-semibold mb-2.5">
-								Facilities Used
+								{{ t('pages.blueprints.detail.facilitiesUsed') }}
 							</h3>
 							<FacilityList
 								v-if="blueprint.facilities?.length"
 								:items="blueprint.facilities"
 							/>
 							<p v-else class="text-sm text-muted-foreground">
-								No facilities provided.
+								{{ t('pages.blueprints.detail.noFacilities') }}
 							</p>
 						</div>
 						<hr class="border-cool-gray-20" >
 						<div>
 							<h3 class="text-lg font-semibold mb-2.5">
-								Input Products
+								{{ t('pages.blueprints.detail.inputProducts') }}
 							</h3>
 							<ItemList
 								v-if="blueprint.item_inputs?.length"
 								:items="blueprint.item_inputs"
 							/>
 							<p v-else class="text-sm text-muted-foreground">
-								No input products provided.
+								{{ t('pages.blueprints.detail.noInputProducts') }}
 							</p>
 						</div>
 						<hr class="border-cool-gray-20" >
 						<div>
 							<h3 class="text-lg font-semibold mb-2.5">
-								Output Products
+								{{ t('pages.blueprints.detail.outputProducts') }}
 							</h3>
 							<ItemList
 								v-if="blueprint.item_outputs?.length"
 								:items="blueprint.item_outputs"
 							/>
 							<p v-else class="text-sm text-muted-foreground">
-								No output products provided.
+								{{ t('pages.blueprints.detail.noOutputProducts') }}
 							</p>
 						</div>
 					</div>
