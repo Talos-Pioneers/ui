@@ -3,6 +3,8 @@ import type { Comment } from '~/models/comment';
 import { Button } from '~/components/ui/button';
 import CommentItem from './CommentItem.vue';
 
+const { t } = useI18n();
+
 const props = defineProps<{
 	comments: Comment[];
 	loading?: boolean;
@@ -21,18 +23,18 @@ const emit = defineEmits<{
 <template>
 	<div class="space-y-4">
 		<div v-if="loading" class="text-center text-sm text-muted-foreground py-6">
-			Loading comments...
+			{{ t('components.comments.list.loading') }}
 		</div>
 
 		<div v-else-if="error" class="flex flex-col items-center gap-3 py-6 text-center">
 			<p class="text-sm text-destructive">{{ error }}</p>
 			<Button size="sm" variant="outline" @click="emit('retry')">
-				Try again
+				{{ t('components.comments.list.tryAgain') }}
 			</Button>
 		</div>
 
 		<div v-else-if="comments.length === 0" class="text-center text-sm text-muted-foreground py-6">
-			No comments yet. Be the first to share your thoughts.
+			{{ t('components.comments.list.empty') }}
 		</div>
 
 		<CommentItem v-else v-for="comment in comments" :key="comment.id" :comment="comment"

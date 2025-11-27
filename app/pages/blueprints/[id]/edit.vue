@@ -55,7 +55,7 @@ watchEffect(() => {
 	if (blueprintStatus.value == 'success' && !blueprint.value) {
 		throw createError({
 			statusCode: 404,
-			statusMessage: 'Blueprint not found',
+			statusMessage: t('pages.blueprints.edit.notFound'),
 		})
 	}
 	if(blueprintError.value) {
@@ -67,11 +67,11 @@ watchEffect(() => {
 	if (!blueprint.value) {
 		throw createError({
 			statusCode: 404,
-			statusMessage: 'Blueprint not found',
+			statusMessage: t('pages.blueprints.edit.notFound'),
 		})
 	}
 	useHead({
-		title: `${blueprint.value?.title} • Talos Pioneers`,
+		title: t('pages.blueprints.edit.titleTemplate', { title: blueprint.value?.title }),
 	})
 })
 

@@ -2,6 +2,8 @@
 import type { Comment } from '~/models/comment';
 import { Button } from '~/components/ui/button';
 
+const { t } = useI18n();
+
 const props = defineProps<{
 	comment: Comment;
 	canManage?: boolean;
@@ -13,7 +15,7 @@ const emit = defineEmits<{
 	delete: [comment: Comment];
 }>();
 
-const displayName = computed(() => props.comment.user?.username ?? 'Anonymous Pioneer');
+const displayName = computed(() => props.comment.user?.username ?? t('components.comments.item.anonymous'));
 const formattedDate = computed(() => useFormatDate(props.comment.created_at));
 </script>
 
@@ -26,17 +28,17 @@ const formattedDate = computed(() => useFormatDate(props.comment.created_at));
 				</p>
 				<p class="text-xs text-cool-gray-60">
 					{{ formattedDate }}
-					<span v-if="comment.is_edited" class="ml-2 text-cool-gray-50 italic">(edited)</span>
+					<span v-if="comment.is_edited" class="ml-2 text-cool-gray-50 italic">{{ t('components.comments.item.edited') }}</span>
 				</p>
 			</div>
 			<div v-if="canManage" class="flex items-center gap-2">
 				<Button size="sm" variant="ghost" class="text-xs px-2 py-1" @click="emit('edit', comment)">
-					Edit
+					{{ t('components.comments.item.edit') }}
 				</Button>
 				<Button size="sm" variant="ghost" class="text-xs px-2 py-1 text-destructive" :disabled="isDeleting"
 					@click="emit('delete', comment)">
-					<span v-if="isDeleting">Deleting...</span>
-					<span v-else>Delete</span>
+					<span v-if="isDeleting">{{ t('components.comments.item.deleting') }}</span>
+					<span v-else>{{ t('components.comments.item.delete') }}</span>
 				</Button>
 			</div>
 		</div>

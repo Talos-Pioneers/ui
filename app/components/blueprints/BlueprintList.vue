@@ -19,6 +19,8 @@ import { useSidebar } from '@/components/ui/sidebar';
 import type { NuxtError } from '#app';
 import { CheckboxGroupRoot } from 'reka-ui';
 
+const { t } = useI18n();
+
 const props = withDefaults(defineProps<{
 	blueprints: Blueprint[];
 	pagination: PaginationMeta | null;
@@ -54,11 +56,11 @@ const emit = defineEmits<{
 
 // Sort options
 const defaultSortOptions = [
-	{ value: 'created_at', label: 'Created Date' },
-	{ value: 'updated_at', label: 'Updated Date' },
-	{ value: 'title', label: 'Title' },
-	{ value: 'likes_count', label: 'Likes' },
-	{ value: 'copies_count', label: 'Copies' },
+	{ value: 'created_at', label: t('components.blueprints.list.sort.createdAt') },
+	{ value: 'updated_at', label: t('components.blueprints.list.sort.updatedAt') },
+	{ value: 'title', label: t('components.blueprints.list.sort.title') },
+	{ value: 'likes_count', label: t('components.blueprints.list.sort.likes') },
+	{ value: 'copies_count', label: t('components.blueprints.list.sort.copies') },
 ];
 
 const sortOptions = computed(() => props.sortOptions ?? defaultSortOptions);
@@ -66,7 +68,7 @@ const sortOptions = computed(() => props.sortOptions ?? defaultSortOptions);
 const currentSortLabel = computed(() => {
 	const sortField = props.sort.replace(/^-/, '');
 	const option = sortOptions.value.find(opt => opt.value === sortField);
-	return option?.label ?? 'Relevancy';
+	return option?.label ?? t('components.blueprints.list.sort.relevancy');
 });
 const handleSortChange = (val: any) => {
 	emit('update:sort', val, props.isSortDescending);
@@ -314,10 +316,10 @@ const unifiedFilterModel = computed({
 		<Sidebar v-if="showSidebar" class="top-(--header-height) h-[calc(100svh-var(--header-height))]!">
 			<SidebarContent>
 				<SidebarGroup>
-					<SidebarGroupLabel>Filters</SidebarGroupLabel>
+					<SidebarGroupLabel>{{ t('components.blueprints.list.filters.label') }}</SidebarGroupLabel>
 					<SidebarGroupContent>
 						<div class="px-2 py-3 space-y-2">
-							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Region</label>
+							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">{{ t('components.blueprints.list.filters.region') }}</label>
 							<div class="flex gap-2">
 								<button
 v-for="region in regionOptions" :key="region.value"
@@ -342,7 +344,7 @@ v-for="region in regionOptions" :key="region.value"
 							<div
 v-if="groupedTags[group as keyof typeof groupedTags].length > 0"
 								class="px-2 py-3 space-y-2">
-								<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Tags</label>
+								<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">{{ t('components.blueprints.list.filters.tags') }}</label>
 								<div class="space-y-2 max-h-48 overflow-y-auto">
 									<CheckboxGroupRoot v-model="filters['tags.id']">
 										<label
@@ -358,30 +360,27 @@ v-for="tag in groupedTags[group as keyof typeof groupedTags]"
 						</template>
 
 						<div class="px-2 py-3 space-y-2">
-							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Facilities
-								Used</label>
+							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">{{ t('components.blueprints.list.filters.facilitiesUsed') }}</label>
 							<SearchableTagsInput
 v-model="filters.facility"
 								:options="facilities.map(f => ({ value: f.slug, label: f.name, icon: f.icon }))"
-								placeholder="Search facilities..." class="w-full" />
+								:placeholder="t('components.blueprints.list.filters.facilitiesPlaceholder')" class="w-full" />
 						</div>
 
 						<div class="px-2 py-3 space-y-2">
-							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Input
-								Products</label>
+							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">{{ t('components.blueprints.list.filters.inputProducts') }}</label>
 							<SearchableTagsInput
 v-model="filters.item_input"
 								:options="items.map(i => ({ value: i.slug, label: i.name, icon: i.icon }))"
-								placeholder="Search input items..." class="w-full" />
+								:placeholder="t('components.blueprints.list.filters.inputProductsPlaceholder')" class="w-full" />
 						</div>
 
 						<div class="px-2 py-3 space-y-2">
-							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">Output
-								Products</label>
+							<label class="text-xs font-medium text-sidebar-foreground/70 mb-2 block">{{ t('components.blueprints.list.filters.outputProducts') }}</label>
 							<SearchableTagsInput
 v-model="filters.item_output"
 								:options="items.map(i => ({ value: i.slug, label: i.name, icon: i.icon }))"
-								placeholder="Search output items..." class="w-full" />
+								:placeholder="t('components.blueprints.list.filters.outputProductsPlaceholder')" class="w-full" />
 						</div>
 					</SidebarGroupContent>
 				</SidebarGroup>
@@ -401,13 +400,13 @@ v-model="filters.item_output"
 						<Button
 v-if="showSidebar" variant="outline" size="sm" class="before:hidden w-fit bg-transparent"
 							@click="toggleSidebar">
-							{{ sidebarOpen ? 'Hide Filters' : 'Show Filters' }}
+							{{ sidebarOpen ? t('components.blueprints.list.filters.hide') : t('components.blueprints.list.filters.show') }}
 						</Button>
 
 						<SearchableTagsInput
 v-model="unifiedFilterModel" :display-tags="false"
 							:options="unifiedFilterOptions.map(opt => ({ value: opt.value, label: opt.label, icon: opt.icon }))"
-							placeholder="Search for any filter..." class="w-full bg-white" />
+							:placeholder="t('components.blueprints.list.filters.searchPlaceholder')" class="w-full bg-white" />
 
 						<div class="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
 							<div v-if="hasActiveFilters" class="flex items-center gap-2 flex-wrap">
@@ -421,18 +420,18 @@ v-for="tag in activeFilterTags" :key="tag.value"
 								<Button
 variant="ghost" size="sm" class="text-sm"
 									@click="emit('clear-all-filters')">
-									Clear All
+									{{ t('components.blueprints.list.filters.clearAll') }}
 								</Button>
 							</div>
 							<div v-else/>
 							<span class="text-sm text-muted-foreground whitespace-nowrap">
-								{{ pagination?.total ?? 0 }} Blueprints found
+								{{ t('components.blueprints.list.pagination.found', { count: pagination?.total ?? 0 }) }}
 							</span>
 						</div>
 
 						<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 							<div class="flex items-center gap-2">
-								<label class="text-sm text-muted-foreground whitespace-nowrap">Sort by</label>
+								<label class="text-sm text-muted-foreground whitespace-nowrap">{{ t('components.blueprints.list.pagination.sortBy') }}</label>
 								<Select
 :model-value="sort.replace(/^-/, '')"
 									@update:model-value="handleSortChange">
@@ -448,7 +447,7 @@ v-for="option in sortOptions" :key="option.value"
 									</SelectContent>
 								</Select>
 								<Button
-class="rounded" variant="ghost" size="icon-sm" :title="isSortDescending ? 'Sort ascending' : 'Sort descending'"
+class="rounded" variant="ghost" size="icon-sm" :title="isSortDescending ? t('components.blueprints.list.pagination.sortAscending') : t('components.blueprints.list.pagination.sortDescending')"
 									@click="handleSortToggle">
 									{{ isSortDescending ? '↑' : '↓' }}
 								</Button>
@@ -462,12 +461,12 @@ v-model:current-page="currentPageModel"
 
 					<!-- Loading State -->
 					<div v-if="loading" class="flex items-center justify-center py-12">
-						<p class="text-muted-foreground">Loading blueprints...</p>
+						<p class="text-muted-foreground">{{ t('components.blueprints.list.loading') }}</p>
 					</div>
 
 					<!-- Error State -->
 					<div v-if="error" class="flex flex-col items-center justify-center py-12">
-						<p class="text-destructive mb-2">Error loading blueprints:</p>
+						<p class="text-destructive mb-2">{{ t('components.blueprints.list.error') }}</p>
 						<pre class="text-sm text-muted-foreground">{{ error }}</pre>
 					</div>
 
@@ -483,7 +482,7 @@ v-for="blueprint in blueprints" :key="blueprint.id" :blueprint="blueprint"
 						<div
 v-if="blueprints.length === 0"
 							class="col-span-full flex items-center justify-center py-12">
-							<p class="text-muted-foreground">No blueprints found.</p>
+							<p class="text-muted-foreground">{{ t('components.blueprints.list.empty') }}</p>
 						</div>
 					</div>
 

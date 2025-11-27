@@ -31,6 +31,7 @@ const emit = defineEmits<{
 }>()
 
 const { copy, copied } = useClipboard()
+const { t } = useI18n()
 
 const dropdownOpen = ref(false)
 
@@ -44,7 +45,7 @@ const previewImage = computed(() => {
 
 const copyBlueprintCode = async () => {
 	await copy(props.blueprint.code)
-	toast.success('Blueprint code copied to clipboard')
+	toast.success(t('pages.blueprints.detail.toast.codeCopied'))
 }
 
 const handleTagClick = (tagId: string) => {
@@ -101,7 +102,7 @@ const { handleDelete } = await useBlueprintDelete()
 			<div class="absolute bottom-2 right-2 z-10">
 				<button
 					class="group/copy-button p-2 bg-black/50 border border-cool-gray-60 hover:border-cool-gray-80 rounded-full hover:bg-white transition-colors cursor-pointer"
-					:title="copied ? 'Copied!' : 'Copy blueprint code'"
+					:title="copied ? t('components.blueprints.card.copyTooltip.copied') : t('components.blueprints.card.copyTooltip.copy')"
 					@click="copyBlueprintCode"
 				>
 					<CopyIcon
@@ -140,7 +141,7 @@ const { handleDelete } = await useBlueprintDelete()
 						>
 					</button>
 					<p v-else class="text-xs leading-0 text-cool-gray-70">
-						by Unknown
+						{{ t('components.blueprints.card.author.unknown') }}
 					</p>
 
 					<div
@@ -175,7 +176,7 @@ const { handleDelete } = await useBlueprintDelete()
 								? regionOptions.find(
 										(r) => r.value === blueprint.region
 									)?.label
-								: 'Any'
+								: t('components.blueprints.card.region.any')
 						}}</span
 					>
 				</div>
@@ -205,9 +206,9 @@ const { handleDelete } = await useBlueprintDelete()
 										@click="handleReport"
 									>
 										<span v-if="isReporting"
-											>Reporting...</span
+											>{{ t('components.blueprints.card.actions.reporting') }}</span
 										>
-										<span v-else>Report Blueprint</span>
+										<span v-else>{{ t('components.blueprints.card.actions.report') }}</span>
 									</DropdownMenuItem>
 								</template>
 							</ReportButton>
@@ -218,14 +219,14 @@ const { handleDelete } = await useBlueprintDelete()
 								<NuxtLinkLocale
 									:to="`/blueprints/${blueprint.id}/edit`"
 								>
-									<span>Edit</span>
+									<span>{{ t('components.blueprints.card.actions.edit') }}</span>
 								</NuxtLinkLocale>
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								v-if="blueprint.permissions.can_delete"
 								@click="handleDelete(blueprint)"
 							>
-								<span>Delete</span>
+								<span>{{ t('components.blueprints.card.actions.delete') }}</span>
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
@@ -261,7 +262,7 @@ const { handleDelete } = await useBlueprintDelete()
 				<span
 					class="px-2 py-1 text-sm border border-cool-gray-30 group-hover/tags:border-cool-gray-100 transition-colors"
 				>
-					Blueprint
+					{{ t('components.blueprints.card.tagLabel') }}
 				</span>
 				<template
 					v-for="(tag, index) in blueprint.tags"

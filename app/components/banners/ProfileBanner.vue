@@ -1,5 +1,7 @@
 <script setup lang="ts">
 	import { Button } from '~/components/ui/button'
+
+	const { t } = useI18n();
 </script>
 
 <template>
@@ -8,11 +10,10 @@
 			class="relative z-10 container mx-auto px-4 py-6 flex flex-col h-full justify-center"
 		>
 			<h1 class="text-3xl md:text-4xl font-medium text-white mb-2">
-				My Blueprints
+				{{ t('components.banners.profileBanner.title') }}
 			</h1>
 			<p class="text-white/80 md:text-lg max-w-2xl mb-6">
-				Manage and organize your blueprints. Create new blueprints to
-				share with the community.
+				{{ t('components.banners.profileBanner.description') }}
 			</p>
 			<div class="flex gap-3">
 				<Button
@@ -42,7 +43,7 @@
 						<span
 							class="flex gap-3 text-sm sm:text-xl items-center text-cool-gray-100"
 						>
-							<span>Create New Blueprint</span>
+							<span>{{ t('components.banners.profileBanner.createButton') }}</span>
 							<svg
 								width="8"
 								height="12"

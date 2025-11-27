@@ -262,17 +262,17 @@ const stats = computed(() => {
 	}
 	return [
 		{
-			label: 'Copies',
+			label: t('pages.blueprints.detail.stats.copies'),
 			value: useFormatCompactNumber(blueprint.value.copies_count),
 			icon: CopiesIcon,
 		},
 		{
-			label: 'Likes',
+			label: t('pages.blueprints.detail.stats.likes'),
 			value: useFormatCompactNumber(blueprint.value.likes_count),
 			icon: LikesIcon,
 		},
 		{
-			label: 'Comments',
+			label: t('pages.blueprints.detail.stats.comments'),
 			value: useFormatCompactNumber(blueprint.value.comments_count),
 			icon: CommentsIcon,
 		},
@@ -291,7 +291,7 @@ const galleryDisplayItems = computed(() => {
 		{
 			thumbnail: NotFoundImage,
 			url: NotFoundImage,
-			name: blueprint.value?.title ?? 'Blueprint preview',
+			name: blueprint.value?.title ?? t('pages.blueprints.detail.previewFallback'),
 		},
 	]
 })
@@ -329,7 +329,7 @@ const handleToggleLike = async () => {
 		if (code === 401) {
 			loginModal.open()
 		} else {
-			toast.error('Unable to update like right now.')
+			toast.error(t('pages.blueprints.detail.toast.likeError'))
 		}
 	} finally {
 		isTogglingLike.value = false
@@ -342,7 +342,7 @@ const handleCopyCode = async () => {
 	}
 
 	await copy(blueprint.value.code)
-	toast.success('Blueprint code copied to clipboard')
+	toast.success(t('pages.blueprints.detail.toast.codeCopied'))
 
 	if (!isAuthenticated.value || isCopyingCode.value) {
 		return
@@ -365,7 +365,7 @@ const handleCopyCode = async () => {
 		if (code === 401) {
 			loginModal.open()
 		} else {
-			toast.error('Unable to track copy right now.')
+			toast.error(t('pages.blueprints.detail.toast.copyError'))
 		}
 	} finally {
 		isCopyingCode.value = false
@@ -422,21 +422,21 @@ const submitComment = async () => {
 			}
 		)
 		commentInput.value = ''
-		toast.success('Comment submitted for review.')
+		toast.success(t('pages.blueprints.detail.toast.commentSubmitted'))
 		await invalidateComments()
 	} catch (error) {
 		const { isValidationError, bag, code } = useSanctumError(error)
 		if (code === 429) {
 			commentErrorMessage.value =
-				'You can only post 1 comment per minute. Please try again later.'
+				t('pages.blueprints.detail.comments.rateLimitError')
 		} else if (isValidationError) {
 			commentErrorMessage.value =
-				bag[0]?.message ?? 'Unable to submit comment.'
+				bag[0]?.message ?? t('pages.blueprints.detail.comments.submitError')
 		} else if (code === 401) {
 			loginModal.open()
 		} else {
 			commentErrorMessage.value =
-				'Unable to submit comment right now.'
+				t('pages.blueprints.detail.toast.commentSubmitError')
 		}
 	} finally {
 		isSubmittingComment.value = false
@@ -475,17 +475,17 @@ const saveCommentEdit = async () => {
 				},
 			}
 		)
-		toast.success('Comment updated.')
+		toast.success(t('pages.blueprints.detail.toast.commentUpdated'))
 		cancelEdit()
 		await invalidateComments()
 	} catch (error) {
 		const { isValidationError, bag } = useSanctumError(error)
 		if (isValidationError) {
 			commentErrorMessage.value =
-				bag[0]?.message ?? 'Unable to update comment.'
+				bag[0]?.message ?? t('pages.blueprints.detail.comments.submitError')
 		} else {
 			commentErrorMessage.value =
-				'Unable to update comment right now.'
+				t('pages.blueprints.detail.toast.commentUpdateError')
 		}
 	} finally {
 		isSubmittingComment.value = false
@@ -504,10 +504,10 @@ const deleteComment = async (comment: Comment) => {
 				method: 'delete',
 			}
 		)
-		toast.success('Comment deleted.')
+		toast.success(t('pages.blueprints.detail.toast.commentDeleted'))
 		await invalidateComments()
 	} catch (error) {
-		toast.error('Unable to delete comment right now.')
+		toast.error(t('pages.blueprints.detail.toast.commentDeleteError'))
 	} finally {
 		deletingCommentId.value = null
 	}

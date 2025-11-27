@@ -135,10 +135,12 @@ const activeFilterTags = computed(() => {
     return filterTags;
 });
 
+const { t } = useI18n();
+
 const sortOptions = [
-    { value: 'created_at', label: 'Created Date' },
-    { value: 'updated_at', label: 'Updated Date' },
-    { value: 'title', label: 'Title' },
+    { value: 'created_at', label: t('pages.profile.blueprints.sort.createdAt') },
+    { value: 'updated_at', label: t('pages.profile.blueprints.sort.updatedAt') },
+    { value: 'title', label: t('pages.profile.blueprints.sort.title') },
 ];
 
 const handlePageUpdate = (page: number) => {

@@ -14,6 +14,7 @@ import {
     DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
 
+const { t } = useI18n();
 const { isAuthenticated, user, logout } = useSanctumAuth();
 const { open } = useLoginModal();
 const router = useRouter();
@@ -29,11 +30,11 @@ const handleLogout = async () => {
 
 const navigationItems = [
     {
-        label: 'Blueprints',
+        label: t('components.navigation.header.nav.blueprints'),
         to: '/',
     },
     {
-        label: 'Create Blueprint',
+        label: t('components.navigation.header.nav.createBlueprint'),
         to: '/blueprints/create',
         auth: true,
     }
@@ -66,7 +67,7 @@ const navigationItems = [
                         <LoginIcon class="h-5" />
                         <span class="h-3.5 w-px bg-cool-gray-50"></span>
                     </span>
-                    Sign In
+                    {{ t('components.navigation.header.signIn') }}
                 </Button>
                 <Button @click="open" class="md:hidden" variant="default" size="icon-lg">
                     <LoginIcon class="h-5" />
@@ -82,17 +83,17 @@ const navigationItems = [
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem as-child>
                             <NuxtLinkLocale to="/profile">
-                                Edit Profile
+                                {{ t('components.navigation.header.menu.editProfile') }}
                             </NuxtLinkLocale>
                         </DropdownMenuItem>
                         <DropdownMenuItem as-child>
                             <NuxtLinkLocale to="/profile/blueprints">
-                                My Blueprints
+                                {{ t('components.navigation.header.menu.myBlueprints') }}
                             </NuxtLinkLocale>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem @click="handleLogout" variant="destructive">
-                            Logout
+                            {{ t('components.navigation.header.menu.logout') }}
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
