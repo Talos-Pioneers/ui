@@ -53,6 +53,7 @@ export type BlueprintTag = {
 }
 
 export type BlueprintGalleryItem = {
+	id?: string
 	thumbnail: string
 	url: string
 	name: string

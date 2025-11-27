@@ -212,12 +212,6 @@ const { handleDelete } = await useBlueprintDelete()
 								</template>
 							</ReportButton>
 							<DropdownMenuItem
-								v-if="blueprint.permissions.can_delete"
-								@click="handleDelete(blueprint)"
-							>
-								<span>Delete</span>
-							</DropdownMenuItem>
-							<DropdownMenuItem
 								v-if="blueprint.permissions.can_edit"
 								as-child
 							>
@@ -226,6 +220,12 @@ const { handleDelete } = await useBlueprintDelete()
 								>
 									<span>Edit</span>
 								</NuxtLinkLocale>
+							</DropdownMenuItem>
+							<DropdownMenuItem
+								v-if="blueprint.permissions.can_delete"
+								@click="handleDelete(blueprint)"
+							>
+								<span>Delete</span>
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>

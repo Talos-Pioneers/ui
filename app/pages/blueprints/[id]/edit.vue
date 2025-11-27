@@ -132,6 +132,7 @@ interface ImageItem {
   preview: string;
   isExisting: boolean;
   url?: string; // For existing images
+  mediaId?: string; // Media ID for existing images
 }
 
 const imageItems = ref<ImageItem[]>([]);
@@ -171,6 +172,7 @@ watchEffect(() => {
       preview: img.url || img.thumbnail,
       url: img.url,
       isExisting: true,
+      mediaId: img.id,
     }));
   }
 
@@ -331,6 +333,13 @@ const createFormData = (): FormData => {
   form.fields.gallery.forEach(file => {
     formData.append('gallery[]', file);
   });
+
+  // Gallery keep IDs - IDs of existing images that should be kept
+  imageItems.value
+      .filter(item => item.isExisting && item.mediaId)
+      .forEach(item => {
+        formData.append('gallery_keep_ids[]', item.mediaId!);
+      });
 
   return formData;
 };
