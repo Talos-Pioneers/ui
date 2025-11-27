@@ -18,6 +18,7 @@ definePageMeta({
 });
 
 const router = useRouter();
+const {t} = useI18n();
 
 // Form schema matching StoreBlueprintRequest
 type Schema = {
@@ -256,8 +257,8 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
     });
 
     const message = status === 'published'
-        ? 'Blueprint published successfully!'
-        : 'Draft saved successfully!';
+        ? t('pages.blueprints.create.successPublished')
+        : t('pages.blueprints.create.successDraft');
     toast.success(message);
 
     // Redirect to blueprint detail page
@@ -294,9 +295,9 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
       // Assign new errors
       Object.assign(form.errors, validationErrors);
 
-      toast.error('Please fix the validation errors.');
+      toast.error(t('pages.blueprints.create.errorValidation'));
     } else {
-      toast.error('Failed to create blueprint. Please try again.');
+      toast.error(t('pages.blueprints.create.errorFailed'));
     }
   } finally {
     isSubmitting.value = false;
@@ -310,11 +311,11 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
       <div class="max-w-4xl mx-auto">
         <div
             class="bg-white dark:bg-cool-gray-95 rounded-lg border border-cool-gray-20 dark:border-cool-gray-80 p-6 space-y-6">
-          <h1 class="font-bold text-3xl">Create a blueprint</h1>
+          <h1 class="font-bold text-3xl">{{ t('pages.blueprints.create.title') }}</h1>
 
           <!-- Validation Errors Alert -->
           <div v-if="form.hasErrors" class="bg-destructive/10 border border-destructive/20 rounded-lg p-4 space-y-2">
-            <p class="text-sm font-medium text-destructive">Please fix the following errors:</p>
+            <p class="text-sm font-medium text-destructive">{{ t('pages.blueprints.create.validationErrorsTitle') }}</p>
             <ul class="list-disc list-inside text-sm text-destructive space-y-1">
               <li v-for="(error, field) in form.errors" :key="field">
                 <strong>{{ field }}:</strong> {{ Array.isArray(error) ? error[0] : error }}
@@ -325,7 +326,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
           <form class="space-y-6" @submit.prevent="() => submit('draft')">
             <!-- Image Upload Section -->
             <div class="space-y-2">
-              <Label>Images</Label>
+              <Label>{{ t('pages.blueprints.create.images') }}</Label>
               <div class="space-y-4">
                 <!-- Upload Area -->
                 <div
@@ -334,7 +335,7 @@ v-if="imageItems.length === 0"
                      @click="fileInputRef?.click()">
                   <div class="text-center">
                     <Plus class="size-12 mx-auto mb-2 text-cool-gray-50"/>
-                    <p class="text-sm text-cool-gray-60">Click to upload images</p>
+                    <p class="text-sm text-cool-gray-60">{{ t('pages.blueprints.create.clickToUpload') }}</p>
                   </div>
                 </div>
 
@@ -367,7 +368,7 @@ type="button"
                     <div
 v-if="index === 0"
                          class="absolute top-2 left-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded">
-                      Thumbnail
+                      {{ t('pages.blueprints.create.thumbnail') }}
                     </div>
                   </div>
                 </VueDraggable>
@@ -378,7 +379,7 @@ v-if="imageItems.length > 0" type="button"
                         class="flex items-center gap-2 px-4 py-2 border border-cool-gray-30 dark:border-cool-gray-70 rounded-lg hover:border-primary transition-colors text-sm"
                         @click="fileInputRef?.click()">
                   <Plus class="size-4"/>
-                  Add more images
+                  {{ t('pages.blueprints.create.addMoreImages') }}
                 </button>
 
                 <input
@@ -386,7 +387,7 @@ ref="fileInputRef" type="file" accept="image/*" multiple class="hidden"
                        @change="handleFileSelect">
 
                 <p class="text-xs text-cool-gray-60">
-                  The first image in the gallery will be used as a thumbnail.
+                  {{ t('pages.blueprints.create.thumbnailHelper') }}
                 </p>
                 <p v-if="form.errors.gallery" class="text-xs text-destructive">
                   {{ Array.isArray(form.errors.gallery) ? form.errors.gallery[0] : form.errors.gallery }}
@@ -396,9 +397,9 @@ ref="fileInputRef" type="file" accept="image/*" multiple class="hidden"
 
             <!-- Title -->
             <div class="space-y-2">
-              <Label for="title">Title</Label>
+              <Label for="title">{{ t('pages.blueprints.create.titleLabel') }}</Label>
               <Input
-id="title" v-model="form.fields.title" placeholder="Title"
+id="title" v-model="form.fields.title" :placeholder="t('pages.blueprints.create.titlePlaceholder')"
                      :aria-invalid="!!form.errors.title"
                      @change="form.validate('title')"/>
               <p v-if="form.errors.title" class="text-xs text-destructive">
@@ -408,11 +409,11 @@ id="title" v-model="form.fields.title" placeholder="Title"
 
             <!-- Description -->
             <div class="space-y-2">
-              <Label for="description">Description</Label>
+              <Label for="description">{{ t('pages.blueprints.create.descriptionLabel') }}</Label>
               <textarea
 id="description" v-model="form.fields.description" rows="6"
                         class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
-                        placeholder="Description" :aria-invalid="!!form.errors.description"
+                        :placeholder="t('pages.blueprints.create.descriptionPlaceholder')" :aria-invalid="!!form.errors.description"
                         @change="form.validate('description')"/>
               <p v-if="form.errors.description" class="text-xs text-destructive">
                 {{ Array.isArray(form.errors.description) ? form.errors.description[0] : form.errors.description }}
@@ -421,9 +422,9 @@ id="description" v-model="form.fields.description" rows="6"
 
             <!-- Share Code -->
             <div class="space-y-2">
-              <Label for="code">Share Code</Label>
+              <Label for="code">{{ t('pages.blueprints.create.shareCodeLabel') }}</Label>
               <Input
-id="code" v-model="form.fields.code" placeholder="Enter blueprint code..."
+id="code" v-model="form.fields.code" :placeholder="t('pages.blueprints.create.shareCodePlaceholder')"
                      :aria-invalid="!!form.errors.code"
                      @change="form.validate('code')"/>
               <p v-if="form.errors.code" class="text-xs text-destructive">
@@ -433,10 +434,10 @@ id="code" v-model="form.fields.code" placeholder="Enter blueprint code..."
 
             <!-- Version -->
             <div class="space-y-2">
-              <Label for="version">Version</Label>
+              <Label for="version">{{ t('pages.blueprints.create.versionLabel') }}</Label>
               <Select v-model="form.fields.version" @update:model-value="form.validate('version')">
                 <SelectTrigger id="version" :aria-invalid="!!form.errors.version">
-                  <SelectValue placeholder="Select a version..."/>
+                  <SelectValue :placeholder="t('pages.blueprints.create.versionPlaceholder')"/>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem
@@ -453,11 +454,11 @@ v-for="option in versionOptions.filter(opt => opt.value)"
 
             <!-- Tags -->
             <div class="space-y-2">
-              <Label>Tags</Label>
+              <Label>{{ t('pages.blueprints.create.tagsLabel') }}</Label>
               <!--                            <SearchableTagsInput v-model="tagsSlugs" :options="tagOptions" placeholder="Search..."-->
               <!--                                class="w-full" />-->
               <SearchableTagsInput
-v-model="tagsSlugs" :options="tagOptions" placeholder="Search..."
+v-model="tagsSlugs" :options="tagOptions" :placeholder="t('pages.blueprints.create.searchPlaceholder')"
                                    class="w-full max-w-[418px]"/>
               <p v-if="form.errors.tags" class="text-xs text-destructive">
                 {{ Array.isArray(form.errors.tags) ? form.errors.tags[0] : form.errors.tags }}
@@ -466,10 +467,10 @@ v-model="tagsSlugs" :options="tagOptions" placeholder="Search..."
 
             <!-- Facilities Used -->
             <div class="space-y-2">
-              <Label>Facilities Used</Label>
+              <Label>{{ t('pages.blueprints.create.facilitiesLabel') }}</Label>
               <SearchableTagsInput
 v-model="facilitiesSlugs" :options="facilityOptions"
-                                   placeholder="Search..." class="w-full max-w-[418px]"/>
+                                   :placeholder="t('pages.blueprints.create.searchPlaceholder')" class="w-full max-w-[418px]"/>
               <p v-if="form.errors.facilities" class="text-xs text-destructive">
                 {{ Array.isArray(form.errors.facilities) ? form.errors.facilities[0] : form.errors.facilities }}
               </p>
@@ -477,10 +478,10 @@ v-model="facilitiesSlugs" :options="facilityOptions"
 
             <!-- Input Products -->
             <div class="space-y-2">
-              <Label>Input Products</Label>
+              <Label>{{ t('pages.blueprints.create.inputProductsLabel') }}</Label>
               <SearchableTagsInput
 v-model="itemInputsSlugs" :options="itemOptions"
-                                   placeholder="Search..." class="w-full max-w-[418px]"/>
+                                   :placeholder="t('pages.blueprints.create.searchPlaceholder')" class="w-full max-w-[418px]"/>
               <p v-if="form.errors.item_inputs" class="text-xs text-destructive">
                 {{ Array.isArray(form.errors.item_inputs) ? form.errors.item_inputs[0] : form.errors.item_inputs }}
               </p>
@@ -488,10 +489,10 @@ v-model="itemInputsSlugs" :options="itemOptions"
 
             <!-- Output Products -->
             <div class="space-y-2">
-              <Label>Output Products</Label>
+              <Label>{{ t('pages.blueprints.create.outputProductsLabel') }}</Label>
               <SearchableTagsInput
 v-model="itemOutputsSlugs" :options="itemOptions"
-                                   placeholder="Search..." class="w-full max-w-[418px]"/>
+                                   :placeholder="t('pages.blueprints.create.searchPlaceholder')" class="w-full max-w-[418px]"/>
               <p v-if="form.errors.item_outputs" class="text-xs text-destructive">
                 {{ Array.isArray(form.errors.item_outputs) ? form.errors.item_outputs[0] : form.errors.item_outputs }}
               </p>
@@ -504,7 +505,7 @@ v-model="itemOutputsSlugs" :options="itemOptions"
 id="is_anonymous" v-model:checked="form.fields.is_anonymous"
                           @update:checked="form.validate('is_anonymous')"/>
                 <Label for="is_anonymous" class="text-sm font-normal cursor-pointer">
-                  Post anonymously
+                  {{ t('pages.blueprints.create.postAnonymously') }}
                 </Label>
               </div>
               <p v-if="form.errors.is_anonymous" class="text-xs text-destructive">
@@ -517,14 +518,14 @@ id="is_anonymous" v-model:checked="form.fields.is_anonymous"
               <Button
 type="button" :disabled="isSubmitting" variant="outline" class="min-w-[120px]"
                       @click="submit('draft')">
-                <span v-if="isSubmitting && form.fields.status === 'draft'">Saving...</span>
-                <span v-else>Save Draft</span>
+                <span v-if="isSubmitting && form.fields.status === 'draft'">{{ t('pages.blueprints.create.saving') }}</span>
+                <span v-else>{{ t('pages.blueprints.create.saveDraft') }}</span>
               </Button>
               <Button
 type="button" :disabled="isSubmitting" class="min-w-[120px]"
                       @click="submit('published')">
-                <span v-if="isSubmitting && form.fields.status === 'published'">Publishing...</span>
-                <span v-else>Publish</span>
+                <span v-if="isSubmitting && form.fields.status === 'published'">{{ t('pages.blueprints.create.publishing') }}</span>
+                <span v-else>{{ t('pages.blueprints.create.publish') }}</span>
               </Button>
             </div>
           </form>
