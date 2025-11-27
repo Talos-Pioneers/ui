@@ -1,453 +1,459 @@
 <script setup lang="ts">
-	import { useClipboard } from '@vueuse/core'
-	import { toast } from 'vue-sonner'
-	import { Button } from '~/components/ui/button'
-	import {
-		Carousel,
-		CarouselContent,
-		CarouselItem,
-		CarouselNext,
-		CarouselPrevious,
-	} from '~/components/ui/carousel'
-	import type { UnwrapRefCarouselApi } from '~/components/ui/carousel/interface'
-	import {
-		Tooltip,
-		TooltipContent,
-		TooltipTrigger,
-	} from '~/components/ui/tooltip'
-	import {
-		DropdownMenu,
-		DropdownMenuContent,
-		DropdownMenuItem,
-		DropdownMenuTrigger,
-	} from '~/components/ui/dropdown-menu'
-	import CommentComposer from '~/components/comments/CommentComposer.vue'
-	import AddCollectionIcon from '~/components/icons/AddCollectionIcon.vue'
-	import ShareIcon from '~/components/icons/ShareIcon.vue'
-	import VerticalElipsis from '~/components/icons/VerticalElipsis.vue'
-	import CommentList from '~/components/comments/CommentList.vue'
-	import CopyIcon from '~/components/icons/CopyIcon.vue'
-	import LikesIcon from '~/components/icons/LikesIcon.vue'
-	import CopiesIcon from '~/components/icons/CopiesIcon.vue'
-	import CommentsIcon from '~/components/icons/CommentsIcon.vue'
-	import CalendarIcon from '~/components/icons/CalendarIcon.vue'
-	import ClockIcon from '~/components/icons/ClockIcon.vue'
-	import RegionIcon from '~/components/icons/RegionIcon.vue'
-	import NotFoundImage from '~/assets/img/not-found-placeholder.png'
-	import type {
-		Blueprint,
-		BlueprintFacility,
-		BlueprintItem,
-		BlueprintTag,
-	} from '~/models/blueprint'
-	import type { Comment } from '~/models/comment'
-	import { regionOptions } from '~/constants/blueprintOptions'
-	import FacilityList from '~/components/blueprints/FacilityList.vue'
-	import ItemList from '~/components/blueprints/ItemList.vue'
+import { useClipboard } from '@vueuse/core'
+import { toast } from 'vue-sonner'
+import { Button } from '~/components/ui/button'
+import {
+	Carousel,
+	CarouselContent,
+	CarouselItem,
+	CarouselNext,
+	CarouselPrevious,
+} from '~/components/ui/carousel'
+import type { UnwrapRefCarouselApi } from '~/components/ui/carousel/interface'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '~/components/ui/dropdown-menu'
+import CommentComposer from '~/components/comments/CommentComposer.vue'
+import VerticalElipsis from '~/components/icons/VerticalElipsis.vue'
+import CommentList from '~/components/comments/CommentList.vue'
+import CopyIcon from '~/components/icons/CopyIcon.vue'
+import LikesIcon from '~/components/icons/LikesIcon.vue'
+import CopiesIcon from '~/components/icons/CopiesIcon.vue'
+import CommentsIcon from '~/components/icons/CommentsIcon.vue'
+import CalendarIcon from '~/components/icons/CalendarIcon.vue'
+import ClockIcon from '~/components/icons/ClockIcon.vue'
+import NotFoundImage from '~/assets/img/not-found-placeholder.png'
+import type {
+	Blueprint,
+	BlueprintTag,
+} from '~/models/blueprint'
+import type { Comment } from '~/models/comment'
+import { regionOptions } from '~/constants/blueprintOptions'
+import FacilityList from '~/components/blueprints/FacilityList.vue'
+import ItemList from '~/components/blueprints/ItemList.vue'
 
-	type BlueprintResponse = {
-		data: Blueprint
+type BlueprintResponse = {
+	data: Blueprint
+}
+
+type CommentListResponse = {
+	data: Comment[]
+	meta: {
+		current_page: number
+		last_page: number
 	}
+}
 
-	type CommentListResponse = {
-		data: Comment[]
-		meta: {
-			current_page: number
-			last_page: number
-		}
-	}
+const route = useRoute()
+const router = useRouter()
+const loginModal = useLoginModal()
+const { user, isAuthenticated } = useSanctumAuth()
+const sanctumClient = useSanctumClient()
+const { copy } = useClipboard()
+const blueprintId = computed(() => route.params.id as string)
 
-	const route = useRoute()
-	const router = useRouter()
-	const loginModal = useLoginModal()
-	const { user, isAuthenticated } = useSanctumAuth()
-	const sanctumClient = useSanctumClient()
-	const { copy } = useClipboard()
-	const blueprintId = computed(() => route.params.id as string)
 
-	const {
-		data: blueprintResponse,
-		status: blueprintStatus,
-		error: blueprintError,
-		refresh: refreshBlueprint,
-	} = await useSanctumFetch<BlueprintResponse>(
-		() => `/api/v1/blueprints/${blueprintId.value}`
-	)
+const {
+	data: blueprintResponse,
+	status: blueprintStatus,
+	error: blueprintError,
+	refresh: refreshBlueprint,
+} = await useSanctumFetch<BlueprintResponse>(
+	() => `/api/v1/blueprints/${blueprintId.value}`
+)
 
-	const blueprint = computed(() => blueprintResponse.value?.data ?? null)
+const blueprint = computed(() => blueprintResponse.value?.data ?? null)
 
-	watchEffect(() => {
-		if (!blueprint.value) {
-			return
-		}
-		useHead({
-			title: `${blueprint.value.title} • Talos Pioneers`,
-		})
-	})
-
-	const commentsPage = ref(1)
-	const shouldResetComments = ref(true)
-
-	const {
-		data: commentsResponse,
-		status: commentsStatus,
-		error: commentsError,
-		refresh: refreshComments,
-	} = await useSanctumFetch<CommentListResponse>(
-		() => `/api/v1/blueprints/${blueprintId.value}/comments`,
-		() => ({
-			method: 'get',
-			query: { page: String(commentsPage.value) },
-		}),
-		{
-			watch: [commentsPage],
-		}
-	)
-
-	const comments = ref<Comment[]>([])
-
-	watch(
-		() => commentsResponse.value?.data,
-		(newComments) => {
-			if (!newComments) {
-				return
-			}
-			if (commentsPage.value === 1 || shouldResetComments.value) {
-				comments.value = [...newComments]
-			} else {
-				const existingIds = new Set(
-					comments.value.map((comment) => comment.id)
-				)
-				const filtered = newComments.filter(
-					(comment) => !existingIds.has(comment.id)
-				)
-				comments.value = [...comments.value, ...filtered]
-			}
-			shouldResetComments.value = false
-		},
-		{ immediate: true }
-	)
-
-	const totalComments = computed(
-		() => blueprint.value?.comments_count ?? comments.value.length
-	)
-	const hasMoreComments = computed(() => {
-		const meta = commentsResponse.value?.meta
-		if (!meta) {
-			return false
-		}
-		return meta.current_page < meta.last_page
-	})
-
-	const galleryApi = ref<UnwrapRefCarouselApi | null>(null)
-	const activeSlide = ref(0)
-
-	const handleCarouselInit = (api: UnwrapRefCarouselApi) => {
-		galleryApi.value = api
-		activeSlide.value = api.selectedScrollSnap()
-		api.on('select', () => {
-			activeSlide.value = api.selectedScrollSnap()
+watchEffect(() => {
+	if (blueprintStatus.value == 'success' && !blueprint.value) {
+		throw createError({
+			statusCode: 404,
+			statusMessage: 'Blueprint not found',
 		})
 	}
-
-	const goToSlide = (index: number) => {
-		galleryApi.value?.scrollTo(index)
-	}
-
-	const stats = computed(() => {
-		if (!blueprint.value) {
-			return []
-		}
-		return [
-			{
-				label: 'Copies',
-				value: useFormatCompactNumber(blueprint.value.copies_count),
-				icon: CopiesIcon,
-			},
-			{
-				label: 'Likes',
-				value: useFormatCompactNumber(blueprint.value.likes_count),
-				icon: LikesIcon,
-			},
-			{
-				label: 'Comments',
-				value: useFormatCompactNumber(blueprint.value.comments_count),
-				icon: CommentsIcon,
-			},
-		]
-	})
-
-	const isTogglingLike = ref(false)
-	const isCopyingCode = ref(false)
-	const galleryItems = computed(() => blueprint.value?.gallery ?? [])
-	const galleryDisplayItems = computed(() => {
-		const items = galleryItems.value
-		if (items.length > 0) {
-			return items
-		}
-		return [
-			{
-				thumbnail: NotFoundImage,
-				url: NotFoundImage,
-				name: blueprint.value?.title ?? 'Blueprint preview',
-			},
-		]
-	})
-	const formattedCreatedAt = computed(() =>
-		blueprint.value ? useFormatDate(blueprint.value.created_at) : ''
-	)
-	const formattedUpdatedAt = computed(() =>
-		blueprint.value ? useFormatDate(blueprint.value.updated_at) : ''
-	)
-
-	const handleToggleLike = async () => {
-		if (!blueprint.value || isTogglingLike.value) {
-			return
-		}
-
-		if (!isAuthenticated.value) {
-			loginModal.open()
-			return
-		}
-
-		isTogglingLike.value = true
-		try {
-			const response = await sanctumClient<{
-				liked: boolean
-				likes_count: number
-			}>(`/api/v1/blueprints/${blueprint.value.id}/like`, {
-				method: 'post',
-			})
-			if (blueprintResponse.value?.data) {
-				blueprintResponse.value.data.is_liked = response.liked
-				blueprintResponse.value.data.likes_count = response.likes_count
-			}
-		} catch (error) {
-			const { code } = useSanctumError(error)
-			if (code === 401) {
-				loginModal.open()
-			} else {
-				toast.error('Unable to update like right now.')
-			}
-		} finally {
-			isTogglingLike.value = false
-		}
-	}
-
-	const handleCopyCode = async () => {
-		if (!blueprint.value) {
-			return
-		}
-
-		await copy(blueprint.value.code)
-		toast.success('Blueprint code copied to clipboard')
-
-		if (!isAuthenticated.value || isCopyingCode.value) {
-			return
-		}
-
-		isCopyingCode.value = true
-		try {
-			const response = await sanctumClient<{
-				copies_count: number
-				message: string
-			}>(`/api/v1/blueprints/${blueprint.value.id}/copy`, {
-				method: 'post',
-			})
-			if (blueprintResponse.value?.data) {
-				blueprintResponse.value.data.copies_count =
-					response.copies_count
-			}
-		} catch (error) {
-			const { code } = useSanctumError(error)
-			if (code === 401) {
-				loginModal.open()
-			} else {
-				toast.error('Unable to track copy right now.')
-			}
-		} finally {
-			isCopyingCode.value = false
-		}
-	}
-
-	const navigateToTag = (tag: BlueprintTag) => {
-		router.push({
-			path: '/',
-			query: {
-				'filter[tags.id]': tag.id,
-			},
+	if(blueprintError.value) {
+		throw createError({
+			statusCode: blueprintError.value.statusCode,
+			statusMessage: blueprintError.value.statusMessage,
 		})
 	}
-
-	const commentInput = ref('')
-	const isSubmittingComment = ref(false)
-	const commentErrorMessage = ref<string | null>(null)
-	const editingCommentId = ref<string | null>(null)
-	const editingContent = ref('')
-	const deletingCommentId = ref<string | null>(null)
-
-	const invalidateComments = async () => {
-		shouldResetComments.value = true
-		commentsPage.value = 1
-		await refreshComments()
-		await refreshBlueprint()
+	if (!blueprint.value) {
+		throw createError({
+			statusCode: 404,
+			statusMessage: 'Blueprint not found',
+		})
 	}
+	useHead({
+		title: `${blueprint.value?.title} • Talos Pioneers`,
+	})
+})
 
-	const submitComment = async () => {
-		if (!blueprint.value) {
+const commentsPage = ref(1)
+const shouldResetComments = ref(true)
+
+const {
+	data: commentsResponse,
+	status: commentsStatus,
+	error: commentsError,
+	refresh: refreshComments,
+} = await useSanctumFetch<CommentListResponse>(
+	() => `/api/v1/blueprints/${blueprintId.value}/comments`,
+	() => ({
+		method: 'get',
+		query: { page: String(commentsPage.value) },
+	}),
+	{
+		watch: [commentsPage],
+	}
+)
+
+const comments = ref<Comment[]>([])
+
+watch(
+	() => commentsResponse.value?.data,
+	(newComments) => {
+		if (!newComments) {
 			return
 		}
-
-		if (!isAuthenticated.value) {
-			loginModal.open()
-			return
-		}
-
-		if (!commentInput.value.trim() || isSubmittingComment.value) {
-			return
-		}
-
-		commentErrorMessage.value = null
-		isSubmittingComment.value = true
-		try {
-			await sanctumClient(
-				`/api/v1/blueprints/${blueprint.value.id}/comments`,
-				{
-					method: 'post',
-					body: {
-						comment: commentInput.value,
-					},
-				}
+		if (commentsPage.value === 1 || shouldResetComments.value) {
+			comments.value = [...newComments]
+		} else {
+			const existingIds = new Set(
+				comments.value.map((comment) => comment.id)
 			)
-			commentInput.value = ''
-			toast.success('Comment submitted for review.')
-			await invalidateComments()
-		} catch (error) {
-			const { isValidationError, bag, code } = useSanctumError(error)
-			if (code === 429) {
-				commentErrorMessage.value =
-					'You can only post 1 comment per minute. Please try again later.'
-			} else if (isValidationError) {
-				commentErrorMessage.value =
-					bag[0]?.message ?? 'Unable to submit comment.'
-			} else if (code === 401) {
-				loginModal.open()
-			} else {
-				commentErrorMessage.value =
-					'Unable to submit comment right now.'
-			}
-		} finally {
-			isSubmittingComment.value = false
-		}
-	}
-
-	const requestEditComment = (comment: Comment) => {
-		if (comment.user?.id !== user.value?.id) {
-			return
-		}
-		editingCommentId.value = comment.id
-		editingContent.value = comment.comment
-	}
-
-	const cancelEdit = () => {
-		editingCommentId.value = null
-		editingContent.value = ''
-	}
-
-	const saveCommentEdit = async () => {
-		if (
-			!blueprint.value ||
-			!editingCommentId.value ||
-			!editingContent.value.trim()
-		) {
-			return
-		}
-		isSubmittingComment.value = true
-		try {
-			await sanctumClient(
-				`/api/v1/blueprints/${blueprint.value.id}/comments/${editingCommentId.value}`,
-				{
-					method: 'put',
-					body: {
-						comment: editingContent.value,
-					},
-				}
+			const filtered = newComments.filter(
+				(comment) => !existingIds.has(comment.id)
 			)
-			toast.success('Comment updated.')
-			cancelEdit()
-			await invalidateComments()
-		} catch (error) {
-			const { isValidationError, bag } = useSanctumError(error)
-			if (isValidationError) {
-				commentErrorMessage.value =
-					bag[0]?.message ?? 'Unable to update comment.'
-			} else {
-				commentErrorMessage.value =
-					'Unable to update comment right now.'
-			}
-		} finally {
-			isSubmittingComment.value = false
-		}
-	}
-
-	const deleteComment = async (comment: Comment) => {
-		if (!blueprint.value || comment.user?.id !== user.value?.id) {
-			return
-		}
-		deletingCommentId.value = comment.id
-		try {
-			await sanctumClient(
-				`/api/v1/blueprints/${blueprint.value.id}/comments/${comment.id}`,
-				{
-					method: 'delete',
-				}
-			)
-			toast.success('Comment deleted.')
-			await invalidateComments()
-		} catch (error) {
-			toast.error('Unable to delete comment right now.')
-		} finally {
-			deletingCommentId.value = null
-		}
-	}
-
-	const loadMoreComments = () => {
-		if (!hasMoreComments.value) {
-			return
+			comments.value = [...comments.value, ...filtered]
 		}
 		shouldResetComments.value = false
-		commentsPage.value += 1
+	},
+	{ immediate: true }
+)
+
+const totalComments = computed(
+	() => blueprint.value?.comments_count ?? comments.value.length
+)
+const hasMoreComments = computed(() => {
+	const meta = commentsResponse.value?.meta
+	if (!meta) {
+		return false
+	}
+	return meta.current_page < meta.last_page
+})
+
+const galleryApi = ref<UnwrapRefCarouselApi | null>(null)
+const activeSlide = ref(0)
+
+const handleCarouselInit = (api: UnwrapRefCarouselApi) => {
+	galleryApi.value = api
+	activeSlide.value = api.selectedScrollSnap()
+	api.on('select', () => {
+		activeSlide.value = api.selectedScrollSnap()
+	})
+}
+
+const goToSlide = (index: number) => {
+	galleryApi.value?.scrollTo(index)
+}
+
+const stats = computed(() => {
+	if (!blueprint.value) {
+		return []
+	}
+	return [
+		{
+			label: 'Copies',
+			value: useFormatCompactNumber(blueprint.value.copies_count),
+			icon: CopiesIcon,
+		},
+		{
+			label: 'Likes',
+			value: useFormatCompactNumber(blueprint.value.likes_count),
+			icon: LikesIcon,
+		},
+		{
+			label: 'Comments',
+			value: useFormatCompactNumber(blueprint.value.comments_count),
+			icon: CommentsIcon,
+		},
+	]
+})
+
+const isTogglingLike = ref(false)
+const isCopyingCode = ref(false)
+const galleryItems = computed(() => blueprint.value?.gallery ?? [])
+const galleryDisplayItems = computed(() => {
+	const items = galleryItems.value
+	if (items.length > 0) {
+		return items
+	}
+	return [
+		{
+			thumbnail: NotFoundImage,
+			url: NotFoundImage,
+			name: blueprint.value?.title ?? 'Blueprint preview',
+		},
+	]
+})
+const formattedCreatedAt = computed(() =>
+	blueprint.value ? useFormatDate(blueprint.value.created_at) : ''
+)
+const formattedUpdatedAt = computed(() =>
+	blueprint.value ? useFormatDate(blueprint.value.updated_at) : ''
+)
+
+const handleToggleLike = async () => {
+	if (!blueprint.value || isTogglingLike.value) {
+		return
 	}
 
-	const retryCommentsFetch = () => {
-		shouldResetComments.value = true
-		refreshComments()
+	if (!isAuthenticated.value) {
+		loginModal.open()
+		return
 	}
 
-	const isBlueprintLoading = computed(
-		() => blueprintStatus.value === 'pending'
-	)
-	const blueprintLoadError = computed(() =>
-		blueprintStatus.value === 'error' ? blueprintError.value : null
-	)
-
-	const isCommentsLoading = computed(
-		() =>
-			commentsStatus.value === 'pending' &&
-			commentsPage.value === 1 &&
-			comments.length === 0
-	)
-	const commentsLoadError = computed(() =>
-		commentsStatus.value === 'error'
-			? 'Unable to load comments.'
-			: (commentsError.value as string | null)
-	)
-
-	const dropdownOpen = ref(false)
-	const handleReported = () => {
-		dropdownOpen.value = false
+	isTogglingLike.value = true
+	try {
+		const response = await sanctumClient<{
+			liked: boolean
+			likes_count: number
+		}>(`/api/v1/blueprints/${blueprint.value.id}/like`, {
+			method: 'post',
+		})
+		if (blueprintResponse.value?.data) {
+			blueprintResponse.value.data.is_liked = response.liked
+			blueprintResponse.value.data.likes_count = response.likes_count
+		}
+	} catch (error) {
+		const { code } = useSanctumError(error)
+		if (code === 401) {
+			loginModal.open()
+		} else {
+			toast.error('Unable to update like right now.')
+		}
+	} finally {
+		isTogglingLike.value = false
 	}
-	const { handleDelete } = await useBlueprintDelete()
+}
+
+const handleCopyCode = async () => {
+	if (!blueprint.value) {
+		return
+	}
+
+	await copy(blueprint.value.code)
+	toast.success('Blueprint code copied to clipboard')
+
+	if (!isAuthenticated.value || isCopyingCode.value) {
+		return
+	}
+
+	isCopyingCode.value = true
+	try {
+		const response = await sanctumClient<{
+			copies_count: number
+			message: string
+		}>(`/api/v1/blueprints/${blueprint.value.id}/copy`, {
+			method: 'post',
+		})
+		if (blueprintResponse.value?.data) {
+			blueprintResponse.value.data.copies_count =
+				response.copies_count
+		}
+	} catch (error) {
+		const { code } = useSanctumError(error)
+		if (code === 401) {
+			loginModal.open()
+		} else {
+			toast.error('Unable to track copy right now.')
+		}
+	} finally {
+		isCopyingCode.value = false
+	}
+}
+
+const navigateToTag = (tag: BlueprintTag) => {
+	router.push({
+		path: '/',
+		query: {
+			'filter[tags.id]': tag.id,
+		},
+	})
+}
+
+const commentInput = ref('')
+const isSubmittingComment = ref(false)
+const commentErrorMessage = ref<string | null>(null)
+const editingCommentId = ref<string | null>(null)
+const editingContent = ref('')
+const deletingCommentId = ref<string | null>(null)
+
+const invalidateComments = async () => {
+	shouldResetComments.value = true
+	commentsPage.value = 1
+	await refreshComments()
+	await refreshBlueprint()
+}
+
+const submitComment = async () => {
+	if (!blueprint.value) {
+		return
+	}
+
+	if (!isAuthenticated.value) {
+		loginModal.open()
+		return
+	}
+
+	if (!commentInput.value.trim() || isSubmittingComment.value) {
+		return
+	}
+
+	commentErrorMessage.value = null
+	isSubmittingComment.value = true
+	try {
+		await sanctumClient(
+			`/api/v1/blueprints/${blueprint.value.id}/comments`,
+			{
+				method: 'post',
+				body: {
+					comment: commentInput.value,
+				},
+			}
+		)
+		commentInput.value = ''
+		toast.success('Comment submitted for review.')
+		await invalidateComments()
+	} catch (error) {
+		const { isValidationError, bag, code } = useSanctumError(error)
+		if (code === 429) {
+			commentErrorMessage.value =
+				'You can only post 1 comment per minute. Please try again later.'
+		} else if (isValidationError) {
+			commentErrorMessage.value =
+				bag[0]?.message ?? 'Unable to submit comment.'
+		} else if (code === 401) {
+			loginModal.open()
+		} else {
+			commentErrorMessage.value =
+				'Unable to submit comment right now.'
+		}
+	} finally {
+		isSubmittingComment.value = false
+	}
+}
+
+const requestEditComment = (comment: Comment) => {
+	if (comment.user?.id !== user.value?.id) {
+		return
+	}
+	editingCommentId.value = comment.id
+	editingContent.value = comment.comment
+}
+
+const cancelEdit = () => {
+	editingCommentId.value = null
+	editingContent.value = ''
+}
+
+const saveCommentEdit = async () => {
+	if (
+		!blueprint.value ||
+		!editingCommentId.value ||
+		!editingContent.value.trim()
+	) {
+		return
+	}
+	isSubmittingComment.value = true
+	try {
+		await sanctumClient(
+			`/api/v1/blueprints/${blueprint.value.id}/comments/${editingCommentId.value}`,
+			{
+				method: 'put',
+				body: {
+					comment: editingContent.value,
+				},
+			}
+		)
+		toast.success('Comment updated.')
+		cancelEdit()
+		await invalidateComments()
+	} catch (error) {
+		const { isValidationError, bag } = useSanctumError(error)
+		if (isValidationError) {
+			commentErrorMessage.value =
+				bag[0]?.message ?? 'Unable to update comment.'
+		} else {
+			commentErrorMessage.value =
+				'Unable to update comment right now.'
+		}
+	} finally {
+		isSubmittingComment.value = false
+	}
+}
+
+const deleteComment = async (comment: Comment) => {
+	if (!blueprint.value || comment.user?.id !== user.value?.id) {
+		return
+	}
+	deletingCommentId.value = comment.id
+	try {
+		await sanctumClient(
+			`/api/v1/blueprints/${blueprint.value.id}/comments/${comment.id}`,
+			{
+				method: 'delete',
+			}
+		)
+		toast.success('Comment deleted.')
+		await invalidateComments()
+	} catch (error) {
+		toast.error('Unable to delete comment right now.')
+	} finally {
+		deletingCommentId.value = null
+	}
+}
+
+const loadMoreComments = () => {
+	if (!hasMoreComments.value) {
+		return
+	}
+	shouldResetComments.value = false
+	commentsPage.value += 1
+}
+
+const retryCommentsFetch = () => {
+	shouldResetComments.value = true
+	refreshComments()
+}
+
+const isBlueprintLoading = computed(
+	() => blueprintStatus.value === 'pending'
+)
+const blueprintLoadError = computed(() =>
+	blueprintStatus.value === 'error' ? blueprintError.value : null
+)
+
+const isCommentsLoading = computed(
+	() =>
+		commentsStatus.value === 'pending' &&
+		commentsPage.value === 1 &&
+		comments.value.length === 0
+)
+const commentsLoadError = computed(() =>
+	commentsStatus.value === 'error'
+		? 'Unable to load comments.'
+		: (commentsError.value as string | null)
+)
+
+const dropdownOpen = ref(false)
+const handleReported = () => {
+	dropdownOpen.value = false
+}
+const { handleDelete } = await useBlueprintDelete()
 </script>
 
 <template>
@@ -497,7 +503,7 @@
 											:src="image.url || image.thumbnail"
 											:alt="image.name"
 											class="w-full h-full object-center object-contain"
-										/>
+										>
 									</CarouselItem>
 								</CarouselContent>
 								<CarouselPrevious
@@ -513,19 +519,19 @@
 								v-for="(image, index) in galleryDisplayItems"
 								:key="`thumb-${index}`"
 								type="button"
-								@click="goToSlide(index)"
 								class="rounded-xl border transition-colors overflow-hidden"
 								:class="
 									activeSlide === index
 										? 'border-primary'
 										: 'border-transparent hover:border-cool-gray-40'
 								"
+								@click="goToSlide(index)"
 							>
 								<img
 									:src="image.thumbnail || image.url"
 									:alt="image.name"
 									class="w-full object-cover"
-								/>
+								>
 							</button>
 						</div>
 					</section>
@@ -562,8 +568,8 @@
 												}"
 											>
 												<DropdownMenuItem
-													@click="handleReport"
 													:disabled="isReporting"
+													@click="handleReport"
 												>
 													<span v-if="isReporting"
 														>Reporting...</span
@@ -590,7 +596,7 @@
 										>
 											<NuxtLinkLocale
 												:to="`/blueprints/${blueprint.id}/edit`"
-											></NuxtLinkLocale>
+											/>
 										</DropdownMenuItem>
 									</DropdownMenuContent>
 								</DropdownMenu>
@@ -626,7 +632,7 @@
 							</div>
 						</div>
 
-						<hr class="border-cool-gray-20" />
+						<hr class="border-cool-gray-20" >
 
 						<div>
 							<p
@@ -787,7 +793,7 @@
 								</div>
 							</div>
 						</div>
-						<hr class="border-cool-gray-20" />
+						<hr class="border-cool-gray-20" >
 						<div v-if="blueprint.tags.length">
 							<h3 class="text-lg font-semibold mb-2.5">Tags</h3>
 							<div class="flex flex-wrap gap-2">
@@ -802,7 +808,7 @@
 								</button>
 							</div>
 						</div>
-						<hr class="border-cool-gray-20" />
+						<hr class="border-cool-gray-20" >
 						<div>
 							<h3 class="text-lg font-semibold mb-2.5">
 								Facilities Used
@@ -815,7 +821,7 @@
 								No facilities provided.
 							</p>
 						</div>
-						<hr class="border-cool-gray-20" />
+						<hr class="border-cool-gray-20" >
 						<div>
 							<h3 class="text-lg font-semibold mb-2.5">
 								Input Products
@@ -828,7 +834,7 @@
 								No input products provided.
 							</p>
 						</div>
-						<hr class="border-cool-gray-20" />
+						<hr class="border-cool-gray-20" >
 						<div>
 							<h3 class="text-lg font-semibold mb-2.5">
 								Output Products
