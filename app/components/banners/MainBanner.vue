@@ -5,11 +5,10 @@ import BannerDivider from './BannerDivider.vue'
 import InfoIcon from '../icons/InfoIcon.vue'
 import BookIcon from '../icons/BookIcon.vue'
 const { t } = useI18n()
-
 </script>
 <template>
 	<div
-		class="relative block w-full h-83.5 md:h-107 bg-cool-gray-90 bg-cover bg-center"
+		class="relative block w-full md:h-107 bg-cool-gray-90 bg-cover bg-center"
 		:style="{
 			background: `url(${backgroundImage}) no-repeat center center / cover`,
 		}"
@@ -43,9 +42,9 @@ const { t } = useI18n()
 						<span
 							class="flex gap-3 items-center text-cool-gray-100"
 						>
-							<span class="leading-none text-sm sm:text-xl"
-								>{{ t('mainBanner.createBlueprint') }}</span
-							>
+							<span class="leading-none text-sm sm:text-xl">{{
+								t('mainBanner.createBlueprint')
+							}}</span>
 							<svg
 								width="8"
 								height="12"
