@@ -223,6 +223,7 @@
 	"components.blueprints.list.filters.hide": "Nascondi filtri",
 	"components.blueprints.list.filters.label": "Filtri",
 	"components.blueprints.list.filters.region": "Regione",
+	"components.blueprints.list.filters.serverRegion": "Region Server",
 	"components.blueprints.list.filters.tags": "Tag",
 	"components.blueprints.list.filters.facilitiesUsed": "Strutture Utilizzate",
 	"components.blueprints.list.filters.facilitiesPlaceholder": "Cerca strutture...",

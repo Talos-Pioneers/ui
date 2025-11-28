@@ -223,6 +223,7 @@
 	"components.blueprints.list.filters.hide": "ซ่อนตัวกรอง",
 	"components.blueprints.list.filters.label": "ตัวกรอง",
 	"components.blueprints.list.filters.region": "ภูมิภาค",
+	"components.blueprints.list.filters.serverRegion": "ภูมิภาคเซิร์ฟเวอร์",
 	"components.blueprints.list.filters.tags": "แท็ก",
 	"components.blueprints.list.filters.facilitiesUsed": "สิ่งอำนวยความสะดวกที่ใช้",
 	"components.blueprints.list.filters.facilitiesPlaceholder": "ค้นหาสิ่งอำนวยความสะดวก...",

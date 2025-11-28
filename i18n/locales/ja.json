@@ -223,6 +223,7 @@
     "components.blueprints.list.filters.hide": "フィルターを非表示",
     "components.blueprints.list.filters.label": "フィルター",
     "components.blueprints.list.filters.region": "地域",
+    "components.blueprints.list.filters.serverRegion": "サーバー地域",
     "components.blueprints.list.filters.tags": "タグ",
     "components.blueprints.list.filters.facilitiesUsed": "使用施設",
     "components.blueprints.list.filters.facilitiesPlaceholder": "施設を検索...",

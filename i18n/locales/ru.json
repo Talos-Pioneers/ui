@@ -223,6 +223,7 @@
 	"components.blueprints.list.filters.hide": "Скрыть фильтры",
 	"components.blueprints.list.filters.label": "Фильтры",
 	"components.blueprints.list.filters.region": "Регион",
+	"components.blueprints.list.filters.serverRegion": "Регион сервера",
 	"components.blueprints.list.filters.tags": "Теги",
 	"components.blueprints.list.filters.facilitiesUsed": "Используемые объекты",
 	"components.blueprints.list.filters.facilitiesPlaceholder": "Поиск объектов...",

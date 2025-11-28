@@ -3,7 +3,7 @@ import type { Blueprint, PaginationMeta } from '~/models/blueprint';
 import type { Facility } from '~/models/facility';
 import type { Item } from '~/models/item';
 import type { Tag } from '~/models/tag';
-import { regionOptions } from '~/constants/blueprintOptions';
+import { regionOptions, versionOptions, serverRegionOptions } from '~/constants/blueprintOptions';
 import BlueprintCard from './BlueprintCard.vue';
 import BlueprintPagination from './BlueprintPagination.vue';
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarGroupContent, SidebarInset } from '~/components/ui/sidebar';
@@ -117,6 +117,11 @@ const groupedTags = computed(() => {
 const handleRegionClick = (regionValue: string) => {
 	const newValue = props.filters.region === regionValue ? null : regionValue;
 	emit('update:filter', 'region', newValue);
+};
+
+const handleServerRegionChange = (serverRegionValue: string) => {
+	const newValue = props.filters.server_region === serverRegionValue ? null : serverRegionValue;
+	emit('update:filter', 'server_region', newValue);
 };
 
 const currentPageModel = computed({
@@ -403,11 +408,24 @@ v-if="showSidebar" variant="outline" size="sm" class="before:hidden w-fit bg-tra
 							{{ sidebarOpen ? t('components.blueprints.list.filters.hide') : t('components.blueprints.list.filters.show') }}
 						</Button>
 
+						<div class="w-full flex gap-4 items-center">
 						<SearchableTagsInput
 v-model="unifiedFilterModel" :display-tags="false"
 							:options="unifiedFilterOptions.map(opt => ({ value: opt.value, label: opt.label, icon: opt.icon }))"
 							:placeholder="t('components.blueprints.list.filters.searchPlaceholder')" class="w-full bg-white" />
-
+							<Select
+                                :model-value="filters.server_region"
+								@update:model-value="handleServerRegionChange">
+								<SelectTrigger class="w-1/3 h-10.5 bg-white">
+									<SelectValue :placeholder="t('components.blueprints.list.filters.serverRegion')" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem v-for="option in serverRegionOptions" :key="option.value" :value="option.value">
+										{{ option.label }}
+									</SelectItem>
+								</SelectContent>
+							</Select>
+						</div>
 						<div class="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
 							<div v-if="hasActiveFilters" class="flex items-center gap-2 flex-wrap">
 								<button

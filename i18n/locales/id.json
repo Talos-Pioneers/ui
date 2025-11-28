@@ -223,6 +223,7 @@
 	"components.blueprints.list.filters.hide": "Sembunyikan Filter",
 	"components.blueprints.list.filters.label": "Filter",
 	"components.blueprints.list.filters.region": "Wilayah",
+	"components.blueprints.list.filters.serverRegion": "Region Server",
 	"components.blueprints.list.filters.tags": "Tag",
 	"components.blueprints.list.filters.facilitiesUsed": "Fasilitas yang Digunakan",
 	"components.blueprints.list.filters.facilitiesPlaceholder": "Cari fasilitas...",

@@ -223,6 +223,7 @@
     "components.blueprints.list.filters.hide": "隱藏篩選器",
     "components.blueprints.list.filters.label": "篩選器",
     "components.blueprints.list.filters.region": "區域",
+    "components.blueprints.list.filters.serverRegion": "伺服器區域",
     "components.blueprints.list.filters.tags": "標籤",
     "components.blueprints.list.filters.facilitiesUsed": "使用的設施",
     "components.blueprints.list.filters.facilitiesPlaceholder": "搜尋設施...",

@@ -223,6 +223,7 @@
     "components.blueprints.list.filters.hide": "Ẩn Bộ lọc",
     "components.blueprints.list.filters.label": "Bộ lọc",
     "components.blueprints.list.filters.region": "Khu vực",
+    "components.blueprints.list.filters.serverRegion": "Khu vực Server",
     "components.blueprints.list.filters.tags": "Thẻ",
     "components.blueprints.list.filters.facilitiesUsed": "Cơ sở Đã Sử dụng",
     "components.blueprints.list.filters.facilitiesPlaceholder": "Tìm kiếm cơ sở...",

@@ -223,6 +223,7 @@
     "components.blueprints.list.filters.hide": "隐藏筛选器",
     "components.blueprints.list.filters.label": "筛选器",
     "components.blueprints.list.filters.region": "区域",
+    "components.blueprints.list.filters.serverRegion": "服务器区域",
     "components.blueprints.list.filters.tags": "标签",
     "components.blueprints.list.filters.facilitiesUsed": "使用的设施",
     "components.blueprints.list.filters.facilitiesPlaceholder": "搜索设施...",

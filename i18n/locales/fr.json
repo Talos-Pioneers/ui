@@ -223,6 +223,7 @@
 	"components.blueprints.list.filters.hide": "Masquer les filtres",
 	"components.blueprints.list.filters.label": "Filtres",
 	"components.blueprints.list.filters.region": "Région",
+	"components.blueprints.list.filters.serverRegion": "Région du serveur",
 	"components.blueprints.list.filters.tags": "Tags",
 	"components.blueprints.list.filters.facilitiesUsed": "Installations utilisées",
 	"components.blueprints.list.filters.facilitiesPlaceholder": "Rechercher des installations...",
