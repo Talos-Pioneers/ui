@@ -13,7 +13,7 @@ if (isAuthenticated.value) {
 
 <template>
 	<div
-		class="flex pt-10 justify-center items-center h-[calc(100vh-var(--header-height))]"
+		class="flex pt-10 justify-center items-center h-[calc(100vh-var(--header-height))] px-4"
 	>
 		<RegisterForm />
 	</div>

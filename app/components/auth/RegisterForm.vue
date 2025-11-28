@@ -5,6 +5,7 @@ import MailIcon from '~/components/icons/MailIcon.vue'
 import UserIcon from '~/components/icons/UserIcon.vue'
 import GoogleIcon from '~/components/icons/GoogleIcon.vue'
 import DiscordIcon from '~/components/icons/DiscordIcon.vue'
+import { FieldError } from '../ui/field'
 
 const config = useSanctumConfig()
 const { locale, t } = useI18n()
@@ -29,7 +30,6 @@ const form = usePrecognitionForm<Schema>('post', '/register', {
 const isSubmitted = ref(false)
 
 const submit = () => {
-	console.log(form.fields)
 	form.submit()
 		.then((response) => {
 			isSubmitted.value = true
@@ -80,6 +80,7 @@ const handleOpenLogin = () => {
 								t('auth.register.usernamePlaceholder')
 							"
 						/>
+						<FieldError :errors="form.errors.username" />
 					</div>
 				</div>
 
@@ -95,6 +96,7 @@ const handleOpenLogin = () => {
 							type="email"
 							:placeholder="t('auth.register.emailPlaceholder')"
 						/>
+						<FieldError :errors="form.errors.email" />
 					</div>
 				</div>
 

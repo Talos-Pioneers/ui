@@ -14,7 +14,7 @@ if (isAuthenticated.value) {
 
 <template>
 	<div
-		class="flex justify-center items-center h-[calc(100vh-var(--header-height))]"
+		class="flex justify-center items-center h-[calc(100vh-var(--header-height))] px-4"
 	>
 		<LoginForm />
 	</div>
