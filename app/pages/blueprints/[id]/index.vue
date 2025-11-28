@@ -28,7 +28,7 @@ import ClockIcon from '~/components/icons/ClockIcon.vue'
 import NotFoundImage from '~/assets/img/not-found-placeholder.png'
 import type { Blueprint, BlueprintTag } from '~/models/blueprint'
 import type { Comment } from '~/models/comment'
-import { regionOptions } from '~/constants/blueprintOptions'
+import { regionOptions, serverRegionOptions } from '~/constants/blueprintOptions'
 import FacilityList from '~/components/blueprints/FacilityList.vue'
 import ItemList from '~/components/blueprints/ItemList.vue'
 
@@ -596,7 +596,7 @@ const { handleDelete } = await useBlueprintDelete()
 											:src="image.url || image.thumbnail"
 											:alt="image.name"
 											class="w-full h-full object-center object-contain"
-										/>
+										>
 									</CarouselItem>
 								</CarouselContent>
 								<CarouselPrevious
@@ -624,7 +624,7 @@ const { handleDelete } = await useBlueprintDelete()
 									:src="image.thumbnail || image.url"
 									:alt="image.name"
 									class="w-full object-cover"
-								/>
+								>
 							</button>
 						</div>
 					</section>
@@ -741,7 +741,7 @@ const { handleDelete } = await useBlueprintDelete()
 							</div>
 						</div>
 
-						<hr class="border-cool-gray-20" />
+						<hr class="border-cool-gray-20" >
 
 						<div>
 							<p
@@ -807,6 +807,17 @@ const { handleDelete } = await useBlueprintDelete()
 								</div>
 								<div class="flex items-center justify-between">
 									<span class="text-cool-gray-60">{{
+										t('pages.blueprints.detail.serverRegion')
+									}}</span>
+									<span>{{
+										serverRegionOptions.find(
+											(r) => r.value === blueprint?.server_region
+										)?.label ??
+										t('pages.blueprints.detail.serverRegionAny')
+									}}</span>
+								</div>
+								<div class="flex items-center justify-between">
+									<span class="text-cool-gray-60">{{
 										t('pages.blueprints.detail.region')
 									}}</span>
 									<span>{{
@@ -834,7 +845,7 @@ const { handleDelete } = await useBlueprintDelete()
 								</div>
 							</div>
 						</div>
-						<hr class="border-cool-gray-20" />
+						<hr class="border-cool-gray-20" >
 						<div v-if="blueprint.tags.length">
 							<h3 class="text-lg font-semibold mb-2.5">
 								{{ t('pages.blueprints.detail.tags') }}
@@ -851,7 +862,7 @@ const { handleDelete } = await useBlueprintDelete()
 								</button>
 							</div>
 						</div>
-						<hr class="border-cool-gray-20" />
+						<hr class="border-cool-gray-20" >
 						<div>
 							<h3 class="text-lg font-semibold mb-2.5">
 								{{
@@ -866,7 +877,7 @@ const { handleDelete } = await useBlueprintDelete()
 								{{ t('pages.blueprints.detail.noFacilities') }}
 							</p>
 						</div>
-						<hr class="border-cool-gray-20" />
+						<hr class="border-cool-gray-20" >
 						<div>
 							<h3 class="text-lg font-semibold mb-2.5">
 								{{ t('pages.blueprints.detail.inputProducts') }}
@@ -881,7 +892,7 @@ const { handleDelete } = await useBlueprintDelete()
 								}}
 							</p>
 						</div>
-						<hr class="border-cool-gray-20" />
+						<hr class="border-cool-gray-20" >
 						<div>
 							<h3 class="text-lg font-semibold mb-2.5">
 								{{

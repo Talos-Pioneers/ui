@@ -1,10 +1,10 @@
-import RegionValleyIcon from '~/components/icons/RegionValleyIcon.vue';
-import RegionWulingIcon from '~/components/icons/RegionWulingIcon.vue';
+import RegionValleyIcon from '~/components/icons/RegionValleyIcon.vue'
+import RegionWulingIcon from '~/components/icons/RegionWulingIcon.vue'
 
 export const versionOptions = [
 	{ value: '', label: 'All' },
 	{ value: 'cbt_3', label: 'CBT 3' },
-];
+]
 
 export const tierOptions = [
 	{ value: '', label: 'All' },
@@ -12,17 +12,22 @@ export const tierOptions = [
 	{ value: 'II', label: 'Tier II' },
 	{ value: 'III', label: 'Tier III' },
 	{ value: 'IV', label: 'Tier IV' },
-];
+]
 
 export const regionOptions = [
 	{ value: 'valley_iv', label: 'Valley IV', icon: RegionValleyIcon },
 	{ value: 'wuling', label: 'Wuling', icon: RegionWulingIcon },
-];
+]
 
 export const statusOptions = [
 	{ value: '', label: 'All' },
 	{ value: 'draft', label: 'Draft' },
 	{ value: 'published', label: 'Published' },
 	{ value: 'archived', label: 'Archived' },
-];
+]
 
+export const serverRegionOptions = [
+	{ value: 'america_europe', label: 'America/Europe' },
+	{ value: 'asia', label: 'Asia' },
+	{ value: 'cn', label: 'CN' },
+]

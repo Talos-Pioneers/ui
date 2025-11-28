@@ -12,7 +12,7 @@ import type {Facility} from '~/models/facility';
 import type {Item} from '~/models/item';
 import type {Tag} from '~/models/tag';
 import type {Blueprint} from '~/models/blueprint';
-import {versionOptions} from '~/constants/blueprintOptions';
+import {versionOptions, serverRegionOptions} from '~/constants/blueprintOptions';
 
 const route = useRoute();
 const router = useRouter();
@@ -32,6 +32,7 @@ type Schema = {
   version: string;
   description: string | null;
   status: string;
+  server_region: string | null;
   is_anonymous: boolean;
   tags: number[];
   facilities: Array<{ id: number; quantity: number }>;
@@ -82,6 +83,7 @@ const form = usePrecognitionForm<Schema>('put', `/api/v1/blueprints/${blueprintI
   version: blueprint.value?.version || 'cbt_3',
   description: blueprint.value?.description || null,
   status: blueprint.value?.status || 'draft',
+  server_region: blueprint.value?.server_region || null,
   is_anonymous: blueprint.value?.is_anonymous ?? false,
   tags: [],
   facilities: [],
@@ -152,6 +154,7 @@ watchEffect(() => {
   form.fields.version = blueprint.value.version || 'cbt_3';
   form.fields.description = blueprint.value.description || null;
   form.fields.status = blueprint.value.status || 'draft';
+  form.fields.server_region = blueprint.value.server_region || null;
   form.fields.is_anonymous = blueprint.value.is_anonymous ?? false;
 
   // Convert tag IDs to slugs
@@ -304,6 +307,10 @@ const createFormData = (): FormData => {
   
   if (form.fields.description) {
     formData.append('description', form.fields.description);
+  }
+
+  if (form.fields.server_region) {
+    formData.append('server_region', form.fields.server_region);
   }
 
   // Tags - Laravel expects tags[] format
@@ -560,6 +567,26 @@ v-for="option in versionOptions.filter(opt => opt.value)"
               </Select>
               <p v-if="form.errors.version" class="text-xs text-destructive">
                 {{ Array.isArray(form.errors.version) ? form.errors.version[0] : form.errors.version }}
+              </p>
+            </div>
+
+            <!-- Server Region -->
+            <div class="space-y-2">
+              <Label for="server_region">{{ t('pages.blueprints.create.serverRegionLabel') }}</Label>
+              <Select v-model="form.fields.server_region" @update:model-value="form.validate('server_region')">
+                <SelectTrigger id="server_region" :aria-invalid="!!form.errors.server_region">
+                  <SelectValue :placeholder="t('pages.blueprints.create.serverRegionPlaceholder')"/>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem
+                    v-for="option in serverRegionOptions"
+                    :key="option.value" :value="option.value">
+                    {{ option.label }}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              <p v-if="form.errors.server_region" class="text-xs text-destructive">
+                {{ Array.isArray(form.errors.server_region) ? form.errors.server_region[0] : form.errors.server_region }}
               </p>
             </div>
 

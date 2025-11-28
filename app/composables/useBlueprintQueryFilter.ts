@@ -39,6 +39,7 @@ export const useBlueprintQueryFilter = async (
 	} = useQueryFilters({
 		filters: options?.filters ?? {
 			region: { type: 'string' },
+			server_region: { type: 'string' },
 			version: { type: 'string' },
 			is_anonymous: { type: 'boolean' },
 			author_id: { type: 'string' },

@@ -7,6 +7,7 @@ export type Blueprint = {
 	description: string
 	status: string
 	region: string | null
+	server_region?: string | null
 	facilities?: BlueprintFacility[]
 	item_inputs?: BlueprintItem[]
 	item_outputs?: BlueprintItem[]

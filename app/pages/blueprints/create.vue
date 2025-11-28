@@ -17,7 +17,7 @@ import { toast } from 'vue-sonner'
 import type { Facility } from '~/models/facility'
 import type { Item } from '~/models/item'
 import type { Tag } from '~/models/tag'
-import { versionOptions } from '~/constants/blueprintOptions'
+import { versionOptions, serverRegionOptions } from '~/constants/blueprintOptions'
 
 definePageMeta({
 	middleware: ['sanctum:auth'],
@@ -33,6 +33,7 @@ type Schema = {
 	version: string
 	description: string | null
 	status: string
+	server_region: string | null
 	is_anonymous: boolean
 	tags: number[]
 	facilities: Array<{ id: number; quantity: number }>
@@ -48,6 +49,7 @@ const form = usePrecognitionForm<Schema>('post', '/api/v1/blueprints', {
 	version: 'cbt_3',
 	description: null,
 	status: 'draft',
+	server_region: null,
 	is_anonymous: false,
 	tags: [],
 	facilities: [],
@@ -210,6 +212,10 @@ const createFormData = (): FormData => {
 
 	if (form.fields.description) {
 		formData.append('description', form.fields.description)
+	}
+
+	if (form.fields.server_region) {
+		formData.append('server_region', form.fields.server_region)
 	}
 
 	// Tags - Laravel expects tags[] format
@@ -622,6 +628,49 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 									Array.isArray(form.errors.version)
 										? form.errors.version[0]
 										: form.errors.version
+								}}
+							</p>
+						</div>
+
+						<!-- Server Region -->
+						<div class="space-y-2">
+							<Label for="server_region">{{
+								t('pages.blueprints.create.serverRegionLabel')
+							}}</Label>
+							<Select
+								v-model="form.fields.server_region"
+								@update:model-value="form.validate('server_region')"
+							>
+								<SelectTrigger
+									id="server_region"
+									:aria-invalid="!!form.errors.server_region"
+								>
+									<SelectValue
+										:placeholder="
+											t(
+												'pages.blueprints.create.serverRegionPlaceholder'
+											)
+										"
+									/>
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem
+										v-for="option in serverRegionOptions"
+										:key="option.value"
+										:value="option.value"
+									>
+										{{ option.label }}
+									</SelectItem>
+								</SelectContent>
+							</Select>
+							<p
+								v-if="form.errors.server_region"
+								class="text-xs text-destructive"
+							>
+								{{
+									Array.isArray(form.errors.server_region)
+										? form.errors.server_region[0]
+										: form.errors.server_region
 								}}
 							</p>
 						</div>

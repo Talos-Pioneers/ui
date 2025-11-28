@@ -6,7 +6,7 @@ import type { Blueprint, PaginationMeta } from '~/models/blueprint';
 import type { Facility } from '~/models/facility';
 import type { Item } from '~/models/item';
 import type { Tag } from '~/models/tag';
-import { versionOptions, regionOptions, statusOptions } from '~/constants/blueprintOptions';
+import { versionOptions, regionOptions, serverRegionOptions, statusOptions } from '~/constants/blueprintOptions';
 
 definePageMeta({
     middleware: ['sanctum:auth'],
@@ -51,6 +51,7 @@ const {
     filters: {
         status: { type: "string" },
         region: { type: "string" },
+        server_region: { type: "string" },
         version: { type: "string" },
         is_anonymous: { type: "boolean" },
         facility: { type: "array" },
@@ -93,6 +94,13 @@ const activeFilterTags = computed(() => {
             filterTags.push({ filterKey: key, label: region?.label ?? String(value), value: value });
             return;
         }
+
+        if (key === "server_region") {
+            const serverRegion = serverRegionOptions.find((r) => r.value === value);
+            filterTags.push({ filterKey: key, label: serverRegion?.label ?? String(value), value: value });
+            return;
+        }
+
         if (key === "version") {
             const version = versionOptions.find((v) => v.value === value);
             filterTags.push({ filterKey: key, label: version?.label ?? String(value), value: value });
@@ -154,7 +162,8 @@ const handlePerPageUpdate = (perPageValue: number) => {
 
 <template>
     <div>
-        <BlueprintList :blueprints="blueprints" :pagination="pagination" :facilities="facilities" :items="items"
+        <BlueprintList
+:blueprints="blueprints" :pagination="pagination" :facilities="facilities" :items="items"
             :tags="tags" :filters="filters" :sort="sort" :is-sort-descending="isSortDescending"
             :has-active-filters="hasActiveFilters" :active-filter-tags="activeFilterTags" :current-page="currentPage"
             :per-page="perPage" :loading="blueprintsStatus === 'pending'" :error="blueprintsError"
