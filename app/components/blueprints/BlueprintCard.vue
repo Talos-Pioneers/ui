@@ -32,6 +32,7 @@ const emit = defineEmits<{
 
 const { copy, copied } = useClipboard()
 const { t } = useI18n()
+const sanctumClient = useSanctumClient()
 
 const dropdownOpen = ref(false)
 
@@ -43,9 +44,32 @@ const previewImage = computed(() => {
 		: null
 })
 
-const copyBlueprintCode = async () => {
+const isCopyingCode = ref(false)
+const copiesCount = ref(props.blueprint.copies_count)
+const handleCopyCode = async () => {
+	if (!props.blueprint) {
+		return
+	}
+
 	await copy(props.blueprint.code)
 	toast.success(t('pages.blueprints.detail.toast.codeCopied'))
+
+	if (isCopyingCode.value) {
+		return
+	}
+
+	isCopyingCode.value = true
+	try {
+		const response = await sanctumClient<{
+			copies_count: number
+			message: string
+		}>(`/api/v1/blueprints/${props.blueprint.id}/copy`, {
+			method: 'post',
+		})
+		copiesCount.value = response.copies_count
+	} finally {
+		isCopyingCode.value = false
+	}
 }
 
 const handleTagClick = (tagId: string) => {
@@ -103,7 +127,7 @@ const { handleDelete } = await useBlueprintDelete()
 				<button
 					class="group/copy-button p-2 bg-black/50 border border-cool-gray-60 hover:border-cool-gray-80 rounded-full hover:bg-white transition-colors cursor-pointer"
 					:title="copied ? t('components.blueprints.card.copyTooltip.copied') : t('components.blueprints.card.copyTooltip.copy')"
-					@click="copyBlueprintCode"
+					@click="handleCopyCode"
 				>
 					<CopyIcon
 						class="w-5 h-5 text-cool-gray-30 group-hover/copy-button:text-cool-gray-80 transition-colors"
@@ -238,7 +262,7 @@ const { handleDelete } = await useBlueprintDelete()
 				<div class="flex items-center gap-1.5">
 					<CopiesIcon class="w-4" />
 					<span>{{
-						useFormatCompactNumber(blueprint.copies_count)
+						useFormatCompactNumber(copiesCount)
 					}}</span>
 				</div>
 				<div class="flex grow items-center gap-1.5">
