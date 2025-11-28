@@ -359,13 +359,6 @@ const handleCopyCode = async () => {
 		if (blueprintResponse.value?.data) {
 			blueprintResponse.value.data.copies_count = response.copies_count
 		}
-	} catch (error) {
-		const { code } = useSanctumError(error)
-		if (code === 401) {
-			loginModal.open()
-		} else {
-			toast.error(t('pages.blueprints.detail.toast.copyError'))
-		}
 	} finally {
 		isCopyingCode.value = false
 	}
