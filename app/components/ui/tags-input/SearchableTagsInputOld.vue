@@ -1,60 +1,60 @@
 <script setup lang="ts">
-	import { CheckIcon, ChevronDown } from 'lucide-vue-next'
-	import {
-		ListboxContent,
-		ListboxFilter,
-		ListboxItem,
-		ListboxItemIndicator,
-		ListboxRoot,
-		useFilter,
-	} from 'reka-ui'
-	import { ref, computed, watch } from 'vue'
-	import { Button } from '@/components/ui/button'
-	import {
-		Popover,
-		PopoverAnchor,
-		PopoverContent,
-		PopoverTrigger,
-	} from '@/components/ui/popover'
-	import {
-		TagsInput,
-		TagsInputInput,
-		TagsInputItem,
-		TagsInputItemDelete,
-		TagsInputItemText,
-	} from '@/components/ui/tags-input'
+import { CheckIcon, ChevronDown } from 'lucide-vue-next'
+import {
+	ListboxContent,
+	ListboxFilter,
+	ListboxItem,
+	ListboxItemIndicator,
+	ListboxRoot,
+	useFilter,
+} from 'reka-ui'
+import { ref, computed, watch } from 'vue'
+import { Button } from '@/components/ui/button'
+import {
+	Popover,
+	PopoverAnchor,
+	PopoverContent,
+	PopoverTrigger,
+} from '@/components/ui/popover'
+import {
+	TagsInput,
+	TagsInputInput,
+	TagsInputItem,
+	TagsInputItemDelete,
+	TagsInputItemText,
+} from '@/components/ui/tags-input'
 
-	interface SearchableOption {
-		value: string
-		label: string
+interface SearchableOption {
+	value: string
+	label: string
+}
+
+const props = defineProps<{
+	options: SearchableOption[]
+	placeholder?: string
+	class?: string
+}>()
+
+const modelValue = defineModel<string[]>({ default: [] })
+
+const searchTerm = ref('')
+const open = ref(false)
+
+const { contains } = useFilter({ sensitivity: 'base' })
+
+const filteredOptions = computed(() =>
+	searchTerm.value === ''
+		? props.options
+		: props.options.filter((option) =>
+				contains(option.label, searchTerm.value)
+			)
+)
+
+watch(searchTerm, (f) => {
+	if (f) {
+		open.value = true
 	}
-
-	const props = defineProps<{
-		options: SearchableOption[]
-		placeholder?: string
-		class?: string
-	}>()
-
-	const modelValue = defineModel<string[]>({ default: [] })
-
-	const searchTerm = ref('')
-	const open = ref(false)
-
-	const { contains } = useFilter({ sensitivity: 'base' })
-
-	const filteredOptions = computed(() =>
-		searchTerm.value === ''
-			? props.options
-			: props.options.filter((option) =>
-					contains(option.label, searchTerm.value)
-				)
-	)
-
-	watch(searchTerm, (f) => {
-		if (f) {
-			open.value = true
-		}
-	})
+})
 </script>
 
 <template>

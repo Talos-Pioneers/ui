@@ -1,62 +1,60 @@
 <script setup lang="ts">
-	import {
-		ComboboxAnchor,
-		ComboboxContent,
-		ComboboxGroup,
-		ComboboxInput,
-		ComboboxItem,
-		ComboboxItemIndicator,
-		ComboboxLabel,
-		ComboboxRoot,
-		ComboboxTrigger,
-		ComboboxViewport,
-		useFilter,
-	} from 'reka-ui'
-	import {
-		TagsInput,
-		TagsInputInput,
-		TagsInputItem,
-		TagsInputItemDelete,
-		TagsInputItemText,
-	} from '@/components/ui/tags-input'
+import {
+	ComboboxAnchor,
+	ComboboxContent,
+	ComboboxGroup,
+	ComboboxInput,
+	ComboboxItem,
+	ComboboxItemIndicator,
+	ComboboxLabel,
+	ComboboxRoot,
+	ComboboxTrigger,
+	ComboboxViewport,
+	useFilter,
+} from 'reka-ui'
+import {
+	TagsInput,
+	TagsInputInput,
+	TagsInputItem,
+	TagsInputItemDelete,
+	TagsInputItemText,
+} from '@/components/ui/tags-input'
 
-	import { computed, ref, watch } from 'vue'
-	import { Button } from '~/components/ui/button'
-	import { ChevronDown } from 'lucide-vue-next'
-	import { cn } from '~/lib/utils'
-	import CheckmarkIcon from '~/components/icons/CheckmarkIcon.vue'
+import { computed, ref, watch } from 'vue'
+import { Button } from '~/components/ui/button'
+import { ChevronDown } from 'lucide-vue-next'
+import { cn } from '~/lib/utils'
+import CheckmarkIcon from '~/components/icons/CheckmarkIcon.vue'
 
-	interface SearchableOption {
-		value: string
-		label: string
-		icon?: string | null
+interface SearchableOption {
+	value: string
+	label: string
+	icon?: string | null
+}
+
+const props = withDefaults(
+	defineProps<{
+		options: SearchableOption[]
+		placeholder?: string
+		class?: string
+		displayTags?: boolean
+	}>(),
+	{
+		displayTags: true,
 	}
+)
 
-	const props = withDefaults(
-		defineProps<{
-			options: SearchableOption[]
-			placeholder?: string
-			class?: string
-			displayTags?: boolean
-		}>(),
-		{
-			displayTags: true,
-		}
-	)
+const { contains } = useFilter({ sensitivity: 'base' })
 
-	const { contains } = useFilter({ sensitivity: 'base' })
+const query = ref('')
 
-	const query = ref('')
+const modelValue = defineModel<string[]>({ default: [] })
 
-	const modelValue = defineModel<string[]>({ default: [] })
-
-	const filteredOptions = computed(() =>
-		query.value === ''
-			? props.options
-			: props.options.filter((option) =>
-					contains(option.label, query.value)
-				)
-	)
+const filteredOptions = computed(() =>
+	query.value === ''
+		? props.options
+		: props.options.filter((option) => contains(option.label, query.value))
+)
 </script>
 <template>
 	<ComboboxRoot
@@ -77,7 +75,7 @@
 							class="py-0.5 px-2 text-sm rounded bg-transparent"
 							>{{
 								props.options.find((opt) => opt.value === item)
-									?.label ?? 'balls'
+									?.label ?? item
 							}}</span
 						>
 						<!-- turns out you can just not use TagsInputItemText lol -->
@@ -131,6 +129,7 @@
 						@select="
 							() => {
 								query = ''
+								// focusInput()
 							}
 						"
 					>
