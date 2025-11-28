@@ -269,6 +269,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 
 		// Create FormData in Laravel's expected format
 		const formData = createFormData()
+		console.log(formData);
 
 		// Use Sanctum client directly with FormData since Precognition doesn't handle nested arrays correctly
 		const sanctumClient = useSanctumClient()
@@ -414,7 +415,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 											:src="item.preview"
 											:alt="`Preview ${index + 1}`"
 											class="w-full h-full object-cover"
-										/>
+										>
 										<div
 											class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2"
 										>
@@ -472,7 +473,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 									multiple
 									class="hidden"
 									@change="handleFileSelect"
-								/>
+								>
 
 								<p class="text-xs text-cool-gray-60">
 									{{
@@ -740,7 +741,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 							<div class="flex items-center space-x-2">
 								<Checkbox
 									id="is_anonymous"
-									v-model:checked="form.fields.is_anonymous"
+									v-model="form.fields.is_anonymous"
 									@update:checked="
 										form.validate('is_anonymous')
 									"
