@@ -709,7 +709,7 @@ const { handleDelete } = await useBlueprintDelete()
 								</DropdownMenu>
 							</div>
 						</div>
-						<div class="flex justify-between items-center gap-3">
+						<div class="flex flex-col md:flex-row md:justify-between md:items-center gap-3">
 							<div class="flex items-center gap-3">
 								<div
 									v-for="stat in stats"

@@ -16,7 +16,7 @@ const buildItemIcon = (item: BlueprintItem) => {
 
 <template>
     <TooltipProvider>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="flex flex-wrap gap-3">
             <Tooltip v-for="item in items" :key="item.id">
                 <TooltipTrigger as-child>
                     <div class="shadow-inner flex items-center justify-center bg-cool-gray-10 rounded-xl p-1">
