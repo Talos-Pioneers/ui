@@ -19,6 +19,7 @@ const { t } = useI18n()
                     {{ t('footer.privacyPolicy') }}
                 </NuxtLinkLocale>
             </nav>
+            <p class="text-cool-gray-60 text-center text-sm mt-4">© 2025 Talos Pioneers. All rights reserved.</p>
         </div>
     </footer>
 </template>
