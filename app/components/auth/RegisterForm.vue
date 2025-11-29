@@ -27,7 +27,7 @@ const form = usePrecognitionForm<Schema>('post', '/register', {
 	locale: locale.value,
 })
 
-const isSubmitted = ref(false)
+const isSubmitted = ref(true)
 
 const submit = () => {
 	form.submit()
@@ -169,16 +169,16 @@ const handleOpenLogin = () => {
 			<!-- Success State -->
 			<div v-else key="success" class="text-center">
 				<!-- Title Section -->
-				<div class="text-center mb-6">
+				<div class="text-center mb-6 flex flex-col">
 					<h1
-						class="text-[2rem] h-8 font-secondary flex justify-center items-center gap-5 font-black text-cool-gray-90 mb-2"
+						class="text-[2rem] h-8 font-secondary flex justify-center items-center gap-5 font-[1000] leading-8 text-cool-gray-90 mb-2"
 					>
 						<span class="text-cool-gray-40 font-sans">[</span>
 						{{ t('auth.register.successTitle') }}
 						<span class="text-cool-gray-40 font-sans">]</span>
 					</h1>
 					<!-- Placeholder for special font glyphs -->
-					<div class="text-sm text-cool-gray-40 font-sarkaz">
+					<div class="text-sm text-cool-gray-40 font-sarkaz mt-3 md:mt-0">
 						<!-- Special font glyphs will be rendered here -->
 						<span>{{ t('auth.register.successTitle') }}</span>
 					</div>
