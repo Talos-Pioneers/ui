@@ -27,7 +27,7 @@ const form = usePrecognitionForm<Schema>('post', '/register', {
 	locale: locale.value,
 })
 
-const isSubmitted = ref(true)
+const isSubmitted = ref(false)
 
 const submit = () => {
 	form.submit()
