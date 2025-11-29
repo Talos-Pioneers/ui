@@ -18,6 +18,12 @@ const { t } = useI18n()
                 >
                     {{ t('footer.privacyPolicy') }}
                 </NuxtLinkLocale>
+                <NuxtLinkLocale
+                    to="/cookie-policy"
+                    class="text-cool-gray-60 hover:text-cool-gray-80 transition-colors"
+                >
+                    {{ t('footer.cookiePolicy') }}
+                </NuxtLinkLocale>
             </nav>
             <p class="text-cool-gray-60 text-center text-sm mt-4">© 2025 Talos Pioneers. All rights reserved.</p>
         </div>
