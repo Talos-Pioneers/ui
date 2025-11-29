@@ -85,7 +85,7 @@ export default defineNuxtConfig({
 			},
 			{
 				code: 'zh-CN',
-				name: '簡體中文',
+				name: '简体中文',
 				file: 'zh-CN.json',
 				language: 'zh-CN',
 			},

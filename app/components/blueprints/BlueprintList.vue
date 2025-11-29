@@ -766,9 +766,6 @@ const unifiedFilterModel = computed({
 						<p class="text-destructive mb-2">
 							{{ t('components.blueprints.list.error') }}
 						</p>
-						<pre class="text-sm text-muted-foreground">{{
-							error
-						}}</pre>
 					</div>
 
 					<!-- Blueprints Grid -->
