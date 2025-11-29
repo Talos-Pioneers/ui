@@ -12,7 +12,7 @@ import type {Facility} from '~/models/facility';
 import type {Item} from '~/models/item';
 import type {Tag} from '~/models/tag';
 import type {Blueprint} from '~/models/blueprint';
-import {versionOptions, serverRegionOptions} from '~/constants/blueprintOptions';
+import {versionOptions, serverRegionOptions, regionOptions} from '~/constants/blueprintOptions';
 
 const route = useRoute();
 const router = useRouter();
@@ -35,6 +35,7 @@ type Schema = {
   server_region: string | null;
   is_anonymous: boolean;
   tags: number[];
+  region: string | null;
   facilities: Array<{ id: number; quantity: number }>;
   item_inputs: Array<{ id: number; quantity: number }>;
   item_outputs: Array<{ id: number; quantity: number }>;
@@ -86,6 +87,7 @@ const form = usePrecognitionForm<Schema>('put', `/api/v1/blueprints/${blueprintI
   server_region: blueprint.value?.server_region || null,
   is_anonymous: blueprint.value?.is_anonymous ?? false,
   tags: [],
+  region: null,
   facilities: [],
   item_inputs: [],
   item_outputs: [],
@@ -156,7 +158,7 @@ watchEffect(() => {
   form.fields.status = blueprint.value.status || 'draft';
   form.fields.server_region = blueprint.value.server_region || null;
   form.fields.is_anonymous = blueprint.value.is_anonymous ?? false;
-
+  form.fields.region = blueprint.value.region || null;
   // Convert tag IDs to slugs
   tagsSlugs.value = blueprint.value.tags?.map(tag => tag.slug) || [];
 
@@ -304,7 +306,9 @@ const createFormData = (): FormData => {
   formData.append('version', form.fields.version);
   formData.append('status', form.fields.status);
   formData.append('is_anonymous', form.fields.is_anonymous ? '1' : '0');
-  
+  if (form.fields.region) {
+    formData.append('region', form.fields.region);
+  }
   if (form.fields.description) {
     formData.append('description', form.fields.description);
   }
@@ -587,6 +591,26 @@ v-for="option in versionOptions.filter(opt => opt.value)"
               </Select>
               <p v-if="form.errors.server_region" class="text-xs text-destructive">
                 {{ Array.isArray(form.errors.server_region) ? form.errors.server_region[0] : form.errors.server_region }}
+              </p>
+            </div>
+
+            <!-- Region -->
+            <div class="space-y-2">
+              <Label for="region">{{ t('pages.blueprints.create.regionLabel') }}</Label>
+              <Select v-model="form.fields.region" @update:model-value="form.validate('region')">
+                <SelectTrigger id="region" :aria-invalid="!!form.errors.region">
+                  <SelectValue :placeholder="t('pages.blueprints.create.regionPlaceholder')"/>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem
+                    v-for="option in regionOptions"
+                    :key="option.value" :value="option.value">
+                    {{ option.label }}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              <p v-if="form.errors.region" class="text-xs text-destructive">
+                {{ Array.isArray(form.errors.region) ? form.errors.region[0] : form.errors.region }}
               </p>
             </div>
 
