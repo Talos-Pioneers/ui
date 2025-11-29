@@ -211,7 +211,7 @@ const createFormData = (): FormData => {
 	formData.append('version', form.fields.version)
 	formData.append('status', form.fields.status)
 	formData.append('is_anonymous', form.fields.is_anonymous ? '1' : '0')
-	if (form.fields.region) {
+	if (form.fields.region && form.fields.region !== 'any') {
 		formData.append('region', form.fields.region)
 	}
 	if (form.fields.description) {
@@ -707,6 +707,10 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 										:value="option.value"
 									>
 										{{ option.label }}
+									</SelectItem>
+									<SelectItem
+										value="any">
+										{{ t('pages.blueprints.create.anyRegion') }}
 									</SelectItem>
 								</SelectContent>
 							</Select>

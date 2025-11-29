@@ -306,7 +306,7 @@ const createFormData = (): FormData => {
   formData.append('version', form.fields.version);
   formData.append('status', form.fields.status);
   formData.append('is_anonymous', form.fields.is_anonymous ? '1' : '0');
-  if (form.fields.region) {
+  if (form.fields.region && form.fields.region !== 'any') {
     formData.append('region', form.fields.region);
   }
   if (form.fields.description) {
@@ -607,7 +607,10 @@ v-for="option in versionOptions.filter(opt => opt.value)"
                     :key="option.value" :value="option.value">
                     {{ option.label }}
                   </SelectItem>
-                </SelectContent>
+                  <SelectItem
+                    value="any">
+                    {{ t('pages.blueprints.create.anyRegion') }}
+                </selectitem></SelectContent>
               </Select>
               <p v-if="form.errors.region" class="text-xs text-destructive">
                 {{ Array.isArray(form.errors.region) ? form.errors.region[0] : form.errors.region }}
