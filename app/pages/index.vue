@@ -22,14 +22,14 @@ const facilities = computed(
 	() =>
 		facilitiesData.value?.data.map((f) => ({
 			...f,
-			icon: `https://static.warfarin.wiki/v1/itemicon/${f.icon}.webp`,
+			icon: `https://assets.warfarin.wiki/v2/itemicon/${f.icon}.webp`,
 		})) ?? []
 )
 const items = computed(
 	() =>
 		itemsData.value?.data.map((i) => ({
 			...i,
-			icon: `https://static.warfarin.wiki/v1/itemicon/${i.icon}.webp`,
+			icon: `https://assets.warfarin.wiki/v2/itemicon/${i.icon}.webp`,
 		})) ?? []
 )
 const tags = computed(() => tagsData.value?.data ?? [])

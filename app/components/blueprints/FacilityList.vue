@@ -10,7 +10,7 @@ const buildFacilityIcon = (facility: BlueprintFacility) => {
     if (!facility.icon) {
         return '';
     }
-    return `https://static.warfarin.wiki/v1/itemicon/${facility.icon}.webp`;
+    return `https://assets.warfarin.wiki/v2/itemicon/${facility.icon}.webp`;
 };
 </script>
 

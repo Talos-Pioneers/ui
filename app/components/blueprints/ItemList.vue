@@ -10,7 +10,7 @@ const buildItemIcon = (item: BlueprintItem) => {
     if (!item.icon) {
         return '';
     }
-    return `https://static.warfarin.wiki/v1/itemicon/${item.icon}.webp`;
+    return `https://assets.warfarin.wiki/v2/itemicon/${item.icon}.webp`;
 };
 </script>
 
