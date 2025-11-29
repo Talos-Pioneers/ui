@@ -20,6 +20,10 @@ export default defineNuxtConfig({
 	nitro: {
 		preset: 'cloudflare_module',
 
+		prerender: {
+			routes: ['/cookie-policy', '/privacy-policy'],
+		},
+
 		cloudflare: {
 			deployConfig: true,
 			nodeCompat: true,
