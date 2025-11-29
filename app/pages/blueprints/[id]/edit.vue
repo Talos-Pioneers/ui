@@ -665,7 +665,7 @@ v-model="itemOutputsSlugs" :options="itemOptions"
             <div class="space-y-2">
               <div class="flex items-center space-x-2">
                 <Checkbox
-id="is_anonymous" v-model:checked="form.fields.is_anonymous"
+id="is_anonymous" v-model="form.fields.is_anonymous"
                           @update:checked="form.validate('is_anonymous')"/>
                 <Label for="is_anonymous" class="text-sm font-normal cursor-pointer">
                   {{ t('pages.blueprints.create.postAnonymously') }}
