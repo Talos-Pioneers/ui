@@ -23,8 +23,8 @@ const { data: tagsData } = await useLazySanctumFetch<{ data: Tag[] }>(
     "/api/v1/tags"
 );
 
-const facilities = computed(() => facilitiesData.value?.data.map(f => ({ ...f, icon: `https://assets.warfarin.wiki/v2/itemicon/${f.icon}.webp` })) ?? []);
-const items = computed(() => itemsData.value?.data.map(i => ({ ...i, icon: `https://assets.warfarin.wiki/v2/itemicon/${i.icon}.webp` })) ?? []);
+const facilities = computed(() => facilitiesData.value?.data.map(f => ({ ...f, icon: `https://assets.warfarin.wiki/v2/itemicon/${f.icon}.png` })) ?? []);
+const items = computed(() => itemsData.value?.data.map(i => ({ ...i, icon: `https://assets.warfarin.wiki/v2/itemicon/${i.icon}.png` })) ?? []);
 const tags = computed(() => tagsData.value?.data ?? []);
 
 const {

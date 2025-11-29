@@ -106,7 +106,7 @@ const facilityOptions = computed(() =>
     facilities.value.map(f => ({
       value: f.slug,
       label: f.name,
-      icon: `https://assets.warfarin.wiki/v2/itemicon/${f.icon}.webp`,
+      icon: `https://assets.warfarin.wiki/v2/itemicon/${f.icon}.png`,
     }))
 );
 
@@ -114,7 +114,7 @@ const itemOptions = computed(() =>
     items.value.map(i => ({
       value: i.slug,
       label: i.name,
-      icon: `https://assets.warfarin.wiki/v2/itemicon/${i.icon}.webp`,
+      icon: `https://assets.warfarin.wiki/v2/itemicon/${i.icon}.png`,
     }))
 );
 
