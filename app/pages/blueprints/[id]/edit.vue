@@ -157,7 +157,7 @@ watchEffect(() => {
   form.fields.description = blueprint.value.description || null;
   form.fields.status = blueprint.value.status || 'draft';
   form.fields.server_region = blueprint.value.server_region || null;
-  form.fields.is_anonymous = blueprint.value.is_anonymous ?? false;
+  form.fields.is_anonymous = blueprint.value.creator === null;
   form.fields.region = blueprint.value.region || null;
   // Convert tag IDs to slugs
   tagsSlugs.value = blueprint.value.tags?.map(tag => tag.slug) || [];
