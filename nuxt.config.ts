@@ -37,6 +37,7 @@ export default defineNuxtConfig({
 		'usemods-nuxt',
 		'@sentry/nuxt/module',
 		'@nuxt/eslint',
+		'nuxt-lottie',
 	],
 
 	runtimeConfig: {

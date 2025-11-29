@@ -29,6 +29,7 @@
     "lucide-vue-next": "^0.554.0",
     "nuxt": "^4.2.1",
     "nuxt-auth-sanctum": "^1.4.2",
+    "nuxt-lottie": "^1.0.8",
     "nuxt-sanctum-precognition": "^0.0.12",
     "reka-ui": "^2.6.0",
     "shadcn-nuxt": "^2.3.3",

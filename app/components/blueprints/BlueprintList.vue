@@ -479,7 +479,9 @@ v-model:current-page="currentPageModel"
 
 					<!-- Loading State -->
 					<div v-if="loading" class="flex items-center justify-center py-12">
-						<p class="text-muted-foreground">{{ t('components.blueprints.list.loading') }}</p>
+						<div class="size-64">
+							<Lottie name="throbber" />
+						</div>
 					</div>
 
 					<!-- Error State -->
