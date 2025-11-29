@@ -408,7 +408,7 @@ v-if="showSidebar" variant="outline" size="sm" class="before:hidden w-fit bg-tra
 							{{ sidebarOpen ? t('components.blueprints.list.filters.hide') : t('components.blueprints.list.filters.show') }}
 						</Button>
 
-						<div class="w-full flex gap-4 items-center">
+						<div class="w-full flex flex-col md:flex-row gap-4 items-center">
 						<SearchableTagsInput
 v-model="unifiedFilterModel" :display-tags="false"
 							:options="unifiedFilterOptions.map(opt => ({ value: opt.value, label: opt.label, icon: opt.icon }))"
@@ -416,7 +416,7 @@ v-model="unifiedFilterModel" :display-tags="false"
 							<Select
                                 :model-value="filters.server_region"
 								@update:model-value="handleServerRegionChange">
-								<SelectTrigger class="w-1/3 h-10.5 bg-white">
+								<SelectTrigger class="w-full md:w-1/3 h-10.5 bg-white">
 									<SelectValue :placeholder="t('components.blueprints.list.filters.serverRegion')" />
 								</SelectTrigger>
 								<SelectContent>

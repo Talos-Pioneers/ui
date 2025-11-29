@@ -38,6 +38,7 @@ export default defineNuxtConfig({
 		'@sentry/nuxt/module',
 		'@nuxt/eslint',
 		'nuxt-lottie',
+		'@nuxt/scripts',
 	],
 
 	runtimeConfig: {
@@ -197,6 +198,14 @@ export default defineNuxtConfig({
 			org: 'talos-pioneers',
 			project: 'talos-pioneers-frontend',
 			authToken: process.env.SENTRY_AUTH_TOKEN,
+		},
+	},
+
+	scripts: {
+		registry: {
+			googleTagManager: {
+				id: 'GTM-MMCT5C3R',
+			},
 		},
 	},
 
