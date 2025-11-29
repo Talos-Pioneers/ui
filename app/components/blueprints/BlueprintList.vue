@@ -90,7 +90,11 @@ const handleClearTag = (filterKey: string, value: any) => {
 	}
 };
 const handleRegionFilter = (region: string) => {
-	emit('update:filter', 'region', region);
+	if (region === 'any') {
+		emit('clear-filter', 'region');
+	} else {
+		emit('update:filter', 'region', region);
+	}
 };
 const handleAuthorFilter = (authorId: string) => {
 	emit('update:filter', 'author_id', authorId);
