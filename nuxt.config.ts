@@ -39,6 +39,7 @@ export default defineNuxtConfig({
 		'@nuxt/eslint',
 		'nuxt-lottie',
 		'@nuxt/scripts',
+		'@nuxt/content',
 	],
 
 	runtimeConfig: {

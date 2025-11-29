@@ -1,21 +1,21 @@
 <script setup lang="ts">
 const lastUpdatedDate = 'November 26, 2025'
-const { data: privacyPolicy } = await useAsyncData(() => queryCollection('content').path('/privacy-policy').first())
+const { data: cookiePolicy } = await useAsyncData(() => queryCollection('content').path('/cookie-policy').first())
 
 useHead({
-	title: 'Privacy Policy',
+	title: 'Cookie Policy',
 	meta: [
 		{
 			property: 'og:title',
-			content: 'Privacy Policy',
+			content: 'Cookie Policy',
 		},
 		{
 			name: 'description',
-			content: 'Privacy Policy for Talos Pioneers',
+			content: 'Cookie Policy for Talos Pioneers',
 		},
 		{
 			property: 'og:description',
-			content: 'Privacy Policy for Talos Pioneers',
+			content: 'Cookie Policy for Talos Pioneers',
 		},
 	],
 })
@@ -29,7 +29,7 @@ useHead({
 					<!-- Title -->
 					<div>
 						<h1 class="font-bold text-3xl text-cool-gray-80 dark:text-cool-gray-20 mb-2">
-							PRIVACY NOTICE
+							COOKIE POLICY
 						</h1>
 						<p class="text-sm text-cool-gray-60 dark:text-cool-gray-40">
 							Last updated {{ lastUpdatedDate }}
@@ -40,10 +40,11 @@ useHead({
 					<div
 						class="prose prose-cool-gray dark:prose-invert max-w-none"
 					>
-						<ContentRenderer v-if="privacyPolicy" :value="privacyPolicy" />
+						<ContentRenderer v-if="cookiePolicy" :value="cookiePolicy" />
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </template>
+
