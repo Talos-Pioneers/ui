@@ -274,5 +274,8 @@
 	"components.banners.profileBanner.title": "Meine Blueprints",
 	"components.banners.profileBanner.description": "Verwalten und organisieren Sie Ihre Blueprints. Erstellen Sie neue Blueprints, um sie mit der Community zu teilen.",
 	"components.banners.profileBanner.createButton": "Neues Blueprint erstellen",
-	"pages.home.siteName": "Talos Pioneers"
+	"pages.home.siteName": "Talos Pioneers",
+	"serverRegion.cn": "CN",
+	"serverRegion.america_europe": "America/Europe",
+	"serverRegion.asia": "Asia"
 }

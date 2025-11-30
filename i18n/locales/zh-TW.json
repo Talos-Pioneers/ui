@@ -274,5 +274,8 @@
     "components.banners.profileBanner.title": "我的藍圖",
     "components.banners.profileBanner.description": "管理和組織您的藍圖。建立新藍圖與社群分享。",
     "components.banners.profileBanner.createButton": "建立新藍圖",
-    "pages.home.siteName": "Talos Pioneers"
+    "pages.home.siteName": "Talos Pioneers",
+    "serverRegion.cn": "CN",
+    "serverRegion.america_europe": "America/Europe",
+    "serverRegion.asia": "Asia"
 }

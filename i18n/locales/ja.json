@@ -274,5 +274,8 @@
     "components.banners.profileBanner.title": "マイ設計図",
     "components.banners.profileBanner.description": "設計図を管理および整理します。コミュニティと共有する新しい設計図を作成します。",
     "components.banners.profileBanner.createButton": "新しい設計図を作成",
-    "pages.home.siteName": "Talos Pioneers"
+    "pages.home.siteName": "Talos Pioneers",
+    "serverRegion.cn": "CN",
+    "serverRegion.america_europe": "America/Europe",
+    "serverRegion.asia": "Asia"
 }

@@ -140,6 +140,13 @@ const handleRegionFilter = (region: string) => {
 		emit('update:filter', 'region', region)
 	}
 }
+const handleServerRegionFilter = (serverRegion: string) => {
+	if (serverRegion === 'any') {
+		emit('clear-filter', 'server_region')
+	} else {
+		emit('update:filter', 'server_region', serverRegion)
+	}
+}
 const handleAuthorFilter = (authorId: string) => {
 	emit('update:filter', 'author_id', authorId)
 }
@@ -779,6 +786,7 @@ const unifiedFilterModel = computed({
 							:blueprint="blueprint"
 							@filter-tag="handleTagFilter"
 							@filter-region="handleRegionFilter"
+							@filter-server-region="handleServerRegionFilter"
 							@filter-author="handleAuthorFilter"
 						/>
 

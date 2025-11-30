@@ -274,5 +274,8 @@
 	"components.banners.profileBanner.title": "Cetak Biru Saya",
 	"components.banners.profileBanner.description": "Kelola dan organisasikan cetak biru Anda. Buat cetak biru baru untuk dibagikan dengan komunitas.",
 	"components.banners.profileBanner.createButton": "Buat Cetak Biru Baru",
-	"pages.home.siteName": "Talos Pioneers"
+	"pages.home.siteName": "Talos Pioneers",
+	"serverRegion.cn": "CN",
+	"serverRegion.america_europe": "America/Europe",
+	"serverRegion.asia": "Asia"
 }

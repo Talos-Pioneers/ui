@@ -274,5 +274,8 @@
     "components.banners.profileBanner.title": "Bản vẽ của Tôi",
     "components.banners.profileBanner.description": "Quản lý và tổ chức bản vẽ của bạn. Tạo bản vẽ mới để chia sẻ với cộng đồng.",
     "components.banners.profileBanner.createButton": "Tạo Bản vẽ Mới",
-    "pages.home.siteName": "Talos Pioneers"
+    "pages.home.siteName": "Talos Pioneers",
+    "serverRegion.cn": "CN",
+    "serverRegion.america_europe": "America/Europe",
+    "serverRegion.asia": "Asia"
 }

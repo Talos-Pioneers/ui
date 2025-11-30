@@ -274,5 +274,8 @@
 	"components.banners.profileBanner.title": "แบบแปลนของฉัน",
 	"components.banners.profileBanner.description": "จัดการและจัดระเบียบแบบแปลนของคุณ สร้างแบบแปลนใหม่เพื่อแบ่งปันกับชุมชน",
 	"components.banners.profileBanner.createButton": "สร้างแบบแปลนใหม่",
-	"pages.home.siteName": "Talos Pioneers"
+	"pages.home.siteName": "Talos Pioneers",
+	"serverRegion.cn": "CN",
+	"serverRegion.america_europe": "America/Europe",
+	"serverRegion.asia": "Asia"
 }

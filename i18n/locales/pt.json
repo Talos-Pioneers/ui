@@ -274,5 +274,8 @@
 	"components.banners.profileBanner.title": "Meus Projetos",
 	"components.banners.profileBanner.description": "Gerencie e organize seus projetos. Crie novos projetos para compartilhar com a comunidade.",
 	"components.banners.profileBanner.createButton": "Criar Novo Projeto",
-	"pages.home.siteName": "Talos Pioneers"
+	"pages.home.siteName": "Talos Pioneers",
+	"serverRegion.cn": "CN",
+	"serverRegion.america_europe": "America/Europe",
+	"serverRegion.asia": "Asia"
 }

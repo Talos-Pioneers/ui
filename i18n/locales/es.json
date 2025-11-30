@@ -274,5 +274,8 @@
 	"components.banners.profileBanner.title": "Mis planos",
 	"components.banners.profileBanner.description": "Administra y organiza tus planos. Crea nuevos planos para compartir con la comunidad.",
 	"components.banners.profileBanner.createButton": "Crear nuevo plano",
-	"pages.home.siteName": "Talos Pioneers"
+	"pages.home.siteName": "Talos Pioneers",
+	"serverRegion.cn": "CN",
+	"serverRegion.america_europe": "America/Europe",
+	"serverRegion.asia": "Asia"
 }

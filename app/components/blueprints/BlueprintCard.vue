@@ -18,7 +18,11 @@ import ReportButton from '~/components/ReportButton.vue'
 import NotFoundImage from '~/assets/img/not-found-placeholder.png'
 import { toast } from 'vue-sonner'
 import { Button } from '../ui/button'
-import { regionOptions } from '~/constants/blueprintOptions'
+import {
+	regionOptions,
+	serverRegionOptions,
+} from '~/constants/blueprintOptions'
+import ServerRegionIcon from '../icons/ServerRegionIcon.vue'
 
 const props = defineProps<{
 	blueprint: Blueprint
@@ -27,6 +31,7 @@ const props = defineProps<{
 const emit = defineEmits<{
 	'filter-tag': [tagId: string]
 	'filter-region': [region: string]
+	'filter-server-region': [serverRegion: string]
 	'filter-author': [authorId: string]
 }>()
 
@@ -82,6 +87,12 @@ const handleRegionClick = () => {
 	}
 }
 
+const handleServerRegionClick = () => {
+	if (props.blueprint.server_region) {
+		emit('filter-server-region', props.blueprint.server_region)
+	}
+}
+
 const handleAuthorClick = () => {
 	if (props.blueprint.creator) {
 		emit('filter-author', props.blueprint.creator.id)
@@ -110,7 +121,7 @@ const { handleDelete } = await useBlueprintDelete()
 					:src="previewImage"
 					:alt="blueprint.title"
 					class="w-full h-full object-cover"
-				>
+				/>
 			</NuxtLinkLocale>
 			<NuxtLinkLocale
 				v-else
@@ -121,12 +132,16 @@ const { handleDelete } = await useBlueprintDelete()
 					:src="NotFoundImage"
 					:alt="blueprint.title"
 					class="w-full h-full object-cover"
-				>
+				/>
 			</NuxtLinkLocale>
 			<div class="absolute bottom-2 right-2 z-10">
 				<button
 					class="group/copy-button p-2 bg-black/50 border border-cool-gray-60 hover:border-cool-gray-80 rounded-full hover:bg-white transition-colors cursor-pointer"
-					:title="copied ? t('components.blueprints.card.copyTooltip.copied') : t('components.blueprints.card.copyTooltip.copy')"
+					:title="
+						copied
+							? t('components.blueprints.card.copyTooltip.copied')
+							: t('components.blueprints.card.copyTooltip.copy')
+					"
 					@click="handleCopyCode"
 				>
 					<CopyIcon
@@ -188,21 +203,40 @@ const { handleDelete } = await useBlueprintDelete()
 
 			<!-- Region and Actions -->
 			<div class="flex items-center justify-between">
-				<div
-					class="group/region flex items-center gap-1.5 text-sm font-medium text-cool-gray-80 cursor-pointer transition-colors"
-					@click="handleRegionClick"
-				>
-					<RegionIcon class="w-5 h-5" />
-					<span
-						class="group-hover/region:text-cool-gray-100 group-hover/region:underline transition-colors"
-						>{{
-							blueprint.region
-								? regionOptions.find(
-										(r) => r.value === blueprint.region
-									)?.label
-								: t('components.blueprints.card.region.any')
-						}}</span
+				<div class="flex items-center gap-2">
+					<button
+						v-if="blueprint.server_region"
+						type="button"
+						class="group/server-region flex items-center gap-1.5 text-sm font-medium text-cool-gray-70 cursor-pointer transition-colors"
+						@click="handleServerRegionClick"
 					>
+						<ServerRegionIcon
+							class="w-5 h-5 group-hover/server-region:text-cool-gray-100 transition-colors"
+						/>
+						<span
+							class="group-hover/server-region:text-cool-gray-100 group-hover/server-region:underline transition-colors"
+							>{{
+								t(`serverRegion.${blueprint.server_region}`)
+							}}</span
+						>
+					</button>
+					<button
+						type="button"
+						class="group/region flex items-center gap-1.5 text-sm font-medium text-cool-gray-70 cursor-pointer transition-colors"
+						@click="handleRegionClick"
+					>
+						<RegionIcon class="w-5 h-5" />
+						<span
+							class="group-hover/region:text-cool-gray-100 group-hover/region:underline transition-colors"
+							>{{
+								blueprint.region
+									? regionOptions.find(
+											(r) => r.value === blueprint.region
+										)?.label
+									: t('components.blueprints.card.region.any')
+							}}</span
+						>
+					</button>
 				</div>
 				<div class="flex items-center gap-1">
 					<DropdownMenu v-model:open="dropdownOpen">
@@ -229,10 +263,16 @@ const { handleDelete } = await useBlueprintDelete()
 										:disabled="isReporting"
 										@click="handleReport"
 									>
-										<span v-if="isReporting"
-											>{{ t('components.blueprints.card.actions.reporting') }}</span
-										>
-										<span v-else>{{ t('components.blueprints.card.actions.report') }}</span>
+										<span v-if="isReporting">{{
+											t(
+												'components.blueprints.card.actions.reporting'
+											)
+										}}</span>
+										<span v-else>{{
+											t(
+												'components.blueprints.card.actions.report'
+											)
+										}}</span>
 									</DropdownMenuItem>
 								</template>
 							</ReportButton>
@@ -243,14 +283,22 @@ const { handleDelete } = await useBlueprintDelete()
 								<NuxtLinkLocale
 									:to="`/blueprints/${blueprint.id}/edit`"
 								>
-									<span>{{ t('components.blueprints.card.actions.edit') }}</span>
+									<span>{{
+										t(
+											'components.blueprints.card.actions.edit'
+										)
+									}}</span>
 								</NuxtLinkLocale>
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								v-if="blueprint.permissions.can_delete"
 								@click="handleDelete(blueprint)"
 							>
-								<span>{{ t('components.blueprints.card.actions.delete') }}</span>
+								<span>{{
+									t(
+										'components.blueprints.card.actions.delete'
+									)
+								}}</span>
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
@@ -261,9 +309,7 @@ const { handleDelete } = await useBlueprintDelete()
 			<div class="flex items-center gap-4 text-sm text-cool-gray-80">
 				<div class="flex items-center gap-1.5">
 					<CopiesIcon class="w-4" />
-					<span>{{
-						useFormatCompactNumber(copiesCount)
-					}}</span>
+					<span>{{ useFormatCompactNumber(copiesCount) }}</span>
 				</div>
 				<div class="flex grow items-center gap-1.5">
 					<LikesIcon class="w-4" />
