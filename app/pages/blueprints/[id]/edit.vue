@@ -392,6 +392,18 @@ const createFormData = (): FormData => {
 			formData.append('gallery_keep_ids[]', item.mediaId!)
 		})
 
+	// Gallery order - send order for all images (existing and new)
+	// Format: mediaId for existing, "new_0", "new_1", etc. for new images
+	let newImageIndex = 0
+	imageItems.value.forEach((item, index) => {
+		if (item.isExisting && item.mediaId) {
+			formData.append('gallery_order[]', item.mediaId)
+		} else {
+			formData.append('gallery_order[]', `new_${newImageIndex}`)
+			newImageIndex++
+		}
+	})
+
 	return formData
 }
 
@@ -431,7 +443,9 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 
 		// Redirect to blueprint detail page
 		if (response.data?.id) {
-			await router.push(`/blueprints/${response.data.id}`)
+			nextTick(() => {
+				router.push(`/blueprints/${response.data.id}`)
+			})
 		}
 	} catch (error) {
 		const { isValidationError, bag } = useSanctumError(error)
