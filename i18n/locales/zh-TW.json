@@ -280,5 +280,12 @@
     "serverRegion.asia": "亞洲",
     "tagGroup.blueprint_tags": "藍圖標籤",
     "tagGroup.blueprint_tier": "藍圖等級",
-    "tagGroup.blueprint_type": "藍圖類型"
+    "tagGroup.blueprint_type": "藍圖類型",
+    "deleteBlueprint.title": "刪除藍圖",
+    "deleteBlueprint.description": "您確定要刪除此藍圖嗎？此操作無法復原。",
+    "deleteBlueprint.cancel": "取消",
+    "deleteBlueprint.confirm": "刪除",
+    "deleteBlueprint.deleting": "刪除中...",
+    "deleteBlueprint.success": "藍圖已成功刪除。",
+    "deleteBlueprint.error": "刪除藍圖失敗。請重試。"
 }

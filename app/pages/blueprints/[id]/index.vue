@@ -34,6 +34,7 @@ import {
 } from '~/constants/blueprintOptions'
 import FacilityList from '~/components/blueprints/FacilityList.vue'
 import ItemList from '~/components/blueprints/ItemList.vue'
+import DeleteBlueprintDialog from '~/components/blueprints/DeleteBlueprintDialog.vue'
 
 type BlueprintResponse = {
 	data: Blueprint
@@ -110,7 +111,6 @@ const seoDescription = computed(() => {
 })
 
 watchEffect(() => {
-	console.log(blueprint.value)
 	if (blueprintStatus.value == 'success' && !blueprint.value) {
 		throw createError({
 			statusCode: 404,
@@ -548,7 +548,11 @@ const dropdownOpen = ref(false)
 const handleReported = () => {
 	dropdownOpen.value = false
 }
-const { handleDelete } = await useBlueprintDelete()
+
+const deleteDialogOpen = ref(false)
+const handleBlueprintDeleted = () => {
+	navigateTo('/')
+}
 </script>
 
 <template>
@@ -701,7 +705,7 @@ const { handleDelete } = await useBlueprintDelete()
 											v-if="
 												blueprint.permissions.can_delete
 											"
-											@click="handleDelete(blueprint)"
+											@click="deleteDialogOpen = true"
 										>
 											<span>{{
 												t(
@@ -1009,5 +1013,13 @@ const { handleDelete } = await useBlueprintDelete()
 				</section>
 			</div>
 		</div>
+
+		<DeleteBlueprintDialog
+			v-if="blueprint"
+			:blueprint="blueprint"
+			:open="deleteDialogOpen"
+			@update:open="deleteDialogOpen = $event"
+			@deleted="handleBlueprintDeleted"
+		/>
 	</div>
 </template>

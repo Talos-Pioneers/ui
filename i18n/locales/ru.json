@@ -280,5 +280,12 @@
 	"serverRegion.asia": "Азия",
 	"tagGroup.blueprint_tags": "Теги чертежей",
 	"tagGroup.blueprint_tier": "Уровень чертежей",
-	"tagGroup.blueprint_type": "Тип чертежей"
+	"tagGroup.blueprint_type": "Тип чертежей",
+	"deleteBlueprint.title": "Удалить чертеж",
+	"deleteBlueprint.description": "Вы уверены, что хотите удалить этот чертеж? Это действие нельзя отменить.",
+	"deleteBlueprint.cancel": "Отмена",
+	"deleteBlueprint.confirm": "Удалить",
+	"deleteBlueprint.deleting": "Удаление...",
+	"deleteBlueprint.success": "Чертеж успешно удален.",
+	"deleteBlueprint.error": "Не удалось удалить чертеж. Пожалуйста, попробуйте еще раз."
 }

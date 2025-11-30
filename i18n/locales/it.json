@@ -280,5 +280,12 @@
 	"serverRegion.asia": "Asia",
 	"tagGroup.blueprint_tags": "Tag Progetto",
 	"tagGroup.blueprint_tier": "Tier Progetto",
-	"tagGroup.blueprint_type": "Tipo Progetto"
+	"tagGroup.blueprint_type": "Tipo Progetto",
+	"deleteBlueprint.title": "Elimina progetto",
+	"deleteBlueprint.description": "Sei sicuro di voler eliminare questo progetto? Questa azione non può essere annullata.",
+	"deleteBlueprint.cancel": "Annulla",
+	"deleteBlueprint.confirm": "Elimina",
+	"deleteBlueprint.deleting": "Eliminazione in corso...",
+	"deleteBlueprint.success": "Progetto eliminato con successo.",
+	"deleteBlueprint.error": "Impossibile eliminare il progetto. Riprova."
 }

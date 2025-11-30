@@ -280,5 +280,12 @@
     "serverRegion.asia": "アジア",
     "tagGroup.blueprint_tags": "設計図タグ",
     "tagGroup.blueprint_tier": "設計図階層",
-    "tagGroup.blueprint_type": "設計図タイプ"
+    "tagGroup.blueprint_type": "設計図タイプ",
+    "deleteBlueprint.title": "設計図を削除",
+    "deleteBlueprint.description": "この設計図を削除してもよろしいですか？この操作は元に戻すことができません。",
+    "deleteBlueprint.cancel": "キャンセル",
+    "deleteBlueprint.confirm": "削除",
+    "deleteBlueprint.deleting": "削除中...",
+    "deleteBlueprint.success": "設計図が正常に削除されました。",
+    "deleteBlueprint.error": "設計図の削除に失敗しました。もう一度お試しください。"
 }

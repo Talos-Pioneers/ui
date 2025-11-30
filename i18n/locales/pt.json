@@ -280,5 +280,12 @@
 	"serverRegion.asia": "Asia",
 	"tagGroup.blueprint_tags": "Tags de Projeto",
 	"tagGroup.blueprint_tier": "Tier de Projeto",
-	"tagGroup.blueprint_type": "Tipo de Projeto"
+	"tagGroup.blueprint_type": "Tipo de Projeto",
+	"deleteBlueprint.title": "Excluir Projeto",
+	"deleteBlueprint.description": "Tem certeza de que deseja excluir este projeto? Esta ação não pode ser desfeita.",
+	"deleteBlueprint.cancel": "Cancelar",
+	"deleteBlueprint.confirm": "Excluir",
+	"deleteBlueprint.deleting": "Excluindo...",
+	"deleteBlueprint.success": "Projeto excluído com sucesso.",
+	"deleteBlueprint.error": "Falha ao excluir o projeto. Por favor, tente novamente."
 }

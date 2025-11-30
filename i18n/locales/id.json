@@ -280,5 +280,12 @@
 	"serverRegion.asia": "Asia",
 	"tagGroup.blueprint_tags": "Tag Cetak Biru",
 	"tagGroup.blueprint_tier": "Tier Cetak Biru",
-	"tagGroup.blueprint_type": "Tipe Cetak Biru"
+	"tagGroup.blueprint_type": "Tipe Cetak Biru",
+	"deleteBlueprint.title": "Hapus Cetak Biru",
+	"deleteBlueprint.description": "Apakah Anda yakin ingin menghapus cetak biru ini? Tindakan ini tidak dapat dibatalkan.",
+	"deleteBlueprint.cancel": "Batal",
+	"deleteBlueprint.confirm": "Hapus",
+	"deleteBlueprint.deleting": "Menghapus...",
+	"deleteBlueprint.success": "Cetak biru berhasil dihapus.",
+	"deleteBlueprint.error": "Gagal menghapus cetak biru. Silakan coba lagi."
 }

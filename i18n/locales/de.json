@@ -280,5 +280,12 @@
 	"serverRegion.asia": "Asien",
 	"tagGroup.blueprint_tags": "Blueprint-Tags",
 	"tagGroup.blueprint_tier": "Blueprint-Stufe",
-	"tagGroup.blueprint_type": "Blueprint-Typ"
+	"tagGroup.blueprint_type": "Blueprint-Typ",
+	"deleteBlueprint.title": "Blueprint löschen",
+	"deleteBlueprint.description": "Sind Sie sicher, dass Sie diesen Blueprint löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+	"deleteBlueprint.cancel": "Abbrechen",
+	"deleteBlueprint.confirm": "Löschen",
+	"deleteBlueprint.deleting": "Wird gelöscht...",
+	"deleteBlueprint.success": "Blueprint erfolgreich gelöscht.",
+	"deleteBlueprint.error": "Blueprint konnte nicht gelöscht werden. Bitte versuchen Sie es erneut."
 }

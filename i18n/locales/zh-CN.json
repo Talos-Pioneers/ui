@@ -280,5 +280,12 @@
     "serverRegion.asia": "亚洲",
     "tagGroup.blueprint_tags": "蓝图标签",
     "tagGroup.blueprint_tier": "蓝图等级",
-    "tagGroup.blueprint_type": "蓝图类型"
+    "tagGroup.blueprint_type": "蓝图类型",
+    "deleteBlueprint.title": "删除蓝图",
+    "deleteBlueprint.description": "您确定要删除此蓝图吗？此操作无法撤消。",
+    "deleteBlueprint.cancel": "取消",
+    "deleteBlueprint.confirm": "删除",
+    "deleteBlueprint.deleting": "删除中...",
+    "deleteBlueprint.success": "蓝图已成功删除。",
+    "deleteBlueprint.error": "删除蓝图失败。请重试。"
 }

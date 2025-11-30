@@ -39,6 +39,7 @@ const {
 	pagination,
 	blueprintsStatus,
 	blueprintsError,
+	blueprintsRefresh,
 
 	currentPage,
 	perPage,
@@ -53,6 +54,10 @@ const {
 	toggleSort,
 	isSortDescending,
 } = await useBlueprintQueryFilter('/api/v1/blueprints')
+
+const handleBlueprintDeleted = () => {
+	blueprintsRefresh()
+}
 
 const activeFilterTags = computed(() => {
 	const filterTags: Array<{
@@ -242,6 +247,7 @@ useHead({
 			@clear-filter="clearFilter"
 			@clear-all-filters="clearAllFilters"
 			@toggle-sort="toggleSort"
+			@blueprint-deleted="handleBlueprintDeleted"
 		>
 			<template #banner>
 				<MainBanner />

@@ -280,5 +280,12 @@
 	"serverRegion.asia": "Asie",
 	"tagGroup.blueprint_tags": "Tags de plan",
 	"tagGroup.blueprint_tier": "Niveau de plan",
-	"tagGroup.blueprint_type": "Type de plan"
+	"tagGroup.blueprint_type": "Type de plan",
+	"deleteBlueprint.title": "Supprimer le plan",
+	"deleteBlueprint.description": "Êtes-vous sûr de vouloir supprimer ce plan ? Cette action ne peut pas être annulée.",
+	"deleteBlueprint.cancel": "Annuler",
+	"deleteBlueprint.confirm": "Supprimer",
+	"deleteBlueprint.deleting": "Suppression en cours...",
+	"deleteBlueprint.success": "Plan supprimé avec succès.",
+	"deleteBlueprint.error": "Échec de la suppression du plan. Veuillez réessayer."
 }

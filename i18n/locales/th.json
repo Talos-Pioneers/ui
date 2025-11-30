@@ -280,5 +280,12 @@
 	"serverRegion.asia": "อะเซีย",
 	"tagGroup.blueprint_tags": "แท็กแบบแปลน",
 	"tagGroup.blueprint_tier": "ระดับแบบแปลน",
-	"tagGroup.blueprint_type": "ประเภทแบบแปลน"
+	"tagGroup.blueprint_type": "ประเภทแบบแปลน",
+	"deleteBlueprint.title": "ลบแบบแปลน",
+	"deleteBlueprint.description": "คุณแน่ใจหรือไม่ว่าต้องการลบแบบแปลนนี้? การกระทำนี้ไม่สามารถยกเลิกได้",
+	"deleteBlueprint.cancel": "ยกเลิก",
+	"deleteBlueprint.confirm": "ลบ",
+	"deleteBlueprint.deleting": "กำลังลบ...",
+	"deleteBlueprint.success": "ลบแบบแปลนสำเร็จแล้ว",
+	"deleteBlueprint.error": "ลบแบบแปลนไม่สำเร็จ โปรดลองอีกครั้ง"
 }

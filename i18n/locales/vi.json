@@ -280,5 +280,12 @@
     "serverRegion.asia": "Châu Á",
     "tagGroup.blueprint_tags": "Thẻ Bản vẽ",
     "tagGroup.blueprint_tier": "Cấp Độ Bản vẽ",
-    "tagGroup.blueprint_type": "Loại Bản vẽ"
+    "tagGroup.blueprint_type": "Loại Bản vẽ",
+    "deleteBlueprint.title": "Xóa Bản vẽ",
+    "deleteBlueprint.description": "Bạn có chắc chắn muốn xóa bản vẽ này không? Hành động này không thể hoàn tác.",
+    "deleteBlueprint.cancel": "Hủy",
+    "deleteBlueprint.confirm": "Xóa",
+    "deleteBlueprint.deleting": "Đang xóa...",
+    "deleteBlueprint.success": "Đã xóa bản vẽ thành công.",
+    "deleteBlueprint.error": "Không thể xóa bản vẽ. Vui lòng thử lại."
 }

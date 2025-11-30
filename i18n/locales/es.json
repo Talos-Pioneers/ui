@@ -280,5 +280,12 @@
 	"serverRegion.asia": "Asia",
 	"tagGroup.blueprint_tags": "Etiquetas de plano",
 	"tagGroup.blueprint_tier": "Nivel de plano",
-	"tagGroup.blueprint_type": "Tipo de plano"
+	"tagGroup.blueprint_type": "Tipo de plano",
+	"deleteBlueprint.title": "Eliminar plano",
+	"deleteBlueprint.description": "¿Está seguro de que desea eliminar este plano? Esta acción no se puede deshacer.",
+	"deleteBlueprint.cancel": "Cancelar",
+	"deleteBlueprint.confirm": "Eliminar",
+	"deleteBlueprint.deleting": "Eliminando...",
+	"deleteBlueprint.success": "Plano eliminado exitosamente.",
+	"deleteBlueprint.error": "No se pudo eliminar el plano. Por favor intente nuevamente."
 }

@@ -80,6 +80,7 @@ const emit = defineEmits<{
 	'update:per-page': [perPage: number]
 	'clear-filter': [key: string, value?: any]
 	'clear-all-filters': []
+	'blueprint-deleted': []
 }>()
 
 // Sort options
@@ -777,15 +778,16 @@ const unifiedFilterModel = computed({
 						v-if="!loading && !error"
 						class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"
 					>
-						<BlueprintCard
-							v-for="blueprint in blueprints"
-							:key="blueprint.id"
-							:blueprint="blueprint"
-							@filter-tag="handleTagFilter"
-							@filter-region="handleRegionFilter"
-							@filter-server-region="handleServerRegionFilter"
-							@filter-author="handleAuthorFilter"
-						/>
+					<BlueprintCard
+						v-for="blueprint in blueprints"
+						:key="blueprint.id"
+						:blueprint="blueprint"
+						@filter-tag="handleTagFilter"
+						@filter-region="handleRegionFilter"
+						@filter-server-region="handleServerRegionFilter"
+						@filter-author="handleAuthorFilter"
+						@deleted="emit('blueprint-deleted')"
+					/>
 
 						<div
 							v-if="blueprints.length === 0"

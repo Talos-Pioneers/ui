@@ -23,6 +23,7 @@ import {
 	serverRegionOptions,
 } from '~/constants/blueprintOptions'
 import ServerRegionIcon from '../icons/ServerRegionIcon.vue'
+import DeleteBlueprintDialog from './DeleteBlueprintDialog.vue'
 
 const props = defineProps<{
 	blueprint: Blueprint
@@ -33,6 +34,7 @@ const emit = defineEmits<{
 	'filter-region': [region: string]
 	'filter-server-region': [serverRegion: string]
 	'filter-author': [authorId: string]
+	deleted: []
 }>()
 
 const { copy, copied } = useClipboard()
@@ -103,7 +105,11 @@ const handleReported = () => {
 	dropdownOpen.value = false
 }
 
-const { handleDelete } = await useBlueprintDelete()
+const deleteDialogOpen = ref(false)
+
+const handleBlueprintDeleted = () => {
+	emit('deleted')
+}
 </script>
 
 <template>
@@ -292,7 +298,7 @@ const { handleDelete } = await useBlueprintDelete()
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								v-if="blueprint.permissions.can_delete"
-								@click="handleDelete(blueprint)"
+								@click="deleteDialogOpen = true"
 							>
 								<span>{{
 									t(
@@ -350,5 +356,12 @@ const { handleDelete } = await useBlueprintDelete()
 				</template>
 			</div>
 		</div>
+
+		<DeleteBlueprintDialog
+			:blueprint="blueprint"
+			:open="deleteDialogOpen"
+			@update:open="deleteDialogOpen = $event"
+			@deleted="handleBlueprintDeleted"
+		/>
 	</div>
 </template>

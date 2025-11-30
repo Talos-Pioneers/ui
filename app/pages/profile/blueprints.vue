@@ -169,7 +169,7 @@ const handlePerPageUpdate = (perPageValue: number) => {
             :per-page="perPage" :loading="blueprintsStatus === 'pending'" :error="blueprintsError"
             :sort-options="sortOptions" @update:filter="setFilter" @update:sort="setSort"
             @update:current-page="handlePageUpdate" @update:per-page="handlePerPageUpdate" @clear-filter="clearFilter"
-            @clear-all-filters="clearAllFilters" @toggle-sort="toggleSort">
+            @clear-all-filters="clearAllFilters" @toggle-sort="toggleSort" @blueprint-deleted="blueprintsRefresh">
             <template #banner>
                 <ProfileBanner />
             </template>

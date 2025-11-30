@@ -280,5 +280,12 @@
 	"serverRegion.asia": "아시아",
 	"tagGroup.blueprint_tags": "설계도 태그",
 	"tagGroup.blueprint_tier": "설계도 계층",
-	"tagGroup.blueprint_type": "설계도 유형"
+	"tagGroup.blueprint_type": "설계도 유형",
+	"deleteBlueprint.title": "설계도 삭제",
+	"deleteBlueprint.description": "이 설계도를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.",
+	"deleteBlueprint.cancel": "취소",
+	"deleteBlueprint.confirm": "삭제",
+	"deleteBlueprint.deleting": "삭제 중...",
+	"deleteBlueprint.success": "설계도가 성공적으로 삭제되었습니다.",
+	"deleteBlueprint.error": "설계도 삭제에 실패했습니다. 다시 시도해 주세요."
 }
