@@ -4,6 +4,7 @@ import backgroundImage from '@/assets/img/banners/factory1.png'
 import BannerDivider from './BannerDivider.vue'
 import InfoIcon from '../icons/InfoIcon.vue'
 import BookIcon from '../icons/BookIcon.vue'
+import AddBlueprintIcon from '../icons/AddBlueprintIcon.vue'
 const { t } = useI18n()
 </script>
 <template>
@@ -38,7 +39,7 @@ const { t } = useI18n()
 					rounded="base"
 				>
 					<NuxtLinkLocale to="/blueprints/create">
-						<BookIcon class="size-4 sm:size-6" />
+						<AddBlueprintIcon class="size-4 sm:size-6" />
 						<span
 							class="flex gap-3 items-center text-cool-gray-100"
 						>
