@@ -38,9 +38,11 @@ const props = withDefaults(
 		placeholder?: string
 		class?: string
 		displayTags?: boolean
+		withPattern?: boolean
 	}>(),
 	{
 		displayTags: true,
+		withPattern: false,
 	}
 )
 
@@ -64,7 +66,11 @@ const filteredOptions = computed(() =>
 		:class="cn('relative', props.class)"
 	>
 		<ComboboxAnchor>
-			<TagsInput v-model="modelValue" delimiter="">
+			<TagsInput
+				v-model="modelValue"
+				delimiter=""
+				:with-pattern="props.withPattern"
+			>
 				<template v-if="props.displayTags">
 					<TagsInputItem
 						v-for="item in modelValue"

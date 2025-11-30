@@ -6,9 +6,17 @@ import { TagsInputRoot, useForwardPropsEmits } from 'reka-ui'
 import { cn } from '@/lib/utils'
 import inputPattern from '@/assets/img/input-pattern.png'
 
-const props = defineProps<
-	TagsInputRootProps & { class?: HTMLAttributes['class'] }
->()
+const props = withDefaults(
+	defineProps<
+		TagsInputRootProps & {
+			class?: HTMLAttributes['class']
+			withPattern?: boolean
+		}
+	>(),
+	{
+		withPattern: false,
+	}
+)
 const emits = defineEmits<TagsInputRootEmits>()
 
 const delegatedProps = reactiveOmit(props, 'class')
@@ -29,7 +37,9 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
 				props.class
 			)
 		"
-		:style="{ backgroundImage: `url(${inputPattern})` }"
+		:style="{
+			backgroundImage: withPattern ? `url(${inputPattern})` : undefined,
+		}"
 	>
 		<slot v-bind="slotProps" />
 	</TagsInputRoot>

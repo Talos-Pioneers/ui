@@ -610,6 +610,7 @@ const unifiedFilterModel = computed({
 						>
 							<SearchableTagsInput
 								v-model="unifiedFilterModel"
+								:with-pattern="true"
 								:display-tags="false"
 								:options="
 									unifiedFilterOptions.map((opt) => ({
