@@ -6,6 +6,7 @@ import UserIcon from '~/components/icons/UserIcon.vue'
 import GoogleIcon from '~/components/icons/GoogleIcon.vue'
 import DiscordIcon from '~/components/icons/DiscordIcon.vue'
 import { FieldError } from '../ui/field'
+import * as Sentry from '@sentry/nuxt'
 
 const config = useSanctumConfig()
 const { locale, t } = useI18n()
@@ -35,6 +36,7 @@ const submit = () => {
 			isSubmitted.value = true
 		})
 		.catch((error) => {
+			Sentry.captureException(error)
 			console.log(error)
 		})
 }
@@ -178,7 +180,9 @@ const handleOpenLogin = () => {
 						<span class="text-cool-gray-40 font-sans">]</span>
 					</h1>
 					<!-- Placeholder for special font glyphs -->
-					<div class="text-sm text-cool-gray-40 font-sarkaz mt-3 md:mt-0">
+					<div
+						class="text-sm text-cool-gray-40 font-sarkaz mt-3 md:mt-0"
+					>
 						<!-- Special font glyphs will be rendered here -->
 						<span>{{ t('auth.register.successTitle') }}</span>
 					</div>
