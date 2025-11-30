@@ -275,7 +275,10 @@
     "components.banners.profileBanner.description": "Quản lý và tổ chức bản vẽ của bạn. Tạo bản vẽ mới để chia sẻ với cộng đồng.",
     "components.banners.profileBanner.createButton": "Tạo Bản vẽ Mới",
     "pages.home.siteName": "Talos Pioneers",
-    "serverRegion.cn": "CN",
-    "serverRegion.america_europe": "America/Europe",
-    "serverRegion.asia": "Asia"
+    "serverRegion.cn": "Trung Quốc",
+    "serverRegion.america_europe": "Mỹ/Châu Âu",
+    "serverRegion.asia": "Châu Á",
+    "tagGroup.blueprint_tags": "Thẻ Bản vẽ",
+    "tagGroup.blueprint_tier": "Cấp Độ Bản vẽ",
+    "tagGroup.blueprint_type": "Loại Bản vẽ"
 }

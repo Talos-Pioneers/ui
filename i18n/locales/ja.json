@@ -275,7 +275,10 @@
     "components.banners.profileBanner.description": "設計図を管理および整理します。コミュニティと共有する新しい設計図を作成します。",
     "components.banners.profileBanner.createButton": "新しい設計図を作成",
     "pages.home.siteName": "Talos Pioneers",
-    "serverRegion.cn": "CN",
-    "serverRegion.america_europe": "America/Europe",
-    "serverRegion.asia": "Asia"
+    "serverRegion.cn": "中国",
+    "serverRegion.america_europe": "アメリカ／ヨーロッパ",
+    "serverRegion.asia": "アジア",
+    "tagGroup.blueprint_tags": "設計図タグ",
+    "tagGroup.blueprint_tier": "設計図階層",
+    "tagGroup.blueprint_type": "設計図タイプ"
 }

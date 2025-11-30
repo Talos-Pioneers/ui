@@ -275,7 +275,10 @@
 	"components.banners.profileBanner.description": "설계도를 관리하고 정리하세요. 커뮤니티와 공유할 새로운 설계도를 만드세요.",
 	"components.banners.profileBanner.createButton": "새 설계도 만들기",
 	"pages.home.siteName": "Talos Pioneers",
-	"serverRegion.cn": "CN",
-	"serverRegion.america_europe": "America/Europe",
-	"serverRegion.asia": "Asia"
+	"serverRegion.cn": "중국",
+	"serverRegion.america_europe": "미국/유럽",
+	"serverRegion.asia": "아시아",
+	"tagGroup.blueprint_tags": "설계도 태그",
+	"tagGroup.blueprint_tier": "설계도 계층",
+	"tagGroup.blueprint_type": "설계도 유형"
 }

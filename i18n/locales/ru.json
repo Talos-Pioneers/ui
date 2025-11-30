@@ -275,7 +275,10 @@
 	"components.banners.profileBanner.description": "Управляйте и организуйте свои чертежи. Создавайте новые чертежи для обмена с сообществом.",
 	"components.banners.profileBanner.createButton": "Создать новый чертеж",
 	"pages.home.siteName": "Talos Pioneers",
-	"serverRegion.cn": "CN",
-	"serverRegion.america_europe": "America/Europe",
-	"serverRegion.asia": "Asia"
+	"serverRegion.cn": "Китай",
+	"serverRegion.america_europe": "Америка/Европа",
+	"serverRegion.asia": "Азия",
+	"tagGroup.blueprint_tags": "Теги чертежей",
+	"tagGroup.blueprint_tier": "Уровень чертежей",
+	"tagGroup.blueprint_type": "Тип чертежей"
 }

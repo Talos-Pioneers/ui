@@ -275,7 +275,10 @@
 	"components.banners.profileBanner.description": "Kelola dan organisasikan cetak biru Anda. Buat cetak biru baru untuk dibagikan dengan komunitas.",
 	"components.banners.profileBanner.createButton": "Buat Cetak Biru Baru",
 	"pages.home.siteName": "Talos Pioneers",
-	"serverRegion.cn": "CN",
-	"serverRegion.america_europe": "America/Europe",
-	"serverRegion.asia": "Asia"
+	"serverRegion.cn": "Tiongkok",
+	"serverRegion.america_europe": "Amerika/Europe",
+	"serverRegion.asia": "Asia",
+	"tagGroup.blueprint_tags": "Tag Cetak Biru",
+	"tagGroup.blueprint_tier": "Tier Cetak Biru",
+	"tagGroup.blueprint_type": "Tipe Cetak Biru"
 }

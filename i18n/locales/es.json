@@ -276,6 +276,9 @@
 	"components.banners.profileBanner.createButton": "Crear nuevo plano",
 	"pages.home.siteName": "Talos Pioneers",
 	"serverRegion.cn": "CN",
-	"serverRegion.america_europe": "America/Europe",
-	"serverRegion.asia": "Asia"
+	"serverRegion.america_europe": "America/Europa",
+	"serverRegion.asia": "Asia",
+	"tagGroup.blueprint_tags": "Etiquetas de plano",
+	"tagGroup.blueprint_tier": "Nivel de plano",
+	"tagGroup.blueprint_type": "Tipo de plano"
 }

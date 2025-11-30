@@ -275,7 +275,10 @@
 	"components.banners.profileBanner.description": "Gérez et organisez vos plans. Créez de nouveaux plans à partager avec la communauté.",
 	"components.banners.profileBanner.createButton": "Créer un nouveau plan",
 	"pages.home.siteName": "Talos Pioneers",
-	"serverRegion.cn": "CN",
-	"serverRegion.america_europe": "America/Europe",
-	"serverRegion.asia": "Asia"
+	"serverRegion.cn": "Chine",
+	"serverRegion.america_europe": "Amérique/Europe",
+	"serverRegion.asia": "Asie",
+	"tagGroup.blueprint_tags": "Tags de plan",
+	"tagGroup.blueprint_tier": "Niveau de plan",
+	"tagGroup.blueprint_type": "Type de plan"
 }

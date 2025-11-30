@@ -460,11 +460,7 @@ const unifiedFilterModel = computed({
 							>
 								<label
 									class="text-xs font-medium text-sidebar-foreground/70 mb-2 block"
-									>{{
-										t(
-											'components.blueprints.list.filters.tags'
-										)
-									}}</label
+									>{{ t(`tagGroup.${group}`) }}</label
 								>
 								<div class="space-y-2 max-h-48 overflow-y-auto">
 									<CheckboxGroupRoot

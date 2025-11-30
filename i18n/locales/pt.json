@@ -275,7 +275,10 @@
 	"components.banners.profileBanner.description": "Gerencie e organize seus projetos. Crie novos projetos para compartilhar com a comunidade.",
 	"components.banners.profileBanner.createButton": "Criar Novo Projeto",
 	"pages.home.siteName": "Talos Pioneers",
-	"serverRegion.cn": "CN",
-	"serverRegion.america_europe": "America/Europe",
-	"serverRegion.asia": "Asia"
+	"serverRegion.cn": "China",
+	"serverRegion.america_europe": "América/Europa",
+	"serverRegion.asia": "Asia",
+	"tagGroup.blueprint_tags": "Tags de Projeto",
+	"tagGroup.blueprint_tier": "Tier de Projeto",
+	"tagGroup.blueprint_type": "Tipo de Projeto"
 }

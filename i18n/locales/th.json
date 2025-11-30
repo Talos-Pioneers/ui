@@ -275,7 +275,10 @@
 	"components.banners.profileBanner.description": "จัดการและจัดระเบียบแบบแปลนของคุณ สร้างแบบแปลนใหม่เพื่อแบ่งปันกับชุมชน",
 	"components.banners.profileBanner.createButton": "สร้างแบบแปลนใหม่",
 	"pages.home.siteName": "Talos Pioneers",
-	"serverRegion.cn": "CN",
-	"serverRegion.america_europe": "America/Europe",
-	"serverRegion.asia": "Asia"
+	"serverRegion.cn": "จีน",
+	"serverRegion.america_europe": "อเมริกา/ยุโรป",
+	"serverRegion.asia": "อะเซีย",
+	"tagGroup.blueprint_tags": "แท็กแบบแปลน",
+	"tagGroup.blueprint_tier": "ระดับแบบแปลน",
+	"tagGroup.blueprint_type": "ประเภทแบบแปลน"
 }

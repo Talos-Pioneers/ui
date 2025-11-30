@@ -277,5 +277,8 @@
 	"pages.home.siteName": "Talos Pioneers",
 	"serverRegion.cn": "CN",
 	"serverRegion.america_europe": "America/Europe",
-	"serverRegion.asia": "Asia"
+	"serverRegion.asia": "Asia",
+	"tagGroup.blueprint_tags": "Blueprint Tags",
+	"tagGroup.blueprint_tier": "Blueprint Tier",
+	"tagGroup.blueprint_type": "Blueprint Type"
 }
