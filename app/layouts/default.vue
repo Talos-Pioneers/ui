@@ -43,20 +43,20 @@ onBeforeMount(() => {
 			</Head>
 
 			<Body>
-				<Transition name="fade">
-					<div
-						v-if="loader"
-						class="fixed inset-0 bg-[#D0D0D0] z-50 flex items-center justify-center"
-					>
-						<video
-							src="https://assets.talospioneers.com/intro.webm"
-							autoplay
-							muted
-							class="size-128"
-						/>
-					</div>
-				</Transition>
-				<TooltipProvider v-show="!loader">
+				<TooltipProvider>
+					<Transition name="fade">
+						<div
+							v-if="loader"
+							class="fixed inset-0 bg-[#D0D0D0] z-50 flex items-center justify-center"
+						>
+							<video
+								src="https://assets.talospioneers.com/intro.webm"
+								autoplay
+								muted
+								class="size-128"
+							/>
+						</div>
+					</Transition>
 					<Toaster />
 					<div
 						class="[--header-height:calc(--spacing(16.5))] flex flex-col min-h-screen"

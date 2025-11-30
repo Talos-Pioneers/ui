@@ -283,11 +283,13 @@ useHead({
 <h2><strong>12. DO UNITED STATES RESIDENTS HAVE SPECIFIC PRIVACY RIGHTS?</strong></h2><strong>In Short: </strong>If you are a resident of California, Colorado, Connecticut, Delaware, Florida, Indiana, Iowa, Kentucky, Maryland, Minnesota, Montana, Nebraska, New Hampshire, New Jersey, Oregon, Rhode Island, Tennessee, Texas, Utah, or Virginia , you may have the right to request access to and receive details about the personal information we maintain about you and how we have processed it, correct inaccuracies, get a copy of, or delete your personal information. You may also have the right to withdraw your consent to our processing of your personal information. These rights may be limited in some circumstances by applicable law. More information is provided below.
 <h3><strong>Categories of Personal Information We Collect</strong></h3>The table below shows the categories of personal information we have collected in the past twelve (12) months. The table includes illustrative examples of each category and does not reflect the personal information we collect from you. For a comprehensive inventory of all personal information we process, please refer to the section " <a href="#infocollect">WHAT INFORMATION DO WE COLLECT?</a> "
 <table>
-  <tr>
-    <th><strong>Category</strong></th>
-    <th><strong>Examples</strong></th>
-    <th><strong>Collected</strong></th>
-  </tr>
+  <thead>
+    <tr>
+      <th><strong>Category</strong></th>
+      <th><strong>Examples</strong></th>
+      <th><strong>Collected</strong></th>
+    </tr>
+  </thead>
   <tbody>
     <tr>
       <td>
