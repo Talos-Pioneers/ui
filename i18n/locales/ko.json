@@ -287,5 +287,6 @@
 	"deleteBlueprint.confirm": "삭제",
 	"deleteBlueprint.deleting": "삭제 중...",
 	"deleteBlueprint.success": "설계도가 성공적으로 삭제되었습니다.",
-	"deleteBlueprint.error": "설계도 삭제에 실패했습니다. 다시 시도해 주세요."
+	"deleteBlueprint.error": "설계도 삭제에 실패했습니다. 다시 시도해 주세요.",
+	"copy.information": "설계도는 동일한 서버 지역에 제한됩니다."
 }

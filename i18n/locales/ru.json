@@ -287,5 +287,6 @@
 	"deleteBlueprint.confirm": "Удалить",
 	"deleteBlueprint.deleting": "Удаление...",
 	"deleteBlueprint.success": "Чертеж успешно удален.",
-	"deleteBlueprint.error": "Не удалось удалить чертеж. Пожалуйста, попробуйте еще раз."
+	"deleteBlueprint.error": "Не удалось удалить чертеж. Пожалуйста, попробуйте еще раз.",
+	"copy.information": "Чертежи ограничены одной и той же региональной сетью."
 }

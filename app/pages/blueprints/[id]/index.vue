@@ -35,6 +35,11 @@ import {
 import FacilityList from '~/components/blueprints/FacilityList.vue'
 import ItemList from '~/components/blueprints/ItemList.vue'
 import DeleteBlueprintDialog from '~/components/blueprints/DeleteBlueprintDialog.vue'
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from '~/components/ui/tooltip'
 
 type BlueprintResponse = {
 	data: Blueprint
@@ -86,7 +91,7 @@ const ogImage = computed(() => {
 		return `${window.location.origin}/logo.png`
 	}
 	const firstImage = blueprint.value.gallery[0]
-	const imageUrl = firstImage.url || firstImage.thumbnail || '/logo.png'
+	const imageUrl = firstImage?.url || firstImage?.thumbnail || '/logo.png'
 	// If image URL is already absolute, return it; otherwise make it absolute
 	if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
 		return imageUrl
@@ -771,14 +776,25 @@ const handleBlueprintDeleted = () => {
 						class="rounded-xl border border-cool-gray-20 bg-white dark:bg-cool-gray-95 p-6 space-y-5"
 					>
 						<div class="grid grid-cols-2 gap-2.5 w-full">
-							<Button
-								class="w-full justify-between before:hidden"
-								rounded="base"
-								@click="handleCopyCode"
-							>
-								<CopyIcon class="size-4.5" />
-								{{ t('pages.blueprints.detail.copyCode') }}
-							</Button>
+							<Tooltip>
+								<TooltipTrigger as-child>
+									<Button
+										class="w-full justify-between before:hidden"
+										rounded="base"
+										@click="handleCopyCode"
+									>
+										<CopyIcon class="size-4.5" />
+										{{
+											t(
+												'pages.blueprints.detail.copyCode'
+											)
+										}}
+									</Button>
+								</TooltipTrigger>
+								<TooltipContent>
+									{{ t('copy.information') }}
+								</TooltipContent>
+							</Tooltip>
 							<Button
 								:variant="
 									blueprint.is_liked ? 'default' : 'outline'

@@ -287,5 +287,6 @@
     "deleteBlueprint.confirm": "删除",
     "deleteBlueprint.deleting": "删除中...",
     "deleteBlueprint.success": "蓝图已成功删除。",
-    "deleteBlueprint.error": "删除蓝图失败。请重试。"
+    "deleteBlueprint.error": "删除蓝图失败。请重试。",
+    "copy.information": "蓝图被限制在同一服务器区域。"
 }

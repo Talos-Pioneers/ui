@@ -287,5 +287,6 @@
     "deleteBlueprint.confirm": "削除",
     "deleteBlueprint.deleting": "削除中...",
     "deleteBlueprint.success": "設計図が正常に削除されました。",
-    "deleteBlueprint.error": "設計図の削除に失敗しました。もう一度お試しください。"
+    "deleteBlueprint.error": "設計図の削除に失敗しました。もう一度お試しください。",
+    "copy.information": "設計図は同じサーバー地域に制限されています。"
 }

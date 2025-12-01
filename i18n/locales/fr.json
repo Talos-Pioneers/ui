@@ -287,5 +287,6 @@
 	"deleteBlueprint.confirm": "Supprimer",
 	"deleteBlueprint.deleting": "Suppression en cours...",
 	"deleteBlueprint.success": "Plan supprimé avec succès.",
-	"deleteBlueprint.error": "Échec de la suppression du plan. Veuillez réessayer."
+	"deleteBlueprint.error": "Échec de la suppression du plan. Veuillez réessayer.",
+	"copy.information": "Les plans sont restreints à la même région du serveur."
 }

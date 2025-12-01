@@ -287,5 +287,6 @@
     "deleteBlueprint.confirm": "Xóa",
     "deleteBlueprint.deleting": "Đang xóa...",
     "deleteBlueprint.success": "Đã xóa bản vẽ thành công.",
-    "deleteBlueprint.error": "Không thể xóa bản vẽ. Vui lòng thử lại."
+    "deleteBlueprint.error": "Không thể xóa bản vẽ. Vui lòng thử lại.",
+    "copy.information": "Bản vẽ được giới hạn trong cùng một khu vực server."
 }

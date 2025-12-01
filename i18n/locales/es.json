@@ -287,5 +287,6 @@
 	"deleteBlueprint.confirm": "Eliminar",
 	"deleteBlueprint.deleting": "Eliminando...",
 	"deleteBlueprint.success": "Plano eliminado exitosamente.",
-	"deleteBlueprint.error": "No se pudo eliminar el plano. Por favor intente nuevamente."
+	"deleteBlueprint.error": "No se pudo eliminar el plano. Por favor intente nuevamente.",
+	"copy.information": "Los planos están restringidos a la misma región del servidor."
 }

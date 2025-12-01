@@ -24,6 +24,7 @@ import {
 } from '~/constants/blueprintOptions'
 import ServerRegionIcon from '../icons/ServerRegionIcon.vue'
 import DeleteBlueprintDialog from './DeleteBlueprintDialog.vue'
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 
 const props = defineProps<{
 	blueprint: Blueprint
@@ -141,19 +142,30 @@ const handleBlueprintDeleted = () => {
 				/>
 			</NuxtLinkLocale>
 			<div class="absolute bottom-2 right-2 z-10">
-				<button
-					class="group/copy-button p-2 bg-black/50 border border-cool-gray-60 hover:border-cool-gray-80 rounded-full hover:bg-white transition-colors cursor-pointer"
-					:title="
-						copied
-							? t('components.blueprints.card.copyTooltip.copied')
-							: t('components.blueprints.card.copyTooltip.copy')
-					"
-					@click="handleCopyCode"
-				>
-					<CopyIcon
-						class="w-5 h-5 text-cool-gray-30 group-hover/copy-button:text-cool-gray-80 transition-colors"
-					/>
-				</button>
+				<Tooltip>
+					<TooltipTrigger as-child>
+						<button
+							class="group/copy-button p-2 bg-black/50 border border-cool-gray-60 hover:border-cool-gray-80 rounded-full hover:bg-white transition-colors cursor-pointer"
+							:title="
+								copied
+									? t(
+											'components.blueprints.card.copyTooltip.copied'
+										)
+									: t(
+											'components.blueprints.card.copyTooltip.copy'
+										)
+							"
+							@click="handleCopyCode"
+						>
+							<CopyIcon
+								class="w-5 h-5 text-cool-gray-30 group-hover/copy-button:text-cool-gray-80 transition-colors"
+							/>
+						</button>
+					</TooltipTrigger>
+					<TooltipContent>
+						{{ t('copy.information') }}
+					</TooltipContent>
+				</Tooltip>
 			</div>
 		</div>
 

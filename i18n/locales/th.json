@@ -287,5 +287,6 @@
 	"deleteBlueprint.confirm": "ลบ",
 	"deleteBlueprint.deleting": "กำลังลบ...",
 	"deleteBlueprint.success": "ลบแบบแปลนสำเร็จแล้ว",
-	"deleteBlueprint.error": "ลบแบบแปลนไม่สำเร็จ โปรดลองอีกครั้ง"
+	"deleteBlueprint.error": "ลบแบบแปลนไม่สำเร็จ โปรดลองอีกครั้ง",
+	"copy.information": "แบบแปลนจะถูกจำกัดไว้ในพื้นที่ภูมิศาสตร์เดียวกัน"
 }

@@ -287,5 +287,6 @@
 	"deleteBlueprint.confirm": "Excluir",
 	"deleteBlueprint.deleting": "Excluindo...",
 	"deleteBlueprint.success": "Projeto excluído com sucesso.",
-	"deleteBlueprint.error": "Falha ao excluir o projeto. Por favor, tente novamente."
+	"deleteBlueprint.error": "Falha ao excluir o projeto. Por favor, tente novamente.",
+	"copy.information": "Projetos são restritos à mesma região do servidor."
 }

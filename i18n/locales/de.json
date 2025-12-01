@@ -287,5 +287,6 @@
 	"deleteBlueprint.confirm": "Löschen",
 	"deleteBlueprint.deleting": "Wird gelöscht...",
 	"deleteBlueprint.success": "Blueprint erfolgreich gelöscht.",
-	"deleteBlueprint.error": "Blueprint konnte nicht gelöscht werden. Bitte versuchen Sie es erneut."
+	"deleteBlueprint.error": "Blueprint konnte nicht gelöscht werden. Bitte versuchen Sie es erneut.",
+	"copy.information": "Blueprints sind auf die gleiche Serverregion beschränkt."
 }

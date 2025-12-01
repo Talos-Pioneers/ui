@@ -287,5 +287,6 @@
 	"deleteBlueprint.confirm": "Hapus",
 	"deleteBlueprint.deleting": "Menghapus...",
 	"deleteBlueprint.success": "Cetak biru berhasil dihapus.",
-	"deleteBlueprint.error": "Gagal menghapus cetak biru. Silakan coba lagi."
+	"deleteBlueprint.error": "Gagal menghapus cetak biru. Silakan coba lagi.",
+	"copy.information": "Cetak biru dibatasi pada region server yang sama."
 }

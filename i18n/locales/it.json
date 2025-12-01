@@ -287,5 +287,6 @@
 	"deleteBlueprint.confirm": "Elimina",
 	"deleteBlueprint.deleting": "Eliminazione in corso...",
 	"deleteBlueprint.success": "Progetto eliminato con successo.",
-	"deleteBlueprint.error": "Impossibile eliminare il progetto. Riprova."
+	"deleteBlueprint.error": "Impossibile eliminare il progetto. Riprova.",
+	"copy.information": "I progetti sono limitati alla stessa regione server."
 }
