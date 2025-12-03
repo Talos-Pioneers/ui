@@ -79,7 +79,6 @@ const submitReport = async () => {
 	} catch (error: unknown) {
 		const { isValidationError, code, bag } = useSanctumError(error)
 		let errorMessage = 'Failed to submit report. Please try again.'
-		console.log(error)
 
 		// Check if it's a duplicate report (422 with message)
 		if (code === 422) {
@@ -148,12 +147,8 @@ const handleModalClose = () => {
 						:disabled="isReporting"
 						:aria-invalid="!!reportForm.errors.reason"
 					/>
-					<FieldError
-						:errors="
-							reportForm.errors.reason ||
-							reportForm.errors.reportable_id
-						"
-					/>
+					<FieldError :errors="reportForm.errors.reason" />
+					<FieldError :errors="reportForm.errors.reportable_id" />
 				</div>
 
 				<div
