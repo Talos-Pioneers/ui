@@ -39,13 +39,16 @@ const { t } = useI18n()
 					rounded="base"
 				>
 					<NuxtLinkLocale to="/blueprints/create">
-						<AddBlueprintIcon class="size-4 sm:size-6" />
+						<AddBlueprintIcon
+							class="size-4 sm:size-6 text-cool-gray-100"
+						/>
 						<span
 							class="flex gap-3 items-center text-cool-gray-100"
 						>
-							<span class="leading-none text-sm sm:text-xl">{{
-								t('mainBanner.createBlueprint')
-							}}</span>
+							<span
+								class="leading-none text-sm sm:text-xl text-cool-gray-100"
+								>{{ t('mainBanner.createBlueprint') }}</span
+							>
 							<svg
 								width="8"
 								height="12"

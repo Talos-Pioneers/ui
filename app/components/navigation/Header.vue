@@ -73,20 +73,20 @@ const navigationItems = [
 			<template v-if="!isAuthenticated">
 				<Button
 					class="min-w-40 px-4.5 justify-between hidden md:flex"
-					@click="open"
 					variant="default"
+					@click="open"
 				>
 					<span class="flex items-center gap-2.5">
 						<LoginIcon class="h-5" />
-						<span class="h-3.5 w-px bg-cool-gray-50"></span>
+						<span class="h-3.5 w-px bg-cool-gray-50" />
 					</span>
 					{{ t('components.navigation.header.signIn') }}
 				</Button>
 				<Button
-					@click="open"
 					class="md:hidden"
 					variant="default"
 					size="icon-lg"
+					@click="open"
 				>
 					<LoginIcon class="h-5" />
 				</Button>
@@ -95,7 +95,7 @@ const navigationItems = [
 				<DropdownMenu>
 					<DropdownMenuTrigger as-child>
 						<Button variant="default" size="icon-lg">
-							<UserIcon class="h-5" />
+							<UserIcon class="h-5 text-cool-gray-100" />
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end">
@@ -119,8 +119,8 @@ const navigationItems = [
 						</DropdownMenuItem>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem
-							@click="handleLogout"
 							variant="destructive"
+							@click="handleLogout"
 						>
 							{{ t('components.navigation.header.menu.logout') }}
 						</DropdownMenuItem>
