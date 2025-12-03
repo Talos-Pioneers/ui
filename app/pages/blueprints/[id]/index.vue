@@ -353,7 +353,7 @@ const handleCopyCode = async () => {
 	await copy(blueprint.value.code)
 	toast.success(t('pages.blueprints.detail.toast.codeCopied'))
 
-	if (!isAuthenticated.value || isCopyingCode.value) {
+	if (isCopyingCode.value) {
 		return
 	}
 
@@ -368,6 +368,9 @@ const handleCopyCode = async () => {
 		if (blueprintResponse.value?.data) {
 			blueprintResponse.value.data.copies_count = response.copies_count
 		}
+	} catch (error) {
+		const { code, bag, isValidationError } = useSanctumError(error)
+		console.log(code, bag, isValidationError)
 	} finally {
 		isCopyingCode.value = false
 	}
