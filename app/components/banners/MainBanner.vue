@@ -3,9 +3,10 @@ import { Button } from '~/components/ui/button'
 import backgroundImage from '@/assets/img/banners/factory1.png'
 import BannerDivider from './BannerDivider.vue'
 import InfoIcon from '../icons/InfoIcon.vue'
-import BookIcon from '../icons/BookIcon.vue'
 import AddBlueprintIcon from '../icons/AddBlueprintIcon.vue'
 const { t } = useI18n()
+
+const { isAuthenticated } = useSanctumAuth()
 </script>
 <template>
 	<div
@@ -38,7 +39,9 @@ const { t } = useI18n()
 					size="responsive-lg"
 					rounded="base"
 				>
-					<NuxtLinkLocale to="/blueprints/create">
+					<NuxtLinkLocale
+						:to="isAuthenticated ? '/blueprints/create' : '/login'"
+					>
 						<AddBlueprintIcon
 							class="size-4 sm:size-6 text-cool-gray-100"
 						/>
