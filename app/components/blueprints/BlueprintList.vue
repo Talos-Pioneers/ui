@@ -180,11 +180,11 @@ const handleRegionClick = (regionValue: string) => {
 }
 
 const handleServerRegionChange = (serverRegionValue: string) => {
-	const newValue =
-		props.filters.server_region === serverRegionValue
-			? null
-			: serverRegionValue
-	emit('update:filter', 'server_region', newValue)
+	if (serverRegionValue === 'any') {
+		emit('clear-filter', 'server_region')
+	} else {
+		emit('update:filter', 'server_region', serverRegionValue)
+	}
 }
 
 const currentPageModel = computed({
@@ -648,6 +648,13 @@ const unifiedFilterModel = computed({
 									>
 										{{ option.label }}
 									</SelectItem>
+									<SelectItem value="any">
+										{{
+											t(
+												'pages.blueprints.create.anyRegion'
+											)
+										}}
+									</SelectItem>
 								</SelectContent>
 							</Select>
 						</div>
@@ -778,16 +785,16 @@ const unifiedFilterModel = computed({
 						v-if="!loading && !error"
 						class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"
 					>
-					<BlueprintCard
-						v-for="blueprint in blueprints"
-						:key="blueprint.id"
-						:blueprint="blueprint"
-						@filter-tag="handleTagFilter"
-						@filter-region="handleRegionFilter"
-						@filter-server-region="handleServerRegionFilter"
-						@filter-author="handleAuthorFilter"
-						@deleted="emit('blueprint-deleted')"
-					/>
+						<BlueprintCard
+							v-for="blueprint in blueprints"
+							:key="blueprint.id"
+							:blueprint="blueprint"
+							@filter-tag="handleTagFilter"
+							@filter-region="handleRegionFilter"
+							@filter-server-region="handleServerRegionFilter"
+							@filter-author="handleAuthorFilter"
+							@deleted="emit('blueprint-deleted')"
+						/>
 
 						<div
 							v-if="blueprints.length === 0"
