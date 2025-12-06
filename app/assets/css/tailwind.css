@@ -72,15 +72,15 @@
 /* Locale-specific primary font overrides */
 html[lang='zh-CN'],
 html[lang='ko'] {
-	--font-sans: 'HarmonyOS_Sans', 'HarmonyOS_Sans_SC', sans-serif;
+	--font-sans: 'HarmonyOS_Sans_SC', 'HarmonyOS_Sans', sans-serif;
 }
 
 html[lang='zh-TW'] {
-	--font-sans: 'HarmonyOS_Sans', 'HarmonyOS_Sans_TC', sans-serif;
+	--font-sans: 'HarmonyOS_Sans_TC', 'HarmonyOS_Sans', sans-serif;
 }
 
 html[lang='ja'] {
-	--font-sans: 'HarmonyOS_Sans', 'Noto Sans JP', sans-serif;
+	--font-sans: 'Noto Sans JP', 'HarmonyOS_Sans', sans-serif;
 }
 
 .dark {

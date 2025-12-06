@@ -159,20 +159,20 @@ export default defineNuxtConfig({
 			{
 				name: 'HarmonyOS_Sans',
 				provider: 'local',
-				weights: [100, 300, 400, 500, 700, 900],
-				fallbacks: ['sans-serif'],
+				weights: [100, 300, 400, 500, 700, 900, 1000],
+				// fallbacks: ['sans-serif'],
 			},
 			{
 				name: 'HarmonyOS_Sans_SC',
 				provider: 'local',
-				weights: [100, 300, 400, 500, 700, 900],
-				fallbacks: ['sans-serif'],
+				weights: [100, 300, 400, 500, 700, 900, 1000],
+				// fallbacks: ['sans-serif'],
 			},
 			{
 				name: 'HarmonyOS_Sans_TC',
 				provider: 'local',
-				weights: [100, 300, 400, 500, 700, 900],
-				fallbacks: ['sans-serif'],
+				weights: [100, 300, 400, 500, 700, 900, 1000],
+				// fallbacks: ['sans-serif'],
 			},
 			{
 				name: 'EndfieldByButan',
