@@ -286,6 +286,8 @@
 	"serverRegion.cn": "중국",
 	"serverRegion.america_europe": "미국/유럽",
 	"serverRegion.asia": "아시아",
+	"region.wuling": "무릉",
+	"region.valley_iv": "4번 협곡",
 	"tagGroup.blueprint_tags": "설계도 태그",
 	"tagGroup.blueprint_tier": "설계도 계층",
 	"tagGroup.blueprint_type": "설계도 유형",

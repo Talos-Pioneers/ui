@@ -286,6 +286,8 @@
 	"serverRegion.cn": "Chine",
 	"serverRegion.america_europe": "Amérique/Europe",
 	"serverRegion.asia": "Asie",
+	"region.wuling": "Wuling",
+	"region.valley_iv": "Valley IV",
 	"tagGroup.blueprint_tags": "Tags de plan",
 	"tagGroup.blueprint_tier": "Niveau de plan",
 	"tagGroup.blueprint_type": "Type de plan",

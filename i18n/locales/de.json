@@ -286,6 +286,8 @@
 	"serverRegion.cn": "China",
 	"serverRegion.america_europe": "Amerika/Europa",
 	"serverRegion.asia": "Asien",
+	"region.wuling": "Wuling",
+	"region.valley_iv": "Valley IV",
 	"tagGroup.blueprint_tags": "Blueprint-Tags",
 	"tagGroup.blueprint_tier": "Blueprint-Stufe",
 	"tagGroup.blueprint_type": "Blueprint-Typ",

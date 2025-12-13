@@ -468,7 +468,7 @@ const unifiedFilterModel = computed({
 									/>
 									<span
 										class="text-xs text-cool-gray-70 font-medium"
-										>{{ region.label }}</span
+										>{{ t(`region.${region.value}`) }}</span
 									>
 								</button>
 							</div>
@@ -738,7 +738,7 @@ const unifiedFilterModel = computed({
 										:key="option.value"
 										:value="option.value"
 									>
-										{{ option.label }}
+										{{ t(`serverRegion.${option.value}`) }}
 									</SelectItem>
 									<SelectItem value="any">
 										{{

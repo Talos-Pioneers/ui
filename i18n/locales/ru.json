@@ -286,6 +286,8 @@
 	"serverRegion.cn": "Китай",
 	"serverRegion.america_europe": "Америка/Европа",
 	"serverRegion.asia": "Азия",
+	"region.wuling": "Wuling",
+	"region.valley_iv": "Valley IV",
 	"tagGroup.blueprint_tags": "Теги чертежей",
 	"tagGroup.blueprint_tier": "Уровень чертежей",
 	"tagGroup.blueprint_type": "Тип чертежей",
