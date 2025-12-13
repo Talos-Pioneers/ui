@@ -60,6 +60,8 @@ const {
         likes_count: { type: "number" },
         copies_count: { type: "number" },
         "tags.id": { type: "array" },
+        width: { type: "number" },
+        height: { type: "number" },
     },
     sort: {
         default: "created_at",
@@ -136,6 +138,24 @@ const activeFilterTags = computed(() => {
                 const factoryItem = items.value.find((i) => i.slug == item);
                 filterTags.push({ filterKey: key, label: factoryItem?.name ?? String(item), value: item });
             }
+            return;
+        }
+
+        if (key === "width" && value !== null && value !== "") {
+            filterTags.push({
+                filterKey: key,
+                label: `${t("components.blueprints.list.filters.width")}: ≤${value}`,
+                value: value,
+            });
+            return;
+        }
+
+        if (key === "height" && value !== null && value !== "") {
+            filterTags.push({
+                filterKey: key,
+                label: `${t("components.blueprints.list.filters.height")}: ≤${value}`,
+                value: value,
+            });
             return;
         }
     });

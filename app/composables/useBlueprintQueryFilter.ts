@@ -49,6 +49,8 @@ export const useBlueprintQueryFilter = async (
 			likes_count: { type: 'number' },
 			copies_count: { type: 'number' },
 			'tags.id': { type: 'array' },
+			width: { type: 'number' },
+			height: { type: 'number' },
 		},
 		sort: options?.sort ?? {
 			default: '-created_at',

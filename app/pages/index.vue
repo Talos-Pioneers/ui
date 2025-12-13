@@ -108,9 +108,7 @@ const activeFilterTags = computed(() => {
 
 		if (key === 'facility' && Array.isArray(value)) {
 			for (const item of value) {
-				const facility = facilities.value.find(
-					(f) => f.slug == item
-				)
+				const facility = facilities.value.find((f) => f.slug == item)
 				filterTags.push({
 					filterKey: key,
 					label: facility?.name ?? String(item),
@@ -141,6 +139,24 @@ const activeFilterTags = computed(() => {
 					value: item,
 				})
 			}
+			return
+		}
+
+		if (key === 'width' && value !== null && value !== '') {
+			filterTags.push({
+				filterKey: key,
+				label: `${t('components.blueprints.list.filters.width')}: ≤${value}`,
+				value: value,
+			})
+			return
+		}
+
+		if (key === 'height' && value !== null && value !== '') {
+			filterTags.push({
+				filterKey: key,
+				label: `${t('components.blueprints.list.filters.height')}: ≤${value}`,
+				value: value,
+			})
 			return
 		}
 	})

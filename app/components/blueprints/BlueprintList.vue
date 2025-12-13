@@ -34,11 +34,13 @@ import {
 	PopoverTrigger,
 } from '~/components/ui/popover'
 import { Button } from '~/components/ui/button'
+import { Input } from '~/components/ui/input'
 import CloseIcon from '../icons/CloseIcon.vue'
 import { ChevronDown } from 'lucide-vue-next'
 import { useSidebar } from '@/components/ui/sidebar'
 import type { NuxtError } from '#app'
 import { CheckboxGroupRoot } from 'reka-ui'
+import { useDebounceFn } from '@vueuse/core'
 
 const { t } = useI18n()
 
@@ -186,6 +188,31 @@ const handleServerRegionChange = (serverRegionValue: string) => {
 		emit('update:filter', 'server_region', serverRegionValue)
 	}
 }
+
+const handleWidthChange = (value: string | number | null | undefined) => {
+	if (value === '' || value === null || value === undefined || value === 0) {
+		emit('clear-filter', 'width')
+	} else {
+		const numValue = Number(value)
+		if (!isNaN(numValue) && numValue > 0) {
+			emit('update:filter', 'width', numValue)
+		}
+	}
+}
+
+const handleHeightChange = (value: string | number | null | undefined) => {
+	if (value === '' || value === null || value === undefined || value === 0) {
+		emit('clear-filter', 'height')
+	} else {
+		const numValue = Number(value)
+		if (!isNaN(numValue) && numValue > 0) {
+			emit('update:filter', 'height', numValue)
+		}
+	}
+}
+
+const debouncedHandleWidthChange = useDebounceFn(handleWidthChange, 500)
+const debouncedHandleHeightChange = useDebounceFn(handleHeightChange, 500)
 
 const currentPageModel = computed({
 	get: () => props.currentPage,
@@ -568,6 +595,71 @@ const unifiedFilterModel = computed({
 								"
 								class="w-full"
 							/>
+						</div>
+
+						<div class="px-2 py-3 space-y-2">
+							<label
+								class="text-xs font-medium text-sidebar-foreground/70 mb-2 block"
+								>{{
+									t(
+										'components.blueprints.list.filters.dimensions'
+									)
+								}}</label
+							>
+							<div class="flex gap-2">
+								<div class="flex-1">
+									<label
+										class="text-xs text-sidebar-foreground/70 mb-1 block"
+										for="width-input"
+										>{{
+											t(
+												'components.blueprints.list.filters.width'
+											)
+										}}</label
+									>
+									<Input
+										id="width-input"
+										:model-value="filters.width ?? ''"
+										type="number"
+										min="1"
+										:placeholder="
+											t(
+												'components.blueprints.list.filters.widthPlaceholder'
+											)
+										"
+										class="w-full"
+										@update:model-value="
+											debouncedHandleWidthChange
+										"
+									/>
+								</div>
+								<div class="flex-1">
+									<label
+										class="text-xs text-sidebar-foreground/70 mb-1 block"
+										for="height-input"
+										>{{
+											t(
+												'components.blueprints.list.filters.height'
+											)
+										}}</label
+									>
+									<Input
+										id="height-input"
+										:model-value="filters.height ?? ''"
+										type="number"
+										min="1"
+										:placeholder="
+											t(
+												'components.blueprints.list.filters.heightPlaceholder'
+											)
+										"
+										class="w-full"
+										@update:model-value="
+											debouncedHandleHeightChange
+										"
+									/>
+								</div>
+							</div>
 						</div>
 					</SidebarGroupContent>
 				</SidebarGroup>
