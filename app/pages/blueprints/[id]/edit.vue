@@ -50,6 +50,8 @@ type Schema = {
 	item_inputs: Array<{ id: number; quantity: number }>
 	item_outputs: Array<{ id: number; quantity: number }>
 	gallery: File[]
+	width: number | null
+	height: number | null
 }
 
 // Fetch blueprint data
@@ -107,6 +109,8 @@ const form = usePrecognitionForm<Schema>(
 		item_inputs: [],
 		item_outputs: [],
 		gallery: [],
+		width: null,
+		height: null,
 	}
 )
 
@@ -181,6 +185,8 @@ watchEffect(() => {
 	form.fields.server_region = blueprint.value.server_region || null
 	form.fields.is_anonymous = blueprint.value.creator === null
 	form.fields.region = blueprint.value.region || 'any'
+	form.fields.width = blueprint.value.width || null
+	form.fields.height = blueprint.value.height || null
 	// Convert tag IDs to slugs
 	tagsSlugs.value = blueprint.value.tags?.map((tag) => tag.slug) || []
 
@@ -337,6 +343,14 @@ const createFormData = (): FormData => {
 	formData.append('version', form.fields.version)
 	formData.append('status', form.fields.status)
 	formData.append('is_anonymous', form.fields.is_anonymous ? '1' : '0')
+
+	if (form.fields.width) {
+		formData.append('width', String(form.fields.width))
+	}
+	if (form.fields.height) {
+		formData.append('height', String(form.fields.height))
+	}
+
 	if (form.fields.region && form.fields.region !== 'any') {
 		formData.append('region', form.fields.region)
 	}
@@ -900,6 +914,54 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 										: form.errors.tags
 								}}
 							</p>
+						</div>
+
+						<div class="grid grid-cols-2 gap-4">
+							<div class="space-y-2">
+								<Label for="width">{{
+									t('pages.blueprints.create.widthLabel')
+								}}</Label>
+								<Input
+									id="width"
+									v-model="form.fields.width"
+									type="number"
+									min="1"
+									max="50"
+								/>
+								<p
+									v-if="form.errors.height"
+									class="text-xs text-destructive"
+								>
+									{{
+										Array.isArray(form.errors.height)
+											? form.errors.height[0]
+											: form.errors.height
+									}}
+								</p>
+							</div>
+
+							<div class="space-y-2">
+								<Label for="height">{{
+									t('pages.blueprints.create.heightLabel')
+								}}</Label>
+								<Input
+									id="height"
+									v-model="form.fields.height"
+									type="number"
+									min="1"
+									max="50"
+								/>
+								<p
+									v-if="form.errors.height"
+									class="text-xs text-destructive"
+								>
+									{{
+										Array.isArray(form.errors.height)
+											? form.errors.height[0]
+											: form.errors.height
+									}}
+								</p>
+							</div>
 						</div>
 
 						<!-- Facilities Used -->

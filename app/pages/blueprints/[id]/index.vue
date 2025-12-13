@@ -878,6 +878,19 @@ const handleBlueprintDeleted = () => {
 										blueprint.status
 									}}</span>
 								</div>
+								<div
+									v-if="blueprint.width || blueprint.height"
+									class="flex items-center justify-between"
+								>
+									<span class="text-cool-gray-60">{{
+										t('pages.blueprints.detail.size')
+									}}</span>
+									<span
+										>{{ blueprint.width ?? 0 }}x{{
+											blueprint.height ?? 0
+										}}</span
+									>
+								</div>
 							</div>
 						</div>
 						<hr class="border-cool-gray-20" />

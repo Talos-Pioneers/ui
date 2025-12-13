@@ -183,6 +183,14 @@ const handleBlueprintDeleted = () => {
 						class="text-xl font-bold leading-6 text-cool-gray-90 mb-2 line-clamp-2"
 					>
 						{{ blueprint.title }}
+						<span
+							v-if="blueprint.width || blueprint.height"
+							class="text-sm text-cool-gray-60"
+						>
+							{{ blueprint.width ?? 0 }}x{{
+								blueprint.height ?? 0
+							}}
+						</span>
 					</h2>
 				</NuxtLinkLocale>
 				<div class="flex items-center justify-between gap-2 h-4">
