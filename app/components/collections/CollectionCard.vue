@@ -117,21 +117,27 @@ const blueprintsCount = computed(() => {
 
 			<!-- Actions and Statistics -->
 			<div class="flex items-center justify-between mt-auto">
-				<span
-					class="px-2 py-1 text-sm border border-cool-gray-30 group-hover/tags:border-cool-gray-100 transition-colors"
-				>
-					{{ t('components.collections.card.tagLabel') }}
-				</span>
-				<div class="flex items-center gap-4 text-sm text-cool-gray-80">
-					<div class="flex items-center gap-1.5">
-						<span>{{
-							useFormatCompactNumber(blueprintsCount)
-						}}</span>
-						<span class="text-cool-gray-60">{{
-							blueprintsCount === 1
-								? t('components.collections.card.blueprint')
-								: t('components.collections.card.blueprints')
-						}}</span>
+				<div class="flex items-center gap-2">
+					<span
+						class="px-2 py-1 text-sm border border-cool-gray-30 group-hover/tags:border-cool-gray-100 transition-colors"
+					>
+						{{ t('components.collections.card.tagLabel') }}
+					</span>
+					<div
+						class="flex items-center gap-4 text-sm text-cool-gray-80"
+					>
+						<div class="flex items-center gap-1.5">
+							<span>{{
+								useFormatCompactNumber(blueprintsCount)
+							}}</span>
+							<span class="text-cool-gray-60">{{
+								blueprintsCount === 1
+									? t('components.collections.card.blueprint')
+									: t(
+											'components.collections.card.blueprints'
+										)
+							}}</span>
+						</div>
 					</div>
 				</div>
 				<div class="flex items-center gap-1">

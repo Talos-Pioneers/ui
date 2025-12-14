@@ -75,6 +75,21 @@ const activeFilterTags = computed(() => {
 			return
 		}
 
+		if (key === 'author_id') {
+			const authorBlueprint = blueprints.value.find(
+				(b) => b.creator?.id == value
+			)
+			const authorName =
+				authorBlueprint?.creator?.name ??
+				t('components.blueprints.list.filters.author.unknown')
+			filterTags.push({
+				filterKey: key,
+				label: authorName,
+				value: value,
+			})
+			return
+		}
+
 		if (key === 'region') {
 			const region = regionOptions.find((r) => r.value === value)
 			filterTags.push({
