@@ -22,6 +22,7 @@ const emit = defineEmits<{
 	added: []
 }>()
 
+const { t } = useI18n()
 const sanctumClient = useSanctumClient()
 
 // Fetch user's collections
@@ -93,7 +94,7 @@ const handleCreateCollection = async () => {
 		// Check for errors
 		if (Object.keys(createForm.errors).length === 0) {
 			toast.success(
-				'Collection created and blueprint added successfully.'
+				t('components.collections.addToCollection.createSuccess')
 			)
 			createForm.fields.title = ''
 			createForm.reset()
@@ -104,9 +105,14 @@ const handleCreateCollection = async () => {
 	} catch (error) {
 		const { isValidationError, bag } = useSanctumError(error)
 		if (isValidationError && bag.length > 0) {
-			toast.error(bag[0]?.message || 'Failed to create collection.')
+			toast.error(
+				bag[0]?.message ||
+					t('components.collections.addToCollection.createError')
+			)
 		} else {
-			toast.error('Failed to create collection. Please try again.')
+			toast.error(
+				t('components.collections.addToCollection.createErrorRetry')
+			)
 		}
 	} finally {
 		isCreating.value = false
@@ -116,7 +122,9 @@ const handleCreateCollection = async () => {
 // Handle adding blueprint to existing collection
 const handleAddToCollection = async (collection: BlueprintCollection) => {
 	if (isBlueprintInCollection(collection)) {
-		toast.info('Blueprint is already in this collection.')
+		toast.info(
+			t('components.collections.addToCollection.alreadyInCollection')
+		)
 		return
 	}
 
@@ -162,21 +170,24 @@ const handleAddToCollection = async (collection: BlueprintCollection) => {
 		await updateForm.submit()
 
 		if (Object.keys(updateForm.errors).length === 0) {
-			toast.success('Blueprint added to collection successfully.')
+			toast.success(
+				t('components.collections.addToCollection.addSuccess')
+			)
 			await refreshCollections()
 			emit('added')
 		} else {
-			toast.error('Failed to add blueprint to collection.')
+			toast.error(t('components.collections.addToCollection.addError'))
 		}
 	} catch (error) {
 		const { isValidationError, bag } = useSanctumError(error)
 		if (isValidationError && bag.length > 0) {
 			toast.error(
-				bag[0]?.message || 'Failed to add blueprint to collection.'
+				bag[0]?.message ||
+					t('components.collections.addToCollection.addError')
 			)
 		} else {
 			toast.error(
-				'Failed to add blueprint to collection. Please try again.'
+				t('components.collections.addToCollection.addErrorRetry')
 			)
 		}
 	} finally {
@@ -206,7 +217,9 @@ const toggleCreateForm = () => {
 		</DialogTrigger>
 		<DialogContent class="max-w-md">
 			<DialogHeader>
-				<DialogTitle>Add to Collection</DialogTitle>
+				<DialogTitle>
+					{{ t('components.collections.addToCollection.title') }}
+				</DialogTitle>
 			</DialogHeader>
 
 			<div class="space-y-4 py-4">
@@ -216,7 +229,9 @@ const toggleCreateForm = () => {
 					class="text-center py-8"
 				>
 					<p class="text-sm text-cool-gray-60">
-						Loading collections...
+						{{
+							t('components.collections.addToCollection.loading')
+						}}
 					</p>
 				</div>
 
@@ -236,16 +251,20 @@ const toggleCreateForm = () => {
 								</p>
 								<p class="text-xs text-cool-gray-60">
 									{{
-										collection.blueprints_count ??
-										collection.blueprints?.length ??
-										0
-									}}
-									{{
-										(collection.blueprints_count ??
-											collection.blueprints?.length ??
-											0) === 1
-											? 'blueprint'
-											: 'blueprints'
+										t(
+											(collection.blueprints_count ??
+												collection.blueprints?.length ??
+												0) === 1
+												? 'components.collections.addToCollection.blueprintCountSingular'
+												: 'components.collections.addToCollection.blueprintCountPlural',
+											{
+												count:
+													collection.blueprints_count ??
+													collection.blueprints
+														?.length ??
+													0,
+											}
+										)
 									}}
 								</p>
 							</div>
@@ -262,9 +281,19 @@ const toggleCreateForm = () => {
 								v-if="updatingCollectionId === collection.id"
 								class="text-xs"
 							>
-								Adding...
+								{{
+									t(
+										'components.collections.addToCollection.adding'
+									)
+								}}
 							</span>
-							<span v-else class="text-xs">Add</span>
+							<span v-else class="text-xs">
+								{{
+									t(
+										'components.collections.addToCollection.add'
+									)
+								}}
+							</span>
 						</Button>
 					</div>
 				</div>
@@ -278,7 +307,7 @@ const toggleCreateForm = () => {
 					class="text-center py-8"
 				>
 					<p class="text-sm text-cool-gray-60">
-						You don't have any collections yet.
+						{{ t('components.collections.addToCollection.empty') }}
 					</p>
 				</div>
 
@@ -293,14 +322,22 @@ const toggleCreateForm = () => {
 						class="w-full"
 						@click="toggleCreateForm"
 					>
-						Create New Collection
+						{{
+							t(
+								'components.collections.addToCollection.createNew'
+							)
+						}}
 					</Button>
 
 					<div v-else class="space-y-3">
 						<div class="space-y-2">
 							<Input
 								v-model="createForm.fields.title"
-								placeholder="Collection title"
+								:placeholder="
+									t(
+										'components.collections.addToCollection.titlePlaceholder'
+									)
+								"
 								:aria-invalid="!!createForm.errors.title"
 								:disabled="isCreating"
 							/>
@@ -313,7 +350,11 @@ const toggleCreateForm = () => {
 								:disabled="isCreating"
 								@click="toggleCreateForm"
 							>
-								Cancel
+								{{
+									t(
+										'components.collections.addToCollection.cancel'
+									)
+								}}
 							</Button>
 							<Button
 								class="flex-1"
@@ -323,8 +364,20 @@ const toggleCreateForm = () => {
 								"
 								@click="handleCreateCollection"
 							>
-								<span v-if="isCreating">Creating...</span>
-								<span v-else>Create</span>
+								<span v-if="isCreating">
+									{{
+										t(
+											'components.collections.addToCollection.creating'
+										)
+									}}
+								</span>
+								<span v-else>
+									{{
+										t(
+											'components.collections.addToCollection.create'
+										)
+									}}
+								</span>
 							</Button>
 						</div>
 					</div>
