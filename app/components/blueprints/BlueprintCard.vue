@@ -25,6 +25,7 @@ import {
 import ServerRegionIcon from '../icons/ServerRegionIcon.vue'
 import DeleteBlueprintDialog from './DeleteBlueprintDialog.vue'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
+import AddToCollection from '../collections/AddToCollection.vue'
 
 const props = defineProps<{
 	blueprint: Blueprint
@@ -41,7 +42,7 @@ const emit = defineEmits<{
 const { copy, copied } = useClipboard()
 const { t } = useI18n()
 const sanctumClient = useSanctumClient()
-
+const { isAuthenticated } = useSanctumAuth()
 const dropdownOpen = ref(false)
 
 const previewImage = computed(() => {
@@ -265,6 +266,10 @@ const handleBlueprintDeleted = () => {
 					</button>
 				</div>
 				<div class="flex items-center gap-1">
+					<AddToCollection
+						v-if="isAuthenticated"
+						:blueprint="blueprint"
+					/>
 					<DropdownMenu v-model:open="dropdownOpen">
 						<DropdownMenuTrigger as-child>
 							<Button
