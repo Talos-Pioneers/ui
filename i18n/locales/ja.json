@@ -278,6 +278,7 @@
     "components.navigation.header.signIn": "ログイン",
     "components.navigation.header.menu.editProfile": "プロフィールを編集",
     "components.navigation.header.menu.myBlueprints": "マイ設計図",
+    "components.navigation.header.menu.myCollections": "マイコレクション",
     "components.navigation.header.menu.logout": "ログアウト",
     "components.banners.profileBanner.title": "マイ設計図",
     "components.banners.profileBanner.description": "設計図を管理および整理します。コミュニティと共有する新しい設計図を作成します。",

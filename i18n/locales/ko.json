@@ -278,6 +278,7 @@
 	"components.navigation.header.signIn": "로그인",
 	"components.navigation.header.menu.editProfile": "프로필 편집",
 	"components.navigation.header.menu.myBlueprints": "내 설계도",
+	"components.navigation.header.menu.myCollections": "내 컬렉션",
 	"components.navigation.header.menu.logout": "로그아웃",
 	"components.banners.profileBanner.title": "내 설계도",
 	"components.banners.profileBanner.description": "설계도를 관리하고 정리하세요. 커뮤니티와 공유할 새로운 설계도를 만드세요.",

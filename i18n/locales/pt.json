@@ -278,6 +278,7 @@
 	"components.navigation.header.signIn": "Entrar",
 	"components.navigation.header.menu.editProfile": "Editar Perfil",
 	"components.navigation.header.menu.myBlueprints": "Meus Projetos",
+	"components.navigation.header.menu.myCollections": "Meus Projetos",
 	"components.navigation.header.menu.logout": "Sair",
 	"components.banners.profileBanner.title": "Meus Projetos",
 	"components.banners.profileBanner.description": "Gerencie e organize seus projetos. Crie novos projetos para compartilhar com a comunidade.",

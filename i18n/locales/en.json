@@ -278,6 +278,7 @@
 	"components.navigation.header.signIn": "Sign In",
 	"components.navigation.header.menu.editProfile": "Edit Profile",
 	"components.navigation.header.menu.myBlueprints": "My Blueprints",
+	"components.navigation.header.menu.myCollections": "My Collections",
 	"components.navigation.header.menu.logout": "Logout",
 	"components.banners.profileBanner.title": "My Blueprints",
 	"components.banners.profileBanner.description": "Manage and organize your blueprints. Create new blueprints to share with the community.",

@@ -117,6 +117,15 @@ const navigationItems = [
 								}}
 							</NuxtLinkLocale>
 						</DropdownMenuItem>
+						<DropdownMenuItem as-child>
+							<NuxtLinkLocale to="/profile/collections">
+								{{
+									t(
+										'components.navigation.header.menu.myCollections'
+									)
+								}}
+							</NuxtLinkLocale>
+						</DropdownMenuItem>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem
 							variant="destructive"

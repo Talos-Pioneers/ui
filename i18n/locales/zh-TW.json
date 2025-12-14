@@ -278,6 +278,7 @@
     "components.navigation.header.signIn": "登入",
     "components.navigation.header.menu.editProfile": "編輯個人資料",
     "components.navigation.header.menu.myBlueprints": "我的藍圖",
+    "components.navigation.header.menu.myCollections": "我的收藏",
     "components.navigation.header.menu.logout": "登出",
     "components.banners.profileBanner.title": "我的藍圖",
     "components.banners.profileBanner.description": "管理與分類您的藍圖。建立新藍圖與社群分享。",

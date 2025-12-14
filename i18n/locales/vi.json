@@ -278,6 +278,7 @@
     "components.navigation.header.signIn": "Đăng nhập",
     "components.navigation.header.menu.editProfile": "Chỉnh sửa Hồ sơ",
     "components.navigation.header.menu.myBlueprints": "Bản vẽ của Tôi",
+    "components.navigation.header.menu.myCollections": "Bộ sưu tập của Tôi",
     "components.navigation.header.menu.logout": "Đăng xuất",
     "components.banners.profileBanner.title": "Bản vẽ của Tôi",
     "components.banners.profileBanner.description": "Quản lý và tổ chức bản vẽ của bạn. Tạo bản vẽ mới để chia sẻ với cộng đồng.",

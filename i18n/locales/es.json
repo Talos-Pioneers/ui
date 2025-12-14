@@ -278,6 +278,7 @@
 	"components.navigation.header.signIn": "Iniciar sesión",
 	"components.navigation.header.menu.editProfile": "Editar perfil",
 	"components.navigation.header.menu.myBlueprints": "Mis planos",
+	"components.navigation.header.menu.myCollections": "Mis colecciones",
 	"components.navigation.header.menu.logout": "Cerrar sesión",
 	"components.banners.profileBanner.title": "Mis planos",
 	"components.banners.profileBanner.description": "Administra y organiza tus planos. Crea nuevos planos para compartir con la comunidad.",

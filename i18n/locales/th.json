@@ -278,6 +278,7 @@
 	"components.navigation.header.signIn": "เข้าสู่ระบบ",
 	"components.navigation.header.menu.editProfile": "แก้ไขโปรไฟล์",
 	"components.navigation.header.menu.myBlueprints": "แบบแปลนของฉัน",
+	"components.navigation.header.menu.myCollections": "คอลเลกชันของฉัน",
 	"components.navigation.header.menu.logout": "ออกจากระบบ",
 	"components.banners.profileBanner.title": "แบบแปลนของฉัน",
 	"components.banners.profileBanner.description": "จัดการและจัดระเบียบแบบแปลนของคุณ สร้างแบบแปลนใหม่เพื่อแบ่งปันกับชุมชน",

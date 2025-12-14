@@ -278,6 +278,7 @@
 	"components.navigation.header.signIn": "Войти",
 	"components.navigation.header.menu.editProfile": "Редактировать профиль",
 	"components.navigation.header.menu.myBlueprints": "Мои чертежи",
+	"components.navigation.header.menu.myCollections": "Мои коллекции",
 	"components.navigation.header.menu.logout": "Выйти",
 	"components.banners.profileBanner.title": "Мои чертежи",
 	"components.banners.profileBanner.description": "Управляйте и организуйте свои чертежи. Создавайте новые чертежи для обмена с сообществом.",
