@@ -10,6 +10,10 @@ export default defineNuxtConfig({
 		host: 'blueprints.test',
 	},
 
+	site: {
+		name: 'Talos Pioneers',
+	},
+
 	ssr: true,
 	css: ['~/assets/css/tailwind.css'],
 

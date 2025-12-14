@@ -204,7 +204,7 @@ const ogImage = computed(() => {
 })
 
 useHead({
-	title: t('pages.home.title'),
+	title: 'Arknights: Endfield',
 	meta: [
 		{
 			name: 'description',
