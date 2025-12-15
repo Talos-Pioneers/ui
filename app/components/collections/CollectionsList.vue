@@ -110,11 +110,11 @@ const handleStatusChange = (status: any) => {
 	}
 }
 
-const handleIsAnonymousChange = (value: boolean) => {
+const handleIsAnonymousChange = (value: any) => {
 	if (value) {
-		emit('update:filter', 'is_anonymous', '1')
+		emit('update:filter', 'is_anonymous', value)
 	} else {
-		emit('clear-filter', 'is_anonymous')
+		emit('clear-filter', 'is_anonymous', value)
 	}
 }
 
@@ -128,7 +128,7 @@ const perPageModel = computed({
 	set: (value: number) => emit('update:per-page', value),
 })
 
-const { open: sidebarOpen, toggleSidebar } = useSidebar()
+// const { open: sidebarOpen, toggleSidebar } = useSidebar()
 
 const statusOptions = [
 	{
@@ -148,70 +148,6 @@ const statusOptions = [
 
 <template>
 	<div class="flex w-full">
-		<Sidebar
-			v-if="showSidebar"
-			class="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
-		>
-			<SidebarContent>
-				<SidebarGroup>
-					<SidebarGroupLabel>{{
-						t('components.collections.list.filters.label')
-					}}</SidebarGroupLabel>
-					<SidebarGroupContent>
-						<!-- Status Filter (only for my collections) -->
-						<div v-if="isMyCollections" class="px-2 py-3 space-y-2">
-							<label
-								class="text-xs font-medium text-sidebar-foreground/70 mb-2 block"
-								>{{
-									t(
-										'components.collections.list.filters.status.label'
-									)
-								}}</label
-							>
-							<Select
-								:model-value="filters.status || 'any'"
-								@update:model-value="
-									(val: any) => handleStatusChange(val)
-								"
-							>
-								<SelectTrigger class="w-full">
-									<SelectValue />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem
-										v-for="option in statusOptions"
-										:key="option.value"
-										:value="option.value"
-									>
-										{{ option.label }}
-									</SelectItem>
-								</SelectContent>
-							</Select>
-						</div>
-
-						<!-- Is Anonymous Filter -->
-						<div class="px-2 py-3 space-y-2">
-							<label
-								class="flex items-center gap-2 cursor-pointer hover:bg-sidebar-accent/50 rounded px-2 py-1.5 transition-colors"
-							>
-								<Checkbox
-									:checked="filters.is_anonymous === '1'"
-									@update:checked="
-										handleIsAnonymousChange($event)
-									"
-								/>
-								<span class="text-sm text-sidebar-foreground">{{
-									t(
-										'components.collections.list.filters.isAnonymous'
-									)
-								}}</span>
-							</label>
-						</div>
-					</SidebarGroupContent>
-				</SidebarGroup>
-			</SidebarContent>
-		</Sidebar>
-
 		<!-- Main Content -->
 		<div class="flex flex-col w-full">
 			<!-- Banner Section -->
@@ -222,24 +158,6 @@ const statusOptions = [
 				<div class="container mx-auto px-4 py-6">
 					<!-- Controls Bar -->
 					<div class="flex flex-col gap-4 mb-8">
-						<Button
-							v-if="showSidebar"
-							variant="outline"
-							size="sm"
-							class="before:hidden w-fit bg-transparent"
-							@click="toggleSidebar"
-						>
-							{{
-								sidebarOpen
-									? t(
-											'components.collections.list.filters.hide'
-										)
-									: t(
-											'components.collections.list.filters.show'
-										)
-							}}
-						</Button>
-
 						<div
 							class="flex flex-col md:flex-row gap-4 md:items-center md:justify-between"
 						>
@@ -333,12 +251,29 @@ const statusOptions = [
 									{{ isSortDescending ? '↑' : '↓' }}
 								</Button>
 							</div>
-							<BlueprintPagination
-								v-model:current-page="currentPageModel"
-								v-model:per-page="perPageModel"
-								:pagination="pagination"
-								:show-per-page-selector="true"
-							/>
+							<label
+								class="flex items-center gap-2 cursor-pointer hover:bg-sidebar-accent/50 rounded px-2 py-1.5 transition-colors"
+							>
+								<Checkbox
+									:checked="filters.is_anonymous === '1'"
+									@update:model-value="
+										handleIsAnonymousChange
+									"
+								/>
+								<span class="text-sm text-sidebar-foreground">{{
+									t(
+										'components.collections.list.filters.isAnonymous'
+									)
+								}}</span>
+							</label>
+							<div class="ml-auto">
+								<BlueprintPagination
+									v-model:current-page="currentPageModel"
+									v-model:per-page="perPageModel"
+									:pagination="pagination"
+									:show-per-page-selector="true"
+								/>
+							</div>
 						</div>
 					</div>
 

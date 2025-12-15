@@ -1,7 +1,7 @@
 <script setup lang="ts">
-	import { Button } from '~/components/ui/button'
+import { Button } from '~/components/ui/button'
 
-	const { t } = useI18n();
+const { t } = useI18n()
 </script>
 
 <template>
@@ -10,10 +10,10 @@
 			class="relative z-10 container mx-auto px-4 py-6 flex flex-col h-full justify-center"
 		>
 			<h1 class="text-3xl md:text-4xl font-medium text-white mb-2">
-				{{ t('components.banners.profileBanner.title') }}
+				{{ t('components.banners.blueprintProfileBanner.title') }}
 			</h1>
 			<p class="text-white/80 md:text-lg max-w-2xl mb-6">
-				{{ t('components.banners.profileBanner.description') }}
+				{{ t('components.banners.blueprintProfileBanner.description') }}
 			</p>
 			<div class="flex gap-3">
 				<Button
@@ -43,7 +43,11 @@
 						<span
 							class="flex gap-3 text-sm sm:text-xl items-center text-cool-gray-100"
 						>
-							<span>{{ t('components.banners.profileBanner.createButton') }}</span>
+							<span>{{
+								t(
+									'components.banners.blueprintProfileBanner.createButton'
+								)
+							}}</span>
 							<svg
 								width="8"
 								height="12"

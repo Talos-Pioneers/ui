@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CollectionsList from '~/components/collections/CollectionsList.vue'
-import ProfileBanner from '~/components/banners/ProfileBanner.vue'
+import CollectionProfileBanner from '~/components/banners/CollectionProfileBanner.vue'
 import { useCollectionQueryFilter } from '~/composables/useCollectionQueryFilter'
 import { statusOptions } from '~/constants/blueprintOptions'
 
@@ -111,7 +111,7 @@ const handlePerPageUpdate = (perPageValue: number) => {
 			@collection-deleted="collectionsRefresh"
 		>
 			<template #banner>
-				<ProfileBanner />
+				<CollectionProfileBanner />
 			</template>
 		</CollectionsList>
 	</div>
