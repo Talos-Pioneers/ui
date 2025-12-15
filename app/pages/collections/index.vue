@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import MainBanner from '~/components/banners/MainBanner.vue'
 import CollectionsList from '~/components/collections/CollectionsList.vue'
 import { useCollectionQueryFilter } from '~/composables/useCollectionQueryFilter'
 import type { BlueprintCollection } from '~/models/blueprintCollection'
@@ -110,6 +111,10 @@ const handlePerPageUpdate = (perPageValue: number) => {
 			@clear-filter="clearFilter"
 			@clear-all-filters="clearAllFilters"
 			@collection-deleted="collectionsRefresh"
-		/>
+		>
+			<template #banner>
+				<MainBanner />
+			</template>
+		</CollectionsList>
 	</div>
 </template>
