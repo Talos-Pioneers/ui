@@ -15,7 +15,7 @@ import {
 } from '~/components/ui/dropdown-menu'
 
 const { t } = useI18n()
-const { isAuthenticated, user, logout } = useSanctumAuth()
+const { isAuthenticated, logout } = useSanctumAuth()
 const { open } = useLoginModal()
 const router = useRouter()
 
@@ -32,6 +32,10 @@ const navigationItems = [
 	{
 		label: 'components.navigation.header.nav.blueprints',
 		to: '/',
+	},
+	{
+		label: 'components.navigation.header.nav.collections',
+		to: '/collections',
 	},
 	{
 		label: 'components.navigation.header.nav.createBlueprint',

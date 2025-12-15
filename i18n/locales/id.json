@@ -274,6 +274,7 @@
 	"components.auth.profileEdit.updating": "Memperbarui...",
 	"components.auth.profileEdit.updateButton": "Perbarui Profil",
 	"components.navigation.header.nav.blueprints": "Cetak Biru",
+	"components.navigation.header.nav.collections": "Koleksi",
 	"components.navigation.header.nav.createBlueprint": "Buat Cetak Biru",
 	"components.navigation.header.signIn": "Masuk",
 	"components.navigation.header.menu.editProfile": "Edit Profil",

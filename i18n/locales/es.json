@@ -274,6 +274,7 @@
 	"components.auth.profileEdit.updating": "Actualizando...",
 	"components.auth.profileEdit.updateButton": "Actualizar perfil",
 	"components.navigation.header.nav.blueprints": "Planos",
+	"components.navigation.header.nav.collections": "Colecciones",
 	"components.navigation.header.nav.createBlueprint": "Crear plano",
 	"components.navigation.header.signIn": "Iniciar sesión",
 	"components.navigation.header.menu.editProfile": "Editar perfil",

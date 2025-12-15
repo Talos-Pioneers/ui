@@ -274,6 +274,7 @@
     "components.auth.profileEdit.updating": "更新中…",
     "components.auth.profileEdit.updateButton": "更新個人資料",
     "components.navigation.header.nav.blueprints": "藍圖",
+    "components.navigation.header.nav.collections": "收藏",
     "components.navigation.header.nav.createBlueprint": "建立藍圖",
     "components.navigation.header.signIn": "登入",
     "components.navigation.header.menu.editProfile": "編輯個人資料",

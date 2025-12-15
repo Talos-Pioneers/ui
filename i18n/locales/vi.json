@@ -274,6 +274,7 @@
     "components.auth.profileEdit.updating": "Đang cập nhật...",
     "components.auth.profileEdit.updateButton": "Cập nhật Hồ sơ",
     "components.navigation.header.nav.blueprints": "Bản vẽ",
+    "components.navigation.header.nav.collections": "Bộ sưu tập",
     "components.navigation.header.nav.createBlueprint": "Tạo Bản vẽ",
     "components.navigation.header.signIn": "Đăng nhập",
     "components.navigation.header.menu.editProfile": "Chỉnh sửa Hồ sơ",

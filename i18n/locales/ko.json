@@ -274,6 +274,7 @@
 	"components.auth.profileEdit.updating": "업데이트 중...",
 	"components.auth.profileEdit.updateButton": "프로필 업데이트",
 	"components.navigation.header.nav.blueprints": "설계도",
+	"components.navigation.header.nav.collections": "컬렉션",
 	"components.navigation.header.nav.createBlueprint": "설계도 만들기",
 	"components.navigation.header.signIn": "로그인",
 	"components.navigation.header.menu.editProfile": "프로필 편집",
