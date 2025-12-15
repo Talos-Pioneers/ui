@@ -275,6 +275,8 @@
 	"components.auth.profileEdit.updateButton": "อัปเดตโปรไฟล์",
 	"components.navigation.header.nav.blueprints": "แบบแปลน",
 	"components.navigation.header.nav.collections": "คอลเลกชัน",
+	"components.navigation.header.nav.create": "สร้าง",
+	"components.navigation.header.nav.createCollection": "คอลเลกชัน",
 	"components.navigation.header.nav.createBlueprint": "สร้างแบบแปลน",
 	"components.navigation.header.signIn": "เข้าสู่ระบบ",
 	"components.navigation.header.menu.editProfile": "แก้ไขโปรไฟล์",

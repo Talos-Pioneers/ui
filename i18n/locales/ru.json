@@ -275,6 +275,8 @@
 	"components.auth.profileEdit.updateButton": "Обновить профиль",
 	"components.navigation.header.nav.blueprints": "Чертежи",
 	"components.navigation.header.nav.collections": "Коллекции",
+	"components.navigation.header.nav.create": "Создать",
+	"components.navigation.header.nav.createCollection": "Коллекция",
 	"components.navigation.header.nav.createBlueprint": "Создать чертеж",
 	"components.navigation.header.signIn": "Войти",
 	"components.navigation.header.menu.editProfile": "Редактировать профиль",
