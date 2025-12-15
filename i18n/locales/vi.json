@@ -359,5 +359,10 @@
     "deleteCollection.confirm": "Xóa",
     "deleteCollection.deleting": "Đang xóa...",
     "deleteCollection.success": "Xóa bộ sưu tập thành công.",
-    "deleteCollection.error": "Không thể xóa bộ sưu tập. Vui lòng thử lại."
+    "deleteCollection.error": "Không thể xóa bộ sưu tập. Vui lòng thử lại.",
+    "pages.collections.view.title": "{title} • Talos Pioneers",
+    "pages.collections.view.description": "Xem bộ sưu tập bản vẽ Arknights: Endfield này trên Talos Pioneers.",
+    "pages.collections.view.loading": "Đang tải bộ sưu tập...",
+    "pages.collections.view.error": "Không thể tải bộ sưu tập này.",
+    "pages.collections.view.notFound": "Không tìm thấy bộ sưu tập."
 }

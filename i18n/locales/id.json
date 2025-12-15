@@ -359,5 +359,10 @@
 	"deleteCollection.confirm": "Hapus",
 	"deleteCollection.deleting": "Menghapus...",
 	"deleteCollection.success": "Koleksi berhasil dihapus.",
-	"deleteCollection.error": "Gagal menghapus koleksi. Silakan coba lagi."
+	"deleteCollection.error": "Gagal menghapus koleksi. Silakan coba lagi.",
+	"pages.collections.view.title": "{title} • Talos Pioneers",
+	"pages.collections.view.description": "Lihat koleksi blueprint Arknights: Endfield ini di Talos Pioneers.",
+	"pages.collections.view.loading": "Memuat koleksi...",
+	"pages.collections.view.error": "Tidak dapat memuat koleksi ini.",
+	"pages.collections.view.notFound": "Koleksi tidak ditemukan."
 }

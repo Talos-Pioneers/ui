@@ -359,5 +359,10 @@
 	"deleteCollection.confirm": "ลบ",
 	"deleteCollection.deleting": "กำลังลบ...",
 	"deleteCollection.success": "ลบคอลเลกชันสำเร็จแล้ว",
-	"deleteCollection.error": "ลบคอลเลกชันไม่สำเร็จ โปรดลองอีกครั้ง"
+	"deleteCollection.error": "ลบคอลเลกชันไม่สำเร็จ โปรดลองอีกครั้ง",
+	"pages.collections.view.title": "{title} • Talos Pioneers",
+	"pages.collections.view.description": "ดูคอลเลกชันพิมพ์เขียว Arknights: Endfield นี้บน Talos Pioneers",
+	"pages.collections.view.loading": "กำลังโหลดคอลเลกชัน...",
+	"pages.collections.view.error": "ไม่สามารถโหลดคอลเลกชันนี้ได้",
+	"pages.collections.view.notFound": "ไม่พบคอลเลกชัน"
 }

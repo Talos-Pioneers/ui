@@ -1,4 +1,353 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import BlueprintList from '~/components/blueprints/BlueprintList.vue'
+import CollectionBanner from '~/components/banners/CollectionBanner.vue'
+import type { BlueprintCollection } from '~/models/blueprintCollection'
+import type { Facility } from '~/models/facility'
+import type { Item } from '~/models/item'
+import type { Tag } from '~/models/tag'
+import { versionOptions, regionOptions } from '~/constants/blueprintOptions'
+import { useBlueprintQueryFilter } from '~/composables/useBlueprintQueryFilter'
+
+const { t } = useI18n()
+const route = useRoute()
+
+// Fetch collection data
+const { data: collectionData, error: collectionError } =
+	await useLazySanctumFetch<{ data: BlueprintCollection }>(
+		`/api/v1/collections/${route.params.id}`
+	)
+
+const collection = computed(() => collectionData.value?.data)
+
+// Fetch filter data
+const { data: facilitiesData } = await useLazySanctumFetch<{
+	data: Facility[]
+}>('/api/v1/facilities')
+const { data: itemsData } = await useLazySanctumFetch<{ data: Item[] }>(
+	'/api/v1/items'
+)
+const { data: tagsData } = await useLazySanctumFetch<{ data: Tag[] }>(
+	'/api/v1/tags'
+)
+
+const facilities = computed(
+	() =>
+		facilitiesData.value?.data.map((f) => ({
+			...f,
+			icon: `https://assets.warfarin.wiki/v2/itemicon/${f.icon}.png`,
+		})) ?? []
+)
+const items = computed(
+	() =>
+		itemsData.value?.data.map((i) => ({
+			...i,
+			icon: `https://assets.warfarin.wiki/v2/itemicon/${i.icon}.png`,
+		})) ?? []
+)
+const tags = computed(() => tagsData.value?.data ?? [])
+
+// Fetch blueprints for the collection
+const {
+	blueprints,
+	pagination,
+	blueprintsStatus,
+	blueprintsError,
+	blueprintsRefresh,
+
+	currentPage,
+	perPage,
+
+	filters,
+	sort,
+	setFilter,
+	clearFilter,
+	clearAllFilters,
+	hasActiveFilters,
+	setSort,
+	toggleSort,
+	isSortDescending,
+} = await useBlueprintQueryFilter(
+	`/api/v1/collections/${route.params.id}/blueprints`
+)
+
+const handleBlueprintDeleted = () => {
+	blueprintsRefresh()
+}
+
+const activeFilterTags = computed(() => {
+	const filterTags: Array<{
+		filterKey: string
+		label: string
+		value: any
+	}> = []
+
+	Object.entries(filters.value).forEach(([key, value]) => {
+		if (
+			value === null ||
+			value === '' ||
+			(Array.isArray(value) && value.length === 0)
+		) {
+			return
+		}
+
+		if (key === 'author_id') {
+			const authorBlueprint = blueprints.value.find(
+				(b) => b.creator?.id == value
+			)
+			const authorName =
+				authorBlueprint?.creator?.name ??
+				t('components.blueprints.list.filters.author.unknown')
+			filterTags.push({
+				filterKey: key,
+				label: authorName,
+				value: value,
+			})
+			return
+		}
+
+		if (key === 'region') {
+			const region = regionOptions.find((r) => r.value === value)
+			filterTags.push({
+				filterKey: key,
+				label: region?.label ?? String(value),
+				value: value,
+			})
+			return
+		}
+		if (key === 'version') {
+			const version = versionOptions.find((v) => v.value === value)
+			filterTags.push({
+				filterKey: key,
+				label: version?.label ?? String(value),
+				value: value,
+			})
+			return
+		}
+
+		if (key === 'tags.id' && Array.isArray(value)) {
+			for (const item of value) {
+				const tag = tags.value.find((t) => t.id == item)
+				filterTags.push({
+					filterKey: key,
+					label: tag?.name ?? String(item),
+					value: item,
+				})
+			}
+			return
+		}
+
+		if (key === 'facility' && Array.isArray(value)) {
+			for (const item of value) {
+				const facility = facilities.value.find((f) => f.slug == item)
+				filterTags.push({
+					filterKey: key,
+					label: facility?.name ?? String(item),
+					value: item,
+				})
+			}
+			return
+		}
+
+		if (key === 'item_input' && Array.isArray(value)) {
+			for (const item of value) {
+				const factoryItem = items.value.find((i) => i.slug == item)
+				filterTags.push({
+					filterKey: key,
+					label: factoryItem?.name ?? String(item),
+					value: item,
+				})
+			}
+			return
+		}
+
+		if (key === 'item_output' && Array.isArray(value)) {
+			for (const item of value) {
+				const factoryItem = items.value.find((i) => i.slug == item)
+				filterTags.push({
+					filterKey: key,
+					label: factoryItem?.name ?? String(item),
+					value: item,
+				})
+			}
+			return
+		}
+
+		if (key === 'width' && value !== null && value !== '') {
+			filterTags.push({
+				filterKey: key,
+				label: `${t('components.blueprints.list.filters.width')}: ≤${value}`,
+				value: value,
+			})
+			return
+		}
+
+		if (key === 'height' && value !== null && value !== '') {
+			filterTags.push({
+				filterKey: key,
+				label: `${t('components.blueprints.list.filters.height')}: ≤${value}`,
+				value: value,
+			})
+			return
+		}
+	})
+
+	return filterTags
+})
+
+const handlePageUpdate = (page: number) => {
+	currentPage.value = page
+}
+
+const handlePerPageUpdate = (perPageValue: number) => {
+	perPage.value = perPageValue
+}
+
+const currentUrl = computed(() => {
+	if (import.meta.server) {
+		const requestURL = useRequestURL()
+		return requestURL.href
+	}
+	return window.location.href
+})
+
+const ogImage = computed(() => {
+	if (import.meta.server) {
+		const requestURL = useRequestURL()
+		return `${requestURL.origin}/logo.png`
+	}
+	return `${window.location.origin}/logo.png`
+})
+
+const pageTitle = computed(() => {
+	if (collection.value?.title) {
+		return t('pages.collections.view.title', {
+			title: collection.value.title,
+		})
+	}
+	return 'Talos Pioneers'
+})
+
+const pageDescription = computed(() => {
+	if (collection.value?.description) {
+		return t('pages.collections.view.description')
+	}
+	return t('pages.collections.view.description')
+})
+
+useHead({
+	title: pageTitle,
+	meta: [
+		{
+			name: 'description',
+			content: pageDescription.value,
+		},
+		{
+			property: 'og:title',
+			content: pageTitle.value,
+		},
+		{
+			property: 'og:description',
+			content: pageDescription.value,
+		},
+		{
+			property: 'og:image',
+			content: ogImage.value,
+		},
+		{
+			property: 'og:url',
+			content: currentUrl.value,
+		},
+		{
+			property: 'og:type',
+			content: 'website',
+		},
+		{
+			property: 'og:site_name',
+			content: t('pages.home.siteName'),
+		},
+		{
+			name: 'twitter:card',
+			content: 'summary_large_image',
+		},
+		{
+			name: 'twitter:title',
+			content: pageTitle.value,
+		},
+		{
+			name: 'twitter:description',
+			content: pageDescription.value,
+		},
+		{
+			name: 'twitter:image',
+			content: ogImage.value,
+		},
+	],
+})
+
+// Handle 404 if collection not found
+if (collectionError.value && collectionError.value.statusCode === 404) {
+	throw createError({
+		statusCode: 404,
+		statusMessage: t('pages.collections.view.notFound'),
+	})
+}
+</script>
+
 <template>
-	<div>test</div>
+	<div>
+		<!-- Loading State -->
+		<div
+			v-if="!collection && !collectionError"
+			class="flex items-center justify-center min-h-screen"
+		>
+			<div class="size-64">
+				<Lottie name="throbber" />
+			</div>
+		</div>
+
+		<!-- Error State -->
+		<div
+			v-else-if="collectionError && collectionError.statusCode !== 404"
+			class="flex flex-col items-center justify-center min-h-screen"
+		>
+			<p class="text-destructive mb-2">
+				{{ t('pages.collections.view.error') }}
+			</p>
+		</div>
+
+		<!-- Collection Content -->
+		<template v-else-if="collection">
+			<BlueprintList
+				:blueprints="blueprints"
+				:pagination="pagination"
+				:facilities="facilities"
+				:items="items"
+				:tags="tags"
+				:filters="filters"
+				:sort="sort"
+				:is-sort-descending="isSortDescending"
+				:has-active-filters="hasActiveFilters"
+				:active-filter-tags="activeFilterTags"
+				:current-page="currentPage"
+				:per-page="perPage"
+				:loading="blueprintsStatus === 'pending'"
+				:error="blueprintsError"
+				@update:filter="setFilter"
+				@update:sort="setSort"
+				@update:current-page="handlePageUpdate"
+				@update:per-page="handlePerPageUpdate"
+				@clear-filter="clearFilter"
+				@clear-all-filters="clearAllFilters"
+				@toggle-sort="toggleSort"
+				@blueprint-deleted="handleBlueprintDeleted"
+			>
+				<template #banner>
+					<CollectionBanner
+						:title="collection.title"
+						:description="collection.description"
+					/>
+				</template>
+			</BlueprintList>
+		</template>
+	</div>
 </template>

@@ -359,5 +359,10 @@
 	"deleteCollection.confirm": "Elimina",
 	"deleteCollection.deleting": "Eliminazione in corso...",
 	"deleteCollection.success": "Collezione eliminata con successo.",
-	"deleteCollection.error": "Impossibile eliminare la collezione. Riprova."
+	"deleteCollection.error": "Impossibile eliminare la collezione. Riprova.",
+	"pages.collections.view.title": "{title} • Talos Pioneers",
+	"pages.collections.view.description": "Visualizza questa collezione di progetti Arknights: Endfield su Talos Pioneers.",
+	"pages.collections.view.loading": "Caricamento collezione...",
+	"pages.collections.view.error": "Impossibile caricare questa collezione.",
+	"pages.collections.view.notFound": "Collezione non trovata."
 }

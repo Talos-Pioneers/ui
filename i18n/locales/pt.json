@@ -359,5 +359,10 @@
 	"deleteCollection.confirm": "Excluir",
 	"deleteCollection.deleting": "Excluindo...",
 	"deleteCollection.success": "Coleção excluída com sucesso.",
-	"deleteCollection.error": "Falha ao excluir a coleção. Por favor, tente novamente."
+	"deleteCollection.error": "Falha ao excluir a coleção. Por favor, tente novamente.",
+	"pages.collections.view.title": "{title} • Talos Pioneers",
+	"pages.collections.view.description": "Ver esta coleção de plantas de Arknights: Endfield no Talos Pioneers.",
+	"pages.collections.view.loading": "Carregando coleção...",
+	"pages.collections.view.error": "Não foi possível carregar esta coleção.",
+	"pages.collections.view.notFound": "Coleção não encontrada."
 }

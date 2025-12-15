@@ -359,5 +359,10 @@
 	"deleteCollection.confirm": "Delete",
 	"deleteCollection.deleting": "Deleting...",
 	"deleteCollection.success": "Collection deleted successfully.",
-	"deleteCollection.error": "Failed to delete collection. Please try again."
+	"deleteCollection.error": "Failed to delete collection. Please try again.",
+	"pages.collections.view.title": "{title} • Talos Pioneers",
+	"pages.collections.view.description": "View this collection of Arknights: Endfield blueprints on Talos Pioneers.",
+	"pages.collections.view.loading": "Loading collection...",
+	"pages.collections.view.error": "Unable to load this collection.",
+	"pages.collections.view.notFound": "Collection not found."
 }

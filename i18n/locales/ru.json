@@ -359,5 +359,10 @@
 	"deleteCollection.confirm": "Удалить",
 	"deleteCollection.deleting": "Удаление...",
 	"deleteCollection.success": "Коллекция успешно удалена.",
-	"deleteCollection.error": "Не удалось удалить коллекцию. Пожалуйста, попробуйте еще раз."
+	"deleteCollection.error": "Не удалось удалить коллекцию. Пожалуйста, попробуйте еще раз.",
+	"pages.collections.view.title": "{title} • Talos Pioneers",
+	"pages.collections.view.description": "Просмотреть эту коллекцию чертежей Arknights: Endfield на Talos Pioneers.",
+	"pages.collections.view.loading": "Загрузка коллекции...",
+	"pages.collections.view.error": "Не удалось загрузить эту коллекцию.",
+	"pages.collections.view.notFound": "Коллекция не найдена."
 }

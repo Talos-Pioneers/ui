@@ -359,5 +359,10 @@
     "deleteCollection.confirm": "刪除",
     "deleteCollection.deleting": "刪除中...",
     "deleteCollection.success": "收藏已成功刪除。",
-    "deleteCollection.error": "刪除收藏失敗。請重試。"
+    "deleteCollection.error": "刪除收藏失敗。請重試。",
+    "pages.collections.view.title": "{title} • Talos Pioneers",
+    "pages.collections.view.description": "在 Talos Pioneers 上查看此明日方舟：終末地藍圖收藏。",
+    "pages.collections.view.loading": "載入收藏中...",
+    "pages.collections.view.error": "無法載入此收藏。",
+    "pages.collections.view.notFound": "找不到收藏。"
 }

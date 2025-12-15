@@ -359,5 +359,10 @@
 	"deleteCollection.confirm": "Eliminar",
 	"deleteCollection.deleting": "Eliminando...",
 	"deleteCollection.success": "Colección eliminada exitosamente.",
-	"deleteCollection.error": "No se pudo eliminar la colección. Por favor intente nuevamente."
+	"deleteCollection.error": "No se pudo eliminar la colección. Por favor intente nuevamente.",
+	"pages.collections.view.title": "{title} • Talos Pioneers",
+	"pages.collections.view.description": "Ver esta colección de planos de Arknights: Endfield en Talos Pioneers.",
+	"pages.collections.view.loading": "Cargando colección...",
+	"pages.collections.view.error": "No se pudo cargar esta colección.",
+	"pages.collections.view.notFound": "Colección no encontrada."
 }

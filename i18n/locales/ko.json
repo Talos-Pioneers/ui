@@ -359,5 +359,10 @@
 	"deleteCollection.confirm": "삭제",
 	"deleteCollection.deleting": "삭제 중...",
 	"deleteCollection.success": "컬렉션이 성공적으로 삭제되었습니다.",
-	"deleteCollection.error": "컬렉션 삭제에 실패했습니다. 다시 시도해 주세요."
+	"deleteCollection.error": "컬렉션 삭제에 실패했습니다. 다시 시도해 주세요.",
+	"pages.collections.view.title": "{title} • Talos Pioneers",
+	"pages.collections.view.description": "Talos Pioneers에서 이 아크나이츠: 엔드필드 청사진 컬렉션을 보세요.",
+	"pages.collections.view.loading": "컬렉션 로드 중...",
+	"pages.collections.view.error": "이 컬렉션을 로드할 수 없습니다.",
+	"pages.collections.view.notFound": "컬렉션을 찾을 수 없습니다."
 }
