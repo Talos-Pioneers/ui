@@ -277,7 +277,7 @@
 	"components.navigation.header.nav.collections": "컬렉션",
 	"components.navigation.header.nav.create": "만들기",
 	"components.navigation.header.nav.createCollection": "컬렉션",
-	"components.navigation.header.nav.createBlueprint": "설계도 만들기",
+	"components.navigation.header.nav.createBlueprint": "설계도",
 	"components.navigation.header.signIn": "로그인",
 	"components.navigation.header.menu.editProfile": "프로필 편집",
 	"components.navigation.header.menu.myBlueprints": "내 설계도",

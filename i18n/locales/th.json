@@ -277,7 +277,7 @@
 	"components.navigation.header.nav.collections": "คอลเลกชัน",
 	"components.navigation.header.nav.create": "สร้าง",
 	"components.navigation.header.nav.createCollection": "คอลเลกชัน",
-	"components.navigation.header.nav.createBlueprint": "สร้างแบบแปลน",
+	"components.navigation.header.nav.createBlueprint": "แบบแปลน",
 	"components.navigation.header.signIn": "เข้าสู่ระบบ",
 	"components.navigation.header.menu.editProfile": "แก้ไขโปรไฟล์",
 	"components.navigation.header.menu.myBlueprints": "แบบแปลนของฉัน",

@@ -277,7 +277,7 @@
 	"components.navigation.header.nav.collections": "Collections",
 	"components.navigation.header.nav.create": "Create",
 	"components.navigation.header.nav.createCollection": "Collection",
-	"components.navigation.header.nav.createBlueprint": "Create Blueprint",
+	"components.navigation.header.nav.createBlueprint": "Blueprint",
 	"components.navigation.header.signIn": "Sign In",
 	"components.navigation.header.menu.editProfile": "Edit Profile",
 	"components.navigation.header.menu.myBlueprints": "My Blueprints",

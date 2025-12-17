@@ -277,7 +277,7 @@
     "components.navigation.header.nav.collections": "コレクション",
     "components.navigation.header.nav.create": "作成",
     "components.navigation.header.nav.createCollection": "コレクション",
-    "components.navigation.header.nav.createBlueprint": "設計図を作成",
+    "components.navigation.header.nav.createBlueprint": "設計図",
     "components.navigation.header.signIn": "ログイン",
     "components.navigation.header.menu.editProfile": "プロフィールを編集",
     "components.navigation.header.menu.myBlueprints": "マイ設計図",

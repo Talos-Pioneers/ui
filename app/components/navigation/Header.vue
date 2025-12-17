@@ -6,6 +6,9 @@ import LoginIcon from '../icons/LoginIcon.vue'
 import LanguageSwitcher from './LanguageSwitcher.vue'
 import LogoMobileIcon from '../icons/LogoMobileIcon.vue'
 import UserIcon from '../icons/UserIcon.vue'
+import AddBlueprintIcon from '../icons/AddBlueprintIcon.vue'
+import AddCollectionIcon from '../icons/AddCollectionIcon.vue'
+import { Menu, Plus } from 'lucide-vue-next'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -13,6 +16,13 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu'
+import {
+	Sheet,
+	SheetContent,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from '~/components/ui/sheet'
 
 const { t } = useI18n()
 const { isAuthenticated, logout } = useSanctumAuth()
@@ -37,11 +47,6 @@ const navigationItems = [
 		label: 'components.navigation.header.nav.collections',
 		to: '/collections',
 	},
-	{
-		label: 'components.navigation.header.nav.createBlueprint',
-		to: '/blueprints/create',
-		auth: true,
-	},
 ]
 </script>
 <template>
@@ -54,7 +59,7 @@ const navigationItems = [
 				<LogoMobileIcon class="block md:hidden" />
 			</NuxtLinkLocale>
 		</div>
-		<nav class="ml-7.5 h-full">
+		<nav class="hidden md:block ml-7.5 h-full">
 			<ul class="flex items-center gap-7.5 h-full">
 				<li
 					v-for="item in navigationItems"
@@ -62,7 +67,6 @@ const navigationItems = [
 					class="h-full flex items-center"
 				>
 					<NuxtLinkLocale
-						v-if="!item.auth || (item.auth && isAuthenticated)"
 						active-class="text-cool-gray-80 border-b-2 h-full border-black"
 						class="text-cool-gray-60 hover:text-cool-gray-80 h-full flex items-center"
 						:to="item.to"
@@ -96,6 +100,46 @@ const navigationItems = [
 				</Button>
 			</template>
 			<template v-else>
+				<DropdownMenu>
+					<DropdownMenuTrigger as-child>
+						<Button
+							variant="default"
+							class="hidden md:flex items-center gap-2 mr-2"
+						>
+							<Plus class="h-4 w-4" />
+							{{ t('components.navigation.header.nav.create') }}
+						</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent align="end">
+						<DropdownMenuItem as-child>
+							<NuxtLinkLocale
+								to="/blueprints/create"
+								class="flex items-center gap-2 cursor-pointer"
+							>
+								<AddBlueprintIcon class="w-4 h-4" />
+								{{
+									t(
+										'components.navigation.header.nav.createBlueprint'
+									)
+								}}
+							</NuxtLinkLocale>
+						</DropdownMenuItem>
+						<DropdownMenuItem as-child>
+							<NuxtLinkLocale
+								to="/collections/create"
+								class="flex items-center gap-2 cursor-pointer"
+							>
+								<AddCollectionIcon class="w-4 h-4" />
+								{{
+									t(
+										'components.navigation.header.nav.createCollection'
+									)
+								}}
+							</NuxtLinkLocale>
+						</DropdownMenuItem>
+					</DropdownMenuContent>
+				</DropdownMenu>
+
 				<DropdownMenu>
 					<DropdownMenuTrigger as-child>
 						<Button variant="default" size="icon-lg">
@@ -140,6 +184,66 @@ const navigationItems = [
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</template>
+			<Sheet>
+				<SheetTrigger as-child>
+					<Button variant="ghost" size="icon" class="md:hidden ml-2">
+						<Menu class="h-6 w-6" />
+					</Button>
+				</SheetTrigger>
+				<SheetContent side="right">
+					<SheetHeader>
+						<SheetTitle class="text-left">
+							<Logo />
+						</SheetTitle>
+					</SheetHeader>
+					<div class="flex flex-col gap-4 px-4">
+						<NuxtLinkLocale
+							v-for="item in navigationItems"
+							:key="item.to"
+							:to="item.to"
+							active-class="text-cool-gray-80 h-full"
+							class="text-cool-gray-60 hover:text-cool-gray-80 h-full flex items-center"
+						>
+							{{ t(item.label) }}
+						</NuxtLinkLocale>
+
+						<template v-if="isAuthenticated">
+							<div class="h-px bg-cool-gray-20 my-2" />
+							<p
+								class="text-sm text-cool-gray-60 font-medium mb-2"
+							>
+								{{
+									t('components.navigation.header.nav.create')
+								}}
+							</p>
+							<NuxtLinkLocale
+								active-class="text-cool-gray-80 border-b-2 h-full border-black"
+								class="text-cool-gray-60 hover:text-cool-gray-80 h-full flex items-center gap-2"
+								to="/blueprints/create"
+							>
+								<AddBlueprintIcon class="size-5" />
+								{{
+									t(
+										'components.navigation.header.nav.createBlueprint'
+									)
+								}}
+							</NuxtLinkLocale>
+							<NuxtLinkLocale
+								active-class="text-cool-gray-80 border-b-2 h-full border-black"
+								class="text-cool-gray-60 hover:text-cool-gray-80 h-full flex items-center gap-2"
+								to="/collections/create"
+							>
+								<AddCollectionIcon class="size-6" />
+								{{
+									t(
+										'components.navigation.header.nav.createCollection'
+									)
+								}}
+							</NuxtLinkLocale>
+						</template>
+					</div>
+				</SheetContent>
+			</Sheet>
 		</div>
 	</header>
 </template>
