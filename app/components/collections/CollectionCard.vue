@@ -62,21 +62,26 @@ const blueprintsCount = computed(() => {
 			<div class="pb-3">
 				<NuxtLinkLocale
 					:to="`/collections/${collection.id}`"
-					class="block"
+					class="flex items-center gap-2"
 				>
 					<h2
 						class="text-xl font-bold leading-6 text-cool-gray-90 mb-2 line-clamp-2"
 					>
 						{{ collection.title }}
-						<span
-							v-if="collection.status === 'draft'"
-							class="ml-2 text-xs text-cool-gray-60 font-normal"
-						>
-							({{
-								t('components.collections.card.status.draft')
-							}})
-						</span>
 					</h2>
+					<span
+						class="text-xs px-1.5 py-0.5 mb-2 inline-block rounded border border-cool-gray-30 dark:border-cool-gray-70 text-cool-gray-70 dark:text-cool-gray-40"
+					>
+						{{
+							collection.status === 'draft'
+								? t(
+										'components.collections.addToCollection.status.private'
+									)
+								: t(
+										'components.collections.addToCollection.status.public'
+									)
+						}}
+					</span>
 				</NuxtLinkLocale>
 				<div class="flex items-center justify-between gap-2 h-4">
 					<button

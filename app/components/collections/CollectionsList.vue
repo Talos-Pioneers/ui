@@ -137,11 +137,11 @@ const statusOptions = [
 	},
 	{
 		value: 'published',
-		label: t('components.collections.list.filters.status.published'),
+		label: t('components.collections.list.filters.status.public'),
 	},
 	{
 		value: 'draft',
-		label: t('components.collections.list.filters.status.draft'),
+		label: t('components.collections.list.filters.status.private'),
 	},
 ]
 </script>

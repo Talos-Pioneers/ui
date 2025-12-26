@@ -119,8 +119,8 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 
 		const message =
 			status === 'published'
-				? t('pages.collections.edit.successPublished')
-				: t('pages.collections.edit.successDraft')
+				? t('pages.collections.edit.successPublic')
+				: t('pages.collections.edit.successPrivate')
 		toast.success(message)
 
 		// Redirect to collection detail page
@@ -315,7 +315,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 									}}</span
 								>
 								<span v-else>{{
-									t('pages.collections.edit.saveDraft')
+									t('pages.collections.edit.savePrivate')
 								}}</span>
 							</Button>
 							<Button
@@ -334,7 +334,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 									}}</span
 								>
 								<span v-else>{{
-									t('pages.collections.edit.publish')
+									t('pages.collections.edit.publishPublic')
 								}}</span>
 							</Button>
 						</div>

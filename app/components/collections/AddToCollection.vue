@@ -244,11 +244,26 @@ const toggleCreateForm = () => {
 					>
 						<div class="flex items-center gap-3 flex-1">
 							<div class="flex-1 min-w-0">
-								<p
-									class="text-sm font-medium text-cool-gray-95 dark:text-white truncate"
-								>
-									{{ collection.title }}
-								</p>
+								<div class="flex items-center gap-2">
+									<p
+										class="text-sm font-medium text-cool-gray-95 dark:text-white truncate"
+									>
+										{{ collection.title }}
+									</p>
+									<span
+										class="text-xs px-1.5 py-0.5 rounded border border-cool-gray-30 dark:border-cool-gray-70 text-cool-gray-70 dark:text-cool-gray-40"
+									>
+										{{
+											collection.status === 'draft'
+												? t(
+														'components.collections.addToCollection.status.private'
+													)
+												: t(
+														'components.collections.addToCollection.status.public'
+													)
+										}}
+									</span>
+								</div>
 								<p class="text-xs text-cool-gray-60">
 									{{
 										t(
