@@ -72,6 +72,7 @@ const createForm = usePrecognitionForm<CreateSchema>(
 
 // State for updating collections
 const updatingCollectionId = ref<string | null>(null)
+const removingCollectionId = ref<string | null>(null)
 
 // Check if blueprint is already in a collection
 const isBlueprintInCollection = (collection: BlueprintCollection): boolean => {
@@ -195,6 +196,83 @@ const handleAddToCollection = async (collection: BlueprintCollection) => {
 	}
 }
 
+// Handle removing blueprint from existing collection
+const handleRemoveFromCollection = async (collection: BlueprintCollection) => {
+	if (!isBlueprintInCollection(collection)) {
+		toast.info(t('components.collections.addToCollection.notInCollection'))
+		return
+	}
+
+	removingCollectionId.value = collection.id
+
+	// Get current blueprints from the collection (already loaded or fetch if needed)
+	try {
+		let currentBlueprints: string[] = []
+
+		// If blueprints are already loaded, use them
+		if (collection.blueprints && collection.blueprints.length > 0) {
+			currentBlueprints = collection.blueprints.map((bp) => bp.id)
+		} else {
+			// Otherwise fetch the collection to get current blueprints
+			const response = await sanctumClient<{
+				data: BlueprintCollection
+			}>(`/api/v1/collections/${collection.id}`, {
+				method: 'get',
+				query: {
+					include: 'blueprints',
+				},
+			})
+
+			currentBlueprints =
+				response.data?.blueprints?.map((bp) => bp.id) ?? []
+		}
+
+		// Remove the blueprint from the array
+		const updatedBlueprints = currentBlueprints.filter(
+			(id) => id !== props.blueprint.id
+		)
+
+		// Use Precognition form for update
+		type UpdateSchema = {
+			blueprints: string[]
+		}
+
+		const updateForm = usePrecognitionForm<UpdateSchema>(
+			'put',
+			`/api/v1/collections/${collection.id}`,
+			{
+				blueprints: updatedBlueprints,
+			}
+		)
+
+		await updateForm.submit()
+
+		if (Object.keys(updateForm.errors).length === 0) {
+			toast.success(
+				t('components.collections.addToCollection.removeSuccess')
+			)
+			await refreshCollections()
+			emit('added')
+		} else {
+			toast.error(t('components.collections.addToCollection.removeError'))
+		}
+	} catch (error) {
+		const { isValidationError, bag } = useSanctumError(error)
+		if (isValidationError && bag.length > 0) {
+			toast.error(
+				bag[0]?.message ||
+					t('components.collections.addToCollection.removeError')
+			)
+		} else {
+			toast.error(
+				t('components.collections.addToCollection.removeErrorRetry')
+			)
+		}
+	} finally {
+		removingCollectionId.value = null
+	}
+}
+
 const toggleCreateForm = () => {
 	showCreateForm.value = !showCreateForm.value
 	if (!showCreateForm.value) {
@@ -306,6 +384,32 @@ const toggleCreateForm = () => {
 								{{
 									t(
 										'components.collections.addToCollection.add'
+									)
+								}}
+							</span>
+						</Button>
+						<Button
+							v-else
+							class="ml-2"
+							variant="ghost"
+							size="sm"
+							:disabled="removingCollectionId === collection.id"
+							@click="handleRemoveFromCollection(collection)"
+						>
+							<span
+								v-if="removingCollectionId === collection.id"
+								class="text-xs"
+							>
+								{{
+									t(
+										'components.collections.addToCollection.removing'
+									)
+								}}
+							</span>
+							<span v-else class="text-xs">
+								{{
+									t(
+										'components.collections.addToCollection.remove'
 									)
 								}}
 							</span>

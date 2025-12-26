@@ -74,6 +74,10 @@ const handleBlueprintDeleted = () => {
 	blueprintsRefresh()
 }
 
+const handleRemovedFromCollection = () => {
+	blueprintsRefresh()
+}
+
 const activeFilterTags = computed(() => {
 	const filterTags: Array<{
 		filterKey: string
@@ -332,6 +336,10 @@ if (collectionError.value && collectionError.value.statusCode === 404) {
 				:per-page="perPage"
 				:loading="blueprintsStatus === 'pending'"
 				:error="blueprintsError"
+				:collection-id="collection?.id"
+				:can-edit-collection="
+					collection?.permissions?.can_edit ?? false
+				"
 				@update:filter="setFilter"
 				@update:sort="setSort"
 				@update:current-page="handlePageUpdate"
@@ -340,6 +348,7 @@ if (collectionError.value && collectionError.value.statusCode === 404) {
 				@clear-all-filters="clearAllFilters"
 				@toggle-sort="toggleSort"
 				@blueprint-deleted="handleBlueprintDeleted"
+				@removed-from-collection="handleRemovedFromCollection"
 			>
 				<template #banner>
 					<CollectionBanner

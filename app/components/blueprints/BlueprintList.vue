@@ -66,12 +66,16 @@ const props = withDefaults(
 		loading?: boolean
 		error?: NuxtError | string | null
 		sortOptions?: Array<{ value: string; label: string }>
+		collectionId?: string
+		canEditCollection?: boolean
 	}>(),
 	{
 		showSidebar: true,
 		loading: false,
 		error: null,
 		sortOptions: undefined,
+		collectionId: undefined,
+		canEditCollection: false,
 	}
 )
 
@@ -83,6 +87,7 @@ const emit = defineEmits<{
 	'clear-filter': [key: string, value?: any]
 	'clear-all-filters': []
 	'blueprint-deleted': []
+	'removed-from-collection': []
 }>()
 
 // Sort options
@@ -881,11 +886,14 @@ const unifiedFilterModel = computed({
 							v-for="blueprint in blueprints"
 							:key="blueprint.id"
 							:blueprint="blueprint"
+							:collection-id="collectionId"
+							:can-edit-collection="canEditCollection"
 							@filter-tag="handleTagFilter"
 							@filter-region="handleRegionFilter"
 							@filter-server-region="handleServerRegionFilter"
 							@filter-author="handleAuthorFilter"
 							@deleted="emit('blueprint-deleted')"
+							@removed-from-collection="emit('removed-from-collection')"
 						/>
 
 						<div
