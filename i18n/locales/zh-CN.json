@@ -244,6 +244,7 @@
     "components.blueprints.list.filters.widthPlaceholder": "最大宽度",
     "components.blueprints.list.filters.height": "高度",
     "components.blueprints.list.filters.heightPlaceholder": "最大高度",
+    "components.blueprints.list.filters.isAnonymous": "匿名",
     "components.blueprints.list.filters.searchPlaceholder": "搜索任何筛选器…",
     "components.blueprints.list.filters.clearAll": "清除全部",
     "components.blueprints.list.pagination.found": "找到 {count} 个蓝图",

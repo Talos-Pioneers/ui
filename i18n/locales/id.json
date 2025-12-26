@@ -244,6 +244,7 @@
 	"components.blueprints.list.filters.widthPlaceholder": "Lebar maks",
 	"components.blueprints.list.filters.height": "Tinggi",
 	"components.blueprints.list.filters.heightPlaceholder": "Tinggi maks",
+	"components.blueprints.list.filters.isAnonymous": "Anonim",
 	"components.blueprints.list.filters.searchPlaceholder": "Cari filter apa pun...",
 	"components.blueprints.list.filters.clearAll": "Hapus Semua",
 	"components.blueprints.list.pagination.found": "{count} Cetak biru ditemukan",

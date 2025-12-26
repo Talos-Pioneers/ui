@@ -244,6 +244,7 @@
 	"components.blueprints.list.filters.widthPlaceholder": "Larghezza max",
 	"components.blueprints.list.filters.height": "Altezza",
 	"components.blueprints.list.filters.heightPlaceholder": "Altezza max",
+	"components.blueprints.list.filters.isAnonymous": "Anonimo",
 	"components.blueprints.list.filters.searchPlaceholder": "Cerca qualsiasi filtro...",
 	"components.blueprints.list.filters.clearAll": "Cancella tutto",
 	"components.blueprints.list.pagination.found": "{count} Progetti trovati",

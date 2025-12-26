@@ -219,6 +219,14 @@ const handleHeightChange = (value: string | number | null | undefined) => {
 const debouncedHandleWidthChange = useDebounceFn(handleWidthChange, 500)
 const debouncedHandleHeightChange = useDebounceFn(handleHeightChange, 500)
 
+const handleIsAnonymousChange = (value: boolean) => {
+	if (value) {
+		emit('update:filter', 'is_anonymous', true)
+	} else {
+		emit('clear-filter', 'is_anonymous')
+	}
+}
+
 const currentPageModel = computed({
 	get: () => props.currentPage,
 	set: (value: number) => emit('update:current-page', value),
@@ -600,6 +608,22 @@ const unifiedFilterModel = computed({
 								"
 								class="w-full"
 							/>
+						</div>
+
+						<div class="px-2 py-3 space-y-2">
+							<label
+								class="flex items-center gap-2 cursor-pointer hover:bg-sidebar-accent/50 rounded px-2 py-1.5 transition-colors"
+							>
+								<Checkbox
+									:checked="filters.is_anonymous === true"
+									@update:model-value="handleIsAnonymousChange"
+								/>
+								<span class="text-sm text-sidebar-foreground">{{
+									t(
+										'components.blueprints.list.filters.isAnonymous'
+									)
+								}}</span>
+							</label>
 						</div>
 
 						<div class="px-2 py-3 space-y-2">

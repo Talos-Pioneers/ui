@@ -206,6 +206,15 @@ const activeFilterTags = computed(() => {
 			})
 			return
 		}
+
+		if (key === 'is_anonymous' && value === true) {
+			filterTags.push({
+				filterKey: key,
+				label: t('components.blueprints.list.filters.isAnonymous'),
+				value: value,
+			})
+			return
+		}
 	})
 
 	return filterTags

@@ -244,6 +244,7 @@
 	"components.blueprints.list.filters.widthPlaceholder": "Largeur max",
 	"components.blueprints.list.filters.height": "Hauteur",
 	"components.blueprints.list.filters.heightPlaceholder": "Hauteur max",
+	"components.blueprints.list.filters.isAnonymous": "Anonyme",
 	"components.blueprints.list.filters.searchPlaceholder": "Rechercher un filtre...",
 	"components.blueprints.list.filters.clearAll": "Tout effacer",
 	"components.blueprints.list.pagination.found": "{count} Plans trouvés",
