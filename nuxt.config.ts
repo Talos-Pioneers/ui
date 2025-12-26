@@ -12,6 +12,7 @@ export default defineNuxtConfig({
 
 	site: {
 		name: 'Talos Pioneers',
+		indexable: process.env.CLOUDFLARE_ENV === 'staging' ? false : true,
 	},
 
 	ssr: true,
@@ -25,6 +26,19 @@ export default defineNuxtConfig({
 		preset: 'cloudflare_module',
 
 		cloudflare: {
+			wrangler: {
+				name: `talos-pioneers${process.env.CLOUDFLARE_ENV === 'staging' ? '-staging' : ''}`,
+				routes: [
+					{
+						pattern: process.env.BASE_DOMAIN,
+						custom_domain: true,
+					},
+				],
+				vars: {
+					API_URL: process.env.API_URL,
+					BASE_URL: process.env.BASE_URL,
+				},
+			},
 			deployConfig: true,
 			nodeCompat: true,
 		},
