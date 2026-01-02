@@ -3,7 +3,7 @@ import RegionWulingIcon from '~/components/icons/RegionWulingIcon.vue'
 
 export const versionOptions = [
 	{ value: '', label: 'All' },
-	{ value: 'cbt_3', label: 'CBT 3' },
+	{ value: 'release', label: 'Release' },
 ]
 
 export const tierOptions = [
