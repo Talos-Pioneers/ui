@@ -228,6 +228,10 @@ useHead({
 			content: t('pages.home.description'),
 		},
 		{
+			property: 'keywords',
+			content: 'Arknights: Endfield, Endfield, Blueprints, AIC, Automated Industry Complex',
+		},
+		{
 			property: 'og:image',
 			content: ogImage.value,
 		},
