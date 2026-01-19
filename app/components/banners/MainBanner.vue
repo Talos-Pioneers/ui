@@ -19,7 +19,7 @@ const randomBackgroundImage = computed(() => {
 </script>
 <template>
 	<div
-		class="relative block w-full h-[600px] md:h-107 md:bg-cover md:bg-center md:bg-no-repeat bg-cover bg-bottom-right bg-no-repeat"
+		class="relative block w-full h-[600px] md:h-[42rem] md:bg-cover md:bg-center md:bg-no-repeat bg-cover bg-bottom-right bg-no-repeat 2xl:bg-position-[center_top_35%]"
 		:style="{
 			backgroundImage: `url(${randomBackgroundImage}) `,
 		}"
