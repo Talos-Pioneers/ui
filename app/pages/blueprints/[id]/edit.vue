@@ -156,6 +156,20 @@ const facilitiesSlugs = ref<string[]>([])
 const itemInputsSlugs = ref<string[]>([])
 const itemOutputsSlugs = ref<string[]>([])
 
+// Image upload validation constants (matching API: UpdateBlueprintRequest)
+const MAX_IMAGES = 5
+const MAX_FILE_SIZE_KB = 30720 // 30MB in KB
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_KB * 1024
+const ALLOWED_MIME_TYPES = [
+	'image/jpeg',
+	'image/png',
+	'image/gif',
+	'image/bmp',
+	'image/svg+xml',
+	'image/webp',
+]
+const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp']
+
 // Image upload state - support both existing (URLs) and new (Files) images
 interface ImageItem {
 	file?: File
@@ -167,6 +181,7 @@ interface ImageItem {
 
 const imageItems = ref<ImageItem[]>([])
 const fileInputRef = ref<HTMLInputElement | null>(null)
+const isDragging = ref(false)
 
 // Loading state for form submission
 const isSubmitting = ref(false)
@@ -215,34 +230,152 @@ watchEffect(() => {
 	isInitialized.value = true
 })
 
-// Handle file selection
+// Validate a single file
+const validateFile = (
+	file: File
+): { valid: boolean; error?: string } => {
+	// Check file type by MIME type
+	if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+		const extension = file.name.split('.').pop()?.toLowerCase()
+		if (!extension || !ALLOWED_EXTENSIONS.includes(extension)) {
+			return {
+				valid: false,
+				error: t('pages.blueprints.create.invalidFileType', {
+					name: file.name,
+					types: ALLOWED_EXTENSIONS.join(', '),
+				}),
+			}
+		}
+	}
+
+	// Check file size
+	if (file.size > MAX_FILE_SIZE_BYTES) {
+		const sizeMB = (file.size / (1024 * 1024)).toFixed(2)
+		return {
+			valid: false,
+			error: t('pages.blueprints.create.fileTooLarge', {
+				name: file.name,
+				size: sizeMB,
+				max: '30',
+			}),
+		}
+	}
+
+	return { valid: true }
+}
+
+// Process and add valid files
+const processFiles = (files: File[]) => {
+	const remainingSlots = MAX_IMAGES - imageItems.value.length
+
+	if (remainingSlots <= 0) {
+		toast.error(
+			t('pages.blueprints.create.maxImagesReached', { max: MAX_IMAGES })
+		)
+		return
+	}
+
+	const filesToProcess = files.slice(0, remainingSlots)
+	const errors: string[] = []
+
+	if (files.length > remainingSlots) {
+		toast.warning(
+			t('pages.blueprints.create.someImagesSkipped', {
+				skipped: files.length - remainingSlots,
+				max: MAX_IMAGES,
+			})
+		)
+	}
+
+	filesToProcess.forEach((file) => {
+		const validation = validateFile(file)
+		if (!validation.valid) {
+			errors.push(validation.error!)
+			return
+		}
+
+		const reader = new FileReader()
+		reader.onload = (e) => {
+			if (e.target?.result) {
+				imageItems.value.push({
+					file,
+					preview: e.target.result as string,
+					isExisting: false,
+				})
+				syncGalleryToForm()
+			}
+		}
+		reader.readAsDataURL(file)
+	})
+
+	if (errors.length > 0) {
+		errors.forEach((error) => toast.error(error))
+	}
+
+	form.validate('gallery')
+}
+
+// Handle file selection from input
 const handleFileSelect = (event: Event) => {
 	const target = event.target as HTMLInputElement
 	if (target.files) {
-		const newFiles = Array.from(target.files)
-
-		// Create previews for new files
-		newFiles.forEach((file) => {
-			const reader = new FileReader()
-			reader.onload = (e) => {
-				if (e.target?.result) {
-					imageItems.value.push({
-						file,
-						preview: e.target.result as string,
-						isExisting: false,
-					})
-				}
-			}
-			reader.readAsDataURL(file)
-		})
-
-		// Sync files to form.fields.gallery and validate
-		syncGalleryToForm()
-		form.validate('gallery')
+		processFiles(Array.from(target.files))
 	}
 	// Reset input
 	if (target) {
 		target.value = ''
+	}
+}
+
+// Drag and drop handlers - only respond to external file drops, not internal VueDraggable reordering
+const isExternalFileDrag = (e: DragEvent): boolean => {
+	// Check if this is an external file drag (not internal VueDraggable)
+	if (!e.dataTransfer) return false
+	// External file drops have 'Files' in the types array
+	return Array.from(e.dataTransfer.types).includes('Files')
+}
+
+const handleDragEnter = (e: DragEvent) => {
+	// Only respond to external file drags
+	if (!isExternalFileDrag(e)) return
+	e.preventDefault()
+	e.stopPropagation()
+	isDragging.value = true
+}
+
+const handleDragLeave = (e: DragEvent) => {
+	// Only respond to external file drags
+	if (!isExternalFileDrag(e)) return
+	e.preventDefault()
+	e.stopPropagation()
+	// Only set to false if leaving the drop zone entirely
+	const relatedTarget = e.relatedTarget as Node | null
+	const currentTarget = e.currentTarget as Node
+	if (!currentTarget.contains(relatedTarget)) {
+		isDragging.value = false
+	}
+}
+
+const handleDragOver = (e: DragEvent) => {
+	// Only respond to external file drags
+	if (!isExternalFileDrag(e)) return
+	e.preventDefault()
+	e.stopPropagation()
+	if (e.dataTransfer) {
+		e.dataTransfer.dropEffect = 'copy'
+	}
+}
+
+const handleDrop = (e: DragEvent) => {
+	// Only respond to external file drags
+	if (!isExternalFileDrag(e)) return
+	e.preventDefault()
+	e.stopPropagation()
+	isDragging.value = false
+
+	if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
+		const droppedFiles = Array.from(e.dataTransfer.files)
+		processFiles(droppedFiles)
 	}
 }
 
@@ -541,103 +674,163 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 					>
 						<!-- Image Upload Section -->
 						<div class="space-y-2">
-							<Label>{{
-								t('pages.blueprints.create.images')
-							}}</Label>
+							<div class="flex items-center justify-between">
+								<Label>{{
+									t('pages.blueprints.create.images')
+								}}</Label>
+								<span class="text-sm text-cool-gray-50">
+									{{ imageItems.length }}/{{ MAX_IMAGES }}
+								</span>
+							</div>
 							<div class="space-y-4">
-								<!-- Upload Area -->
+								<!-- Upload Area with Drag and Drop -->
 								<div
 									v-if="imageItems.length === 0"
-									class="border-2 border-dashed border-cool-gray-30 dark:border-cool-gray-70 rounded-lg p-8 flex items-center justify-center cursor-pointer hover:border-primary transition-colors"
+									class="border-2 border-dashed rounded-lg p-8 flex items-center justify-center cursor-pointer transition-colors"
+									:class="[
+										isDragging
+											? 'border-primary bg-primary/5'
+											: 'border-cool-gray-30 dark:border-cool-gray-70 hover:border-primary',
+									]"
 									@click="fileInputRef?.click()"
+									@dragenter="handleDragEnter"
+									@dragleave="handleDragLeave"
+									@dragover="handleDragOver"
+									@drop="handleDrop"
 								>
 									<div class="text-center">
 										<Plus
-											class="size-12 mx-auto mb-2 text-cool-gray-50"
+											class="size-12 mx-auto mb-2"
+											:class="[
+												isDragging
+													? 'text-primary'
+													: 'text-cool-gray-50',
+											]"
 										/>
-										<p class="text-sm text-cool-gray-60">
+										<p
+											class="text-sm"
+											:class="[
+												isDragging
+													? 'text-primary'
+													: 'text-cool-gray-60',
+											]"
+										>
 											{{
-												t(
-													'pages.blueprints.create.clickToUpload'
-												)
+												isDragging
+													? t(
+															'pages.blueprints.create.dropHere'
+														)
+													: t(
+															'pages.blueprints.create.clickToUpload'
+														)
 											}}
 										</p>
 									</div>
 								</div>
 
-								<!-- Image Gallery with Drag and Drop -->
-								<VueDraggable
+								<!-- Image Gallery with Drag and Drop Reordering -->
+								<div
 									v-if="imageItems.length > 0"
-									v-model="imageItems"
-									:animation="200"
-									handle=".drag-handle"
-									class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-									@update:model-value="handleImageReorder"
+									class="space-y-4"
 								>
-									<div
-										v-for="(item, index) in imageItems"
-										:key="index"
-										class="relative group aspect-square rounded-lg overflow-hidden border border-cool-gray-20 dark:border-cool-gray-80"
+									<VueDraggable
+										v-model="imageItems"
+										:animation="200"
+										handle=".drag-handle"
+										class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+										@update:model-value="handleImageReorder"
 									>
-										<img
-											:src="item.preview"
-											:alt="`Preview ${index + 1}`"
-											class="w-full h-full object-cover"
-										/>
 										<div
-											class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2"
+											v-for="(item, index) in imageItems"
+											:key="index"
+											class="relative group aspect-square rounded-lg overflow-hidden border border-cool-gray-20 dark:border-cool-gray-80"
 										>
-											<button
-												type="button"
-												class="drag-handle cursor-grab active:cursor-grabbing p-2 bg-white/90 rounded hover:bg-white transition-colors"
-												@mousedown.stop
+											<img
+												:src="item.preview"
+												:alt="`Preview ${index + 1}`"
+												class="w-full h-full object-cover"
+											/>
+											<div
+												class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2"
 											>
-												<GripVertical
-													class="size-4 text-cool-gray-90"
-												/>
-											</button>
-											<button
-												type="button"
-												class="p-2 bg-white/90 rounded hover:bg-white transition-colors"
-												@click="removeImage(index)"
+												<button
+													type="button"
+													class="drag-handle cursor-grab active:cursor-grabbing p-2 bg-white/90 rounded hover:bg-white transition-colors"
+													@mousedown.stop
+												>
+													<GripVertical
+														class="size-4 text-cool-gray-90"
+													/>
+												</button>
+												<button
+													type="button"
+													class="p-2 bg-white/90 rounded hover:bg-white transition-colors"
+													@click="removeImage(index)"
+												>
+													<X
+														class="size-4 text-cool-gray-90"
+													/>
+												</button>
+											</div>
+											<div
+												v-if="index === 0"
+												class="absolute top-2 left-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded"
 											>
-												<X
-													class="size-4 text-cool-gray-90"
-												/>
-											</button>
+												{{
+													t(
+														'pages.blueprints.create.thumbnail'
+													)
+												}}
+											</div>
 										</div>
-										<div
-											v-if="index === 0"
-											class="absolute top-2 left-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded"
+									</VueDraggable>
+								</div>
+
+								<!-- Add More Images - Drag and Drop Area -->
+								<div
+									v-if="imageItems.length > 0 && imageItems.length < MAX_IMAGES"
+									class="border-2 border-dashed rounded-lg p-6 flex items-center justify-center cursor-pointer transition-colors"
+									:class="[
+										isDragging
+											? 'border-primary bg-primary/5'
+											: 'border-cool-gray-30 dark:border-cool-gray-70 hover:border-primary',
+									]"
+									@click="fileInputRef?.click()"
+									@dragenter="handleDragEnter"
+									@dragleave="handleDragLeave"
+									@dragover="handleDragOver"
+									@drop="handleDrop"
+								>
+									<div class="text-center">
+										<Plus
+											class="size-8 mx-auto mb-1"
+											:class="[
+												isDragging
+													? 'text-primary'
+													: 'text-cool-gray-50',
+											]"
+										/>
+										<p
+											class="text-sm"
+											:class="[
+												isDragging
+													? 'text-primary'
+													: 'text-cool-gray-60',
+											]"
 										>
 											{{
-												t(
-													'pages.blueprints.create.thumbnail'
-												)
+												isDragging
+													? t('pages.blueprints.create.dropHere')
+													: t('pages.blueprints.create.addMoreImages')
 											}}
-										</div>
+										</p>
 									</div>
-								</VueDraggable>
-
-								<!-- Add More Images Button -->
-								<button
-									v-if="imageItems.length > 0"
-									type="button"
-									class="flex items-center gap-2 px-4 py-2 border border-cool-gray-30 dark:border-cool-gray-70 rounded-lg hover:border-primary transition-colors text-sm"
-									@click="fileInputRef?.click()"
-								>
-									<Plus class="size-4" />
-									{{
-										t(
-											'pages.blueprints.create.addMoreImages'
-										)
-									}}
-								</button>
+								</div>
 
 								<input
 									ref="fileInputRef"
 									type="file"
-									accept="image/*"
+									accept=".jpg,.jpeg,.png,.gif,.bmp,.svg,.webp,image/jpeg,image/png,image/gif,image/bmp,image/svg+xml,image/webp"
 									multiple
 									class="hidden"
 									@change="handleFileSelect"
