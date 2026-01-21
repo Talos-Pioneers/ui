@@ -17,7 +17,11 @@ import { toast } from 'vue-sonner'
 import type { Facility } from '~/models/facility'
 import type { Item } from '~/models/item'
 import type { Tag } from '~/models/tag'
-import { versionOptions, serverRegionOptions, regionOptions } from '~/constants/blueprintOptions'
+import {
+	versionOptions,
+	serverRegionOptions,
+	regionOptions,
+} from '~/constants/blueprintOptions'
 
 definePageMeta({
 	middleware: ['sanctum:auth'],
@@ -41,6 +45,8 @@ type Schema = {
 	item_inputs: Array<{ id: number; quantity: number }>
 	item_outputs: Array<{ id: number; quantity: number }>
 	gallery: File[]
+	width: number | null
+	height: number | null
 }
 
 // Initialize form with Precognition
@@ -58,6 +64,8 @@ const form = usePrecognitionForm<Schema>('post', '/api/v1/blueprints', {
 	item_inputs: [],
 	item_outputs: [],
 	gallery: [],
+	width: null,
+	height: null,
 })
 
 // Fetch facilities, items, and tags
@@ -222,6 +230,13 @@ const createFormData = (): FormData => {
 		formData.append('server_region', form.fields.server_region)
 	}
 
+	if (form.fields.width) {
+		formData.append('width', String(form.fields.width))
+	}
+	if (form.fields.height) {
+		formData.append('height', String(form.fields.height))
+	}
+
 	// Tags - Laravel expects tags[] format
 	form.fields.tags.forEach((id) => {
 		formData.append('tags[]', String(id))
@@ -279,7 +294,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 
 		// Create FormData in Laravel's expected format
 		const formData = createFormData()
-		console.log(formData);
+		console.log(formData)
 
 		// Use Sanctum client directly with FormData since Precognition doesn't handle nested arrays correctly
 		const sanctumClient = useSanctumClient()
@@ -425,7 +440,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 											:src="item.preview"
 											:alt="`Preview ${index + 1}`"
 											class="w-full h-full object-cover"
-										>
+										/>
 										<div
 											class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2"
 										>
@@ -483,7 +498,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 									multiple
 									class="hidden"
 									@change="handleFileSelect"
-								>
+								/>
 
 								<p class="text-xs text-cool-gray-60">
 									{{
@@ -643,7 +658,9 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 							}}</Label>
 							<Select
 								v-model="form.fields.server_region"
-								@update:model-value="form.validate('server_region')"
+								@update:model-value="
+									form.validate('server_region')
+								"
 							>
 								<SelectTrigger
 									id="server_region"
@@ -708,9 +725,12 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 									>
 										{{ option.label }}
 									</SelectItem>
-									<SelectItem
-										value="any">
-										{{ t('pages.blueprints.create.anyRegion') }}
+									<SelectItem value="any">
+										{{
+											t(
+												'pages.blueprints.create.anyRegion'
+											)
+										}}
 									</SelectItem>
 								</SelectContent>
 							</Select>
@@ -753,6 +773,54 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 										: form.errors.tags
 								}}
 							</p>
+						</div>
+
+						<div class="grid grid-cols-2 gap-4">
+							<div class="space-y-2">
+								<Label for="width">{{
+									t('pages.blueprints.create.widthLabel')
+								}}</Label>
+								<Input
+									id="width"
+									v-model="form.fields.width"
+									type="number"
+									min="1"
+									max="50"
+								/>
+								<p
+									v-if="form.errors.height"
+									class="text-xs text-destructive"
+								>
+									{{
+										Array.isArray(form.errors.height)
+											? form.errors.height[0]
+											: form.errors.height
+									}}
+								</p>
+							</div>
+
+							<div class="space-y-2">
+								<Label for="height">{{
+									t('pages.blueprints.create.heightLabel')
+								}}</Label>
+								<Input
+									id="height"
+									v-model="form.fields.height"
+									type="number"
+									min="1"
+									max="50"
+								/>
+								<p
+									v-if="form.errors.height"
+									class="text-xs text-destructive"
+								>
+									{{
+										Array.isArray(form.errors.height)
+											? form.errors.height[0]
+											: form.errors.height
+									}}
+								</p>
+							</div>
 						</div>
 
 						<!-- Facilities Used -->

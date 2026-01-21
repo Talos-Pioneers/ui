@@ -1,12 +1,9 @@
-import { regionOptions, versionOptions } from '~/constants/blueprintOptions'
-import type { Blueprint, PaginationMeta } from '~/models/blueprint'
-import type { Facility } from '~/models/facility'
-import type { Item } from '~/models/item'
-import type { Tag } from '~/models/tag'
+import type { BlueprintCollection } from '~/models/blueprintCollection'
+import type { PaginationMeta } from '~/models/blueprint'
 import type { FilterConfig, SortConfig } from './useQueryFilters'
 
-type BlueprintListResponse = {
-	data: Blueprint[]
+type CollectionListResponse = {
+	data: BlueprintCollection[]
 	links: {
 		first: string | null
 		last: string | null
@@ -16,14 +13,14 @@ type BlueprintListResponse = {
 	meta: PaginationMeta
 }
 
-type UseBlueprintQueryFilterOptions = {
+type UseCollectionQueryFilterOptions = {
 	filters?: Record<string, FilterConfig>
 	sort?: SortConfig
 }
 
-export const useBlueprintQueryFilter = async (
-	endpoint: string = '/api/v1/blueprints',
-	options?: UseBlueprintQueryFilterOptions
+export const useCollectionQueryFilter = async (
+	endpoint: string = '/api/v1/collections',
+	options?: UseCollectionQueryFilterOptions
 ) => {
 	const {
 		filters,
@@ -38,29 +35,13 @@ export const useBlueprintQueryFilter = async (
 		computedQuery,
 	} = useQueryFilters({
 		filters: options?.filters ?? {
-			region: { type: 'string' },
-			server_region: { type: 'string' },
-			version: { type: 'string' },
-			is_anonymous: { type: 'boolean' },
 			author_id: { type: 'string' },
-			facility: { type: 'array' },
-			item_input: { type: 'array' },
-			item_output: { type: 'array' },
-			likes_count: { type: 'number' },
-			copies_count: { type: 'number' },
-			'tags.id': { type: 'array' },
-			width: { type: 'number' },
-			height: { type: 'number' },
+			status: { type: 'string' },
+			is_anonymous: { type: 'boolean' },
 		},
 		sort: options?.sort ?? {
 			default: '-created_at',
-			fields: [
-				'created_at',
-				'updated_at',
-				'title',
-				'likes_count',
-				'copies_count',
-			],
+			fields: ['created_at', 'updated_at', 'title'],
 		},
 	})
 
@@ -71,7 +52,7 @@ export const useBlueprintQueryFilter = async (
 	const currentPage = ref<number>(Number(query.page) || 1)
 	const perPage = ref<number>(Number(query.per_page) || 25)
 
-	// // Build active query with filters, sort, and pagination
+	// Build active query with filters, sort, and pagination
 	const activeQuery = computed(() => {
 		const queryParams = { ...computedQuery.value }
 		if (currentPage.value > 1) {
@@ -85,7 +66,7 @@ export const useBlueprintQueryFilter = async (
 		return queryParams
 	})
 
-	// // Sync pagination state when route query changes (e.g., browser back/forward)
+	// Sync pagination state when route query changes (e.g., browser back/forward)
 	watch(
 		() => route.query,
 		(newQuery) => {
@@ -101,11 +82,11 @@ export const useBlueprintQueryFilter = async (
 	)
 
 	const {
-		data: blueprintsData,
-		status: blueprintsStatus,
-		error: blueprintsError,
-		refresh: blueprintsRefresh,
-	} = await useLazySanctumFetch<BlueprintListResponse>(
+		data: collectionsData,
+		status: collectionsStatus,
+		error: collectionsError,
+		refresh: collectionsRefresh,
+	} = await useLazySanctumFetch<CollectionListResponse>(
 		endpoint,
 		() => ({
 			method: 'get',
@@ -116,18 +97,18 @@ export const useBlueprintQueryFilter = async (
 		}
 	)
 
-	const blueprints = computed(() => blueprintsData.value?.data ?? [])
-	const pagination = computed(() => blueprintsData.value?.meta ?? null)
+	const collections = computed(() => collectionsData.value?.data ?? [])
+	const pagination = computed(() => collectionsData.value?.meta ?? null)
 
-	// // Pagination Logic
-	// // Sync currentPage with API response (in case API adjusts the page)
+	// Pagination Logic
+	// Sync currentPage with API response (in case API adjusts the page)
 	watch(pagination, (newPagination) => {
 		if (newPagination && newPagination.current_page !== currentPage.value) {
 			currentPage.value = newPagination.current_page
 		}
 	})
 
-	// // Reset to page 1 when filters or sort change
+	// Reset to page 1 when filters or sort change
 	watch(
 		filters,
 		() => {
@@ -143,7 +124,7 @@ export const useBlueprintQueryFilter = async (
 		}
 	})
 
-	// // Update route query when pagination changes
+	// Update route query when pagination changes
 	watch([currentPage, perPage], () => {
 		useRouter().replace({
 			query: activeQuery.value,
@@ -151,11 +132,11 @@ export const useBlueprintQueryFilter = async (
 	})
 
 	return {
-		blueprints,
+		collections,
 		pagination,
-		blueprintsStatus,
-		blueprintsError,
-		blueprintsRefresh,
+		collectionsStatus,
+		collectionsError,
+		collectionsRefresh,
 
 		currentPage,
 		perPage,

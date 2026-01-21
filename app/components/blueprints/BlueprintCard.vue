@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useClipboard } from '@vueuse/core'
 import type { Blueprint } from '~/models/blueprint'
+import type { BlueprintCollection } from '~/models/blueprintCollection'
 import ClockIcon from '../icons/ClockIcon.vue'
 import CopyIcon from '../icons/CopyIcon.vue'
 import RegionIcon from '../icons/RegionIcon.vue'
@@ -25,9 +26,12 @@ import {
 import ServerRegionIcon from '../icons/ServerRegionIcon.vue'
 import DeleteBlueprintDialog from './DeleteBlueprintDialog.vue'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
+import AddToCollection from '../collections/AddToCollection.vue'
 
 const props = defineProps<{
 	blueprint: Blueprint
+	collectionId?: string
+	canEditCollection?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -36,12 +40,13 @@ const emit = defineEmits<{
 	'filter-server-region': [serverRegion: string]
 	'filter-author': [authorId: string]
 	deleted: []
+	'removed-from-collection': []
 }>()
 
 const { copy, copied } = useClipboard()
 const { t } = useI18n()
 const sanctumClient = useSanctumClient()
-
+const { isAuthenticated } = useSanctumAuth()
 const dropdownOpen = ref(false)
 
 const previewImage = computed(() => {
@@ -110,6 +115,64 @@ const deleteDialogOpen = ref(false)
 
 const handleBlueprintDeleted = () => {
 	emit('deleted')
+}
+
+const isRemovingFromCollection = ref(false)
+
+const handleRemoveFromCollection = async () => {
+	if (!props.collectionId || !props.canEditCollection) {
+		return
+	}
+
+	isRemovingFromCollection.value = true
+
+	try {
+		// Fetch current collection blueprints
+		const response = await sanctumClient<{
+			data: BlueprintCollection
+		}>(`/api/v1/collections/${props.collectionId}`, {
+			method: 'get',
+			query: {
+				include: 'blueprints',
+			},
+		})
+
+		const currentBlueprints =
+			response.data?.blueprints?.map((bp) => bp.id) ?? []
+
+		// Remove the blueprint from the array
+		const updatedBlueprints = currentBlueprints.filter(
+			(id) => id !== props.blueprint.id
+		)
+
+		// Update the collection
+		await sanctumClient(`/api/v1/collections/${props.collectionId}`, {
+			method: 'put',
+			body: {
+				blueprints: updatedBlueprints,
+			},
+		})
+
+		toast.success(
+			t('components.collections.addToCollection.removeSuccess')
+		)
+		emit('removed-from-collection')
+	} catch (error) {
+		const { isValidationError, bag } = useSanctumError(error)
+		if (isValidationError && bag.length > 0) {
+			toast.error(
+				bag[0]?.message ||
+					t('components.collections.addToCollection.removeError')
+			)
+		} else {
+			toast.error(
+				t('components.collections.addToCollection.removeErrorRetry')
+			)
+		}
+	} finally {
+		isRemovingFromCollection.value = false
+		dropdownOpen.value = false
+	}
 }
 </script>
 
@@ -183,6 +246,14 @@ const handleBlueprintDeleted = () => {
 						class="text-xl font-bold leading-6 text-cool-gray-90 mb-2 line-clamp-2"
 					>
 						{{ blueprint.title }}
+						<span
+							v-if="blueprint.width || blueprint.height"
+							class="text-sm text-cool-gray-60"
+						>
+							{{ blueprint.width ?? 0 }}x{{
+								blueprint.height ?? 0
+							}}
+						</span>
 					</h2>
 				</NuxtLinkLocale>
 				<div class="flex items-center justify-between gap-2 h-4">
@@ -257,6 +328,10 @@ const handleBlueprintDeleted = () => {
 					</button>
 				</div>
 				<div class="flex items-center gap-1">
+					<AddToCollection
+						v-if="isAuthenticated"
+						:blueprint="blueprint"
+					/>
 					<DropdownMenu v-model:open="dropdownOpen">
 						<DropdownMenuTrigger as-child>
 							<Button
@@ -315,6 +390,17 @@ const handleBlueprintDeleted = () => {
 								<span>{{
 									t(
 										'components.blueprints.card.actions.delete'
+									)
+								}}</span>
+							</DropdownMenuItem>
+							<DropdownMenuItem
+								v-if="collectionId && canEditCollection"
+								:disabled="isRemovingFromCollection"
+								@click="handleRemoveFromCollection"
+							>
+								<span>{{
+									t(
+										'components.blueprints.card.actions.removeFromCollection'
 									)
 								}}</span>
 							</DropdownMenuItem>

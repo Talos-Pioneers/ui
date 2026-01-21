@@ -34,11 +34,13 @@ import {
 	PopoverTrigger,
 } from '~/components/ui/popover'
 import { Button } from '~/components/ui/button'
+import { Input } from '~/components/ui/input'
 import CloseIcon from '../icons/CloseIcon.vue'
 import { ChevronDown } from 'lucide-vue-next'
 import { useSidebar } from '@/components/ui/sidebar'
 import type { NuxtError } from '#app'
 import { CheckboxGroupRoot } from 'reka-ui'
+import { useDebounceFn } from '@vueuse/core'
 
 const { t } = useI18n()
 
@@ -64,12 +66,16 @@ const props = withDefaults(
 		loading?: boolean
 		error?: NuxtError | string | null
 		sortOptions?: Array<{ value: string; label: string }>
+		collectionId?: string
+		canEditCollection?: boolean
 	}>(),
 	{
 		showSidebar: true,
 		loading: false,
 		error: null,
 		sortOptions: undefined,
+		collectionId: undefined,
+		canEditCollection: false,
 	}
 )
 
@@ -81,6 +87,7 @@ const emit = defineEmits<{
 	'clear-filter': [key: string, value?: any]
 	'clear-all-filters': []
 	'blueprint-deleted': []
+	'removed-from-collection': []
 }>()
 
 // Sort options
@@ -184,6 +191,39 @@ const handleServerRegionChange = (serverRegionValue: string) => {
 		emit('clear-filter', 'server_region')
 	} else {
 		emit('update:filter', 'server_region', serverRegionValue)
+	}
+}
+
+const handleWidthChange = (value: string | number | null | undefined) => {
+	if (value === '' || value === null || value === undefined || value === 0) {
+		emit('clear-filter', 'width')
+	} else {
+		const numValue = Number(value)
+		if (!isNaN(numValue) && numValue > 0) {
+			emit('update:filter', 'width', numValue)
+		}
+	}
+}
+
+const handleHeightChange = (value: string | number | null | undefined) => {
+	if (value === '' || value === null || value === undefined || value === 0) {
+		emit('clear-filter', 'height')
+	} else {
+		const numValue = Number(value)
+		if (!isNaN(numValue) && numValue > 0) {
+			emit('update:filter', 'height', numValue)
+		}
+	}
+}
+
+const debouncedHandleWidthChange = useDebounceFn(handleWidthChange, 500)
+const debouncedHandleHeightChange = useDebounceFn(handleHeightChange, 500)
+
+const handleIsAnonymousChange = (value: boolean) => {
+	if (value) {
+		emit('update:filter', 'is_anonymous', true)
+	} else {
+		emit('clear-filter', 'is_anonymous')
 	}
 }
 
@@ -441,7 +481,7 @@ const unifiedFilterModel = computed({
 									/>
 									<span
 										class="text-xs text-cool-gray-70 font-medium"
-										>{{ region.label }}</span
+										>{{ t(`region.${region.value}`) }}</span
 									>
 								</button>
 							</div>
@@ -569,6 +609,87 @@ const unifiedFilterModel = computed({
 								class="w-full"
 							/>
 						</div>
+
+						<div class="px-2 py-3 space-y-2">
+							<label
+								class="flex items-center gap-2 cursor-pointer hover:bg-sidebar-accent/50 rounded px-2 py-1.5 transition-colors"
+							>
+								<Checkbox
+									:checked="filters.is_anonymous === true"
+									@update:model-value="handleIsAnonymousChange"
+								/>
+								<span class="text-sm text-sidebar-foreground">{{
+									t(
+										'components.blueprints.list.filters.isAnonymous'
+									)
+								}}</span>
+							</label>
+						</div>
+
+						<div class="px-2 py-3 space-y-2">
+							<label
+								class="text-xs font-medium text-sidebar-foreground/70 mb-2 block"
+								>{{
+									t(
+										'components.blueprints.list.filters.dimensions'
+									)
+								}}</label
+							>
+							<div class="flex gap-2">
+								<div class="flex-1">
+									<label
+										class="text-xs text-sidebar-foreground/70 mb-1 block"
+										for="width-input"
+										>{{
+											t(
+												'components.blueprints.list.filters.width'
+											)
+										}}</label
+									>
+									<Input
+										id="width-input"
+										:model-value="filters.width ?? ''"
+										type="number"
+										min="1"
+										:placeholder="
+											t(
+												'components.blueprints.list.filters.widthPlaceholder'
+											)
+										"
+										class="w-full"
+										@update:model-value="
+											debouncedHandleWidthChange
+										"
+									/>
+								</div>
+								<div class="flex-1">
+									<label
+										class="text-xs text-sidebar-foreground/70 mb-1 block"
+										for="height-input"
+										>{{
+											t(
+												'components.blueprints.list.filters.height'
+											)
+										}}</label
+									>
+									<Input
+										id="height-input"
+										:model-value="filters.height ?? ''"
+										type="number"
+										min="1"
+										:placeholder="
+											t(
+												'components.blueprints.list.filters.heightPlaceholder'
+											)
+										"
+										class="w-full"
+										@update:model-value="
+											debouncedHandleHeightChange
+										"
+									/>
+								</div>
+							</div>
+						</div>
 					</SidebarGroupContent>
 				</SidebarGroup>
 			</SidebarContent>
@@ -646,7 +767,7 @@ const unifiedFilterModel = computed({
 										:key="option.value"
 										:value="option.value"
 									>
-										{{ option.label }}
+										{{ t(`serverRegion.${option.value}`) }}
 									</SelectItem>
 									<SelectItem value="any">
 										{{
@@ -789,11 +910,14 @@ const unifiedFilterModel = computed({
 							v-for="blueprint in blueprints"
 							:key="blueprint.id"
 							:blueprint="blueprint"
+							:collection-id="collectionId"
+							:can-edit-collection="canEditCollection"
 							@filter-tag="handleTagFilter"
 							@filter-region="handleRegionFilter"
 							@filter-server-region="handleServerRegionFilter"
 							@filter-author="handleAuthorFilter"
 							@deleted="emit('blueprint-deleted')"
+							@removed-from-collection="emit('removed-from-collection')"
 						/>
 
 						<div

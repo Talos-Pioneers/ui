@@ -1,12 +1,24 @@
 <script setup lang="ts">
 import BlueprintList from '~/components/blueprints/BlueprintList.vue'
-import MainBanner from '~/components/banners/MainBanner.vue'
+import CollectionBanner from '~/components/banners/CollectionBanner.vue'
+import type { BlueprintCollection } from '~/models/blueprintCollection'
 import type { Facility } from '~/models/facility'
 import type { Item } from '~/models/item'
 import type { Tag } from '~/models/tag'
 import { versionOptions, regionOptions } from '~/constants/blueprintOptions'
+import { useBlueprintQueryFilter } from '~/composables/useBlueprintQueryFilter'
 
 const { t } = useI18n()
+const route = useRoute()
+
+// Fetch collection data
+const { data: collectionData, error: collectionError } =
+	await useLazySanctumFetch<{ data: BlueprintCollection }>(
+		`/api/v1/collections/${route.params.id}`
+	)
+
+const collection = computed(() => collectionData.value?.data)
+
 // Fetch filter data
 const { data: facilitiesData } = await useLazySanctumFetch<{
 	data: Facility[]
@@ -34,6 +46,7 @@ const items = computed(
 )
 const tags = computed(() => tagsData.value?.data ?? [])
 
+// Fetch blueprints for the collection
 const {
 	blueprints,
 	pagination,
@@ -53,9 +66,15 @@ const {
 	setSort,
 	toggleSort,
 	isSortDescending,
-} = await useBlueprintQueryFilter('/api/v1/blueprints')
+} = await useBlueprintQueryFilter(
+	`/api/v1/collections/${route.params.id}/blueprints`
+)
 
 const handleBlueprintDeleted = () => {
+	blueprintsRefresh()
+}
+
+const handleRemovedFromCollection = () => {
 	blueprintsRefresh()
 }
 
@@ -174,15 +193,6 @@ const activeFilterTags = computed(() => {
 			})
 			return
 		}
-
-		if (key === 'is_anonymous' && value === true) {
-			filterTags.push({
-				filterKey: key,
-				label: t('components.blueprints.list.filters.isAnonymous'),
-				value: value,
-			})
-			return
-		}
 	})
 
 	return filterTags
@@ -212,24 +222,36 @@ const ogImage = computed(() => {
 	return `${window.location.origin}/logo.png`
 })
 
+const pageTitle = computed(() => {
+	if (collection.value?.title) {
+		return t('pages.collections.view.title', {
+			title: collection.value.title,
+		})
+	}
+	return 'Talos Pioneers'
+})
+
+const pageDescription = computed(() => {
+	if (collection.value?.description) {
+		return t('pages.collections.view.description')
+	}
+	return t('pages.collections.view.description')
+})
+
 useHead({
-	title: 'Arknights: Endfield',
+	title: pageTitle,
 	meta: [
 		{
 			name: 'description',
-			content: t('pages.home.description'),
+			content: pageDescription.value,
 		},
 		{
 			property: 'og:title',
-			content: t('pages.home.title'),
+			content: pageTitle.value,
 		},
 		{
 			property: 'og:description',
-			content: t('pages.home.description'),
-		},
-		{
-			property: 'keywords',
-			content: 'Arknights: Endfield, Endfield, Blueprints, AIC, Automated Industry Complex',
+			content: pageDescription.value,
 		},
 		{
 			property: 'og:image',
@@ -253,11 +275,11 @@ useHead({
 		},
 		{
 			name: 'twitter:title',
-			content: t('pages.home.title'),
+			content: pageTitle.value,
 		},
 		{
 			name: 'twitter:description',
-			content: t('pages.home.description'),
+			content: pageDescription.value,
 		},
 		{
 			name: 'twitter:image',
@@ -265,37 +287,76 @@ useHead({
 		},
 	],
 })
+
+// Handle 404 if collection not found
+if (collectionError.value && collectionError.value.statusCode === 404) {
+	throw createError({
+		statusCode: 404,
+		statusMessage: t('pages.collections.view.notFound'),
+	})
+}
 </script>
 
 <template>
 	<div>
-		<BlueprintList
-			:blueprints="blueprints"
-			:pagination="pagination"
-			:facilities="facilities"
-			:items="items"
-			:tags="tags"
-			:filters="filters"
-			:sort="sort"
-			:is-sort-descending="isSortDescending"
-			:has-active-filters="hasActiveFilters"
-			:active-filter-tags="activeFilterTags"
-			:current-page="currentPage"
-			:per-page="perPage"
-			:loading="blueprintsStatus === 'pending'"
-			:error="blueprintsError"
-			@update:filter="setFilter"
-			@update:sort="setSort"
-			@update:current-page="handlePageUpdate"
-			@update:per-page="handlePerPageUpdate"
-			@clear-filter="clearFilter"
-			@clear-all-filters="clearAllFilters"
-			@toggle-sort="toggleSort"
-			@blueprint-deleted="handleBlueprintDeleted"
+		<!-- Loading State -->
+		<div
+			v-if="!collection && !collectionError"
+			class="flex items-center justify-center min-h-screen"
 		>
-			<template #banner>
-				<MainBanner />
-			</template>
-		</BlueprintList>
+			<div class="size-64">
+				<Lottie name="throbber" />
+			</div>
+		</div>
+
+		<!-- Error State -->
+		<div
+			v-else-if="collectionError && collectionError.statusCode !== 404"
+			class="flex flex-col items-center justify-center min-h-screen"
+		>
+			<p class="text-destructive mb-2">
+				{{ t('pages.collections.view.error') }}
+			</p>
+		</div>
+
+		<!-- Collection Content -->
+		<template v-else-if="collection">
+			<BlueprintList
+				:blueprints="blueprints"
+				:pagination="pagination"
+				:facilities="facilities"
+				:items="items"
+				:tags="tags"
+				:filters="filters"
+				:sort="sort"
+				:is-sort-descending="isSortDescending"
+				:has-active-filters="hasActiveFilters"
+				:active-filter-tags="activeFilterTags"
+				:current-page="currentPage"
+				:per-page="perPage"
+				:loading="blueprintsStatus === 'pending'"
+				:error="blueprintsError"
+				:collection-id="collection?.id"
+				:can-edit-collection="
+					collection?.permissions?.can_edit ?? false
+				"
+				@update:filter="setFilter"
+				@update:sort="setSort"
+				@update:current-page="handlePageUpdate"
+				@update:per-page="handlePerPageUpdate"
+				@clear-filter="clearFilter"
+				@clear-all-filters="clearAllFilters"
+				@toggle-sort="toggleSort"
+				@blueprint-deleted="handleBlueprintDeleted"
+				@removed-from-collection="handleRemovedFromCollection"
+			>
+				<template #banner>
+					<CollectionBanner
+						:title="collection.title"
+						:description="collection.description"
+					/>
+				</template>
+			</BlueprintList>
+		</template>
 	</div>
 </template>

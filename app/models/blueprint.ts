@@ -8,6 +8,8 @@ export type Blueprint = {
 	status: string
 	region: string | null
 	server_region?: string | null
+	width?: number | null
+	height?: number | null
 	facilities?: BlueprintFacility[]
 	item_inputs?: BlueprintItem[]
 	item_outputs?: BlueprintItem[]

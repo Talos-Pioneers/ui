@@ -26,6 +26,11 @@ const teamMembers = [
 		role: 'designer',
 		avatar: '/avatars/patupatu.webp',
 	},
+	{
+		name: '十二獣Zodiac',
+		role: 'illustrator',
+		avatar: '/avatars/zodiac.jpg',
+	}
 ]
 
 // Special thanks
