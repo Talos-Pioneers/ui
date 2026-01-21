@@ -205,7 +205,7 @@ const handleRemoveFromCollection = async () => {
 				/>
 			</NuxtLinkLocale>
 			<div class="absolute bottom-2 right-2 z-10">
-				<Tooltip>
+				<Tooltip v-if="blueprint.code">
 					<TooltipTrigger as-child>
 						<button
 							class="group/copy-button p-2 bg-black/50 border border-cool-gray-60 hover:border-cool-gray-80 rounded-full hover:bg-white transition-colors cursor-pointer"
