@@ -39,15 +39,25 @@ onMounted(() => {
 		ref="parallaxContainer"
 		class="relative block w-full h-[600px] md:h-[42rem] overflow-hidden"
 	>
-		<!-- Parallax background layer with gradient overlay -->
-		<!-- will-change hints browser to pre-composite this layer for GPU acceleration -->
+		<!-- Parallax background layer with image -->
+		<!-- Using img tag with object-fit for better focal point control -->
 		<div
-			class="absolute inset-0 w-full h-[calc(100%+200px)] md:bg-cover md:bg-center md:bg-no-repeat bg-cover bg-bottom-right bg-no-repeat 2xl:bg-position-[center_top_35%] will-change-transform"
+			class="absolute inset-0 w-full h-[calc(100%+200px)] will-change-transform"
 			:style="{
-				backgroundImage: `linear-gradient(180deg, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.7) 100%), url(${randomBackgroundImage})`,
 				transform: parallaxStyle.transform || 'translate3d(0, 0, 0)',
 			}"
-		/>
+		>
+			<img
+				:src="randomBackgroundImage"
+				alt=""
+				class="w-full h-full object-cover object-[80%] md:object-center 2xl:object-[center_35%] scale-125 -translate-y-[15%] md:scale-100 md:-translate-y-[10%]"
+			/>
+			<!-- Gradient overlay -->
+			<div
+				class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70"
+				style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.7) 100%)"
+			/>
+		</div>
 		<!-- Content layer (stays fixed) -->
 		<div
 			class="relative z-10 container mx-auto px-6 sm:px-4 py-6 flex flex-col h-full justify-end md:justify-center"
