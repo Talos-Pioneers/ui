@@ -51,6 +51,7 @@ export const useBlueprintQueryFilter = async (
 			'tags.id': { type: 'array' },
 			width: { type: 'number' },
 			height: { type: 'number' },
+			hide_partner_url: { type: 'boolean' },
 		},
 		sort: options?.sort ?? {
 			default: '-created_at',

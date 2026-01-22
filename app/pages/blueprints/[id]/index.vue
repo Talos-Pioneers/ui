@@ -111,7 +111,10 @@ const seoDescription = computed(() => {
 		? blueprint.value.description.substring(0, 200)
 		: ''
 	return description
-		? t('pages.blueprints.detail.description', { description })
+		? t('pages.blueprints.detail.description', {
+				description,
+				code: blueprint.value.code,
+			})
 		: t('pages.blueprints.detail.descriptionFallback')
 })
 
@@ -779,7 +782,7 @@ const handleBlueprintDeleted = () => {
 						class="rounded-xl border border-cool-gray-20 bg-white dark:bg-cool-gray-95 p-6 space-y-5"
 					>
 						<div class="grid grid-cols-2 gap-2.5 w-full">
-							<Tooltip>
+							<Tooltip v-if="blueprint.code">
 								<TooltipTrigger as-child>
 									<Button
 										class="w-full justify-between before:hidden"
@@ -802,6 +805,7 @@ const handleBlueprintDeleted = () => {
 								:variant="
 									blueprint.is_liked ? 'default' : 'outline'
 								"
+								:class="blueprint.code ? '' : 'col-span-2'"
 								rounded="base"
 								class="w-full justify-between before:hidden"
 								:disabled="isTogglingLike"
@@ -818,6 +822,28 @@ const handleBlueprintDeleted = () => {
 								}}</span>
 							</Button>
 						</div>
+						<!-- Partner URL Link -->
+						<Button
+							v-if="blueprint.partner_url"
+							:href="blueprint.partner_url"
+							target="_blank"
+							rel="noopener noreferrer"
+							as="a"
+							variant="outline"
+							rounded="base"
+							class="w-full bg-[#FFFA00] hover:bg-[#FFFA00]/70 justify-between before:hidden"
+						>
+							<img
+								src="/enkanetwork.svg"
+								alt="Enka Network"
+								class="size-4.5"
+							/>
+							{{
+								t(
+									'pages.blueprints.detail.viewOnEnkaNetwork'
+								)
+							}}
+						</Button>
 						<div>
 							<h3 class="text-lg font-semibold mb-2.5">
 								{{ t('pages.blueprints.detail.details') }}

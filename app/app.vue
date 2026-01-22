@@ -3,7 +3,7 @@ import { ConfigProvider } from 'reka-ui'
 
 const useIdFunction = () => useId()
 useHead({
-	titleTemplate: '%siteName %separator %s ',
+	titleTemplate: '%s %separator %siteName',
 })
 </script>
 

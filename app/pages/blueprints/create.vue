@@ -22,6 +22,7 @@ import {
 	serverRegionOptions,
 	regionOptions,
 } from '~/constants/blueprintOptions'
+import { useImageGallery } from '~/composables/useImageGallery'
 
 definePageMeta({
 	middleware: ['sanctum:auth'],
@@ -33,6 +34,7 @@ const { t } = useI18n()
 // Form schema matching StoreBlueprintRequest
 type Schema = {
 	code: string
+	partner_url: string | null
 	title: string
 	version: string
 	description: string | null
@@ -52,6 +54,7 @@ type Schema = {
 // Initialize form with Precognition
 const form = usePrecognitionForm<Schema>('post', '/api/v1/blueprints', {
 	code: '',
+	partner_url: null,
 	title: '',
 	version: 'cbt_3',
 	description: null,
@@ -110,65 +113,37 @@ const facilitiesSlugs = ref<string[]>([])
 const itemInputsSlugs = ref<string[]>([])
 const itemOutputsSlugs = ref<string[]>([])
 
-// Image upload state - use a reactive object to maintain file-preview mapping
-interface ImageItem {
-	file: File
-	preview: string
-}
-
-const imageItems = ref<ImageItem[]>([])
-const fileInputRef = ref<HTMLInputElement | null>(null)
-
 // Loading state for form submission
 const isSubmitting = ref(false)
 
-// Handle file selection
-const handleFileSelect = (event: Event) => {
-	const target = event.target as HTMLInputElement
-	if (target.files) {
-		const newFiles = Array.from(target.files)
-
-		// Create previews for new files
-		newFiles.forEach((file) => {
-			const reader = new FileReader()
-			reader.onload = (e) => {
-				if (e.target?.result) {
-					imageItems.value.push({
-						file,
-						preview: e.target.result as string,
-					})
-				}
-			}
-			reader.readAsDataURL(file)
-		})
-
-		// Sync files to form.fields.gallery and validate
-		syncGalleryToForm()
-		form.validate('gallery')
-	}
-	// Reset input
-	if (target) {
-		target.value = ''
-	}
-}
-
-// Remove image
-const removeImage = (index: number) => {
-	imageItems.value.splice(index, 1)
-	syncGalleryToForm()
-	form.forgetError('gallery')
-}
-
-// Handle image reordering
-const handleImageReorder = (newOrder: ImageItem[]) => {
-	imageItems.value = newOrder
-	syncGalleryToForm()
-}
-
 // Sync imageItems to form.fields.gallery (maintain order - first image = thumbnail)
 const syncGalleryToForm = () => {
-	form.fields.gallery = imageItems.value.map((item) => item.file)
+	form.fields.gallery = gallery.getNewFiles()
 }
+
+// Image gallery composable - handles all drag-drop, validation, cleanup
+const gallery = useImageGallery({
+	t,
+	onGalleryChange: syncGalleryToForm,
+	onValidate: (field) => form.validate(field as keyof Schema),
+	onForgetError: (field) => form.forgetError(field as keyof Schema),
+})
+
+// Destructure for template access
+const {
+	imageItems,
+	isDragging,
+	fileInputRef,
+	maxImages: MAX_IMAGES,
+	allowedExtensions: ALLOWED_EXTENSIONS,
+	handleFileSelect,
+	handleDragEnter,
+	handleDragLeave,
+	handleDragOver,
+	handleDrop,
+	removeImage,
+	onImageReorder,
+} = gallery
 
 // Sync slugs to IDs and update form fields before submission
 const syncFormFields = () => {
@@ -228,6 +203,10 @@ const createFormData = (): FormData => {
 
 	if (form.fields.server_region) {
 		formData.append('server_region', form.fields.server_region)
+	}
+
+	if (form.fields.partner_url) {
+		formData.append('partner_url', form.fields.partner_url)
 	}
 
 	if (form.fields.width) {
@@ -398,103 +377,163 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 					>
 						<!-- Image Upload Section -->
 						<div class="space-y-2">
-							<Label>{{
-								t('pages.blueprints.create.images')
-							}}</Label>
+							<div class="flex items-center justify-between">
+								<Label>{{
+									t('pages.blueprints.create.images')
+								}}</Label>
+								<span class="text-sm text-cool-gray-50">
+									{{ imageItems.length }}/{{ MAX_IMAGES }}
+								</span>
+							</div>
 							<div class="space-y-4">
-								<!-- Upload Area -->
+								<!-- Upload Area with Drag and Drop -->
 								<div
 									v-if="imageItems.length === 0"
-									class="border-2 border-dashed border-cool-gray-30 dark:border-cool-gray-70 rounded-lg p-8 flex items-center justify-center cursor-pointer hover:border-primary transition-colors"
+									class="border-2 border-dashed rounded-lg p-8 flex items-center justify-center cursor-pointer transition-colors"
+									:class="[
+										isDragging
+											? 'border-primary bg-primary/5'
+											: 'border-cool-gray-30 dark:border-cool-gray-70 hover:border-primary',
+									]"
 									@click="fileInputRef?.click()"
+									@dragenter="handleDragEnter"
+									@dragleave="handleDragLeave"
+									@dragover="handleDragOver"
+									@drop="handleDrop"
 								>
 									<div class="text-center">
 										<Plus
-											class="size-12 mx-auto mb-2 text-cool-gray-50"
+											class="size-12 mx-auto mb-2"
+											:class="[
+												isDragging
+													? 'text-primary'
+													: 'text-cool-gray-50',
+											]"
 										/>
-										<p class="text-sm text-cool-gray-60">
+										<p
+											class="text-sm"
+											:class="[
+												isDragging
+													? 'text-primary'
+													: 'text-cool-gray-60',
+											]"
+										>
 											{{
-												t(
-													'pages.blueprints.create.clickToUpload'
-												)
+												isDragging
+													? t(
+															'pages.blueprints.create.dropHere'
+														)
+													: t(
+															'pages.blueprints.create.clickToUpload'
+														)
 											}}
 										</p>
 									</div>
 								</div>
 
-								<!-- Image Gallery with Drag and Drop -->
-								<VueDraggable
+								<!-- Image Gallery with Drag and Drop Reordering -->
+								<div
 									v-if="imageItems.length > 0"
-									v-model="imageItems"
-									:animation="200"
-									handle=".drag-handle"
-									class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-									@update:model-value="handleImageReorder"
+									class="space-y-4"
 								>
-									<div
-										v-for="(item, index) in imageItems"
-										:key="index"
-										class="relative group aspect-square rounded-lg overflow-hidden border border-cool-gray-20 dark:border-cool-gray-80"
+									<VueDraggable
+										:model-value="imageItems"
+										:animation="200"
+										handle=".drag-handle"
+										class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+										@update:model-value="onImageReorder"
 									>
-										<img
-											:src="item.preview"
-											:alt="`Preview ${index + 1}`"
-											class="w-full h-full object-cover"
-										/>
 										<div
-											class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2"
+											v-for="(item, index) in imageItems"
+											:key="item.id"
+											class="relative group aspect-square rounded-lg overflow-hidden border border-cool-gray-20 dark:border-cool-gray-80"
 										>
-											<button
-												type="button"
-												class="drag-handle cursor-grab active:cursor-grabbing p-2 bg-white/90 rounded hover:bg-white transition-colors"
-												@mousedown.stop
+											<img
+												:src="item.preview"
+												:alt="`Preview ${index + 1}`"
+												class="w-full h-full object-cover"
+											/>
+											<div
+												class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2"
 											>
-												<GripVertical
-													class="size-4 text-cool-gray-90"
-												/>
-											</button>
-											<button
-												type="button"
-												class="p-2 bg-white/90 rounded hover:bg-white transition-colors"
-												@click="removeImage(index)"
+												<button
+													type="button"
+													class="drag-handle cursor-grab active:cursor-grabbing p-2 bg-white/90 rounded hover:bg-white transition-colors"
+													@mousedown.stop
+												>
+													<GripVertical
+														class="size-4 text-cool-gray-90"
+													/>
+												</button>
+												<button
+													type="button"
+													class="p-2 bg-white/90 rounded hover:bg-white transition-colors"
+													@click="removeImage(item.id)"
+												>
+													<X
+														class="size-4 text-cool-gray-90"
+													/>
+												</button>
+											</div>
+											<div
+												v-if="index === 0"
+												class="absolute top-2 left-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded"
 											>
-												<X
-													class="size-4 text-cool-gray-90"
-												/>
-											</button>
+												{{
+													t(
+														'pages.blueprints.create.thumbnail'
+													)
+												}}
+											</div>
 										</div>
-										<div
-											v-if="index === 0"
-											class="absolute top-2 left-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded"
+									</VueDraggable>
+								</div>
+
+								<!-- Add More Images - Drag and Drop Area -->
+								<div
+									v-if="imageItems.length > 0 && imageItems.length < MAX_IMAGES"
+									class="border-2 border-dashed rounded-lg p-6 flex items-center justify-center cursor-pointer transition-colors"
+									:class="[
+										isDragging
+											? 'border-primary bg-primary/5'
+											: 'border-cool-gray-30 dark:border-cool-gray-70 hover:border-primary',
+									]"
+									@click="fileInputRef?.click()"
+									@dragenter="handleDragEnter"
+									@dragleave="handleDragLeave"
+									@dragover="handleDragOver"
+									@drop="handleDrop"
+								>
+									<div class="text-center">
+										<Plus
+											class="size-8 mx-auto mb-1"
+											:class="[
+												isDragging
+													? 'text-primary'
+													: 'text-cool-gray-50',
+											]"
+										/>
+										<p
+											class="text-sm"
+											:class="[
+												isDragging
+													? 'text-primary'
+													: 'text-cool-gray-60',
+											]"
 										>
 											{{
-												t(
-													'pages.blueprints.create.thumbnail'
-												)
+												isDragging
+													? t('pages.blueprints.create.dropHere')
+													: t('pages.blueprints.create.addMoreImages')
 											}}
-										</div>
+										</p>
 									</div>
-								</VueDraggable>
-
-								<!-- Add More Images Button -->
-								<button
-									v-if="imageItems.length > 0"
-									type="button"
-									class="flex items-center gap-2 px-4 py-2 border border-cool-gray-30 dark:border-cool-gray-70 rounded-lg hover:border-primary transition-colors text-sm"
-									@click="fileInputRef?.click()"
-								>
-									<Plus class="size-4" />
-									{{
-										t(
-											'pages.blueprints.create.addMoreImages'
-										)
-									}}
-								</button>
+								</div>
 
 								<input
 									ref="fileInputRef"
 									type="file"
-									accept="image/*"
+									accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,image/jpeg,image/png,image/gif,image/bmp,image/webp"
 									multiple
 									class="hidden"
 									@change="handleFileSelect"
@@ -602,6 +641,39 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 									Array.isArray(form.errors.code)
 										? form.errors.code[0]
 										: form.errors.code
+								}}
+							</p>
+						</div>
+
+						<!-- Partner URL -->
+						<div class="space-y-2">
+							<Label for="partner_url">{{
+								t('pages.blueprints.create.partnerUrlLabel')
+							}}</Label>
+							<Input
+								id="partner_url"
+								v-model="form.fields.partner_url"
+								:placeholder="
+									t(
+										'pages.blueprints.create.partnerUrlPlaceholder'
+									)
+								"
+								:aria-invalid="!!form.errors.partner_url"
+								@change="form.validate('partner_url')"
+							/>
+							<p class="text-xs text-cool-gray-60">
+								{{
+									t('pages.blueprints.create.partnerUrlHelper')
+								}}
+							</p>
+							<p
+								v-if="form.errors.partner_url"
+								class="text-xs text-destructive"
+							>
+								{{
+									Array.isArray(form.errors.partner_url)
+										? form.errors.partner_url[0]
+										: form.errors.partner_url
 								}}
 							</p>
 						</div>
