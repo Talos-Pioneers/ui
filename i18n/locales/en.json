@@ -119,7 +119,7 @@
 	"pages.blueprints.create.shareCodeLabel": "Share Code",
 	"pages.blueprints.create.shareCodePlaceholder": "Enter blueprint code...",
 	"pages.blueprints.create.partnerUrlLabel": "Partner URL (Enka Network)",
-	"pages.blueprints.create.partnerUrlPlaceholder": "https://enka.network/endfield/blueprint/?id=...",
+	"pages.blueprints.create.partnerUrlPlaceholder": "https://enka.network/endfield/aic/?id=...",
 	"pages.blueprints.create.partnerUrlHelper": "If you have an Enka Network link for this blueprint, paste it here. Either Share Code or Partner URL is required.",
 	"pages.blueprints.create.versionLabel": "Version",
 	"pages.blueprints.create.versionPlaceholder": "Select a version...",
