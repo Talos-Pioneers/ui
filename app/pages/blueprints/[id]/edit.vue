@@ -39,6 +39,7 @@ definePageMeta({
 // Form schema matching UpdateBlueprintRequest
 type Schema = {
 	code: string
+	partner_url: string | null
 	title: string
 	version: string
 	description: string | null
@@ -98,6 +99,7 @@ const form = usePrecognitionForm<Schema>(
 	`/api/v1/blueprints/${blueprintId.value}`,
 	{
 		code: blueprint.value?.code || '',
+		partner_url: blueprint.value?.partner_url || null,
 		title: blueprint.value?.title || '',
 		version: blueprint.value?.version || 'cbt_3',
 		description: blueprint.value?.description || null,
@@ -195,8 +197,8 @@ const isInitialized = ref(false)
 watchEffect(() => {
 	if (!blueprint.value || isInitialized.value) return
 
-	// Update form fields with blueprint data
 	form.fields.code = blueprint.value.code || ''
+	form.fields.partner_url = blueprint.value.partner_url || null
 	form.fields.title = blueprint.value.title || ''
 	form.fields.version = blueprint.value.version || 'cbt_3'
 	form.fields.description = blueprint.value.description || null
@@ -328,6 +330,10 @@ const createFormData = (): FormData => {
 
 	if (form.fields.server_region) {
 		formData.append('server_region', form.fields.server_region)
+	}
+
+	if (form.fields.partner_url) {
+		formData.append('partner_url', form.fields.partner_url)
 	}
 
 	// Tags - Laravel expects tags[] format
@@ -773,6 +779,39 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 									Array.isArray(form.errors.code)
 										? form.errors.code[0]
 										: form.errors.code
+								}}
+							</p>
+						</div>
+
+						<!-- Partner URL -->
+						<div class="space-y-2">
+							<Label for="partner_url">{{
+								t('pages.blueprints.create.partnerUrlLabel')
+							}}</Label>
+							<Input
+								id="partner_url"
+								v-model="form.fields.partner_url"
+								:placeholder="
+									t(
+										'pages.blueprints.create.partnerUrlPlaceholder'
+									)
+								"
+								:aria-invalid="!!form.errors.partner_url"
+								@change="form.validate('partner_url')"
+							/>
+							<p class="text-xs text-cool-gray-60">
+								{{
+									t('pages.blueprints.create.partnerUrlHelper')
+								}}
+							</p>
+							<p
+								v-if="form.errors.partner_url"
+								class="text-xs text-destructive"
+							>
+								{{
+									Array.isArray(form.errors.partner_url)
+										? form.errors.partner_url[0]
+										: form.errors.partner_url
 								}}
 							</p>
 						</div>

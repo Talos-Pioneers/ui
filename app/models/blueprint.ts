@@ -1,6 +1,7 @@
 export type Blueprint = {
 	id: string
 	code: string
+	partner_url?: string | null
 	title: string
 	slug: string
 	version: string

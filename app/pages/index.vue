@@ -213,7 +213,7 @@ const ogImage = computed(() => {
 })
 
 useHead({
-	title: 'Arknights: Endfield',
+	title: 'Browse Endfield Blueprints',
 	meta: [
 		{
 			name: 'description',
