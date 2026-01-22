@@ -828,7 +828,7 @@ const handleBlueprintDeleted = () => {
 							as="a"
 							variant="outline"
 							rounded="base"
-							class="w-full justify-between before:hidden"
+							class="w-full bg-[#FFFA00] hover:bg-[#FFFA00]/80 justify-between before:hidden"
 						>
 							<img
 								src="/enkanetwork.svg"
