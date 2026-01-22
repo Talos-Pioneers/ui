@@ -111,7 +111,10 @@ const seoDescription = computed(() => {
 		? blueprint.value.description.substring(0, 200)
 		: ''
 	return description
-		? t('pages.blueprints.detail.description', { description })
+		? t('pages.blueprints.detail.description', {
+				description,
+				code: blueprint.value.code,
+			})
 		: t('pages.blueprints.detail.descriptionFallback')
 })
 

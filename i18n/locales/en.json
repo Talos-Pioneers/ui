@@ -1,6 +1,6 @@
 {
 	"hello": "Hello",
-	"pages.home.title": "Talos Pioneers Endfield Blueprints",
+	"pages.home.title": "Browse Endfield Blueprints",
 	"pages.home.description": "Talos Pioneers is a community resource for Arknights: Endfield, acting as a means for fellow Endministrators to share their endfield blueprints to each other.",
 	"footer.about": "About",
 	"footer.privacyPolicy": "Privacy Policy",
@@ -149,8 +149,8 @@
 	"pages.blueprints.edit.successDraft": "Draft updated successfully!",
 	"pages.blueprints.edit.errorValidation": "Please fix the validation errors.",
 	"pages.blueprints.edit.errorFailed": "Failed to update blueprint. Please try again.",
-	"pages.blueprints.detail.title": "{title} • Talos Pioneers",
-	"pages.blueprints.detail.description": "View and share this Arknights: Endfield blueprint on Talos Pioneers. {description}",
+	"pages.blueprints.detail.title": "{title} Blueprint",
+	"pages.blueprints.detail.description": "View and share this Arknights: Endfield Blueprint on Talos Pioneers. {code} {description}",
 	"pages.blueprints.detail.descriptionFallback": "View and share this Arknights: Endfield blueprint on Talos Pioneers.",
 	"pages.blueprints.detail.siteName": "Talos Pioneers",
 	"pages.blueprints.detail.loading": "Loading blueprint details...",
