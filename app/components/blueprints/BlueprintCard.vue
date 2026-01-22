@@ -204,6 +204,38 @@ const handleRemoveFromCollection = async () => {
 					class="w-full h-full object-cover"
 				/>
 			</NuxtLinkLocale>
+			<div
+				v-if="blueprint.partner_url"
+				class="absolute bottom-2 left-2 z-10"
+			>
+				<Tooltip>
+					<TooltipTrigger as-child>
+						<Button
+							:href="blueprint.partner_url"
+							target="_blank"
+							rel="noopener noreferrer"
+							as="a"
+							variant="outline"
+							rounded="base"
+							size="sm"
+							class="w-full bg-[#FFFA00] hover:bg-[#FFFA00]/70 justify-between before:hidden"
+						>
+							<img
+								src="/enkanetwork.svg"
+								alt="Enka Network"
+								class="size-4.5"
+							/>
+						</Button>
+					</TooltipTrigger>
+					<TooltipContent>
+						{{
+							t(
+								'pages.blueprints.detail.viewOnEnkaNetwork'
+							)
+						}}
+					</TooltipContent>
+				</Tooltip>
+			</div>
 			<div class="absolute bottom-2 right-2 z-10">
 				<Tooltip v-if="blueprint.code">
 					<TooltipTrigger as-child>
