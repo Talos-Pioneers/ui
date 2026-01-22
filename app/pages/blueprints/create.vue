@@ -33,6 +33,7 @@ const { t } = useI18n()
 // Form schema matching StoreBlueprintRequest
 type Schema = {
 	code: string
+	partner_url: string | null
 	title: string
 	version: string
 	description: string | null
@@ -52,6 +53,7 @@ type Schema = {
 // Initialize form with Precognition
 const form = usePrecognitionForm<Schema>('post', '/api/v1/blueprints', {
 	code: '',
+	partner_url: null,
 	title: '',
 	version: 'cbt_3',
 	description: null,
@@ -228,6 +230,10 @@ const createFormData = (): FormData => {
 
 	if (form.fields.server_region) {
 		formData.append('server_region', form.fields.server_region)
+	}
+
+	if (form.fields.partner_url) {
+		formData.append('partner_url', form.fields.partner_url)
 	}
 
 	if (form.fields.width) {
@@ -602,6 +608,39 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 									Array.isArray(form.errors.code)
 										? form.errors.code[0]
 										: form.errors.code
+								}}
+							</p>
+						</div>
+
+						<!-- Partner URL -->
+						<div class="space-y-2">
+							<Label for="partner_url">{{
+								t('pages.blueprints.create.partnerUrlLabel')
+							}}</Label>
+							<Input
+								id="partner_url"
+								v-model="form.fields.partner_url"
+								:placeholder="
+									t(
+										'pages.blueprints.create.partnerUrlPlaceholder'
+									)
+								"
+								:aria-invalid="!!form.errors.partner_url"
+								@change="form.validate('partner_url')"
+							/>
+							<p class="text-xs text-cool-gray-60">
+								{{
+									t('pages.blueprints.create.partnerUrlHelper')
+								}}
+							</p>
+							<p
+								v-if="form.errors.partner_url"
+								class="text-xs text-destructive"
+							>
+								{{
+									Array.isArray(form.errors.partner_url)
+										? form.errors.partner_url[0]
+										: form.errors.partner_url
 								}}
 							</p>
 						</div>
