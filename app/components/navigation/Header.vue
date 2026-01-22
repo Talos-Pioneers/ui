@@ -28,6 +28,7 @@ const { t } = useI18n()
 const { isAuthenticated, logout } = useSanctumAuth()
 const { open } = useLoginModal()
 const router = useRouter()
+const mobileMenuOpen = ref(false)
 
 const handleLogout = async () => {
 	try {
@@ -184,7 +185,7 @@ const navigationItems = [
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</template>
-			<Sheet>
+			<Sheet v-model:open="mobileMenuOpen">
 				<SheetTrigger as-child>
 					<Button variant="ghost" size="icon" class="md:hidden ml-2">
 						<Menu class="h-6 w-6" />
@@ -203,6 +204,7 @@ const navigationItems = [
 							:to="item.to"
 							active-class="text-cool-gray-80 h-full"
 							class="text-cool-gray-60 hover:text-cool-gray-80 h-full flex items-center"
+							@click="mobileMenuOpen = false"
 						>
 							{{ t(item.label) }}
 						</NuxtLinkLocale>
@@ -220,6 +222,7 @@ const navigationItems = [
 								active-class="text-cool-gray-80 border-b-2 h-full border-black"
 								class="text-cool-gray-60 hover:text-cool-gray-80 h-full flex items-center gap-2"
 								to="/blueprints/create"
+								@click="mobileMenuOpen = false"
 							>
 								<AddBlueprintIcon class="size-5" />
 								{{
@@ -232,6 +235,7 @@ const navigationItems = [
 								active-class="text-cool-gray-80 border-b-2 h-full border-black"
 								class="text-cool-gray-60 hover:text-cool-gray-80 h-full flex items-center gap-2"
 								to="/collections/create"
+								@click="mobileMenuOpen = false"
 							>
 								<AddCollectionIcon class="size-6" />
 								{{
