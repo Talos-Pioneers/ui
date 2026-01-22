@@ -22,6 +22,7 @@ import {
 	serverRegionOptions,
 	regionOptions,
 } from '~/constants/blueprintOptions'
+import { useImageGallery } from '~/composables/useImageGallery'
 
 definePageMeta({
 	middleware: ['sanctum:auth'],
@@ -110,198 +111,37 @@ const facilitiesSlugs = ref<string[]>([])
 const itemInputsSlugs = ref<string[]>([])
 const itemOutputsSlugs = ref<string[]>([])
 
-// Image upload validation constants (matching API: StoreBlueprintRequest)
-const MAX_IMAGES = 5
-const MAX_FILE_SIZE_KB = 30720 // 30MB in KB
-const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_KB * 1024
-const ALLOWED_MIME_TYPES = [
-	'image/jpeg',
-	'image/png',
-	'image/gif',
-	'image/bmp',
-	'image/svg+xml',
-	'image/webp',
-]
-const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp']
-
-// Image upload state - use a reactive object to maintain file-preview mapping
-interface ImageItem {
-	file: File
-	preview: string
-}
-
-const imageItems = ref<ImageItem[]>([])
-const fileInputRef = ref<HTMLInputElement | null>(null)
-const isDragging = ref(false)
-
 // Loading state for form submission
 const isSubmitting = ref(false)
 
-// Validate a single file
-const validateFile = (
-	file: File
-): { valid: boolean; error?: string } => {
-	// Check file type by MIME type
-	if (!ALLOWED_MIME_TYPES.includes(file.type)) {
-		const extension = file.name.split('.').pop()?.toLowerCase()
-		if (!extension || !ALLOWED_EXTENSIONS.includes(extension)) {
-			return {
-				valid: false,
-				error: t('pages.blueprints.create.invalidFileType', {
-					name: file.name,
-					types: ALLOWED_EXTENSIONS.join(', '),
-				}),
-			}
-		}
-	}
-
-	// Check file size
-	if (file.size > MAX_FILE_SIZE_BYTES) {
-		const sizeMB = (file.size / (1024 * 1024)).toFixed(2)
-		return {
-			valid: false,
-			error: t('pages.blueprints.create.fileTooLarge', {
-				name: file.name,
-				size: sizeMB,
-				max: '30',
-			}),
-		}
-	}
-
-	return { valid: true }
-}
-
-// Process and add valid files
-const processFiles = (files: File[]) => {
-	const remainingSlots = MAX_IMAGES - imageItems.value.length
-
-	if (remainingSlots <= 0) {
-		toast.error(
-			t('pages.blueprints.create.maxImagesReached', { max: MAX_IMAGES })
-		)
-		return
-	}
-
-	const filesToProcess = files.slice(0, remainingSlots)
-	const errors: string[] = []
-
-	if (files.length > remainingSlots) {
-		toast.warning(
-			t('pages.blueprints.create.someImagesSkipped', {
-				skipped: files.length - remainingSlots,
-				max: MAX_IMAGES,
-			})
-		)
-	}
-
-	filesToProcess.forEach((file) => {
-		const validation = validateFile(file)
-		if (!validation.valid) {
-			errors.push(validation.error!)
-			return
-		}
-
-		const reader = new FileReader()
-		reader.onload = (e) => {
-			if (e.target?.result) {
-				imageItems.value.push({
-					file,
-					preview: e.target.result as string,
-				})
-				syncGalleryToForm()
-			}
-		}
-		reader.readAsDataURL(file)
-	})
-
-	if (errors.length > 0) {
-		errors.forEach((error) => toast.error(error))
-	}
-
-	form.validate('gallery')
-}
-
-// Handle file selection from input
-const handleFileSelect = (event: Event) => {
-	const target = event.target as HTMLInputElement
-	if (target.files) {
-		processFiles(Array.from(target.files))
-	}
-	// Reset input
-	if (target) {
-		target.value = ''
-	}
-}
-
-// Drag and drop handlers - only respond to external file drops, not internal VueDraggable reordering
-const isExternalFileDrag = (e: DragEvent): boolean => {
-	// Check if this is an external file drag (not internal VueDraggable)
-	if (!e.dataTransfer) return false
-	// External file drops have 'Files' in the types array
-	return Array.from(e.dataTransfer.types).includes('Files')
-}
-
-const handleDragEnter = (e: DragEvent) => {
-	// Only respond to external file drags
-	if (!isExternalFileDrag(e)) return
-	e.preventDefault()
-	e.stopPropagation()
-	isDragging.value = true
-}
-
-const handleDragLeave = (e: DragEvent) => {
-	// Only respond to external file drags
-	if (!isExternalFileDrag(e)) return
-	e.preventDefault()
-	e.stopPropagation()
-	// Only set to false if leaving the drop zone entirely
-	const relatedTarget = e.relatedTarget as Node | null
-	const currentTarget = e.currentTarget as Node
-	if (!currentTarget.contains(relatedTarget)) {
-		isDragging.value = false
-	}
-}
-
-const handleDragOver = (e: DragEvent) => {
-	// Only respond to external file drags
-	if (!isExternalFileDrag(e)) return
-	e.preventDefault()
-	e.stopPropagation()
-	if (e.dataTransfer) {
-		e.dataTransfer.dropEffect = 'copy'
-	}
-}
-
-const handleDrop = (e: DragEvent) => {
-	// Only respond to external file drags
-	if (!isExternalFileDrag(e)) return
-	e.preventDefault()
-	e.stopPropagation()
-	isDragging.value = false
-
-	if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
-		const droppedFiles = Array.from(e.dataTransfer.files)
-		processFiles(droppedFiles)
-	}
-}
-
-// Remove image
-const removeImage = (index: number) => {
-	imageItems.value.splice(index, 1)
-	syncGalleryToForm()
-	form.forgetError('gallery')
-}
-
-// Handle image reordering
-const handleImageReorder = (newOrder: ImageItem[]) => {
-	imageItems.value = newOrder
-	syncGalleryToForm()
-}
-
 // Sync imageItems to form.fields.gallery (maintain order - first image = thumbnail)
 const syncGalleryToForm = () => {
-	form.fields.gallery = imageItems.value.map((item) => item.file)
+	form.fields.gallery = gallery.getNewFiles()
 }
+
+// Image gallery composable - handles all drag-drop, validation, cleanup
+const gallery = useImageGallery({
+	t,
+	onGalleryChange: syncGalleryToForm,
+	onValidate: (field) => form.validate(field as keyof Schema),
+	onForgetError: (field) => form.forgetError(field as keyof Schema),
+})
+
+// Destructure for template access
+const {
+	imageItems,
+	isDragging,
+	fileInputRef,
+	maxImages: MAX_IMAGES,
+	allowedExtensions: ALLOWED_EXTENSIONS,
+	handleFileSelect,
+	handleDragEnter,
+	handleDragLeave,
+	handleDragOver,
+	handleDrop,
+	removeImage,
+	onImageReorder,
+} = gallery
 
 // Sync slugs to IDs and update form fields before submission
 const syncFormFields = () => {
@@ -591,15 +431,15 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 									class="space-y-4"
 								>
 									<VueDraggable
-										v-model="imageItems"
+										:model-value="imageItems"
 										:animation="200"
 										handle=".drag-handle"
 										class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-										@update:model-value="handleImageReorder"
+										@update:model-value="onImageReorder"
 									>
 										<div
 											v-for="(item, index) in imageItems"
-											:key="index"
+											:key="item.id"
 											class="relative group aspect-square rounded-lg overflow-hidden border border-cool-gray-20 dark:border-cool-gray-80"
 										>
 											<img
@@ -622,7 +462,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 												<button
 													type="button"
 													class="p-2 bg-white/90 rounded hover:bg-white transition-colors"
-													@click="removeImage(index)"
+													@click="removeImage(item.id)"
 												>
 													<X
 														class="size-4 text-cool-gray-90"
@@ -687,7 +527,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 								<input
 									ref="fileInputRef"
 									type="file"
-									accept=".jpg,.jpeg,.png,.gif,.bmp,.svg,.webp,image/jpeg,image/png,image/gif,image/bmp,image/svg+xml,image/webp"
+									accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,image/jpeg,image/png,image/gif,image/bmp,image/webp"
 									multiple
 									class="hidden"
 									@change="handleFileSelect"
