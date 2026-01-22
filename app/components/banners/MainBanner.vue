@@ -11,25 +11,44 @@ const backgroundImages = [
 	'https://assets.talospioneers.com/media/talos_pioneerbannerIllust_FENDMIN.webp',
 	'https://assets.talospioneers.com/media/talos_pioneerbannerIllust_MENDMIN.webp',
 ]
-// randomize background image
-const randomBackgroundImage = computed(() => {
-	return backgroundImages[Math.floor(Math.random() * backgroundImages.length)]
+
+// SSR-safe random image selection using useState to prevent hydration mismatch
+// useState ensures the random value is computed once on server and rehydrated on client
+const randomBackgroundImage = useState('mainBannerImage', () =>
+	backgroundImages[Math.floor(Math.random() * backgroundImages.length)]
+)
+
+// Parallax scroll effect - background moves at 30% of scroll speed
+// maxOffset prevents background from revealing edges at extreme scroll
+const { parallaxStyle, registerElement } = useParallaxScroll(0.3, {
+	maxOffset: 180, // 600px * 0.3 = 180px max travel
 })
 
+// Reference to the parallax container for IntersectionObserver
+const parallaxContainer = ref<HTMLElement | null>(null)
+
+// Single onMounted hook for all client-side initialization
+onMounted(() => {
+	if (parallaxContainer.value) {
+		registerElement(parallaxContainer.value)
+	}
+})
 </script>
 <template>
 	<div
-		class="relative block w-full h-[600px] md:h-[42rem] md:bg-cover md:bg-center md:bg-no-repeat bg-cover bg-bottom-right bg-no-repeat 2xl:bg-position-[center_top_35%]"
-		:style="{
-			backgroundImage: `url(${randomBackgroundImage}) `,
-		}"
+		ref="parallaxContainer"
+		class="relative block w-full h-[600px] md:h-[42rem] overflow-hidden"
 	>
+		<!-- Parallax background layer with gradient overlay -->
+		<!-- will-change hints browser to pre-composite this layer for GPU acceleration -->
 		<div
-			class="absolute inset-0 z-0"
+			class="absolute inset-0 w-full h-[calc(100%+200px)] md:bg-cover md:bg-center md:bg-no-repeat bg-cover bg-bottom-right bg-no-repeat 2xl:bg-position-[center_top_35%] will-change-transform"
 			:style="{
-				background: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.7) 100%)',
+				backgroundImage: `linear-gradient(180deg, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.7) 100%), url(${randomBackgroundImage})`,
+				transform: parallaxStyle.transform || 'translate3d(0, 0, 0)',
 			}"
 		/>
+		<!-- Content layer (stays fixed) -->
 		<div
 			class="relative z-10 container mx-auto px-6 sm:px-4 py-6 flex flex-col h-full justify-end md:justify-center"
 		>
