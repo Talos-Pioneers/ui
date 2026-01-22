@@ -258,6 +258,7 @@
 	"components.blueprints.list.filters.height": "Altura",
 	"components.blueprints.list.filters.heightPlaceholder": "Altura máx",
 	"components.blueprints.list.filters.isAnonymous": "Anônimo",
+	"components.blueprints.list.filters.hidePartnerUrl": "Ocultar projetos externos",
 	"components.blueprints.list.filters.searchPlaceholder": "Pesquisar qualquer filtro...",
 	"components.blueprints.list.filters.clearAll": "Limpar Tudo",
 	"components.blueprints.list.pagination.found": "{count} Projetos encontrados",

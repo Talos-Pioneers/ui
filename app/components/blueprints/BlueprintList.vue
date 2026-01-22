@@ -186,11 +186,11 @@ const handleRegionClick = (regionValue: string) => {
 	emit('update:filter', 'region', newValue)
 }
 
-const handleServerRegionChange = (serverRegionValue: string) => {
-	if (serverRegionValue === 'any') {
+const handleServerRegionChange = (value: any) => {
+	if (!value || value === 'any') {
 		emit('clear-filter', 'server_region')
 	} else {
-		emit('update:filter', 'server_region', serverRegionValue)
+		emit('update:filter', 'server_region', value)
 	}
 }
 
@@ -219,11 +219,19 @@ const handleHeightChange = (value: string | number | null | undefined) => {
 const debouncedHandleWidthChange = useDebounceFn(handleWidthChange, 500)
 const debouncedHandleHeightChange = useDebounceFn(handleHeightChange, 500)
 
-const handleIsAnonymousChange = (value: boolean) => {
-	if (value) {
+const handleIsAnonymousChange = (value: boolean | 'indeterminate') => {
+	if (value === true) {
 		emit('update:filter', 'is_anonymous', true)
 	} else {
 		emit('clear-filter', 'is_anonymous')
+	}
+}
+
+const handleHidePartnerUrlChange = (value: boolean | 'indeterminate') => {
+	if (value === true) {
+		emit('update:filter', 'hide_partner_url', true)
+	} else {
+		emit('clear-filter', 'hide_partner_url')
 	}
 }
 
@@ -621,6 +629,20 @@ const unifiedFilterModel = computed({
 								<span class="text-sm text-sidebar-foreground">{{
 									t(
 										'components.blueprints.list.filters.isAnonymous'
+									)
+								}}</span>
+							</label>
+
+							<label
+								class="flex items-center gap-2 cursor-pointer hover:bg-sidebar-accent/50 rounded px-2 py-1.5 transition-colors"
+							>
+								<Checkbox
+									:checked="filters.hide_partner_url === true"
+									@update:model-value="handleHidePartnerUrlChange"
+								/>
+								<span class="text-sm text-sidebar-foreground">{{
+									t(
+										'components.blueprints.list.filters.hidePartnerUrl'
 									)
 								}}</span>
 							</label>

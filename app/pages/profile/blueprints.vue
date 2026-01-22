@@ -79,6 +79,7 @@ const {
 		'tags.id': { type: 'array' },
 		width: { type: 'number' },
 		height: { type: 'number' },
+		hide_partner_url: { type: 'boolean' },
 	},
 	sort: {
 		default: 'created_at',
@@ -174,6 +175,24 @@ const activeFilterTags = computed(() => {
 					value: item,
 				})
 			}
+			return
+		}
+
+		if (key === 'is_anonymous' && value === true) {
+			filterTags.push({
+				filterKey: key,
+				label: t('components.blueprints.list.filters.isAnonymous'),
+				value: value,
+			})
+			return
+		}
+
+		if (key === 'hide_partner_url' && value === true) {
+			filterTags.push({
+				filterKey: key,
+				label: t('components.blueprints.list.filters.hidePartnerUrl'),
+				value: value,
+			})
 			return
 		}
 

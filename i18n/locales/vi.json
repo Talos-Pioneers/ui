@@ -258,6 +258,7 @@
     "components.blueprints.list.filters.height": "Chiều cao",
     "components.blueprints.list.filters.heightPlaceholder": "Chiều cao tối đa",
     "components.blueprints.list.filters.isAnonymous": "Ẩn danh",
+    "components.blueprints.list.filters.hidePartnerUrl": "Ẩn các bản vẽ bên ngoài",
     "components.blueprints.list.filters.searchPlaceholder": "Tìm kiếm bất kỳ bộ lọc nào...",
     "components.blueprints.list.filters.clearAll": "Xóa Tất cả",
     "components.blueprints.list.pagination.found": "Tìm thấy {count} Bản vẽ",

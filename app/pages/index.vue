@@ -145,6 +145,24 @@ const activeFilterTags = computed(() => {
 			return
 		}
 
+		if (key === 'is_anonymous' && value === true) {
+			filterTags.push({
+				filterKey: key,
+				label: t('components.blueprints.list.filters.isAnonymous'),
+				value: value,
+			})
+			return
+		}
+
+		if (key === 'hide_partner_url' && value === true) {
+			filterTags.push({
+				filterKey: key,
+				label: t('components.blueprints.list.filters.hidePartnerUrl'),
+				value: value,
+			})
+			return
+		}
+
 		if (key === 'item_output' && Array.isArray(value)) {
 			for (const item of value) {
 				const factoryItem = items.value.find((i) => i.slug == item)

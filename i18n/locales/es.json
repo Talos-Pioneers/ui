@@ -258,6 +258,7 @@
 	"components.blueprints.list.filters.height": "Alto",
 	"components.blueprints.list.filters.heightPlaceholder": "Alto máximo",
 	"components.blueprints.list.filters.isAnonymous": "Anónimo",
+	"components.blueprints.list.filters.hidePartnerUrl": "Ocultar planos externos",
 	"components.blueprints.list.filters.searchPlaceholder": "Buscar cualquier filtro...",
 	"components.blueprints.list.filters.clearAll": "Limpiar todo",
 	"components.blueprints.list.pagination.found": "{count} Planos encontrados",

@@ -258,6 +258,7 @@
 	"components.blueprints.list.filters.height": "높이",
 	"components.blueprints.list.filters.heightPlaceholder": "최대 높이",
 	"components.blueprints.list.filters.isAnonymous": "익명",
+	"components.blueprints.list.filters.hidePartnerUrl": "외부 설계도 숨기기",
 	"components.blueprints.list.filters.searchPlaceholder": "필터 검색...",
 	"components.blueprints.list.filters.clearAll": "모두 지우기",
 	"components.blueprints.list.pagination.found": "{count}개의 설계도 찾음",

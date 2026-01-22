@@ -258,6 +258,7 @@
     "components.blueprints.list.filters.height": "高さ",
     "components.blueprints.list.filters.heightPlaceholder": "最大高さ",
     "components.blueprints.list.filters.isAnonymous": "匿名",
+    "components.blueprints.list.filters.hidePartnerUrl": "外部設計図を非表示",
     "components.blueprints.list.filters.searchPlaceholder": "フィルターを検索...",
     "components.blueprints.list.filters.clearAll": "すべてクリア",
     "components.blueprints.list.pagination.found": "{count}件の設計図が見つかりました",
