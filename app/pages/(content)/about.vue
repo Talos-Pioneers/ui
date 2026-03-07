@@ -277,7 +277,7 @@ const friends = [
 								<a
 									:href="friend.url"
 									target="_blank"
-									class="text-cool-gray-80 hover:text-cool-gray-80 hover:underline transition-colors"
+									class="text-cool-gray-80 hover:text-cool-gray-80 underline transition-colors"
 								>
 									{{ friend.name }}
 								</a>
