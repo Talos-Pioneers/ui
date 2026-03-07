@@ -33,7 +33,7 @@ const { t } = useI18n()
 					{{ t('footer.apiTerms') }}
 				</NuxtLinkLocale>
 				<a
-					href="https://discord.gg/apeehhry"
+					href="https://discord.gg/yuBpRqGzAh"
 					class="text-cool-gray-60 hover:text-cool-gray-80 transition-colors flex items-center gap-1"
 				>
 					<svg

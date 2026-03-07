@@ -143,7 +143,7 @@ const friends = [
 					</div>
 					<div class="mt-6">
 						<a
-							href="https://discord.gg/apeehhry"
+							href="https://discord.gg/yuBpRqGzAh"
 							target="_blank"
 							rel="noopener noreferrer"
 							class="flex items-center gap-2 text-xl border bg-white justify-center p-4 hover:bg-accent transition-all"
