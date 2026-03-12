@@ -43,7 +43,7 @@ export default defineNuxtConfig({
 			},
 		],
 		build: {
-			chunkSizeWarningLimit: 1000,
+			chunkSizeWarningLimit: 4000,
 		},
 	},
 
