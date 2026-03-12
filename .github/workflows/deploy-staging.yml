@@ -4,6 +4,15 @@ on:
   push:
     branches:
       - staging
+    paths:
+      - '**/*.vue'
+      - '**/*.ts'
+      - '**/*.js'
+      - '**/*.css'
+      - '**/*.json'
+      - 'nuxt.config.ts'
+      - 'package-lock.json'
+      - '.github/workflows/deploy-staging.yml'
 
 concurrency:
   group: deploy-staging
@@ -18,45 +27,23 @@ jobs:
       deployments: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 20
-          cache: npm
+
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
 
       - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
-
-      - name: Create staging wrangler config
-        run: |
-          cat > wrangler.staging.jsonc << EOF
-          {
-            "\$schema": "node_modules/wrangler/config-schema.json",
-            "name": "talos-pioneers-staging",
-            "main": "./.output/server/index.mjs",
-            "compatibility_date": "2025-11-15",
-            "assets": {
-              "binding": "ASSETS",
-              "directory": "./.output/public/"
-            },
-            "observability": {
-              "enabled": true
-            },
-            "compatibility_flags": [
-              "nodejs_als",
-              "nodejs_compat"
-            ],
-            "version_metadata": {
-              "binding": "CF_VERSION_METADATA"
-            },
-            "vars": {
-              "BASE_URL": "${{ secrets.STAGING_BASE_URL }}",
-              "API_URL": "${{ secrets.STAGING_API_URL }}"
-            }
-          }
-          EOF
 
       - name: Build
         run: npx nuxt build
@@ -73,4 +60,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --config wrangler.staging.jsonc
+          command: deploy --config .output/server/wrangler.json
