@@ -43,7 +43,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: npm ci
+        run: npm ci --loglevel=error
 
       - name: Build
         run: npx nuxt build

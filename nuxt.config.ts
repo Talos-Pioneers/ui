@@ -19,7 +19,32 @@ export default defineNuxtConfig({
 	css: ['~/assets/css/tailwind.css'],
 
 	vite: {
-		plugins: [tailwindcss()],
+		plugins: [
+			tailwindcss(),
+			{
+				name: 'suppress-known-warnings',
+				apply: 'build',
+				configResolved(config) {
+					const originalOnWarn = config.build.rollupOptions.onwarn
+					config.build.rollupOptions.onwarn = (warning, warn) => {
+						if (
+							warning.code === 'SOURCEMAP_BROKEN' &&
+							warning.plugin === '@tailwindcss/vite:generate:build'
+						)
+							return
+						if (warning.code === 'EVAL' && warning.id?.includes('lottie-web')) return
+						if (originalOnWarn) {
+							originalOnWarn(warning, warn)
+						} else {
+							warn(warning)
+						}
+					}
+				},
+			},
+		],
+		build: {
+			chunkSizeWarningLimit: 1000,
+		},
 	},
 
 	nitro: {
@@ -28,6 +53,8 @@ export default defineNuxtConfig({
 		cloudflare: {
 			wrangler: {
 				name: `talos-pioneers${process.env.CLOUDFLARE_ENV === 'staging' ? '-staging' : ''}`,
+				workers_dev: false,
+				preview_urls: false,
 				routes: [
 					{
 						pattern: process.env.BASE_DOMAIN,
