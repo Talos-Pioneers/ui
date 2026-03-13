@@ -11,14 +11,14 @@ export const buttonVariants = cva(
 		variants: {
 			variant: {
 				default:
-					'bg-primary text-primary-foreground hover:bg-primary/60 before:border-cool-gray-80',
+					'bg-primary text-primary-foreground hover:bg-primary/60 before:border-foreground/30',
 				destructive:
 					'bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
 				outline:
-					'border-2 border-cool-gray-70 bg-background hover:bg-accent/90 hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
+					'border-2 border-input bg-background hover:bg-accent/90 hover:text-accent-foreground',
 				secondary:
-					'bg-secondary text-secondary-foreground hover:bg-secondary/80 before:border-cool-gray-40',
-				ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
+					'bg-secondary text-secondary-foreground hover:bg-secondary/80 before:border-muted-foreground/40',
+				ghost: 'text-foreground hover:bg-accent hover:text-accent-foreground',
 				link: 'text-primary underline-offset-4 hover:underline',
 			},
 			size: {

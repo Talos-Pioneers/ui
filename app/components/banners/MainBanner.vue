@@ -84,13 +84,13 @@ onMounted(() => {
 						:to="isAuthenticated ? '/blueprints/create' : '/login'"
 					>
 						<AddBlueprintIcon
-							class="size-4 sm:size-6 text-cool-gray-100"
+							class="size-4 sm:size-6 text-foreground dark:text-primary-foreground"
 						/>
 						<span
-							class="flex gap-3 items-center text-cool-gray-100"
+							class="flex gap-3 items-center text-foreground dark:text-primary-foreground"
 						>
 							<span
-								class="leading-none text-sm sm:text-xl text-cool-gray-100"
+								class="leading-none text-sm sm:text-xl text-foreground dark:text-primary-foreground"
 								>{{ t('mainBanner.createBlueprint') }}</span
 							>
 							<svg
@@ -98,7 +98,7 @@ onMounted(() => {
 								height="12"
 								viewBox="0 0 8 12"
 								fill="none"
-								class="fill-cool-gray-40"
+								class="fill-muted-foreground"
 								xmlns="http://www.w3.org/2000/svg"
 							>
 								<path
@@ -117,9 +117,9 @@ onMounted(() => {
 				>
 					<NuxtLinkLocale to="/about">
 						<InfoIcon class="size-4 sm:size-6" />
-						<span class="flex gap-3 items-center text-cool-gray-70">
+						<span class="flex gap-3 items-center text-muted-foreground">
 							<span
-								class="text-cool-gray-70 text-sm sm:text-xl leading-none"
+								class="text-muted-foreground text-sm sm:text-xl leading-none"
 								>{{ t('mainBanner.about') }}</span
 							>
 							<svg
@@ -127,7 +127,7 @@ onMounted(() => {
 								height="12"
 								viewBox="0 0 8 12"
 								fill="none"
-								class="fill-cool-gray-40"
+								class="fill-muted-foreground"
 								xmlns="http://www.w3.org/2000/svg"
 							>
 								<path

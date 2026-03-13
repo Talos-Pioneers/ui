@@ -54,7 +54,7 @@ const navigationItems = [
 </script>
 <template>
 	<header
-		class="sticky top-0 z-40 bg-white flex items-center h-16.5 px-7.5 border-b border-cool-gray-20"
+		class="sticky top-0 z-40 bg-background flex items-center h-16.5 px-7.5 border-b border-border"
 	>
 		<div>
 			<NuxtLinkLocale to="/">
@@ -70,8 +70,8 @@ const navigationItems = [
 					class="h-full flex items-center"
 				>
 					<NuxtLinkLocale
-						active-class="text-cool-gray-80 border-b-2 h-full border-black"
-						class="text-cool-gray-60 hover:text-cool-gray-80 h-full flex items-center"
+						active-class="text-foreground border-b-2 h-full border-foreground"
+						class="text-muted-foreground hover:text-foreground h-full flex items-center"
 						:to="item.to"
 					>
 						{{ t(item.label) }}
@@ -147,7 +147,7 @@ const navigationItems = [
 				<DropdownMenu>
 					<DropdownMenuTrigger as-child>
 						<Button variant="default" size="icon-lg">
-							<UserIcon class="h-5 text-cool-gray-100" />
+							<UserIcon class="h-5 text-foreground" />
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end">
@@ -205,31 +205,31 @@ const navigationItems = [
 							v-for="item in navigationItems"
 							:key="item.to"
 							:to="item.to"
-							active-class="text-cool-gray-80 h-full"
-							class="text-cool-gray-60 hover:text-cool-gray-80 h-full flex items-center"
+							active-class="text-foreground h-full"
+							class="text-muted-foreground hover:text-foreground h-full flex items-center"
 							@click="mobileMenuOpen = false"
 						>
 							{{ t(item.label) }}
 						</NuxtLinkLocale>
 
-						<div class="h-px bg-cool-gray-20 my-2" />
-						<p class="text-sm text-cool-gray-60 font-medium mb-2">
+						<div class="h-px bg-border my-2" />
+						<p class="text-sm text-muted-foreground font-medium mb-2">
 							{{ t('theme.label') }}
 						</p>
 						<ThemeSelectorInline />
 
 						<template v-if="isAuthenticated">
-							<div class="h-px bg-cool-gray-20 my-2" />
+							<div class="h-px bg-border my-2" />
 							<p
-								class="text-sm text-cool-gray-60 font-medium mb-2"
+								class="text-sm text-muted-foreground font-medium mb-2"
 							>
 								{{
 									t('components.navigation.header.nav.create')
 								}}
 							</p>
 							<NuxtLinkLocale
-								active-class="text-cool-gray-80 border-b-2 h-full border-black"
-								class="text-cool-gray-60 hover:text-cool-gray-80 h-full flex items-center gap-2"
+								active-class="text-foreground border-b-2 h-full border-foreground"
+								class="text-muted-foreground hover:text-foreground h-full flex items-center gap-2"
 								to="/blueprints/create"
 								@click="mobileMenuOpen = false"
 							>
@@ -241,8 +241,8 @@ const navigationItems = [
 								}}
 							</NuxtLinkLocale>
 							<NuxtLinkLocale
-								active-class="text-cool-gray-80 border-b-2 h-full border-black"
-								class="text-cool-gray-60 hover:text-cool-gray-80 h-full flex items-center gap-2"
+								active-class="text-foreground border-b-2 h-full border-foreground"
+								class="text-muted-foreground hover:text-foreground h-full flex items-center gap-2"
 								to="/collections/create"
 								@click="mobileMenuOpen = false"
 							>

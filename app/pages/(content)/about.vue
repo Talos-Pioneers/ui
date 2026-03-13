@@ -82,7 +82,7 @@ const friends = [
 
 <template>
 	<div
-		class="wave-bg bg-cool-gray-10 dark:bg-cool-gray-90 before:bg-size-[400px] min-h-[calc(100vh-var(--header-height))]"
+		class="wave-bg bg-muted before:bg-size-[400px] min-h-[calc(100vh-var(--header-height))]"
 	>
 		<div class="container mx-auto px-4 py-6">
 			<div
@@ -93,10 +93,10 @@ const friends = [
 					class="lg:sticky lg:top-[calc(var(--header-height)+1.5rem)] h-fit"
 				>
 					<div
-						class="bg-white dark:bg-cool-gray-90 rounded-lg border border-cool-gray-20 dark:border-cool-gray-80 p-6"
+						class="bg-card rounded-lg border border-border p-6"
 					>
 						<h2
-							class="font-bold text-xl mb-4 text-cool-gray-80 dark:text-cool-gray-20"
+							class="font-bold text-xl mb-4 text-foreground"
 						>
 							{{ $t('pages.about.teamTitle') }}
 						</h2>
@@ -107,7 +107,7 @@ const friends = [
 								class="flex items-center gap-3"
 							>
 								<div
-									class="size-12 rounded-full bg-cool-gray-20 dark:bg-cool-gray-80 overflow-hidden flex-shrink-0"
+									class="size-12 rounded-full bg-muted overflow-hidden flex-shrink-0"
 								>
 									<img
 										v-if="member.avatar"
@@ -117,19 +117,19 @@ const friends = [
 									/>
 									<div
 										v-else
-										class="w-full h-full flex items-center justify-center bg-cool-gray-30 dark:bg-cool-gray-70 text-cool-gray-60 dark:text-cool-gray-40 text-sm font-medium"
+										class="w-full h-full flex items-center justify-center bg-muted text-muted-foreground text-sm font-medium"
 									>
 										{{ member.name.charAt(0) }}
 									</div>
 								</div>
 								<div class="flex-1 min-w-0">
 									<p
-										class="font-medium text-cool-gray-80 dark:text-cool-gray-20 truncate"
+										class="font-medium text-foreground truncate"
 									>
 										{{ member.name }}
 									</p>
 									<p
-										class="text-sm text-cool-gray-60 dark:text-cool-gray-40"
+										class="text-sm text-muted-foreground"
 									>
 										{{
 											$t(
@@ -146,7 +146,7 @@ const friends = [
 							href="https://discord.gg/yuBpRqGzAh"
 							target="_blank"
 							rel="noopener noreferrer"
-							class="flex items-center gap-2 text-xl border bg-white justify-center p-4 hover:bg-accent transition-all"
+							class="flex items-center gap-2 text-xl border border-border bg-card justify-center p-4 hover:bg-accent transition-colors"
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -169,15 +169,15 @@ const friends = [
 				<main class="space-y-6">
 					<!-- Project Description -->
 					<section
-						class="bg-white dark:bg-cool-gray-90 rounded-lg border border-cool-gray-20 dark:border-cool-gray-80 p-6 space-y-4"
+						class="bg-card rounded-lg border border-border p-6 space-y-4"
 					>
 						<h1
-							class="font-bold text-3xl text-cool-gray-80 dark:text-cool-gray-20"
+							class="font-bold text-3xl text-foreground"
 						>
 							{{ $t('pages.about.projectTitle') }}
 						</h1>
 						<p
-							class="text-cool-gray-70 dark:text-cool-gray-30 leading-relaxed"
+							class="text-muted-foreground leading-relaxed"
 						>
 							{{ $t('pages.about.projectDescription') }}
 						</p>
@@ -185,15 +185,15 @@ const friends = [
 
 					<!-- Disclaimer -->
 					<section
-						class="bg-white dark:bg-cool-gray-90 rounded-lg border border-cool-gray-20 dark:border-cool-gray-80 p-6 space-y-4"
+						class="bg-card rounded-lg border border-border p-6 space-y-4"
 					>
 						<h2
-							class="font-bold text-xl text-cool-gray-80 dark:text-cool-gray-20"
+							class="font-bold text-xl text-foreground"
 						>
 							{{ $t('pages.about.disclaimerTitle') }}
 						</h2>
 						<p
-							class="text-cool-gray-70 dark:text-cool-gray-30 leading-relaxed"
+							class="text-muted-foreground leading-relaxed"
 						>
 							{{ $t('pages.about.disclaimerText') }}
 						</p>
@@ -201,15 +201,15 @@ const friends = [
 
 					<!-- Feedback -->
 					<section
-						class="bg-white dark:bg-cool-gray-90 rounded-lg border border-cool-gray-20 dark:border-cool-gray-80 p-6 space-y-4"
+						class="bg-card rounded-lg border border-border p-6 space-y-4"
 					>
 						<h2
-							class="font-bold text-xl text-cool-gray-80 dark:text-cool-gray-20"
+							class="font-bold text-xl text-foreground"
 						>
 							{{ $t('pages.about.feedbackTitle') }}
 						</h2>
 						<p
-							class="text-cool-gray-70 dark:text-cool-gray-30 leading-relaxed"
+							class="text-muted-foreground leading-relaxed"
 						>
 							{{ $t('pages.about.feedbackDescription') }}
 						</p>
@@ -217,7 +217,7 @@ const friends = [
 							:href="feedbackUrl"
 							target="_blank"
 							rel="noopener noreferrer"
-							class="inline-flex items-center gap-2 text-cool-gray-80 hover:text-cool-gray-80 hover:underline transition-colors"
+							class="inline-flex items-center gap-2 text-foreground hover:text-foreground hover:underline transition-colors"
 						>
 							{{ $t('pages.about.feedbackButton') }}
 							<svg
@@ -241,20 +241,20 @@ const friends = [
 
 					<!-- Special Thanks -->
 					<section
-						class="bg-white dark:bg-cool-gray-90 rounded-lg border border-cool-gray-20 dark:border-cool-gray-80 p-6 space-y-4"
+						class="bg-card rounded-lg border border-border p-6 space-y-4"
 					>
 						<h2
-							class="font-bold text-xl text-cool-gray-80 dark:text-cool-gray-20"
+							class="font-bold text-xl text-foreground"
 						>
 							{{ $t('pages.about.specialThanksTitle') }}
 						</h2>
 						<p
-							class="text-cool-gray-70 dark:text-cool-gray-30 leading-relaxed"
+							class="text-muted-foreground leading-relaxed"
 						>
 							{{ $t('pages.about.specialThanksDescription') }}
 						</p>
 						<ul
-							class="list-disc list-inside space-y-2 text-cool-gray-70 dark:text-cool-gray-30"
+							class="list-disc list-inside space-y-2 text-muted-foreground"
 						>
 							<li v-for="person in specialThanks" :key="person">
 								{{ person }}
@@ -263,21 +263,21 @@ const friends = [
 					</section>
 
 					<section
-						class="bg-white dark:bg-cool-gray-90 rounded-lg border border-cool-gray-20 dark:border-cool-gray-80 p-6 space-y-4"
+						class="bg-card rounded-lg border border-border p-6 space-y-4"
 					>
 						<h2
-							class="font-bold text-xl text-cool-gray-80 dark:text-cool-gray-20"
+							class="font-bold text-xl text-foreground"
 						>
 							Friends
 						</h2>
 						<ul
-							class="list-disc list-inside space-y-2 text-cool-gray-70 dark:text-cool-gray-30"
+							class="list-disc list-inside space-y-2 text-muted-foreground"
 						>
 							<li v-for="friend in friends" :key="friend.name">
 								<a
 									:href="friend.url"
 									target="_blank"
-									class="text-cool-gray-80 hover:text-cool-gray-80 underline transition-colors"
+									class="text-foreground hover:text-foreground underline transition-colors"
 								>
 									{{ friend.name }}
 								</a>

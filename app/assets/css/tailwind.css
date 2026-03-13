@@ -88,38 +88,39 @@ html[lang='ja'] {
 
 [data-theme="dark"] {
 	color-scheme: dark;
-	--background: oklch(0.251 0.0095 219.8651);
-	--foreground: oklch(1 0 0);
-	--card: oklch(0.3032 0.0132 229.4039);
-	--card-foreground: oklch(1 0 0);
-	--popover: oklch(0.3032 0.0132 229.4039);
-	--popover-foreground: oklch(1 0 0);
-	--primary: oklch(0.7147 0.1211 194.7836);
-	--primary-foreground: oklch(1 0 0);
-	--secondary: oklch(0.3741 0.0178 224.9693);
-	--secondary-foreground: oklch(1 0 0);
-	--muted: oklch(0.3741 0.0178 224.9693);
-	--muted-foreground: oklch(0.74 0.006 264);
-	--accent: oklch(0.3741 0.0178 224.9693);
-	--accent-foreground: oklch(1 0 0);
+	/* Figma CoolGray neutral grays — zero chroma */
+	--background: oklch(0.2727 0 0);              /* #272727 CoolGray/90 */
+	--foreground: oklch(1 0 0);                    /* #FFFFFF CoolGray/10 */
+	--card: oklch(0.3211 0 0);                     /* #333333 */
+	--card-foreground: oklch(1 0 0);               /* #FFFFFF CoolGray/10 */
+	--popover: oklch(0.3211 0 0);                  /* #333333 */
+	--popover-foreground: oklch(1 0 0);            /* #FFFFFF CoolGray/10 */
+	--primary: oklch(0.9051 0.1546 194.2590);      /* #00FFFE Primary/60 — same as light */
+	--primary-foreground: oklch(0.2308 0 0);       /* #1D1D1D CoolGray/100 — dark text on cyan */
+	--secondary: oklch(0.4748 0 0);                /* #5C5C5C CoolGray/70 */
+	--secondary-foreground: oklch(1 0 0);          /* #FFFFFF CoolGray/10 */
+	--muted: oklch(0.4748 0 0);                    /* #5C5C5C CoolGray/70 */
+	--muted-foreground: oklch(0.8452 0 0);         /* #CCCCCC CoolGray/30 */
+	--accent: oklch(0.4748 0 0);                   /* #5C5C5C CoolGray/70 */
+	--accent-foreground: oklch(1 0 0);             /* #FFFFFF CoolGray/10 */
 	--destructive: oklch(0.6358 0.2088 25.4126);
 	--destructive-foreground: oklch(1 0 0);
-	--border: oklch(0.4222 0.0193 227.4184);
-	--input: oklch(0.4222 0.0193 227.4184);
-	--ring: oklch(0.7147 0.1211 194.7836);
-	--chart-1: oklch(0.7147 0.1211 194.7836);
+	--border: oklch(0.7444 0 0);                   /* #ACACAC CoolGray/40 */
+	--input: oklch(0.5693 0 0);                    /* #777777 CoolGray/60 */
+	--ring: oklch(0.9051 0.1546 194.2590);         /* #00FFFE Primary/60 */
+	--chart-1: oklch(0.9051 0.1546 194.2590);      /* #00FFFE Primary/60 */
 	--chart-2: oklch(1 0 0);
-	--chart-3: oklch(0.3741 0.0178 224.9693);
-	--chart-4: oklch(0.6851 0.0164 229.0806);
+	--chart-3: oklch(0.4748 0 0);                  /* #5C5C5C CoolGray/70 */
+	--chart-4: oklch(0.6600 0 0);                  /* #929292 CoolGray/50 */
 	--chart-5: oklch(0.6358 0.2088 25.4126);
-	--sidebar: oklch(0.3032 0.0132 229.4039);
-	--sidebar-foreground: oklch(1 0 0);
-	--sidebar-primary: oklch(0.7147 0.1211 194.7836);
-	--sidebar-primary-foreground: oklch(1 0 0);
-	--sidebar-accent: oklch(0.3741 0.0178 224.9693);
-	--sidebar-accent-foreground: oklch(1 0 0);
-	--sidebar-border: oklch(0.4222 0.0193 227.4184);
-	--sidebar-ring: oklch(0.7147 0.1211 194.7836);
+	--sidebar: oklch(0.3211 0 0);                  /* #333333 */
+	--sidebar-foreground: oklch(1 0 0);            /* #FFFFFF CoolGray/10 */
+	--sidebar-primary: oklch(0.9051 0.1546 194.2590); /* #00FFFE Primary/60 */
+	--sidebar-primary-foreground: oklch(0.2308 0 0);  /* #1D1D1D CoolGray/100 */
+	--sidebar-accent: oklch(0.4748 0 0);           /* #5C5C5C CoolGray/70 */
+	--sidebar-accent-foreground: oklch(1 0 0);     /* #FFFFFF CoolGray/10 */
+	--sidebar-border: oklch(0.7444 0 0);           /* #ACACAC CoolGray/40 */
+	--sidebar-ring: oklch(0.9051 0.1546 194.2590); /* #00FFFE Primary/60 */
 	--shadow-x: 0rem;
 	--shadow-y: 0.125rem;
 	--shadow-blur: 0px;
@@ -234,11 +235,37 @@ body {
 		@apply bg-background text-foreground;
 	}
 
-	/* Theme transition — only active after user interaction, not on page load */
-	html.theme-transition,
-	html.theme-transition * {
-		transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease !important;
+	/* Theme transition — targets body and key layout elements that set their own
+	   background/border. Only background-color and border-color to avoid logo/icon
+	   flash from color inheritance.
+	   Applied via JS class, removed after timeout so it never fires on page load. */
+	html.theme-transition body,
+	html.theme-transition header,
+	html.theme-transition main,
+	html.theme-transition aside,
+	html.theme-transition footer,
+	html.theme-transition section,
+	html.theme-transition nav,
+	html.theme-transition [class*="bg-card"],
+	html.theme-transition [class*="bg-background"],
+	html.theme-transition [class*="bg-muted"],
+	html.theme-transition [class*="bg-popover"],
+	html.theme-transition [class*="bg-accent"],
+	html.theme-transition [class*="bg-secondary"],
+	html.theme-transition [class*="border-border"] {
+		transition: background-color 0.15s ease, border-color 0.15s ease;
 	}
+
+	/* Footer and main content text can safely transition color — the logo SVG
+	   (which causes currentColor flash) is only in the header. */
+	html.theme-transition footer,
+	html.theme-transition footer *,
+	html.theme-transition main,
+	html.theme-transition main [class*="text-muted"],
+	html.theme-transition main [class*="text-foreground"] {
+		transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+	}
+
 	.wave-bg {
 		@apply relative;
 	}

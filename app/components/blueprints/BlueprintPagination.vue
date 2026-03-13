@@ -73,18 +73,18 @@ const perPageOptions = [
 			:page="pagination.current_page" @update:page="currentPage = $event">
 			<template #default="{ page, pageCount }">
 				<PaginationContent>
-					<PaginationPrevious class="bg-transparent hover:bg-cool-gray-20 border-none before:hidden"
+					<PaginationPrevious class="bg-transparent hover:bg-muted border-none before:hidden"
 						:disabled="pagination.current_page <= 1" @click="currentPage = pagination.current_page - 1" />
 					<template v-for="pageNum in getPageNumbers" :key="pageNum">
 						<PaginationEllipsis v-if="pageNum === 'ellipsis'" />
 						<PaginationItem
-							class="border-none before:hidden data-[selected=true]:bg-cool-gray-20 data-[selected=true]:hover:bg-cool-gray-30 bg-transparent hover:bg-cool-gray-20"
+							class="border-none before:hidden data-[selected=true]:bg-muted data-[selected=true]:hover:bg-muted/80 bg-transparent hover:bg-muted"
 							v-else :value="pageNum" :is-active="pageNum === pagination.current_page"
 							@click="currentPage = pageNum">
 							{{ pageNum }}
 						</PaginationItem>
 					</template>
-					<PaginationNext class="bg-transparent hover:bg-cool-gray-20 border-none before:hidden"
+					<PaginationNext class="bg-transparent hover:bg-muted border-none before:hidden"
 						:disabled="pagination.current_page >= pagination.last_page"
 						@click="currentPage = pagination.current_page + 1" />
 				</PaginationContent>

@@ -178,7 +178,7 @@ const handleRemoveFromCollection = async () => {
 
 <template>
 	<div
-		class="group grid grid-rows-[auto_1fr] rounded-b-[8px] border-cool-gray-20 border bg-white hover:border-cool-gray-40 transition-colors overflow-hidden"
+		class="group grid grid-rows-[auto_1fr] rounded-b-[8px] border-border border bg-card hover:border-cool-gray-40 transition-colors overflow-hidden"
 	>
 		<!-- Header Section with Preview Image -->
 		<div class="relative aspect-video bg-cool-gray-90 overflow-hidden">
@@ -240,7 +240,7 @@ const handleRemoveFromCollection = async () => {
 				<Tooltip v-if="blueprint.code">
 					<TooltipTrigger as-child>
 						<button
-							class="group/copy-button p-2 bg-black/50 border border-cool-gray-60 hover:border-cool-gray-80 rounded-full hover:bg-white transition-colors cursor-pointer"
+							class="group/copy-button p-2 bg-black/50 border border-cool-gray-60 hover:border-cool-gray-80 rounded-full hover:bg-background transition-colors cursor-pointer"
 							:title="
 								copied
 									? t(
@@ -266,7 +266,7 @@ const handleRemoveFromCollection = async () => {
 
 		<!-- Content Section -->
 		<div
-			class="p-4 flex flex-col gap-3 bg-white dark:bg-cool-gray-90 rounded-b-lg h-full"
+			class="p-4 flex flex-col gap-3 bg-card rounded-b-lg h-full"
 		>
 			<!-- Title and Author -->
 			<div class="pb-3">
@@ -275,12 +275,12 @@ const handleRemoveFromCollection = async () => {
 					class="block"
 				>
 					<h2
-						class="text-xl font-bold leading-6 text-cool-gray-90 mb-2 line-clamp-2"
+						class="text-xl font-bold leading-6 text-foreground mb-2 line-clamp-2"
 					>
 						{{ blueprint.title }}
 						<span
 							v-if="blueprint.width || blueprint.height"
-							class="text-sm text-cool-gray-60"
+							class="text-sm text-muted-foreground"
 						>
 							{{ blueprint.width ?? 0 }}x{{
 								blueprint.height ?? 0
@@ -291,21 +291,21 @@ const handleRemoveFromCollection = async () => {
 				<div class="flex items-center justify-between gap-2 h-4">
 					<button
 						v-if="blueprint.creator"
-						class="group/author text-xs text-cool-gray-70 cursor-pointer transition-colors overflow-hidden text-nowrap text-ellipsis flex items-center h-4"
+						class="group/author text-xs text-muted-foreground cursor-pointer transition-colors overflow-hidden text-nowrap text-ellipsis flex items-center h-4"
 						@click="handleAuthorClick"
 					>
 						<span class="leading-0">by&nbsp;</span
 						><span
-							class="leading-0 group-hover/author:text-cool-gray-100 group-hover/author:underline transition-colors"
+							class="leading-0 group-hover/author:text-foreground group-hover/author:underline transition-colors"
 							>{{ blueprint.creator.name }}</span
 						>
 					</button>
-					<p v-else class="text-xs leading-0 text-cool-gray-70">
+					<p v-else class="text-xs leading-0 text-muted-foreground">
 						{{ t('components.blueprints.card.author.unknown') }}
 					</p>
 
 					<div
-						class="flex items-center gap-1.5 text-[10px] text-cool-gray-60 ml-auto text-nowrap flex-none"
+						class="flex items-center gap-1.5 text-[10px] text-muted-foreground ml-auto text-nowrap flex-none"
 					>
 						<div class="flex items-center gap-1">
 							<ClockIcon class="w-3 h-3" />
@@ -328,14 +328,14 @@ const handleRemoveFromCollection = async () => {
 					<button
 						v-if="blueprint.server_region"
 						type="button"
-						class="group/server-region flex items-center gap-1.5 text-sm font-medium text-cool-gray-70 cursor-pointer transition-colors"
+						class="group/server-region flex items-center gap-1.5 text-sm font-medium text-muted-foreground cursor-pointer transition-colors"
 						@click="handleServerRegionClick"
 					>
 						<ServerRegionIcon
-							class="w-5 h-5 group-hover/server-region:text-cool-gray-100 transition-colors"
+							class="w-5 h-5 group-hover/server-region:text-foreground transition-colors"
 						/>
 						<span
-							class="group-hover/server-region:text-cool-gray-100 group-hover/server-region:underline transition-colors"
+							class="group-hover/server-region:text-foreground group-hover/server-region:underline transition-colors"
 							>{{
 								t(`serverRegion.${blueprint.server_region}`)
 							}}</span
@@ -343,12 +343,12 @@ const handleRemoveFromCollection = async () => {
 					</button>
 					<button
 						type="button"
-						class="group/region flex items-center gap-1.5 text-sm font-medium text-cool-gray-70 cursor-pointer transition-colors"
+						class="group/region flex items-center gap-1.5 text-sm font-medium text-muted-foreground cursor-pointer transition-colors"
 						@click="handleRegionClick"
 					>
 						<RegionIcon class="w-5 h-5" />
 						<span
-							class="group-hover/region:text-cool-gray-100 group-hover/region:underline transition-colors"
+							class="group-hover/region:text-foreground group-hover/region:underline transition-colors"
 							>{{
 								blueprint.region
 									? regionOptions.find(
@@ -442,7 +442,7 @@ const handleRemoveFromCollection = async () => {
 			</div>
 
 			<!-- Statistics -->
-			<div class="flex items-center gap-4 text-sm text-cool-gray-80">
+			<div class="flex items-center gap-4 text-sm text-foreground">
 				<div class="flex items-center gap-1.5">
 					<CopiesIcon class="w-4" />
 					<span>{{ useFormatCompactNumber(copiesCount) }}</span>
@@ -463,10 +463,10 @@ const handleRemoveFromCollection = async () => {
 
 			<!-- Tags -->
 			<div
-				class="group/tags flex items-center gap-2 flex-wrap border-t border-cool-gray-20 mt-auto pt-5 pb-3"
+				class="group/tags flex items-center gap-2 flex-wrap border-t border-border mt-auto pt-5 pb-3"
 			>
 				<span
-					class="px-2 py-1 text-sm border border-cool-gray-30 group-hover/tags:border-cool-gray-100 transition-colors"
+					class="px-2 py-1 text-sm border border-border group-hover/tags:border-foreground transition-colors"
 				>
 					{{ t('components.blueprints.card.tagLabel') }}
 				</span>
@@ -474,11 +474,11 @@ const handleRemoveFromCollection = async () => {
 					v-for="(tag, index) in blueprint.tags"
 					:key="tag.slug"
 				>
-					<span v-if="index !== 0" class="text-cool-gray-60 text-sm"
+					<span v-if="index !== 0" class="text-muted-foreground text-sm"
 						>|</span
 					>
 					<span
-						class="text-sm text-cool-gray-80 cursor-pointer hover:text-cool-gray-100 hover:underline transition-colors"
+						class="text-sm text-foreground cursor-pointer hover:text-foreground hover:underline transition-colors"
 						@click="handleTagClick(tag.id)"
 					>
 						{{ tag.name }}

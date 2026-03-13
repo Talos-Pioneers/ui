@@ -12,7 +12,7 @@ const { isOpen, close } = useLoginModal()
   <Dialog :open="isOpen" @update:open="(val) => !val && close()">
     <DialogContent class="p-0 border-0 bg-transparent shadow-none max-w-md w-full">
       <div class="relative rounded-lg overflow-hidden">
-        <div class="relative p-8 pt-12 bg-linear-to-b wave-bg from-cool-gray-10 from-50% to-primary rounded-[0.5rem]">
+        <div class="relative p-8 pt-12 bg-linear-to-b wave-bg from-muted from-50% to-primary rounded-[0.5rem]">
           <LoginForm />
         </div>
       </div>

@@ -12,7 +12,7 @@ const iconMap: Record<string, Component> = {
 }
 </script>
 <template>
-	<div class="flex items-center gap-1 rounded-lg border border-border p-1">
+	<div class="flex items-center gap-1 rounded-lg border border-border p-1 w-fit">
 		<button
 			v-for="theme in themes"
 			:key="theme.id"

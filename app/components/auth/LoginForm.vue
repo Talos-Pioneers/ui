@@ -49,14 +49,14 @@ const handleRegisterClick = () => {
 				<!-- Title Section -->
 				<div class="text-center mb-6">
 					<h1
-						class="text-[2rem] h-8 font-secondary flex justify-center items-center gap-5 font-[1000] text-cool-gray-90 mb-2"
+						class="text-[2rem] h-8 font-secondary flex justify-center items-center gap-5 font-[1000] text-foreground mb-2"
 					>
-						<span class="text-cool-gray-40 font-sans">[</span>
+						<span class="text-muted-foreground font-sans">[</span>
 						{{ t('auth.login.title') }}
-						<span class="text-cool-gray-40 font-sans">]</span>
+						<span class="text-muted-foreground font-sans">]</span>
 					</h1>
 					<!-- Placeholder for special font glyphs -->
-					<div class="text-sm text-cool-gray-40 font-sarkaz">
+					<div class="text-sm text-muted-foreground font-sarkaz">
 						<!-- Special font glyphs will be rendered here -->
 						<span>{{ t('auth.login.title') }}</span>
 					</div>
@@ -93,14 +93,14 @@ const handleRegisterClick = () => {
 				<!-- Links Section -->
 				<div class="flex justify-between mb-4 text-sm">
 					<button
-						class="text-[#1b1b18] dark:text-[#EDEDEC] hover:underline"
+						class="text-foreground hover:underline"
 						@click="handleRegisterClick"
 					>
 						{{ t('auth.common.registerLink') }}
 					</button>
 					<NuxtLinkLocale
 						to="/privacy-policy"
-						class="text-[#1b1b18] dark:text-[#EDEDEC] hover:underline"
+						class="text-foreground hover:underline"
 					>
 						{{ t('auth.common.privacyPolicy') }}
 					</NuxtLinkLocale>
@@ -108,7 +108,7 @@ const handleRegisterClick = () => {
 
 				<!-- Divider -->
 				<div
-					class="border-t border-[#e3e3e0] dark:border-[#3E3E3A] mb-4"
+					class="border-t border-border mb-4"
 				/>
 
 				<!-- Social Login Buttons -->
@@ -123,7 +123,7 @@ const handleRegisterClick = () => {
 					>
 						<GoogleIcon />
 						<span
-							class="text-[#1b1b18] dark:text-[#EDEDEC] font-medium"
+							class="text-foreground font-medium"
 							>{{ t('auth.common.googleLogin') }}</span
 						>
 					</Button>
@@ -137,7 +137,7 @@ const handleRegisterClick = () => {
 					>
 						<DiscordIcon />
 						<span
-							class="text-[#1b1b18] dark:text-[#EDEDEC] font-medium"
+							class="text-foreground font-medium"
 							>{{ t('auth.common.discordLogin') }}</span
 						>
 					</Button>
@@ -149,15 +149,15 @@ const handleRegisterClick = () => {
 				<!-- Title Section -->
 				<div class="text-center mb-6 flex flex-col">
 					<h1
-						class="text-[2rem] h-8 font-secondary flex justify-center items-center gap-5 font-[1000] leading-8 text-cool-gray-90 mb-2"
+						class="text-[2rem] h-8 font-secondary flex justify-center items-center gap-5 font-[1000] leading-8 text-foreground mb-2"
 					>
-						<span class="text-cool-gray-40 font-sans">[</span>
+						<span class="text-muted-foreground font-sans">[</span>
 						{{ t('auth.login.successTitle') }}
-						<span class="text-cool-gray-40 font-sans">]</span>
+						<span class="text-muted-foreground font-sans">]</span>
 					</h1>
 					<!-- Placeholder for special font glyphs -->
 					<div
-						class="text-sm text-cool-gray-40 font-sarkaz mt-3 md:mt-0"
+						class="text-sm text-muted-foreground font-sarkaz mt-3 md:mt-0"
 					>
 						<!-- Special font glyphs will be rendered here -->
 						<span>{{ t('auth.login.successTitle') }}</span>
@@ -166,10 +166,10 @@ const handleRegisterClick = () => {
 
 				<!-- Success Message -->
 				<div class="mb-6">
-					<p class="text-cool-gray-90 dark:text-[#EDEDEC] mb-4">
+					<p class="text-foreground mb-4">
 						{{ t('auth.login.successMessage') }}
 					</p>
-					<p class="text-sm text-cool-gray-60 dark:text-cool-gray-40">
+					<p class="text-sm text-muted-foreground">
 						{{ t('auth.login.instructions') }}
 					</p>
 				</div>

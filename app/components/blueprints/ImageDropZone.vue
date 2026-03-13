@@ -101,7 +101,7 @@ const onKeyDown = (e: KeyboardEvent) => {
 			<div
 				v-for="(element, index) in localItems"
 				:key="element.id"
-				class="image-item relative group aspect-square rounded-lg overflow-hidden border border-cool-gray-20 dark:border-cool-gray-80 bg-cool-gray-10 dark:bg-cool-gray-90"
+				class="image-item relative group aspect-square rounded-lg overflow-hidden border border-border bg-muted"
 			>
 				<img
 					:src="element.preview"
@@ -120,7 +120,7 @@ const onKeyDown = (e: KeyboardEvent) => {
 						aria-label="Drag to reorder"
 						@mousedown.stop
 					>
-						<GripVertical class="size-4 text-cool-gray-90" />
+						<GripVertical class="size-4 text-foreground" />
 					</button>
 					<button
 						type="button"
@@ -128,7 +128,7 @@ const onKeyDown = (e: KeyboardEvent) => {
 						aria-label="Remove image"
 						@click.stop="emit('remove', element.id)"
 					>
-						<X class="size-4 text-cool-gray-90" />
+						<X class="size-4 text-foreground" />
 					</button>
 				</div>
 				
@@ -152,7 +152,7 @@ const onKeyDown = (e: KeyboardEvent) => {
 			:class="[
 				isDragging
 					? 'border-primary bg-primary/10 scale-[1.02]'
-					: 'border-cool-gray-30 dark:border-cool-gray-70 hover:border-primary hover:bg-primary/5',
+					: 'border-border hover:border-primary hover:bg-primary/5',
 			]"
 			@click="emit('click')"
 			@keydown="onKeyDown"
@@ -165,8 +165,8 @@ const onKeyDown = (e: KeyboardEvent) => {
 					</p>
 				</div>
 				<div v-else>
-					<Plus class="size-8 mx-auto mb-2 text-cool-gray-50" />
-					<p class="text-xs text-cool-gray-60">
+					<Plus class="size-8 mx-auto mb-2 text-muted-foreground" />
+					<p class="text-xs text-muted-foreground">
 						{{ imageItems.length === 0 ? dragOrClickText : addMoreText }}
 					</p>
 				</div>

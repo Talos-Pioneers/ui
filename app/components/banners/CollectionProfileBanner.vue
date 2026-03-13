@@ -43,7 +43,7 @@ const { t } = useI18n()
 							/>
 						</svg>
 						<span
-							class="flex gap-3 text-sm sm:text-xl items-center text-cool-gray-100"
+							class="flex gap-3 text-sm sm:text-xl items-center text-foreground"
 						>
 							<span>{{
 								t(
@@ -55,7 +55,7 @@ const { t } = useI18n()
 								height="12"
 								viewBox="0 0 8 12"
 								fill="none"
-								class="fill-cool-gray-40"
+								class="fill-muted-foreground"
 								xmlns="http://www.w3.org/2000/svg"
 							>
 								<path

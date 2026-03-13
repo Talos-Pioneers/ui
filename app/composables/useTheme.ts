@@ -48,7 +48,7 @@ export function useTheme() {
 			const el = document.documentElement
 			el.classList.add('theme-transition')
 			el.setAttribute('data-theme', theme)
-			setTimeout(() => el.classList.remove('theme-transition'), 300)
+			setTimeout(() => el.classList.remove('theme-transition'), 200)
 		}
 	}
 

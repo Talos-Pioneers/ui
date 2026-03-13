@@ -567,7 +567,7 @@ const handleBlueprintDeleted = () => {
 </script>
 
 <template>
-	<div class="bg-cool-gray-5 dark:bg-cool-gray-95 min-h-screen py-8">
+	<div class="bg-background min-h-screen py-8">
 		<div class="container mx-auto px-4">
 			<div
 				v-if="isBlueprintLoading"
@@ -598,7 +598,7 @@ const handleBlueprintDeleted = () => {
 				<div class="space-y-8">
 					<section class="space-y-4">
 						<div
-							class="relative rounded-lg overflow-hidden border border-cool-gray-20 dark:border-cool-gray-80 bg-white dark:bg-cool-gray-95"
+							class="relative rounded-lg overflow-hidden border border-border bg-card"
 						>
 							<Carousel
 								class="relative"
@@ -635,7 +635,7 @@ const handleBlueprintDeleted = () => {
 								:class="
 									activeSlide === index
 										? 'border-primary'
-										: 'border-transparent hover:border-cool-gray-40'
+										: 'border-transparent hover:border-muted-foreground'
 								"
 								@click="goToSlide(index)"
 							>
@@ -649,7 +649,7 @@ const handleBlueprintDeleted = () => {
 					</section>
 
 					<section
-						class="rounded-lg border border-cool-gray-20 dark:border-cool-gray-80 bg-white dark:bg-cool-gray-95 p-6 space-y-6"
+						class="rounded-lg border border-border bg-card p-6 space-y-6"
 					>
 						<div class="flex items-center justify-between">
 							<h1 class="font-bold text-3xl">
@@ -739,15 +739,15 @@ const handleBlueprintDeleted = () => {
 								>
 									<component
 										:is="stat.icon"
-										class="size-4.5 text-cool-gray-70"
+										class="size-4.5 text-muted-foreground"
 									/>
-									<p class="font-medium text-cool-gray-90">
+									<p class="font-medium text-foreground">
 										{{ stat.value }}
 									</p>
 								</div>
 							</div>
 							<div
-								class="flex flex-wrap gap-4 text-sm text-cool-gray-70"
+								class="flex flex-wrap gap-4 text-sm text-muted-foreground"
 							>
 								<div class="flex items-center gap-2">
 									<ClockIcon class="w-4 h-4" />
@@ -762,11 +762,11 @@ const handleBlueprintDeleted = () => {
 							</div>
 						</div>
 
-						<hr class="border-cool-gray-20" />
+						<hr class="border-border" />
 
 						<div>
 							<p
-								class="text-sm text-cool-gray-80 leading-relaxed whitespace-pre-line"
+								class="text-sm text-foreground leading-relaxed whitespace-pre-line"
 							>
 								{{
 									blueprint.description ||
@@ -779,7 +779,7 @@ const handleBlueprintDeleted = () => {
 
 				<aside class="space-y-6">
 					<div
-						class="rounded-xl border border-cool-gray-20 bg-white dark:bg-cool-gray-95 p-6 space-y-5"
+						class="rounded-xl border border-border bg-card p-6 space-y-5"
 					>
 						<div class="grid grid-cols-2 gap-2.5 w-full">
 							<Tooltip v-if="blueprint.code">
@@ -848,9 +848,9 @@ const handleBlueprintDeleted = () => {
 							<h3 class="text-lg font-semibold mb-2.5">
 								{{ t('pages.blueprints.detail.details') }}
 							</h3>
-							<div class="space-y-3 text-sm text-cool-gray-80">
+							<div class="space-y-3 text-sm text-foreground">
 								<div class="flex items-center justify-between">
-									<span class="text-cool-gray-60">{{
+									<span class="text-muted-foreground">{{
 										t('pages.blueprints.detail.author')
 									}}</span>
 									<span>{{
@@ -861,7 +861,7 @@ const handleBlueprintDeleted = () => {
 									}}</span>
 								</div>
 								<div class="flex items-center justify-between">
-									<span class="text-cool-gray-60">{{
+									<span class="text-muted-foreground">{{
 										t(
 											'pages.blueprints.detail.serverRegion'
 										)
@@ -878,7 +878,7 @@ const handleBlueprintDeleted = () => {
 									}}</span>
 								</div>
 								<div class="flex items-center justify-between">
-									<span class="text-cool-gray-60">{{
+									<span class="text-muted-foreground">{{
 										t('pages.blueprints.detail.region')
 									}}</span>
 									<span>{{
@@ -889,7 +889,7 @@ const handleBlueprintDeleted = () => {
 									}}</span>
 								</div>
 								<div class="flex items-center justify-between">
-									<span class="text-cool-gray-60">{{
+									<span class="text-muted-foreground">{{
 										t('pages.blueprints.detail.version')
 									}}</span>
 									<span class="uppercase">{{
@@ -897,7 +897,7 @@ const handleBlueprintDeleted = () => {
 									}}</span>
 								</div>
 								<div class="flex items-center justify-between">
-									<span class="text-cool-gray-60">{{
+									<span class="text-muted-foreground">{{
 										t('pages.blueprints.detail.status')
 									}}</span>
 									<span class="capitalize">{{
@@ -908,7 +908,7 @@ const handleBlueprintDeleted = () => {
 									v-if="blueprint.width || blueprint.height"
 									class="flex items-center justify-between"
 								>
-									<span class="text-cool-gray-60">{{
+									<span class="text-muted-foreground">{{
 										t('pages.blueprints.detail.size')
 									}}</span>
 									<span
@@ -919,7 +919,7 @@ const handleBlueprintDeleted = () => {
 								</div>
 							</div>
 						</div>
-						<hr class="border-cool-gray-20" />
+						<hr class="border-border" />
 						<div v-if="blueprint.tags.length">
 							<h3 class="text-lg font-semibold mb-2.5">
 								{{ t('pages.blueprints.detail.tags') }}
@@ -929,14 +929,14 @@ const handleBlueprintDeleted = () => {
 									v-for="tag in blueprint.tags"
 									:key="tag.id"
 									type="button"
-									class="px-3 py-1.5 rounded-full border border-cool-gray-30 dark:border-cool-gray-70 text-sm hover:bg-cool-gray-10 dark:hover:bg-cool-gray-80 transition-colors"
+									class="px-3 py-1.5 rounded-full border border-border text-sm hover:bg-muted transition-colors"
 									@click="navigateToTag(tag)"
 								>
 									{{ tag.name }}
 								</button>
 							</div>
 						</div>
-						<hr class="border-cool-gray-20" />
+						<hr class="border-border" />
 						<div>
 							<h3 class="text-lg font-semibold mb-2.5">
 								{{
@@ -951,7 +951,7 @@ const handleBlueprintDeleted = () => {
 								{{ t('pages.blueprints.detail.noFacilities') }}
 							</p>
 						</div>
-						<hr class="border-cool-gray-20" />
+						<hr class="border-border" />
 						<div>
 							<h3 class="text-lg font-semibold mb-2.5">
 								{{ t('pages.blueprints.detail.inputProducts') }}
@@ -966,7 +966,7 @@ const handleBlueprintDeleted = () => {
 								}}
 							</p>
 						</div>
-						<hr class="border-cool-gray-20" />
+						<hr class="border-border" />
 						<div>
 							<h3 class="text-lg font-semibold mb-2.5">
 								{{
@@ -989,7 +989,7 @@ const handleBlueprintDeleted = () => {
 				</aside>
 
 				<section
-					class="rounded-lg border border-cool-gray-20 dark:border-cool-gray-80 bg-white dark:bg-cool-gray-95 p-6 space-y-6"
+					class="rounded-lg border border-border bg-card p-6 space-y-6"
 				>
 					<div
 						class="flex items-center justify-between flex-wrap gap-3"
@@ -1028,9 +1028,9 @@ const handleBlueprintDeleted = () => {
 						/>
 						<div
 							v-else
-							class="rounded-2xl border border-dashed border-cool-gray-30 dark:border-cool-gray-70 p-6 text-center space-y-3"
+							class="rounded-2xl border border-dashed border-border p-6 text-center space-y-3"
 						>
-							<p class="text-sm text-cool-gray-70">
+							<p class="text-sm text-muted-foreground">
 								{{
 									t('pages.blueprints.detail.signInToComment')
 								}}

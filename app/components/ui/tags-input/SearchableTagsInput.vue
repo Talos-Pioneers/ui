@@ -111,7 +111,7 @@ const filteredOptions = computed(() =>
 		</ComboboxAnchor>
 
 		<ComboboxContent
-			class="absolute z-10 w-full max-w-[418px] bg-white rounded will-change-[opacity,transform] border-1 max-h-[300px] mt-2 py-1"
+			class="absolute z-10 w-full max-w-[418px] bg-background rounded will-change-[opacity,transform] border-1 max-h-[300px] mt-2 py-1"
 			align-flip
 			prioritize-position
 		>
@@ -122,7 +122,7 @@ const filteredOptions = computed(() =>
 				<ComboboxGroup>
 					<ComboboxLabel
 						v-if="!filteredOptions?.length"
-						class="bg-white px-2 py-1.5 text-sm"
+						class="bg-background px-2 py-1.5 text-sm"
 					>
 						No results
 					</ComboboxLabel>

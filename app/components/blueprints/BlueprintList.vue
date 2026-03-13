@@ -473,7 +473,7 @@ const unifiedFilterModel = computed({
 									:class="[
 										'flex-1 flex flex-col items-center justify-center gap-2 p-3 rounded border transition-colors',
 										filters.region === region.value
-											? 'bg-primary border-primary text-cool-gray-100'
+											? 'bg-primary border-primary text-foreground'
 											: 'bg-sidebar border-sidebar-border hover:bg-sidebar-accent',
 									]"
 									@click="handleRegionClick(region.value)"
@@ -483,12 +483,12 @@ const unifiedFilterModel = computed({
 										class="w-6 h-6"
 										:class="[
 											filters.region === region.value
-												? 'text-cool-gray-100'
-												: 'text-cool-gray-30',
+												? 'text-foreground'
+												: 'text-muted-foreground',
 										]"
 									/>
 									<span
-										class="text-xs text-cool-gray-70 font-medium"
+										class="text-xs text-muted-foreground font-medium"
 										>{{ t(`region.${region.value}`) }}</span
 									>
 								</button>
@@ -723,7 +723,7 @@ const unifiedFilterModel = computed({
 			<slot name="banner" />
 
 			<!-- Content Area -->
-			<div class="wave-bg bg-cool-gray-10 before:bg-size-[400px]">
+			<div class="wave-bg bg-muted before:bg-size-[400px]">
 				<div class="container mx-auto px-4 py-6">
 					<!-- Controls Bar -->
 					<div class="flex flex-col gap-4 mb-8">
@@ -764,7 +764,7 @@ const unifiedFilterModel = computed({
 										'components.blueprints.list.filters.searchPlaceholder'
 									)
 								"
-								class="w-full bg-white"
+								class="w-full bg-background"
 							/>
 							<Select
 								:model-value="filters.server_region"
@@ -773,7 +773,7 @@ const unifiedFilterModel = computed({
 								<SelectTrigger
 									size="custom"
 									:with-pattern="true"
-									class="w-full md:w-1/3 h-10.5 bg-white"
+									class="w-full md:w-1/3 h-10.5 bg-background"
 								>
 									<SelectValue
 										:placeholder="
@@ -811,7 +811,7 @@ const unifiedFilterModel = computed({
 								<button
 									v-for="tag in activeFilterTags"
 									:key="tag.value"
-									class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cool-gray-20 dark:bg-cool-gray-80 text-cool-gray-90 dark:text-cool-gray-10 text-sm hover:bg-cool-gray-30 dark:hover:bg-cool-gray-70 transition-colors"
+									class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted text-foreground text-sm hover:bg-muted/80 transition-colors"
 									@click="
 										handleClearTag(tag.filterKey, tag.value)
 									"
