@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { Button } from '~/components/ui/button'
-import { useLoginModal } from '~/composables/useLoginModal'
 import Logo from '../icons/Logo.vue'
-import LoginIcon from '../icons/LoginIcon.vue'
 import LanguageSwitcher from './LanguageSwitcher.vue'
+import SignInButton from './SignInButton.vue'
 import ThemeSelector from './ThemeSelector.vue'
 import ThemeSelectorInline from './ThemeSelectorInline.vue'
 import LogoMobileIcon from '../icons/LogoMobileIcon.vue'
@@ -28,7 +27,6 @@ import {
 
 const { t } = useI18n()
 const { isAuthenticated, logout } = useSanctumAuth()
-const { open } = useLoginModal()
 const router = useRouter()
 const mobileMenuOpen = ref(false)
 
@@ -83,25 +81,7 @@ const navigationItems = [
 			<ThemeSelector />
 			<LanguageSwitcher />
 			<template v-if="!isAuthenticated">
-				<Button
-					class="min-w-40 px-4.5 justify-between hidden md:flex"
-					variant="default"
-					@click="open"
-				>
-					<span class="flex items-center gap-2.5">
-						<LoginIcon class="h-5" />
-						<span class="h-3.5 w-px bg-cool-gray-50" />
-					</span>
-					{{ t('components.navigation.header.signIn') }}
-				</Button>
-				<Button
-					class="md:hidden"
-					variant="default"
-					size="icon-lg"
-					@click="open"
-				>
-					<LoginIcon class="h-5" />
-				</Button>
+				<SignInButton />
 			</template>
 			<template v-else>
 				<DropdownMenu>
