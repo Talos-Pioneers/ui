@@ -1,8 +1,11 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-@custom-variant dark (&:is(.dark *));
-:root {
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root,
+[data-theme="light"] {
+	color-scheme: light;
 	--background: oklch(1 0 0);
 	--foreground: oklch(0.251 0.0095 219.8651);
 	--card: oklch(1 0 0);
@@ -83,7 +86,8 @@ html[lang='ja'] {
 	--font-sans: 'Noto Sans JP', 'HarmonyOS_Sans', sans-serif;
 }
 
-.dark {
+[data-theme="dark"] {
+	color-scheme: dark;
 	--background: oklch(0.251 0.0095 219.8651);
 	--foreground: oklch(1 0 0);
 	--card: oklch(0.3032 0.0132 229.4039);
@@ -95,7 +99,7 @@ html[lang='ja'] {
 	--secondary: oklch(0.3741 0.0178 224.9693);
 	--secondary-foreground: oklch(1 0 0);
 	--muted: oklch(0.3741 0.0178 224.9693);
-	--muted-foreground: oklch(0.6851 0.0164 229.0806);
+	--muted-foreground: oklch(0.74 0.006 264);
 	--accent: oklch(0.3741 0.0178 224.9693);
 	--accent-foreground: oklch(1 0 0);
 	--destructive: oklch(0.6358 0.2088 25.4126);
@@ -116,12 +120,6 @@ html[lang='ja'] {
 	--sidebar-accent-foreground: oklch(1 0 0);
 	--sidebar-border: oklch(0.4222 0.0193 227.4184);
 	--sidebar-ring: oklch(0.7147 0.1211 194.7836);
-	--font-sans: 'HarmonyOS_Sans', sans-serif;
-	--font-secondary: 'DM Sans', sans-serif;
-	--font-sarkaz: 'EndfieldByButan', sans-serif;
-	--font-serif: serif;
-	--font-mono: monospace;
-	--radius: 0rem;
 	--shadow-x: 0rem;
 	--shadow-y: 0.125rem;
 	--shadow-blur: 0px;
@@ -234,6 +232,12 @@ body {
 	}
 	body {
 		@apply bg-background text-foreground;
+	}
+
+	/* Theme transition — only active after user interaction, not on page load */
+	html.theme-transition,
+	html.theme-transition * {
+		transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease !important;
 	}
 	.wave-bg {
 		@apply relative;
