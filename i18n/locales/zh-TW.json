@@ -424,5 +424,10 @@
 	"pages.collections.edit.successPublic": "收藏已更新並成功公開發佈！",
 	"pages.collections.edit.successPrivate": "私有收藏更新成功！",
 	"pages.collections.edit.errorValidation": "請修復驗證錯誤。",
-	"pages.collections.edit.errorFailed": "更新收藏失敗。請重試。"
+	"pages.collections.edit.errorFailed": "更新收藏失敗。請重試。",
+	"theme.light": "淺色",
+	"theme.dark": "深色",
+	"theme.system": "跟隨系統",
+	"theme.label": "主題",
+	"theme.change": "切換主題"
 }

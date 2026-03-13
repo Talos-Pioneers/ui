@@ -424,5 +424,10 @@
 	"pages.collections.edit.successPublic": "收藏已更新并成功公开发布！",
 	"pages.collections.edit.successPrivate": "私有收藏更新成功！",
 	"pages.collections.edit.errorValidation": "请修复验证错误。",
-	"pages.collections.edit.errorFailed": "更新收藏失败。请重试。"
+	"pages.collections.edit.errorFailed": "更新收藏失败。请重试。",
+	"theme.light": "浅色",
+	"theme.dark": "深色",
+	"theme.system": "跟随系统",
+	"theme.label": "主题",
+	"theme.change": "切换主题"
 }

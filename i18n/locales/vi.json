@@ -425,5 +425,10 @@
 	"pages.collections.edit.successPublic": "Bộ sưu tập đã được cập nhật và xuất bản công khai thành công!",
 	"pages.collections.edit.successPrivate": "Bộ sưu tập riêng tư đã được cập nhật thành công!",
 	"pages.collections.edit.errorValidation": "Vui lòng sửa các lỗi xác thực.",
-	"pages.collections.edit.errorFailed": "Không thể cập nhật bộ sưu tập. Vui lòng thử lại."
+	"pages.collections.edit.errorFailed": "Không thể cập nhật bộ sưu tập. Vui lòng thử lại.",
+	"theme.light": "Sáng",
+	"theme.dark": "Tối",
+	"theme.system": "Hệ thống",
+	"theme.label": "Chủ đề",
+	"theme.change": "Đổi chủ đề"
 }

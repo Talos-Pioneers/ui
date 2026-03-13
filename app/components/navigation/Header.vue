@@ -4,6 +4,8 @@ import { useLoginModal } from '~/composables/useLoginModal'
 import Logo from '../icons/Logo.vue'
 import LoginIcon from '../icons/LoginIcon.vue'
 import LanguageSwitcher from './LanguageSwitcher.vue'
+import ThemeSelector from './ThemeSelector.vue'
+import ThemeSelectorInline from './ThemeSelectorInline.vue'
 import LogoMobileIcon from '../icons/LogoMobileIcon.vue'
 import UserIcon from '../icons/UserIcon.vue'
 import AddBlueprintIcon from '../icons/AddBlueprintIcon.vue'
@@ -78,6 +80,7 @@ const navigationItems = [
 			</ul>
 		</nav>
 		<div class="ml-auto flex items-center gap-2">
+			<ThemeSelector />
 			<LanguageSwitcher />
 			<template v-if="!isAuthenticated">
 				<Button
@@ -208,6 +211,12 @@ const navigationItems = [
 						>
 							{{ t(item.label) }}
 						</NuxtLinkLocale>
+
+						<div class="h-px bg-cool-gray-20 my-2" />
+						<p class="text-sm text-cool-gray-60 font-medium mb-2">
+							{{ t('theme.label') }}
+						</p>
+						<ThemeSelectorInline />
 
 						<template v-if="isAuthenticated">
 							<div class="h-px bg-cool-gray-20 my-2" />

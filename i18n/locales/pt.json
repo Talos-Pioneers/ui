@@ -425,5 +425,10 @@
 	"pages.collections.edit.successPublic": "Coleção atualizada e publicada como pública com sucesso!",
 	"pages.collections.edit.successPrivate": "Coleção privada atualizada com sucesso!",
 	"pages.collections.edit.errorValidation": "Por favor, corrija os erros de validação.",
-	"pages.collections.edit.errorFailed": "Falha ao atualizar a coleção. Por favor, tente novamente."
+	"pages.collections.edit.errorFailed": "Falha ao atualizar a coleção. Por favor, tente novamente.",
+	"theme.light": "Claro",
+	"theme.dark": "Escuro",
+	"theme.system": "Sistema",
+	"theme.label": "Tema",
+	"theme.change": "Alterar tema"
 }
