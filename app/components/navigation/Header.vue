@@ -205,12 +205,14 @@ const navigationItems = [
 								}}
 							</p>
 							<NuxtLinkLocale
-								active-class="text-foreground border-b-2 h-full border-foreground"
-								class="text-muted-foreground hover:text-foreground h-full flex items-center gap-2"
+								active-class="text-nav-link-active"
+								class="text-nav-link hover:text-nav-link-active flex items-center gap-2"
 								to="/blueprints/create"
 								@click="mobileMenuOpen = false"
 							>
-								<AddBlueprintIcon class="size-5" />
+								<span class="w-6 flex items-center shrink-0">
+									<AddBlueprintIcon class="size-5" />
+								</span>
 								{{
 									t(
 										'components.navigation.header.nav.createBlueprint'
@@ -218,12 +220,14 @@ const navigationItems = [
 								}}
 							</NuxtLinkLocale>
 							<NuxtLinkLocale
-								active-class="text-foreground border-b-2 h-full border-foreground"
-								class="text-muted-foreground hover:text-foreground h-full flex items-center gap-2"
+								active-class="text-nav-link-active"
+								class="text-nav-link hover:text-nav-link-active flex items-center gap-2"
 								to="/collections/create"
 								@click="mobileMenuOpen = false"
 							>
-								<AddCollectionIcon class="size-6" />
+								<span class="w-6 flex items-center shrink-0">
+									<AddCollectionIcon class="size-5" />
+								</span>
 								{{
 									t(
 										'components.navigation.header.nav.createCollection'
