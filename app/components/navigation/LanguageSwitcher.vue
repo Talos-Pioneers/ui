@@ -18,7 +18,7 @@ const currentLocale = computed(() => {
 <template>
     <DropdownMenu :modal="false">
         <DropdownMenuTrigger as-child>
-            <Button variant="secondary" class="md:min-w-38 md:px-4.5 md:justify-between" size="responsive-icon">
+            <Button variant="secondary" class="md:min-w-40 md:px-4.5 md:justify-between" size="responsive-icon">
                 <LanguageIcon class="h-5 block md:hidden text-(--lang-switcher-icon)" />
                 <span class="items-center gap-2.5 hidden md:flex">
                     <LanguageIcon class="h-5 text-(--lang-switcher-icon)" />
