@@ -126,8 +126,8 @@ const navigationItems = [
 
 				<DropdownMenu :modal="false">
 					<DropdownMenuTrigger as-child>
-						<Button variant="default" size="icon-lg">
-							<UserIcon class="h-5 text-foreground" />
+						<Button variant="default" size="icon-lg" class="bg-(--profile-btn-bg) before:border-(--profile-btn-outline)">
+							<UserIcon class="h-5 text-(--profile-btn-icon)" />
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end">
