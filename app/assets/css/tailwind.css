@@ -15,7 +15,7 @@
 	--primary: oklch(0.9054 0.1546 194.7689);
 	--primary-foreground: hsla(0, 0%, 27%, 1);
 	--secondary: oklch(0.9692 0.0034 247.8583);
-	--secondary-foreground: oklch(0.3665 0 0);              /* #444444 CoolGray/80 */
+	--secondary-foreground: oklch(0.4748 0 0);              /* #5C5C5C CoolGray/70 */
 	--lang-switcher-icon: oklch(0.4748 0 0);               /* #5C5C5C CoolGray/70 */
 	--lang-switcher-text: oklch(0.3665 0 0);               /* #444444 CoolGray/80 */
 	--lang-switcher-divider: oklch(0.7444 0 0);            /* #ACACAC CoolGray/40 */
