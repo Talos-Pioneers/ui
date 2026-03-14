@@ -36,6 +36,7 @@ export const buttonVariants = cva(
 				default:
 					"rounded-full relative before:rounded-full before:absolute before:inset-0 before:content-[''] before:m-[2px] before:border",
 				base: 'rounded',
+				none: 'rounded-none',
 			},
 		},
 		defaultVariants: {

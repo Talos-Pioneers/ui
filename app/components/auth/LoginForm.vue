@@ -49,14 +49,14 @@ const handleRegisterClick = () => {
 				<!-- Title Section -->
 				<div class="text-center mb-6">
 					<h1
-						class="text-[2rem] h-8 font-secondary flex justify-center items-center gap-5 font-[1000] text-foreground mb-2"
+						class="text-[2rem] h-8 font-secondary flex justify-center items-center gap-5 font-[1000] text-(--login-title) mb-2"
 					>
-						<span class="text-muted-foreground font-sans">[</span>
+						<span class="text-(--login-bracket) font-sans">[</span>
 						{{ t('auth.login.title') }}
-						<span class="text-muted-foreground font-sans">]</span>
+						<span class="text-(--login-bracket) font-sans">]</span>
 					</h1>
 					<!-- Placeholder for special font glyphs -->
-					<div class="text-sm text-muted-foreground font-sarkaz">
+					<div class="text-sm text-(--login-caption) font-sarkaz">
 						<!-- Special font glyphs will be rendered here -->
 						<span>{{ t('auth.login.title') }}</span>
 					</div>
@@ -65,12 +65,12 @@ const handleRegisterClick = () => {
 				<!-- Email Input -->
 				<div class="mb-4">
 					<div class="relative">
-						<div class="absolute left-3 top-1/2 -translate-y-1/2">
+						<div class="absolute left-3 top-1/2 -translate-y-1/2 text-(--login-input-placeholder)">
 							<MailIcon />
 						</div>
 						<Input
 							v-model="email"
-							class="pl-10"
+							class="pl-10 border-0 border-b border-(--login-input-border) rounded-none bg-white placeholder:text-(--login-input-placeholder)"
 							type="email"
 							:placeholder="t('auth.login.emailPlaceholder')"
 						/>
@@ -84,7 +84,7 @@ const handleRegisterClick = () => {
 						type="submit"
 						class="w-full"
 						variant="default"
-						rounded="base"
+						rounded="none"
 					>
 						{{ t('auth.login.submit') }}
 					</Button>
@@ -93,14 +93,14 @@ const handleRegisterClick = () => {
 				<!-- Links Section -->
 				<div class="flex justify-between mb-4 text-sm">
 					<button
-						class="text-foreground hover:underline"
+						class="text-(--login-link) hover:underline"
 						@click="handleRegisterClick"
 					>
 						{{ t('auth.common.registerLink') }}
 					</button>
 					<NuxtLinkLocale
 						to="/privacy-policy"
-						class="text-foreground hover:underline"
+						class="text-(--login-link) hover:underline"
 					>
 						{{ t('auth.common.privacyPolicy') }}
 					</NuxtLinkLocale>
@@ -108,36 +108,36 @@ const handleRegisterClick = () => {
 
 				<!-- Divider -->
 				<div
-					class="border-t border-border mb-4"
+					class="border-t border-(--login-divider) mb-4"
 				/>
 
 				<!-- Social Login Buttons -->
 				<div class="flex flex-col gap-3">
 					<Button
-						class="bg-transparent"
+						class="bg-transparent border-(--login-social-border)!"
 						as="a"
 						:href="googleUrl"
 						variant="outline"
-						rounded="base"
+						rounded="none"
 						:with-wave="false"
 					>
-						<GoogleIcon />
+						<GoogleIcon class="text-(--login-social-icon)" />
 						<span
-							class="text-foreground font-medium"
+							class="text-(--login-social-text) font-medium"
 							>{{ t('auth.common.googleLogin') }}</span
 						>
 					</Button>
 					<Button
-						class="bg-transparent"
+						class="bg-transparent border-(--login-social-border)!"
 						as="a"
 						:href="discordUrl"
 						variant="outline"
-						rounded="base"
+						rounded="none"
 						:with-wave="false"
 					>
-						<DiscordIcon />
+						<DiscordIcon class="text-(--login-social-icon)" />
 						<span
-							class="text-foreground font-medium"
+							class="text-(--login-social-text) font-medium"
 							>{{ t('auth.common.discordLogin') }}</span
 						>
 					</Button>
@@ -149,15 +149,15 @@ const handleRegisterClick = () => {
 				<!-- Title Section -->
 				<div class="text-center mb-6 flex flex-col">
 					<h1
-						class="text-[2rem] h-8 font-secondary flex justify-center items-center gap-5 font-[1000] leading-8 text-foreground mb-2"
+						class="text-[2rem] h-8 font-secondary flex justify-center items-center gap-5 font-[1000] leading-8 text-(--login-title) mb-2"
 					>
-						<span class="text-muted-foreground font-sans">[</span>
+						<span class="text-(--login-bracket) font-sans">[</span>
 						{{ t('auth.login.successTitle') }}
-						<span class="text-muted-foreground font-sans">]</span>
+						<span class="text-(--login-bracket) font-sans">]</span>
 					</h1>
 					<!-- Placeholder for special font glyphs -->
 					<div
-						class="text-sm text-muted-foreground font-sarkaz mt-3 md:mt-0"
+						class="text-sm text-(--login-caption) font-sarkaz mt-3 md:mt-0"
 					>
 						<!-- Special font glyphs will be rendered here -->
 						<span>{{ t('auth.login.successTitle') }}</span>
@@ -178,7 +178,7 @@ const handleRegisterClick = () => {
 				<Button
 					class="w-full"
 					variant="default"
-					rounded="base"
+					rounded="none"
 					@click="close()"
 				>
 					{{ t('auth.common.loginLink') }}
