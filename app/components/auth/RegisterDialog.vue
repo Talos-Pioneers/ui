@@ -4,6 +4,11 @@ import RegisterForm from './RegisterForm.vue'
 import { useRegisterModal } from '~/composables/useRegisterModal'
 
 const { isOpen, close } = useRegisterModal()
+const route = useRoute()
+
+watch(() => route.path, () => {
+  if (isOpen.value) close()
+})
 </script>
 
 <template>

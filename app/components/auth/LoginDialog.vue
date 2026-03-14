@@ -4,6 +4,11 @@ import LoginForm from './LoginForm.vue'
 import { useLoginModal } from '~/composables/useLoginModal'
 
 const { isOpen, close } = useLoginModal()
+const route = useRoute()
+
+watch(() => route.path, () => {
+  if (isOpen.value) close()
+})
 </script>
 
 <template>

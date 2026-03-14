@@ -103,6 +103,7 @@ const handleRegisterClick = () => {
 					<NuxtLinkLocale
 						to="/privacy-policy"
 						class="text-(--login-link) hover:underline"
+						@click="close()"
 					>
 						{{ t('auth.common.privacyPolicy') }}
 					</NuxtLinkLocale>
