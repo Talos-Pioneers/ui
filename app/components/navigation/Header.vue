@@ -56,11 +56,11 @@ const navigationItems = [
 	>
 		<div>
 			<NuxtLinkLocale to="/">
-				<Logo class="hidden md:block" />
-				<LogoMobileIcon class="block md:hidden" />
+				<Logo class="hidden nav:block" />
+				<LogoMobileIcon class="block nav:hidden" />
 			</NuxtLinkLocale>
 		</div>
-		<nav class="hidden md:block ml-7.5 h-full">
+		<nav class="hidden nav:block ml-7.5 h-full">
 			<ul class="flex items-center gap-7.5 h-full">
 				<li
 					v-for="item in navigationItems"
@@ -88,7 +88,7 @@ const navigationItems = [
 					<DropdownMenuTrigger as-child>
 						<Button
 							variant="default"
-							class="hidden md:flex items-center gap-1.5 mr-2 min-w-28 px-3.5 bg-(--create-btn-bg) before:border-(--create-btn-outline)"
+							class="hidden nav:flex items-center gap-1.5 mr-2 min-w-28 px-3.5 bg-(--create-btn-bg) before:border-(--create-btn-outline)"
 						>
 							<span><Plus class="h-4 w-4 text-(--create-btn-icon)" /></span>
 							<span class="text-(--create-btn-text) -translate-x-1">{{ t('components.navigation.header.nav.create') }}</span>
@@ -170,7 +170,7 @@ const navigationItems = [
 			</template>
 			<Sheet v-model:open="mobileMenuOpen">
 				<SheetTrigger as-child>
-					<Button variant="ghost" size="icon" class="md:hidden ml-2">
+					<Button variant="ghost" size="icon" class="nav:hidden ml-2">
 						<Menu class="h-6 w-6" />
 					</Button>
 				</SheetTrigger>

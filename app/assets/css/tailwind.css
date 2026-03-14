@@ -221,6 +221,8 @@ html[lang='ja'] {
 	--color-nav-link-active: var(--nav-link-active);
 	--color-nav-underline: var(--nav-underline);
 
+	--breakpoint-nav: 850px;
+
 	--font-sans: var(--font-sans);
 	--font-secondary: var(--font-secondary);
 	--font-sarkaz: var(--font-sarkaz);

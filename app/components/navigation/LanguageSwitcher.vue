@@ -18,13 +18,13 @@ const currentLocale = computed(() => {
 <template>
     <DropdownMenu :modal="false">
         <DropdownMenuTrigger as-child>
-            <Button variant="secondary" class="md:min-w-40 md:px-4.5 md:justify-between" size="responsive-icon">
-                <LanguageIcon class="h-5 block md:hidden text-(--lang-switcher-icon)" />
-                <span class="items-center gap-2.5 hidden md:flex">
+            <Button variant="secondary" class="nav:min-w-40 nav:px-4.5 nav:justify-between" size="responsive-icon">
+                <LanguageIcon class="h-5 block nav:hidden text-(--lang-switcher-icon)" />
+                <span class="items-center gap-2.5 hidden nav:flex">
                     <LanguageIcon class="h-5 text-(--lang-switcher-icon)" />
                     <span class="h-3.5 w-px bg-(--lang-switcher-divider)"></span>
                 </span>
-                <span class="items-center hidden md:flex">
+                <span class="items-center hidden nav:flex">
                     <span class="text-(--lang-switcher-text)">{{ currentLocale?.name ?? currentLocale?.code }}</span>
                     <ChevronIcon class="w-4.5 h-4.5 mt-0.5 text-(--lang-switcher-icon)" />
                 </span>
