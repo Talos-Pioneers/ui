@@ -428,7 +428,6 @@
 	"pages.collections.edit.errorFailed": "Gagal memperbarui koleksi. Silakan coba lagi.",
 	"theme.light": "Terang",
 	"theme.dark": "Gelap",
-	"theme.system": "Sistem",
 	"theme.label": "Tema",
 	"theme.change": "Ubah tema"
 }

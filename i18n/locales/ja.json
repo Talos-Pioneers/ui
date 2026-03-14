@@ -428,7 +428,6 @@
 	"pages.collections.edit.errorFailed": "コレクションの更新に失敗しました。もう一度お試しください。",
 	"theme.light": "ライト",
 	"theme.dark": "ダーク",
-	"theme.system": "システム",
 	"theme.label": "テーマ",
 	"theme.change": "テーマを変更"
 }

@@ -427,7 +427,6 @@
 	"pages.collections.edit.errorFailed": "更新收藏失敗。請重試。",
 	"theme.light": "淺色",
 	"theme.dark": "深色",
-	"theme.system": "跟隨系統",
 	"theme.label": "主題",
 	"theme.change": "切換主題"
 }

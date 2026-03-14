@@ -428,7 +428,6 @@
 	"pages.collections.edit.errorFailed": "Errore durante l'aggiornamento della collezione. Per favore riprova.",
 	"theme.light": "Chiaro",
 	"theme.dark": "Scuro",
-	"theme.system": "Sistema",
 	"theme.label": "Tema",
 	"theme.change": "Cambia tema"
 }

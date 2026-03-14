@@ -428,7 +428,6 @@
 	"pages.collections.edit.errorFailed": "อัปเดตคอลเลกชันไม่สำเร็จ โปรดลองอีกครั้ง",
 	"theme.light": "สว่าง",
 	"theme.dark": "มืด",
-	"theme.system": "ระบบ",
 	"theme.label": "ธีม",
 	"theme.change": "เปลี่ยนธีม"
 }

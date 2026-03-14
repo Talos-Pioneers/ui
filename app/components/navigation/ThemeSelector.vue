@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Sun, Moon, Monitor } from 'lucide-vue-next'
+import { Sun, Moon } from 'lucide-vue-next'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -7,7 +7,7 @@ import {
 	DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu'
 import { Button } from '~/components/ui/button'
-import { useTheme, type UserPreference } from '~/composables/useTheme'
+import { useTheme, type ThemeId } from '~/composables/useTheme'
 
 const { t } = useI18n()
 const { preference, resolved, themes, setTheme } = useTheme()
@@ -15,13 +15,11 @@ const { preference, resolved, themes, setTheme } = useTheme()
 const iconMap: Record<string, Component> = {
 	Sun,
 	Moon,
-	Monitor,
 }
 
 const triggerIcon = computed(() => {
-	if (resolved.value === 'dark') return Moon
-	if (resolved.value === 'light') return Sun
-	return Monitor
+	const theme = themes.find(th => th.id === resolved.value)
+	return theme ? iconMap[theme.icon] : iconMap[themes[0].icon]
 })
 </script>
 <template>
@@ -45,7 +43,7 @@ const triggerIcon = computed(() => {
 				:key="theme.id"
 				class="flex items-center gap-2 cursor-pointer"
 				:class="{ 'bg-accent': preference === theme.id }"
-				@click="setTheme(theme.id as UserPreference)"
+				@click="setTheme(theme.id as ThemeId)"
 			>
 				<component :is="iconMap[theme.icon]" class="h-4 w-4" />
 				{{ t(theme.labelKey) }}

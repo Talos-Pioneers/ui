@@ -7,6 +7,7 @@ import RegisterDialog from '~/components/auth/RegisterDialog.vue'
 import { TooltipProvider } from '~/components/ui/tooltip'
 import { Toaster } from '~/components/ui/sonner'
 import { SidebarProvider, SidebarInset } from '~/components/ui/sidebar'
+import { THEME_META, type ThemeId } from '~/composables/useTheme'
 
 const head = useLocaleHead()
 const { resolved } = useTheme()
@@ -14,7 +15,7 @@ const { resolved } = useTheme()
 useHead(() => ({
 	htmlAttrs: resolved.value ? { 'data-theme': resolved.value } : {},
 	meta: resolved.value
-		? [{ name: 'theme-color', content: resolved.value === 'dark' ? '#272727' : '#ffffff' }]
+		? [{ name: 'theme-color', content: THEME_META[resolved.value as ThemeId]?.themeColor ?? '#ffffff' }]
 		: [],
 }))
 

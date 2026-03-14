@@ -428,7 +428,6 @@
 	"pages.collections.edit.errorFailed": "Sammlung konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.",
 	"theme.light": "Hell",
 	"theme.dark": "Dunkel",
-	"theme.system": "System",
 	"theme.label": "Thema",
 	"theme.change": "Thema ändern"
 }

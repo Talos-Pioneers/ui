@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Sun, Moon, Monitor } from 'lucide-vue-next'
-import { useTheme, type UserPreference } from '~/composables/useTheme'
+import { Sun, Moon } from 'lucide-vue-next'
+import { useTheme, type ThemeId } from '~/composables/useTheme'
 
 const { t } = useI18n()
 const { preference, themes, setTheme } = useTheme()
@@ -8,7 +8,6 @@ const { preference, themes, setTheme } = useTheme()
 const iconMap: Record<string, Component> = {
 	Sun,
 	Moon,
-	Monitor,
 }
 </script>
 <template>
@@ -22,7 +21,7 @@ const iconMap: Record<string, Component> = {
 				: 'text-muted-foreground hover:text-foreground hover:bg-accent/50'"
 			:aria-label="t(theme.labelKey)"
 			:aria-pressed="preference === theme.id"
-			@click="setTheme(theme.id as UserPreference)"
+			@click="setTheme(theme.id as ThemeId)"
 		>
 			<component :is="iconMap[theme.icon]" class="h-5 w-5" />
 		</button>

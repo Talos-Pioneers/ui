@@ -1,29 +1,51 @@
 import { useEventListener } from '@vueuse/core'
 
-export type UserPreference = 'light' | 'dark' | 'system'
-export type ResolvedTheme = 'light' | 'dark'
-
 export interface ThemeOption {
-	id: UserPreference
+	id: string
 	labelKey: string
 	icon: string
 }
 
-export const THEMES: ThemeOption[] = [
+/**
+ * All available themes — single source of truth.
+ * To add a future theme: add an entry here and a matching
+ * `[data-theme="<id>"]` block in tailwind.css.
+ */
+export const THEMES = [
 	{ id: 'light', labelKey: 'theme.light', icon: 'Sun' },
 	{ id: 'dark', labelKey: 'theme.dark', icon: 'Moon' },
-	{ id: 'system', labelKey: 'theme.system', icon: 'Monitor' },
-]
+] as const satisfies readonly ThemeOption[]
+
+/** Union of all registered theme IDs, derived from THEMES. */
+export type ThemeId = (typeof THEMES)[number]['id']
+
+/**
+ * Maps OS `prefers-color-scheme` result to a theme id.
+ * Centralised so only this mapping needs updating if a future theme
+ * should become the OS default for dark- or light-preferring users.
+ */
+const OS_THEME_MAP: Record<'light' | 'dark', ThemeId> = {
+	light: 'light',
+	dark: 'dark',
+}
+
+/**
+ * Per-theme metadata used outside CSS (e.g. `<meta name="theme-color">`).
+ * Add an entry for each new theme.
+ */
+export const THEME_META: Record<ThemeId, { themeColor: string }> = {
+	light: { themeColor: '#ffffff' },
+	dark: { themeColor: '#272727' },
+}
 
 export function useTheme() {
-	const themeCookie = useCookie<UserPreference>('talos_theme', {
-		default: () => 'system',
+	const themeCookie = useCookie<ThemeId | null>('talos_theme', {
+		default: () => null,
 		maxAge: 60 * 60 * 24 * 365,
 		path: '/',
 		sameSite: 'lax',
 	})
 
-	const preference = useState<UserPreference>('theme-preference', () => themeCookie.value)
 	const systemPrefersDark = useState('theme-system-dark', () => false)
 
 	if (import.meta.client) {
@@ -35,15 +57,28 @@ export function useTheme() {
 		})
 	}
 
-	const resolved = computed<ResolvedTheme | null>(() => {
-		if (preference.value === 'system') {
-			if (import.meta.server) return null
-			return systemPrefersDark.value ? 'dark' : 'light'
-		}
+	/** The theme the OS would select if the user has no stored preference. */
+	const osDefault = computed<ThemeId>(() =>
+		OS_THEME_MAP[systemPrefersDark.value ? 'dark' : 'light'],
+	)
+
+	const preference = useState<ThemeId>('theme-preference', () =>
+		themeCookie.value ?? osDefault.value,
+	)
+
+	// Keep preference in sync with OS changes when user has no stored preference
+	if (import.meta.client) {
+		watch(osDefault, (val) => {
+			if (!themeCookie.value) preference.value = val
+		})
+	}
+
+	const resolved = computed<ThemeId | null>(() => {
+		if (import.meta.server && !themeCookie.value) return null
 		return preference.value
 	})
 
-	const applyTheme = (theme: ResolvedTheme) => {
+	const applyTheme = (theme: ThemeId) => {
 		if (import.meta.client) {
 			const el = document.documentElement
 			el.classList.add('theme-transition')
@@ -52,7 +87,7 @@ export function useTheme() {
 		}
 	}
 
-	const setTheme = (id: UserPreference) => {
+	const setTheme = (id: ThemeId) => {
 		preference.value = id
 		themeCookie.value = id
 	}

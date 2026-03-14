@@ -428,7 +428,6 @@
 	"pages.collections.edit.errorFailed": "컬렉션 업데이트에 실패했습니다. 다시 시도해 주세요.",
 	"theme.light": "라이트",
 	"theme.dark": "다크",
-	"theme.system": "시스템",
 	"theme.label": "테마",
 	"theme.change": "테마 변경"
 }

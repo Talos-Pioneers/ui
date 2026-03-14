@@ -428,7 +428,6 @@
 	"pages.collections.edit.errorFailed": "Failed to update collection. Please try again.",
 	"theme.light": "Light",
 	"theme.dark": "Dark",
-	"theme.system": "System",
 	"theme.label": "Theme",
 	"theme.change": "Change theme"
 }

@@ -5,10 +5,9 @@ export default defineNuxtPlugin(() => {
 	// it's serialized as a standalone function.
 	onPrehydrate(() => {
 		const m = document.cookie.match(/talos_theme=([\w-]+)/)
-		const p = (m && m[1]) || 'system'
-		const t = p === 'system'
-			? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-			: p
+		// If cookie exists, use it directly; otherwise detect from OS preference
+		const t = (m && m[1])
+			|| (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
 		document.documentElement.setAttribute('data-theme', t)
 	})
 })
