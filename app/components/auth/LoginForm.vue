@@ -95,7 +95,7 @@ const handleRegisterClick = () => {
 				<!-- Links Section -->
 				<div class="flex justify-between mb-4 text-sm">
 					<button
-						class="text-(--login-link) hover:underline cursor-pointer"
+						class="text-(--login-link) hover:underline"
 						@click="handleRegisterClick"
 					>
 						{{ t('auth.common.registerLink') }}

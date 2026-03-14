@@ -119,7 +119,7 @@ const handleOpenLogin = () => {
 				<!-- Links Section -->
 				<div class="flex justify-between mb-4 text-sm">
 					<button
-						class="text-(--login-link) hover:underline cursor-pointer"
+						class="text-(--login-link) hover:underline"
 						@click="handleOpenLogin"
 					>
 						{{ t('auth.common.loginLink') }}

@@ -22,7 +22,6 @@ const { isOpen, close } = useLoginModal()
 .login-dialog [data-slot="dialog-close"] {
   border-color: var(--login-close-border);
   opacity: 1;
-  cursor: pointer;
 }
 .login-dialog [data-slot="dialog-close"]:hover {
   opacity: 0.7;

@@ -298,6 +298,10 @@ body {
 	body {
 		@apply bg-background text-foreground;
 	}
+	button:not(:disabled),
+	[role="button"]:not(:disabled) {
+		cursor: pointer;
+	}
 
 	/* Theme transition — targets body and key layout elements that set their own
 	   background/border. Only background-color and border-color to avoid logo/icon
