@@ -195,12 +195,6 @@ const navigationItems = [
 							{{ t(item.label) }}
 						</NuxtLinkLocale>
 
-						<div class="h-px bg-border my-2" />
-						<p class="text-sm text-muted-foreground font-medium mb-2">
-							{{ t('theme.label') }}
-						</p>
-						<ThemeSelectorInline />
-
 						<template v-if="isAuthenticated">
 							<div class="h-px bg-border my-2" />
 							<p
@@ -237,6 +231,12 @@ const navigationItems = [
 								}}
 							</NuxtLinkLocale>
 						</template>
+
+						<div class="h-px bg-border my-2" />
+						<p class="text-sm text-muted-foreground font-medium mb-2">
+							{{ t('theme.label') }}
+						</p>
+						<ThemeSelectorInline />
 					</div>
 				</SheetContent>
 			</Sheet>
