@@ -33,7 +33,7 @@
 	--accent-foreground: oklch(0.251 0 0);                   /* ~CoolGray/95 */
 	--destructive: oklch(0.6358 0.2088 25.4126);
 	--destructive-foreground: oklch(1 0 0);
-	--border: oklch(0.9257 0.0126 255.5081);
+	--border: oklch(0.9134 0 0);                             /* #E3E3E3 CoolGray/20 */
 	--input: oklch(0.9257 0.0126 255.5081);
 	--ring: oklch(0.7147 0.1211 194.7836);
 	--chart-1: oklch(0.7147 0.1211 194.7836);
