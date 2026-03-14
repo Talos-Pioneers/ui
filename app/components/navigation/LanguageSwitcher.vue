@@ -2,18 +2,23 @@
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuItem,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Button } from '../ui/button'
+import CheckmarkIcon from '../icons/CheckmarkIcon.vue'
 import ChevronIcon from '../icons/ChevronIcon.vue'
 import LanguageIcon from '../icons/LanguageIcon.vue'
-const { locale, locales, t } = useI18n()
-const switchLocalePath = useSwitchLocalePath()
+const { locale, locales, setLocale } = useI18n()
 
 const currentLocale = computed(() => {
     return locales.value.find(i => i.code === locale.value)
 })
+
+const handleLocaleChange = (code: string | number) => {
+    setLocale(code as string)
+}
 </script>
 <template>
     <DropdownMenu :modal="false">
@@ -31,11 +36,19 @@ const currentLocale = computed(() => {
             </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" class="min-w-[var(--reka-dropdown-menu-trigger-width)]">
-            <DropdownMenuItem v-for="locale in locales" :key="locale.code" as-child>
-                <NuxtLink :to="switchLocalePath(locale.code)" class="text-(--lang-switcher-text)">
-                    {{ locale.name ?? locale.code }}
-                </NuxtLink>
-            </DropdownMenuItem>
+            <DropdownMenuRadioGroup :model-value="locale" @update:model-value="handleLocaleChange">
+                <DropdownMenuRadioItem
+                    v-for="loc in locales"
+                    :key="loc.code"
+                    :value="loc.code"
+                    class="text-(--lang-switcher-text) cursor-pointer"
+                >
+                    <template #indicator-icon>
+                        <CheckmarkIcon class="size-3 text-(--lang-switcher-checkmark)" />
+                    </template>
+                    {{ loc.name ?? loc.code }}
+                </DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
         </DropdownMenuContent>
     </DropdownMenu>
 </template>
