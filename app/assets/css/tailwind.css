@@ -334,6 +334,12 @@ body {
 		transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 	}
 
+	.login-modal-bg {
+		background:
+			linear-gradient(180deg, transparent 55%, oklch(0.9054 0.1546 194.7689 / 0.9) 90%),
+			linear-gradient(180deg, var(--muted) 55%, var(--primary) 90%);
+	}
+
 	.wave-bg {
 		@apply relative;
 	}

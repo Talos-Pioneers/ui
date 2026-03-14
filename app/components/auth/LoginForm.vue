@@ -56,7 +56,7 @@ const handleRegisterClick = () => {
 						<span class="text-(--login-bracket) font-sans">]</span>
 					</h1>
 					<!-- Placeholder for special font glyphs -->
-					<div class="text-sm text-(--login-caption) font-sarkaz">
+					<div class="text-xl leading-none text-(--login-caption) font-sarkaz tracking-[1px] uppercase">
 						<!-- Special font glyphs will be rendered here -->
 						<span>{{ t('auth.login.title') }}</span>
 					</div>
@@ -93,7 +93,7 @@ const handleRegisterClick = () => {
 				<!-- Links Section -->
 				<div class="flex justify-between mb-4 text-sm">
 					<button
-						class="text-(--login-link) hover:underline"
+						class="text-(--login-link) hover:underline cursor-pointer"
 						@click="handleRegisterClick"
 					>
 						{{ t('auth.common.registerLink') }}
@@ -157,7 +157,7 @@ const handleRegisterClick = () => {
 					</h1>
 					<!-- Placeholder for special font glyphs -->
 					<div
-						class="text-sm text-(--login-caption) font-sarkaz mt-3 md:mt-0"
+						class="text-xl leading-none text-(--login-caption) font-sarkaz tracking-[1px] uppercase mt-3 md:mt-0"
 					>
 						<!-- Special font glyphs will be rendered here -->
 						<span>{{ t('auth.login.successTitle') }}</span>
