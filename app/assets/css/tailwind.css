@@ -13,6 +13,7 @@
 	--popover: oklch(1 0 0);
 	--popover-foreground: oklch(0.251 0 0);
 	--primary: oklch(0.9054 0.1546 194.7689);
+	--primary-hover: oklch(0.8554 0.1546 194.7689);        /* -0.05 lightness for hover */
 	--primary-foreground: oklch(0.2308 0 0);               /* #1D1D1D CoolGray/100 */
 	--secondary: oklch(0.9692 0 0);
 	--secondary-foreground: oklch(0.4748 0 0);              /* #5C5C5C CoolGray/70 */
@@ -131,6 +132,7 @@ html[lang='ja'] {
 	--popover: oklch(0.3211 0 0);                  /* #333333 */
 	--popover-foreground: oklch(1 0 0);            /* #FFFFFF CoolGray/10 */
 	--primary: oklch(0.9051 0.1546 194.2590);      /* #00FFFE Primary/60 — same as light */
+	--primary-hover: oklch(0.9500 0.1200 194.2590); /* lightened cyan for hover */
 	--primary-foreground: oklch(0.2308 0 0);       /* #1D1D1D CoolGray/100 — dark text on cyan */
 	--secondary: oklch(0.4748 0 0);                /* #5C5C5C CoolGray/70 */
 	--secondary-foreground: oklch(0.7444 0 0);     /* #ACACAC CoolGray/40 */
@@ -213,6 +215,7 @@ html[lang='ja'] {
 	--color-popover: var(--popover);
 	--color-popover-foreground: var(--popover-foreground);
 	--color-primary: var(--primary);
+	--color-primary-hover: var(--primary-hover);
 	--color-primary-foreground: var(--primary-foreground);
 	--color-secondary: var(--secondary);
 	--color-secondary-foreground: var(--secondary-foreground);
