@@ -152,7 +152,7 @@ const navigationItems = [
 			<ThemeSelector />
 			<LanguageSwitcher />
 			<template v-if="!isAuthenticated">
-				<SignInButton />
+				<SignInButton v-if="!route.path.includes('/login')" />
 			</template>
 			<template v-else>
 				<DropdownMenu :modal="false">

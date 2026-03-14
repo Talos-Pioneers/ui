@@ -8,6 +8,10 @@ import DiscordIcon from '~/components/icons/DiscordIcon.vue'
 import { FieldError } from '../ui/field'
 import * as Sentry from '@sentry/nuxt'
 
+const props = defineProps<{
+	onSwitchToLogin?: () => void
+}>()
+
 const config = useSanctumConfig()
 const { locale, t } = useI18n()
 const { close } = useRegisterModal()
@@ -42,8 +46,12 @@ const submit = () => {
 }
 
 const handleOpenLogin = () => {
-	close()
-	openLogin()
+	if (props.onSwitchToLogin) {
+		props.onSwitchToLogin()
+	} else {
+		close()
+		openLogin()
+	}
 }
 </script>
 
@@ -127,7 +135,8 @@ const handleOpenLogin = () => {
 					<NuxtLinkLocale
 						to="/privacy-policy"
 						class="text-(--login-link) hover:underline"
-						@click="close()"
+						:target="props.onSwitchToLogin ? '_blank' : undefined"
+						@click="!props.onSwitchToLogin && close()"
 					>
 						{{ t('auth.common.privacyPolicy') }}
 					</NuxtLinkLocale>

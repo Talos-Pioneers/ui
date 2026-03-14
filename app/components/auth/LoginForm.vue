@@ -7,6 +7,10 @@ import DiscordIcon from '~/components/icons/DiscordIcon.vue'
 import { FieldError } from '../ui/field'
 import * as Sentry from '@sentry/nuxt'
 
+const props = defineProps<{
+	onSwitchToRegister?: () => void
+}>()
+
 const email = ref('')
 const config = useSanctumConfig()
 const { locale, t } = useI18n()
@@ -36,8 +40,12 @@ const submit = async () => {
 }
 
 const handleRegisterClick = () => {
-	close()
-	openRegister()
+	if (props.onSwitchToRegister) {
+		props.onSwitchToRegister()
+	} else {
+		close()
+		openRegister()
+	}
 }
 </script>
 
@@ -103,7 +111,8 @@ const handleRegisterClick = () => {
 					<NuxtLinkLocale
 						to="/privacy-policy"
 						class="text-(--login-link) hover:underline"
-						@click="close()"
+						:target="props.onSwitchToRegister ? '_blank' : undefined"
+						@click="!props.onSwitchToRegister && close()"
 					>
 						{{ t('auth.common.privacyPolicy') }}
 					</NuxtLinkLocale>
