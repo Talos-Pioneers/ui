@@ -55,7 +55,7 @@ const navigationItems = [
 		class="sticky top-0 z-40 bg-background flex items-center h-16.5 px-7.5 border-b border-border"
 	>
 		<div>
-			<NuxtLinkLocale to="/">
+			<NuxtLinkLocale to="/" class="text-(--logo)">
 				<Logo class="hidden nav:block" />
 				<LogoMobileIcon class="block nav:hidden" />
 			</NuxtLinkLocale>
@@ -179,7 +179,7 @@ const navigationItems = [
 				</SheetTrigger>
 				<SheetContent side="right">
 					<SheetHeader>
-						<SheetTitle class="text-left">
+						<SheetTitle class="text-left text-(--logo)">
 							<Logo />
 						</SheetTitle>
 					</SheetHeader>
