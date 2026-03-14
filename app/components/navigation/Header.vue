@@ -68,8 +68,8 @@ const navigationItems = [
 					class="h-full flex items-center"
 				>
 					<NuxtLinkLocale
-						active-class="text-foreground border-b-2 h-full border-foreground"
-						class="text-muted-foreground hover:text-foreground h-full flex items-center"
+						active-class="text-nav-link-active border-b-2 h-full border-nav-underline"
+						class="text-nav-link hover:text-nav-link-active h-full flex items-center"
 						:to="item.to"
 					>
 						{{ t(item.label) }}
@@ -185,8 +185,8 @@ const navigationItems = [
 							v-for="item in navigationItems"
 							:key="item.to"
 							:to="item.to"
-							active-class="text-foreground h-full"
-							class="text-muted-foreground hover:text-foreground h-full flex items-center"
+							active-class="text-nav-link-active h-full"
+							class="text-nav-link hover:text-nav-link-active h-full flex items-center"
 							@click="mobileMenuOpen = false"
 						>
 							{{ t(item.label) }}
