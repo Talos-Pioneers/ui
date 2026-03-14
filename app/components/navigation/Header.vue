@@ -9,7 +9,8 @@ import LogoMobileIcon from '../icons/LogoMobileIcon.vue'
 import UserIcon from '../icons/UserIcon.vue'
 import AddBlueprintIcon from '../icons/AddBlueprintIcon.vue'
 import AddCollectionIcon from '../icons/AddCollectionIcon.vue'
-import { Menu, Plus } from 'lucide-vue-next'
+import { Plus } from 'lucide-vue-next'
+import MenuIcon from '../icons/MenuIcon.vue'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -170,8 +171,8 @@ const navigationItems = [
 			</template>
 			<Sheet v-model:open="mobileMenuOpen">
 				<SheetTrigger as-child>
-					<Button variant="ghost" size="icon" class="nav:hidden ml-2">
-						<Menu class="h-6 w-6" />
+					<Button variant="secondary" size="icon-lg" class="nav:hidden">
+						<MenuIcon class="h-7 w-7" />
 					</Button>
 				</SheetTrigger>
 				<SheetContent side="right">
