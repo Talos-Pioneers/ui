@@ -19,11 +19,11 @@ const { open } = useLoginModal()
 		<span class="text-(--sign-in-text)">{{ t('components.navigation.header.signIn') }}</span>
 	</Button>
 	<Button
-		class="nav:hidden bg-(--sign-in-bg) before:border-(--sign-in-outline)"
-		variant="default"
+		class="nav:hidden"
+		variant="secondary"
 		size="icon-lg"
 		@click="open"
 	>
-		<LoginIcon class="h-5 text-(--sign-in-icon)" />
+		<LoginIcon class="h-5" />
 	</Button>
 </template>

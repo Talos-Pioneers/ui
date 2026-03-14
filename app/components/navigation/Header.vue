@@ -171,8 +171,8 @@ const navigationItems = [
 			</template>
 			<Sheet v-model:open="mobileMenuOpen">
 				<SheetTrigger as-child>
-					<Button variant="secondary" size="icon-lg" class="nav:hidden">
-						<MenuIcon class="h-7 w-7" />
+					<Button variant="default" size="icon-lg" class="nav:hidden bg-(--burger-bg) before:border-(--burger-outline)">
+						<MenuIcon class="h-7 w-7 text-(--burger-icon)" />
 					</Button>
 				</SheetTrigger>
 				<SheetContent side="right">
