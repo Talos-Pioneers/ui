@@ -426,8 +426,6 @@
 	"pages.collections.edit.successPrivate": "非公開コレクションを正常に更新しました！",
 	"pages.collections.edit.errorValidation": "バリデーションエラーを修正してください。",
 	"pages.collections.edit.errorFailed": "コレクションの更新に失敗しました。もう一度お試しください。",
-	"theme.light": "ライト",
-	"theme.dark": "ダーク",
 	"theme.label": "テーマ",
-	"theme.change": "テーマを変更"
+	"theme.toggle": "テーマを切替"
 }

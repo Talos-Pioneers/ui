@@ -2,7 +2,6 @@ import { useEventListener } from '@vueuse/core'
 
 export interface ThemeOption {
 	id: string
-	labelKey: string
 	icon: string
 }
 
@@ -12,8 +11,8 @@ export interface ThemeOption {
  * `[data-theme="<id>"]` block in tailwind.css.
  */
 export const THEMES = [
-	{ id: 'light', labelKey: 'theme.light', icon: 'Sun' },
-	{ id: 'dark', labelKey: 'theme.dark', icon: 'Moon' },
+	{ id: 'light', icon: 'Sun' },
+	{ id: 'dark', icon: 'Moon' },
 ] as const satisfies readonly ThemeOption[]
 
 /** Union of all registered theme IDs, derived from THEMES. */
@@ -92,6 +91,13 @@ export function useTheme() {
 		themeCookie.value = id
 	}
 
+	/** Cycle to the next theme in the THEMES array. */
+	const toggleTheme = () => {
+		const currentIndex = THEMES.findIndex(th => th.id === preference.value)
+		const nextIndex = (currentIndex + 1) % THEMES.length
+		setTheme(THEMES[nextIndex].id)
+	}
+
 	if (import.meta.client) {
 		watch(resolved, (val) => {
 			if (val) applyTheme(val)
@@ -103,5 +109,6 @@ export function useTheme() {
 		resolved,
 		themes: THEMES,
 		setTheme,
+		toggleTheme,
 	}
 }

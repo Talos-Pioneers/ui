@@ -426,8 +426,6 @@
 	"pages.collections.edit.successPrivate": "อัปเดตคอลเลกชันส่วนตัวเรียบร้อยแล้ว!",
 	"pages.collections.edit.errorValidation": "โปรดแก้ไขข้อผิดพลาดในการตรวจสอบ",
 	"pages.collections.edit.errorFailed": "อัปเดตคอลเลกชันไม่สำเร็จ โปรดลองอีกครั้ง",
-	"theme.light": "สว่าง",
-	"theme.dark": "มืด",
 	"theme.label": "ธีม",
-	"theme.change": "เปลี่ยนธีม"
+	"theme.toggle": "สลับธีม"
 }

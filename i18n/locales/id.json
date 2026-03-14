@@ -426,8 +426,6 @@
 	"pages.collections.edit.successPrivate": "Koleksi pribadi berhasil diperbarui!",
 	"pages.collections.edit.errorValidation": "Mohon perbaiki kesalahan validasi.",
 	"pages.collections.edit.errorFailed": "Gagal memperbarui koleksi. Silakan coba lagi.",
-	"theme.light": "Terang",
-	"theme.dark": "Gelap",
 	"theme.label": "Tema",
-	"theme.change": "Ubah tema"
+	"theme.toggle": "Alihkan tema"
 }

@@ -426,8 +426,6 @@
 	"pages.collections.edit.successPrivate": "Приватная коллекция успешно обновлена!",
 	"pages.collections.edit.errorValidation": "Пожалуйста, исправьте ошибки валидации.",
 	"pages.collections.edit.errorFailed": "Не удалось обновить коллекцию. Пожалуйста, попробуйте еще раз.",
-	"theme.light": "Светлая",
-	"theme.dark": "Тёмная",
 	"theme.label": "Тема",
-	"theme.change": "Сменить тему"
+	"theme.toggle": "Переключить тему"
 }

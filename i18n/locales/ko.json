@@ -426,8 +426,6 @@
 	"pages.collections.edit.successPrivate": "비공개 컬렉션이 성공적으로 업데이트되었습니다!",
 	"pages.collections.edit.errorValidation": "유효성 검사 오류를 수정해 주세요.",
 	"pages.collections.edit.errorFailed": "컬렉션 업데이트에 실패했습니다. 다시 시도해 주세요.",
-	"theme.light": "라이트",
-	"theme.dark": "다크",
 	"theme.label": "테마",
-	"theme.change": "테마 변경"
+	"theme.toggle": "테마 전환"
 }

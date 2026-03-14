@@ -426,8 +426,6 @@
 	"pages.collections.edit.successPrivate": "Private Sammlung erfolgreich aktualisiert!",
 	"pages.collections.edit.errorValidation": "Bitte beheben Sie die Validierungsfehler.",
 	"pages.collections.edit.errorFailed": "Sammlung konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.",
-	"theme.light": "Hell",
-	"theme.dark": "Dunkel",
 	"theme.label": "Thema",
-	"theme.change": "Thema ändern"
+	"theme.toggle": "Thema umschalten"
 }

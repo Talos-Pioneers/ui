@@ -426,8 +426,6 @@
 	"pages.collections.edit.successPrivate": "Collection privée mise à jour avec succès !",
 	"pages.collections.edit.errorValidation": "Veuillez corriger les erreurs de validation.",
 	"pages.collections.edit.errorFailed": "Échec de la mise à jour de la collection. Veuillez réessayer.",
-	"theme.light": "Clair",
-	"theme.dark": "Sombre",
 	"theme.label": "Thème",
-	"theme.change": "Changer le thème"
+	"theme.toggle": "Basculer le thème"
 }

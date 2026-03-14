@@ -426,8 +426,6 @@
 	"pages.collections.edit.successPrivate": "Collezione privata aggiornata con successo!",
 	"pages.collections.edit.errorValidation": "Per favore correggi gli errori di validazione.",
 	"pages.collections.edit.errorFailed": "Errore durante l'aggiornamento della collezione. Per favore riprova.",
-	"theme.light": "Chiaro",
-	"theme.dark": "Scuro",
 	"theme.label": "Tema",
-	"theme.change": "Cambia tema"
+	"theme.toggle": "Cambia tema"
 }

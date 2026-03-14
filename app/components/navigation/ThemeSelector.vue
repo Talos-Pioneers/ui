@@ -1,54 +1,50 @@
 <script setup lang="ts">
 import { Sun, Moon } from 'lucide-vue-next'
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu'
 import { Button } from '~/components/ui/button'
-import { useTheme, type ThemeId } from '~/composables/useTheme'
+import { useTheme, THEMES } from '~/composables/useTheme'
 
 const { t } = useI18n()
-const { preference, resolved, themes, setTheme } = useTheme()
+const { resolved, toggleTheme } = useTheme()
 
 const iconMap: Record<string, Component> = {
 	Sun,
 	Moon,
 }
 
-const triggerIcon = computed(() => {
-	const theme = themes.find(th => th.id === resolved.value)
-	return theme ? iconMap[theme.icon] : iconMap[themes[0].icon]
+const currentIcon = computed(() => {
+	const theme = THEMES.find(th => th.id === resolved.value)
+	return theme ? iconMap[theme.icon] : iconMap[THEMES[0].icon]
 })
 </script>
 <template>
 	<div class="hidden md:inline-flex">
-	<DropdownMenu>
-		<DropdownMenuTrigger as-child>
-			<Button
-				variant="secondary"
-				size="responsive-icon"
-				:aria-label="t('theme.change')"
-			>
+		<Button
+			variant="secondary"
+			size="responsive-icon"
+			:aria-label="t('theme.toggle')"
+			@click="toggleTheme"
+		>
+			<Transition name="theme-icon" mode="out-in">
 				<component
-					:is="triggerIcon"
+					:is="currentIcon"
+					:key="resolved"
 					class="h-5 w-5"
 				/>
-			</Button>
-		</DropdownMenuTrigger>
-		<DropdownMenuContent class="w-40 rounded-2xl" align="end">
-			<DropdownMenuItem
-				v-for="theme in themes"
-				:key="theme.id"
-				class="flex items-center gap-2 cursor-pointer"
-				:class="{ 'bg-accent': preference === theme.id }"
-				@click="setTheme(theme.id as ThemeId)"
-			>
-				<component :is="iconMap[theme.icon]" class="h-4 w-4" />
-				{{ t(theme.labelKey) }}
-			</DropdownMenuItem>
-		</DropdownMenuContent>
-	</DropdownMenu>
+			</Transition>
+		</Button>
 	</div>
 </template>
+<style scoped>
+.theme-icon-enter-active,
+.theme-icon-leave-active {
+	transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.theme-icon-enter-from {
+	opacity: 0;
+	transform: rotate(-90deg) scale(0.8);
+}
+.theme-icon-leave-to {
+	opacity: 0;
+	transform: rotate(90deg) scale(0.8);
+}
+</style>

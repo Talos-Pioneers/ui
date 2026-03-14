@@ -19,7 +19,7 @@ const iconMap: Record<string, Component> = {
 			:class="preference === theme.id
 				? 'bg-accent text-accent-foreground'
 				: 'text-muted-foreground hover:text-foreground hover:bg-accent/50'"
-			:aria-label="t(theme.labelKey)"
+			:aria-label="t('theme.toggle')"
 			:aria-pressed="preference === theme.id"
 			@click="setTheme(theme.id as ThemeId)"
 		>
