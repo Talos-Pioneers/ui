@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { Sun, Moon } from 'lucide-vue-next'
+import ThemeLightIcon from '~/components/icons/ThemeLightIcon.vue'
+import ThemeDarkIcon from '~/components/icons/ThemeDarkIcon.vue'
 import { useTheme, type ThemeId } from '~/composables/useTheme'
 
 const { t } = useI18n()
 const { preference, themes, setTheme } = useTheme()
 
 const iconMap: Record<string, Component> = {
-	Sun,
-	Moon,
+	Sun: ThemeLightIcon,
+	Moon: ThemeDarkIcon,
 }
 </script>
 <template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Sun, Moon } from 'lucide-vue-next'
+import ThemeLightIcon from '~/components/icons/ThemeLightIcon.vue'
+import ThemeDarkIcon from '~/components/icons/ThemeDarkIcon.vue'
 import { Button } from '~/components/ui/button'
 import { useTheme, THEMES } from '~/composables/useTheme'
 
@@ -7,8 +8,8 @@ const { t } = useI18n()
 const { resolved, toggleTheme } = useTheme()
 
 const iconMap: Record<string, Component> = {
-	Sun,
-	Moon,
+	Sun: ThemeLightIcon,
+	Moon: ThemeDarkIcon,
 }
 
 const currentIcon = computed(() => {
@@ -21,6 +22,7 @@ const currentIcon = computed(() => {
 		<Button
 			variant="secondary"
 			size="responsive-icon"
+			class="md:w-11.5"
 			:aria-label="t('theme.toggle')"
 			@click="toggleTheme"
 		>
