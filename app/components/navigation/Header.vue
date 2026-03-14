@@ -84,7 +84,7 @@ const navigationItems = [
 				<SignInButton />
 			</template>
 			<template v-else>
-				<DropdownMenu>
+				<DropdownMenu :modal="false">
 					<DropdownMenuTrigger as-child>
 						<Button
 							variant="default"
@@ -124,7 +124,7 @@ const navigationItems = [
 					</DropdownMenuContent>
 				</DropdownMenu>
 
-				<DropdownMenu>
+				<DropdownMenu :modal="false">
 					<DropdownMenuTrigger as-child>
 						<Button variant="default" size="icon-lg">
 							<UserIcon class="h-5 text-foreground" />
