@@ -9,7 +9,6 @@ import LogoMobileIcon from '../icons/LogoMobileIcon.vue'
 import UserIcon from '../icons/UserIcon.vue'
 import AddBlueprintIcon from '../icons/AddBlueprintIcon.vue'
 import AddCollectionIcon from '../icons/AddCollectionIcon.vue'
-import { Plus } from 'lucide-vue-next'
 import MenuIcon from '../icons/MenuIcon.vue'
 import {
 	DropdownMenu,
@@ -89,10 +88,13 @@ const navigationItems = [
 					<DropdownMenuTrigger as-child>
 						<Button
 							variant="default"
-							class="hidden nav:flex items-center gap-1.5 min-w-[106px] px-[11px] bg-(--create-btn-bg) before:border-(--create-btn-outline)"
+							class="hidden nav:flex min-w-40 px-4.5 justify-between bg-(--create-btn-bg) before:border-(--create-btn-outline)"
 						>
-							<span><Plus class="h-4 w-4 text-(--create-btn-icon)" /></span>
-							<span class="text-(--create-btn-text) -translate-x-1">{{ t('components.navigation.header.nav.create') }}</span>
+							<span class="flex items-center gap-2.5">
+								<AddBlueprintIcon class="h-5 text-(--create-btn-icon)" />
+								<span class="h-3.5 w-px bg-(--create-btn-outline)"></span>
+							</span>
+							<span class="text-(--create-btn-text)">{{ t('components.navigation.header.nav.create') }}</span>
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end">
