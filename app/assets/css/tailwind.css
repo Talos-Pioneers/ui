@@ -24,6 +24,10 @@
 	--sign-in-text: oklch(0.3665 0 0);                    /* #444444 CoolGray/80 */
 	--sign-in-outline: oklch(0.3665 0 0);                 /* #444444 CoolGray/80 */
 	--sign-in-bg: oklch(0.9051 0.1546 194.2590);          /* #00FFFE Primary/60 */
+	--create-btn-icon: oklch(0.2308 0 0);                 /* #1D1D1D CoolGray/100 */
+	--create-btn-text: oklch(0.3665 0 0);                 /* #444444 CoolGray/80 */
+	--create-btn-outline: oklch(0.3665 0 0);              /* #444444 CoolGray/80 */
+	--create-btn-bg: oklch(0.9051 0.1546 194.2590);       /* #00FFFE Primary/60 */
 	--nav-link: oklch(0.5693 0 0);                        /* #777777 CoolGray/60 */
 	--nav-link-active: oklch(0.3665 0 0);                 /* #444444 CoolGray/80 */
 	--nav-underline: oklch(0 0 0);                        /* #000000 Black */
@@ -118,6 +122,10 @@ html[lang='ja'] {
 	--sign-in-text: oklch(0.3665 0 0);             /* #444444 CoolGray/80 */
 	--sign-in-outline: oklch(0.3665 0 0);          /* #444444 CoolGray/80 */
 	--sign-in-bg: oklch(0.9051 0.1546 194.2590);   /* #00FFFE Primary/60 */
+	--create-btn-icon: oklch(0.2308 0 0);          /* #1D1D1D CoolGray/100 */
+	--create-btn-text: oklch(0.3665 0 0);          /* #444444 CoolGray/80 */
+	--create-btn-outline: oklch(0.3665 0 0);       /* #444444 CoolGray/80 */
+	--create-btn-bg: oklch(0.9051 0.1546 194.2590); /* #00FFFE Primary/60 */
 	--nav-link: oklch(0.8452 0 0);                 /* #CCCCCC CoolGray/30 */
 	--nav-link-active: oklch(0.9051 0.1546 194.2590); /* #00FFFE Primary/60 */
 	--nav-underline: oklch(0.9051 0.1546 194.2590);   /* #00FFFE Primary/60 */

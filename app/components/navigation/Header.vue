@@ -88,10 +88,10 @@ const navigationItems = [
 					<DropdownMenuTrigger as-child>
 						<Button
 							variant="default"
-							class="hidden md:flex items-center gap-2 mr-2"
+							class="hidden md:flex items-center gap-1.5 mr-2 px-3.5 bg-(--create-btn-bg) before:border-(--create-btn-outline)"
 						>
-							<Plus class="h-4 w-4" />
-							{{ t('components.navigation.header.nav.create') }}
+							<span><Plus class="h-4 w-4 text-(--create-btn-icon)" /></span>
+							<span class="text-(--create-btn-text) -translate-x-1">{{ t('components.navigation.header.nav.create') }}</span>
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end">
