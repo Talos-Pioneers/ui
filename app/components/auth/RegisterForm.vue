@@ -83,8 +83,8 @@ const handleOpenLogin = () => {
 									t('auth.register.usernamePlaceholder')
 								"
 							/>
-							<FieldError :errors="form.errors.username" />
 						</div>
+						<FieldError :errors="form.errors.username" />
 					</div>
 
 					<!-- Email Input -->
@@ -99,8 +99,8 @@ const handleOpenLogin = () => {
 								type="email"
 								:placeholder="t('auth.register.emailPlaceholder')"
 							/>
-							<FieldError :errors="form.errors.email" />
 						</div>
+						<FieldError :errors="form.errors.email" />
 					</div>
 
 					<!-- Primary Register Button -->

@@ -75,8 +75,8 @@ const handleRegisterClick = () => {
 								type="email"
 								:placeholder="t('auth.login.emailPlaceholder')"
 							/>
-							<FieldError :errors="errors" />
 						</div>
+						<FieldError :errors="errors" />
 					</div>
 
 					<!-- Primary Login Button -->
