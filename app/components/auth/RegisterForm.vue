@@ -68,50 +68,52 @@ const handleOpenLogin = () => {
 					</div>
 				</div>
 
-				<!-- Username Input -->
-				<div class="mb-4">
-					<div class="relative">
-						<div class="absolute left-3 top-1/2 -translate-y-1/2 text-(--login-input-placeholder)">
-							<UserIcon />
+				<form @submit.prevent="submit">
+					<!-- Username Input -->
+					<div class="mb-4">
+						<div class="relative">
+							<div class="absolute left-3 top-1/2 -translate-y-1/2 text-(--login-input-placeholder)">
+								<UserIcon />
+							</div>
+							<Input
+								v-model="form.fields.username"
+								class="pl-10 border-0 border-b border-(--login-input-border) rounded-none bg-white placeholder:text-(--login-input-placeholder)"
+								type="text"
+								:placeholder="
+									t('auth.register.usernamePlaceholder')
+								"
+							/>
+							<FieldError :errors="form.errors.username" />
 						</div>
-						<Input
-							v-model="form.fields.username"
-							class="pl-10 border-0 border-b border-(--login-input-border) rounded-none bg-white placeholder:text-(--login-input-placeholder)"
-							type="text"
-							:placeholder="
-								t('auth.register.usernamePlaceholder')
-							"
-						/>
-						<FieldError :errors="form.errors.username" />
 					</div>
-				</div>
 
-				<!-- Email Input -->
-				<div class="mb-4">
-					<div class="relative">
-						<div class="absolute left-3 top-1/2 -translate-y-1/2 text-(--login-input-placeholder)">
-							<MailIcon />
+					<!-- Email Input -->
+					<div class="mb-4">
+						<div class="relative">
+							<div class="absolute left-3 top-1/2 -translate-y-1/2 text-(--login-input-placeholder)">
+								<MailIcon />
+							</div>
+							<Input
+								v-model="form.fields.email"
+								class="pl-10 border-0 border-b border-(--login-input-border) rounded-none bg-white placeholder:text-(--login-input-placeholder)"
+								type="email"
+								:placeholder="t('auth.register.emailPlaceholder')"
+							/>
+							<FieldError :errors="form.errors.email" />
 						</div>
-						<Input
-							v-model="form.fields.email"
-							class="pl-10 border-0 border-b border-(--login-input-border) rounded-none bg-white placeholder:text-(--login-input-placeholder)"
-							type="email"
-							:placeholder="t('auth.register.emailPlaceholder')"
-						/>
-						<FieldError :errors="form.errors.email" />
 					</div>
-				</div>
 
-				<!-- Primary Register Button -->
-				<form class="mb-4" @submit.prevent="submit">
-					<Button
-						type="submit"
-						class="w-full"
-						variant="default"
-						rounded="none"
-					>
-						{{ t('auth.register.submit') }}
-					</Button>
+					<!-- Primary Register Button -->
+					<div class="mb-4">
+						<Button
+							type="submit"
+							class="w-full"
+							variant="default"
+							rounded="none"
+						>
+							{{ t('auth.register.submit') }}
+						</Button>
+					</div>
 				</form>
 
 				<!-- Links Section -->

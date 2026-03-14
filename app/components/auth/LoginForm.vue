@@ -62,32 +62,34 @@ const handleRegisterClick = () => {
 					</div>
 				</div>
 
-				<!-- Email Input -->
-				<div class="mb-4">
-					<div class="relative">
-						<div class="absolute left-3 top-1/2 -translate-y-1/2 text-(--login-input-placeholder)">
-							<MailIcon />
+				<form @submit.prevent="submit">
+					<!-- Email Input -->
+					<div class="mb-4">
+						<div class="relative">
+							<div class="absolute left-3 top-1/2 -translate-y-1/2 text-(--login-input-placeholder)">
+								<MailIcon />
+							</div>
+							<Input
+								v-model="email"
+								class="pl-10 border-0 border-b border-(--login-input-border) rounded-none bg-white placeholder:text-(--login-input-placeholder)"
+								type="email"
+								:placeholder="t('auth.login.emailPlaceholder')"
+							/>
+							<FieldError :errors="errors" />
 						</div>
-						<Input
-							v-model="email"
-							class="pl-10 border-0 border-b border-(--login-input-border) rounded-none bg-white placeholder:text-(--login-input-placeholder)"
-							type="email"
-							:placeholder="t('auth.login.emailPlaceholder')"
-						/>
-						<FieldError :errors="errors" />
 					</div>
-				</div>
 
-				<!-- Primary Login Button -->
-				<form class="mb-4" @submit.prevent="submit">
-					<Button
-						type="submit"
-						class="w-full"
-						variant="default"
-						rounded="none"
-					>
-						{{ t('auth.login.submit') }}
-					</Button>
+					<!-- Primary Login Button -->
+					<div class="mb-4">
+						<Button
+							type="submit"
+							class="w-full"
+							variant="default"
+							rounded="none"
+						>
+							{{ t('auth.login.submit') }}
+						</Button>
+					</div>
 				</form>
 
 				<!-- Links Section -->
