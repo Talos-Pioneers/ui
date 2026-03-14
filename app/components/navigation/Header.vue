@@ -97,7 +97,7 @@ const navigationItems = [
 							<span class="text-(--create-btn-text)">{{ t('components.navigation.header.nav.create') }}</span>
 						</Button>
 					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
+					<DropdownMenuContent align="end" class="min-w-[var(--reka-dropdown-menu-trigger-width)]">
 						<DropdownMenuItem as-child>
 							<NuxtLinkLocale
 								to="/blueprints/create"
@@ -133,7 +133,7 @@ const navigationItems = [
 							<UserIcon class="h-5 text-(--profile-btn-icon)" />
 						</Button>
 					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
+					<DropdownMenuContent align="end" class="min-w-[var(--reka-dropdown-menu-trigger-width)]">
 						<DropdownMenuItem as-child>
 							<NuxtLinkLocale to="/profile">
 								{{

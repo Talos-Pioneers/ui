@@ -30,7 +30,7 @@ const currentLocale = computed(() => {
                 </span>
             </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" class="w-40">
+        <DropdownMenuContent align="end" class="min-w-[var(--reka-dropdown-menu-trigger-width)]">
             <DropdownMenuItem v-for="locale in locales" :key="locale.code" as-child>
                 <NuxtLink :to="switchLocalePath(locale.code)" class="text-(--lang-switcher-text)">
                     {{ locale.name ?? locale.code }}
