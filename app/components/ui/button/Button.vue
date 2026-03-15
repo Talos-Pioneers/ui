@@ -19,12 +19,14 @@ const props = withDefaults(defineProps<Props>(), {
   as: "button",
   withWave: true,
 })
+
+const showWave = computed(() => props.withWave && props.variant !== 'ghost' && props.variant !== 'link')
 </script>
 
 <template>
   <Primitive data-slot="button" :as="as" :as-child="asChild"
     :class="cn(buttonVariants({ variant, size, rounded }), props.class)"
-    :style="{ backgroundImage: withWave ? `url(${buttonWaveImage})` : undefined }">
+    :style="{ backgroundImage: showWave ? `url(${buttonWaveImage})` : undefined }">
     <slot />
   </Primitive>
 </template>
