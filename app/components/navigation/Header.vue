@@ -251,7 +251,7 @@ const navigationItems = [
 				<SheetContent side="right">
 					<SheetHeader>
 						<SheetTitle class="text-left text-(--logo)">
-							<NuxtLinkLocale to="/" data-scroll-top @click="mobileMenuOpen = false">
+							<NuxtLinkLocale to="/" data-scroll-top class="inline-block" @click="mobileMenuOpen = false">
 								<Logo />
 							</NuxtLinkLocale>
 						</SheetTitle>
