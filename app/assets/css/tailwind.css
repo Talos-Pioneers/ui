@@ -61,6 +61,9 @@
 	--login-close-border: oklch(0.6600 0 0);               /* #929292 CoolGray/50 */
 	--login-close-icon: oklch(0.5693 0 0);                 /* #777777 CoolGray/60 */
 	--login-card-bg: oklch(0.9692 0 0);                    /* #F2F2F2 matches --muted light */
+	--page-social-text: oklch(0.4748 0 0);                 /* #5C5C5C CoolGray/70 — same as modal on white bg */
+	--page-social-border: oklch(0.4748 0 0);
+	--page-social-hover: oklch(0.3211 0 0);                /* #333333 CoolGray/80 — darken on hover */
 	--nav-link: oklch(0.5693 0 0);                        /* #777777 CoolGray/60 */
 	--nav-link-active: oklch(0.3665 0 0);                 /* #444444 CoolGray/80 */
 	--nav-underline: oklch(0 0 0);                        /* #000000 Black */
@@ -195,6 +198,9 @@ html[lang='ja'] {
 	--login-close-border: oklch(0.5693 0 0);       /* #777777 CoolGray/60 */
 	--login-close-icon: oklch(0.6600 0 0);         /* #929292 CoolGray/50 */
 	--login-card-bg: oklch(0.3264 0 0);            /* #353535 */
+	--page-social-text: oklch(0.7444 0 0);         /* #ACACAC CoolGray/40 — visible on dark bg */
+	--page-social-border: oklch(0.7444 0 0);
+	--page-social-hover: oklch(0.8452 0 0);        /* #CCCCCC CoolGray/30 — lighten on hover */
 	--wave-bg: oklch(0.2727 0 0);              /* #272727 CoolGray/90 per Figma */
 	--muted: oklch(0.4748 0 0);                    /* #5C5C5C CoolGray/70 */
 	--muted-foreground: oklch(0.8452 0 0);         /* #CCCCCC CoolGray/30 */
@@ -382,6 +388,14 @@ body {
 		background:
 			linear-gradient(180deg, transparent 55%, oklch(0.9054 0.1546 194.7689 / 0.9) 90%),
 			linear-gradient(180deg, var(--login-card-bg) 55%, var(--primary) 90%);
+	}
+
+	/* Login page context: override modal social tokens with page-specific
+	   values so buttons are visible on the plain page background */
+	.login-page {
+		--login-social-text: var(--page-social-text);
+		--login-social-border: var(--page-social-border);
+		--login-social-hover: var(--page-social-hover);
 	}
 
 	.wave-bg {

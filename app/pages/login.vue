@@ -16,7 +16,7 @@ const mode = ref<'login' | 'register'>(
 
 <template>
 	<div
-		class="flex justify-center items-center h-[calc(100vh-var(--header-height))] px-4"
+		class="login-page flex justify-center items-center h-[calc(100vh-var(--header-height))] px-4"
 	>
 		<Transition name="swap" mode="out-in">
 			<LoginForm

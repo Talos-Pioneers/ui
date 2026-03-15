@@ -126,7 +126,7 @@ const handleRegisterClick = () => {
 				<!-- Social Login Buttons -->
 				<div class="flex flex-col gap-3">
 					<Button
-						class="bg-transparent text-(--login-social-text) hover:text-(--login-social-hover) border-2 border-(--login-social-border) hover:border-(--login-social-hover)"
+						class="bg-transparent hover:bg-transparent text-(--login-social-text) hover:text-(--login-social-hover) border-2 border-(--login-social-border) hover:border-(--login-social-hover)"
 						as="a"
 						:href="googleUrl"
 						variant="ghost"
@@ -137,7 +137,7 @@ const handleRegisterClick = () => {
 						<span class="font-medium">{{ t('auth.common.googleLogin') }}</span>
 					</Button>
 					<Button
-						class="bg-transparent text-(--login-social-text) hover:text-(--login-social-hover) border-2 border-(--login-social-border) hover:border-(--login-social-hover)"
+						class="bg-transparent hover:bg-transparent text-(--login-social-text) hover:text-(--login-social-hover) border-2 border-(--login-social-border) hover:border-(--login-social-hover)"
 						as="a"
 						:href="discordUrl"
 						variant="ghost"
