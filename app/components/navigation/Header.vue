@@ -50,7 +50,7 @@ const readyToAnimate = ref(false)
 const activeNavIndex = computed(() => {
 	const path = route.path
 	if (path.includes('/collections')) return 1
-	if (path.includes('/blueprints') || path.endsWith('/') || path.match(/\/[a-z]{2}$/)) return 0
+	if (path.includes('/blueprints') || path.endsWith('/') || path.match(/\/[a-z]{2}(-[A-Z]{2})?$/)) return 0
 	return -1
 })
 
