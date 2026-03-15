@@ -3,6 +3,7 @@ import { Button } from '~/components/ui/button'
 import BannerDivider from './BannerDivider.vue'
 import InfoIcon from '../icons/InfoIcon.vue'
 import AddBlueprintIcon from '../icons/AddBlueprintIcon.vue'
+import ChevronRightIcon from '../icons/ChevronRightIcon.vue'
 const { t } = useI18n()
 
 const { isAuthenticated } = useSanctumAuth()
@@ -85,27 +86,16 @@ onMounted(() => {
 						:to="isAuthenticated ? '/blueprints/create' : '/login'"
 					>
 						<AddBlueprintIcon
-							class="size-4 sm:size-6 text-foreground dark:text-primary-foreground"
+							class="size-4 sm:size-6 text-(--hero-btn-icon)"
 						/>
 						<span
-							class="flex gap-3 items-center text-foreground dark:text-primary-foreground"
+							class="flex gap-3 items-center text-(--hero-btn-text)"
 						>
 							<span
-								class="leading-none text-sm sm:text-xl text-foreground dark:text-primary-foreground"
+								class="leading-none text-sm sm:text-xl tracking-[0.5px]"
 								>{{ t('mainBanner.createBlueprint') }}</span
 							>
-							<svg
-								width="8"
-								height="12"
-								viewBox="0 0 8 12"
-								fill="none"
-								class="fill-muted-foreground"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									d="M0 10.59L4.58 6L0 1.41L1.41 0L7.41 6L1.41 12L0 10.59Z"
-								/>
-							</svg>
+							<ChevronRightIcon class="w-2 h-3 text-(--hero-btn-chevron)" />
 						</span>
 					</NuxtLinkLocale>
 				</Button>
