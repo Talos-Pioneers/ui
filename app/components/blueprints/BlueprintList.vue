@@ -878,9 +878,11 @@ const unifiedFilterModel = computed({
 									</SelectContent>
 								</Select>
 								<Button
-									class="rounded"
+									class="rounded-full border border-muted-foreground/30"
 									variant="ghost"
 									size="icon-sm"
+									rounded="base"
+									:with-wave="false"
 									:title="
 										isSortDescending
 											? t(

@@ -367,9 +367,11 @@ const handleRemoveFromCollection = async () => {
 					<DropdownMenu v-model:open="dropdownOpen">
 						<DropdownMenuTrigger as-child>
 							<Button
-								class="before:border-none rounded-lg"
+								class="rounded-lg"
 								size="icon-sm"
 								variant="ghost"
+								rounded="base"
+								:with-wave="false"
 							>
 								<VerticalElipsis class="size-7.5" />
 							</Button>

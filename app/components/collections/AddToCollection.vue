@@ -286,11 +286,13 @@ const toggleCreateForm = () => {
 	<Dialog>
 		<DialogTrigger as-child>
 			<Button
-				class="before:border-none rounded-lg"
+				class="rounded-lg"
 				size="icon-sm"
 				variant="ghost"
+				rounded="base"
+				:with-wave="false"
 			>
-				<AddCollectionIcon class="size-7.5" />
+				<AddCollectionIcon class="size-5.5" />
 			</Button>
 		</DialogTrigger>
 		<DialogContent class="max-w-md">
