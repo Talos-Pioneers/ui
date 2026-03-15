@@ -60,6 +60,7 @@
 	--nav-link: oklch(0.5693 0 0);                        /* #777777 CoolGray/60 */
 	--nav-link-active: oklch(0.3665 0 0);                 /* #444444 CoolGray/80 */
 	--nav-underline: oklch(0 0 0);                        /* #000000 Black */
+	--wave-bg: oklch(0.940 0 0);                             /* #EAEAEA per Figma */
 	--muted: oklch(0.9692 0 0);                              /* ~#F2F2F2 CoolGray/15 (neutralized) */
 	--muted-foreground: oklch(0.5693 0 0);                  /* #777777 CoolGray/60 */
 	--accent: oklch(0.9692 0 0);                             /* ~#F2F2F2 (neutralized) */
@@ -174,6 +175,7 @@ html[lang='ja'] {
 	--nav-link: oklch(0.8452 0 0);                 /* #CCCCCC CoolGray/30 */
 	--nav-link-active: oklch(0.9051 0.1546 194.2590); /* #00FFFE Primary/60 */
 	--nav-underline: oklch(0.9051 0.1546 194.2590);   /* #00FFFE Primary/60 */
+	--wave-bg: oklch(0.2727 0 0);              /* #272727 CoolGray/90 per Figma */
 	--muted: oklch(0.4748 0 0);                    /* #5C5C5C CoolGray/70 */
 	--muted-foreground: oklch(0.8452 0 0);         /* #CCCCCC CoolGray/30 */
 	--accent: oklch(0.4748 0 0);                   /* #5C5C5C CoolGray/70 */
@@ -368,20 +370,45 @@ body {
 	#main-hero + .wave-bg {
 		min-height: 100dvh;
 	}
-	.wave-bg::before {
-		z-index: 0;
+	/* Dual-layer wave pattern: two offset copies hide tile seams.
+	   Layer A (::before) tiles normally, layer B (::after) is offset
+	   by half a tile so its seams fall in the middle of layer A's
+	   intact tiles. Both at reduced opacity blend together. */
+	.wave-bg::before,
+	.wave-bg::after {
 		content: '';
 		position: absolute;
 		top: 0;
 		left: 0;
 		width: 100%;
 		height: 100%;
-		opacity: 0.45;
 		background-image: url('@/assets/img/wave-bg.svg');
-		background-size: 50%;
+		background-size: 400px;
 		pointer-events: none;
-		-webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
-		mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+	}
+	.wave-bg::before {
+		z-index: 0;
+		opacity: 0.25;
+	}
+	.wave-bg::after {
+		z-index: 0;
+		background-position: 200px 200px;
+		opacity: 0.25;
+	}
+	/* Dark mode: invert white waves to dark, reduce opacity to match
+	   light mode's visual weight (~5 luminance delta per layer) */
+	[data-theme="dark"] .wave-bg::before,
+	[data-theme="dark"] .wave-bg::after {
+		filter: invert(1);
+		opacity: 0.06;
+	}
+	/* Auth modals: responsive tile sizing within small container */
+	.wave-bg.login-modal-bg::before,
+	.wave-bg.login-modal-bg::after {
+		background-size: 50%;
+	}
+	.wave-bg.login-modal-bg::after {
+		background-position: 50% 50%;
 	}
 	.wave-bg > * {
 		position: relative;

@@ -111,7 +111,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 </script>
 
 <template>
-	<div class="wave-bg bg-muted before:bg-size-[400px] min-h-screen">
+	<div class="wave-bg bg-(--wave-bg) min-h-screen">
 		<div class="container mx-auto px-4 py-6">
 			<div class="max-w-4xl mx-auto">
 				<div

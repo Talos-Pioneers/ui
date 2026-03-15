@@ -82,7 +82,7 @@ const friends = [
 
 <template>
 	<div
-		class="wave-bg bg-muted before:bg-size-[400px] min-h-[calc(100vh-var(--header-height))]"
+		class="wave-bg bg-(--wave-bg) min-h-[calc(100vh-var(--header-height))]"
 	>
 		<div class="container mx-auto px-4 py-6">
 			<div
