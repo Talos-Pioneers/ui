@@ -350,6 +350,9 @@ body {
 	.wave-bg {
 		@apply relative;
 	}
+	#main-hero + .wave-bg {
+		min-height: 100dvh;
+	}
 	.wave-bg::before {
 		z-index: 0;
 		content: '';

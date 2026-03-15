@@ -36,6 +36,7 @@ onMounted(() => {
 </script>
 <template>
 	<div
+		id="main-hero"
 		ref="parallaxContainer"
 		class="relative block w-full h-[600px] md:h-[42rem] overflow-hidden"
 	>

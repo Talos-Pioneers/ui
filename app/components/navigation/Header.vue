@@ -121,7 +121,7 @@ const navigationItems = [
 		class="sticky top-0 z-40 bg-background flex items-center h-16.5 px-7.5 border-b border-border"
 	>
 		<div>
-			<NuxtLinkLocale to="/" class="text-(--logo)">
+			<NuxtLinkLocale to="/" class="text-(--logo)" data-scroll-top>
 				<Logo class="hidden nav:block" />
 				<LogoMobileIcon class="block nav:hidden" />
 			</NuxtLinkLocale>
@@ -251,7 +251,9 @@ const navigationItems = [
 				<SheetContent side="right">
 					<SheetHeader>
 						<SheetTitle class="text-left text-(--logo)">
-							<Logo />
+							<NuxtLinkLocale to="/" data-scroll-top @click="mobileMenuOpen = false">
+								<Logo />
+							</NuxtLinkLocale>
 						</SheetTitle>
 					</SheetHeader>
 					<div class="flex flex-col gap-4 px-4">
