@@ -389,6 +389,11 @@ body {
 			linear-gradient(180deg, transparent 55%, oklch(0.9054 0.1546 194.7689 / 0.9) 90%),
 			linear-gradient(180deg, var(--login-card-bg) 55%, var(--primary) 90%);
 	}
+	.login-modal-bg:has([data-login-success]) {
+		background:
+			linear-gradient(180deg, transparent 62%, oklch(0.9054 0.1546 194.7689 / 0.9) 90%),
+			linear-gradient(180deg, var(--login-card-bg) 62%, var(--primary) 90%);
+	}
 
 	/* Login page context: override modal social tokens with page-specific
 	   values so buttons are visible on the plain page background */

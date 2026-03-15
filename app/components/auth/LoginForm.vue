@@ -151,7 +151,7 @@ const handleRegisterClick = () => {
 			</div>
 
 			<!-- Success State -->
-			<div v-else key="success" class="text-center">
+			<div v-else key="success" class="text-center" data-login-success>
 				<!-- Title Section -->
 				<div class="text-center mb-6 flex flex-col">
 					<h1
@@ -172,24 +172,15 @@ const handleRegisterClick = () => {
 
 				<!-- Success Message -->
 				<div class="mb-6">
-					<p class="text-foreground mb-4">
+					<p class="text-(--login-title) mb-4">
 						{{ t('auth.login.successMessage') }}
 					</p>
-					<p class="text-sm text-muted-foreground">
+					<p class="text-sm text-(--login-link)">
 						{{ t('auth.login.instructions') }}
 					</p>
 				</div>
 
-				<!-- Close Button -->
-				<Button
-					class="w-full"
-					variant="default"
-					rounded="none"
-					@click="close()"
-				>
-					{{ t('auth.common.loginLink') }}
-				</Button>
-			</div>
+				</div>
 		</Transition>
 	</div>
 </template>
