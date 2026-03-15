@@ -109,7 +109,7 @@ const filteredOptions = computed(() =>
 				position="popper"
 				body-lock
 				disable-outside-pointer-events
-				class="z-50 w-[var(--reka-combobox-trigger-width)] bg-popover text-popover-foreground rounded border py-1 shadow-md overflow-hidden"
+				class="z-50 w-[var(--reka-combobox-trigger-width)] bg-popover text-popover-foreground rounded-none border py-1 shadow-md overflow-hidden"
 				:side-offset="4"
 			>
 				<ComboboxViewport
