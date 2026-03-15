@@ -245,7 +245,8 @@ const perPageModel = computed({
 	set: (value: number) => emit('update:per-page', value),
 })
 
-const { open: sidebarOpen, toggleSidebar } = useSidebar()
+const { open: sidebarOpen, isMobile, openMobile, toggleSidebar } = useSidebar()
+const isSidebarVisible = computed(() => isMobile.value ? openMobile.value : sidebarOpen.value)
 
 // Unified filter options - combines all filterable items
 interface UnifiedFilterOption {
@@ -735,7 +736,7 @@ const unifiedFilterModel = computed({
 							@click="toggleSidebar"
 						>
 							{{
-								sidebarOpen
+								isSidebarVisible
 									? t(
 											'components.blueprints.list.filters.hide'
 										)
