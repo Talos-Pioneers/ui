@@ -614,7 +614,7 @@ const handleBlueprintDeleted = () => {
 										<img
 											:src="image.url || image.thumbnail"
 											:alt="image.name"
-											class="w-full h-full object-center object-contain"
+											class="w-full aspect-video object-center object-contain"
 										/>
 									</CarouselItem>
 								</CarouselContent>
