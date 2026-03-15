@@ -22,6 +22,14 @@ useHead(() => ({
 // Intro animation config
 const INTRO_VERSION = 'v1' // Bump to force re-show after intro changes
 const INTRO_TIMEOUT_MS = 10000
+const INTRO_VIDEOS: Record<string, string> = {
+	light: 'https://assets.talospioneers.com/intro.webm',
+	dark: 'https://assets.talospioneers.com/intro.webm', // TODO: replace with dark mode variant
+}
+const introSrc = computed(() => {
+	const video = INTRO_VIDEOS[resolved.value ?? 'light'] ?? INTRO_VIDEOS.light
+	return `${video}#t=2.9`
+})
 
 // Cookie expires at midnight (rolling calendar day)
 const getSecondsUntilMidnight = (): number => {
@@ -40,11 +48,19 @@ const introSeen = useCookie('talos_intro_seen', {
 // Determine initial state from cookie (SSR-safe: cookie available on both server & client)
 const showIntro = ref(introSeen.value !== INTRO_VERSION)
 const videoRef = ref<HTMLVideoElement | null>(null)
+const autoplayBlocked = ref(false)
 let timeoutId: ReturnType<typeof setTimeout> | null = null
 
 const dismissIntro = () => {
 	showIntro.value = false
 	introSeen.value = INTRO_VERSION
+}
+
+const handleIntroTap = () => {
+	if (!videoRef.value) return
+	autoplayBlocked.value = false
+	videoRef.value.currentTime = 0
+	videoRef.value.play().catch(() => {})
 }
 
 // Fallback timeout + explicit autoplay for mobile
@@ -64,7 +80,10 @@ onMounted(() => {
 		try {
 			await videoRef.value.play()
 		} catch {
-			dismissIntro() // Autoplay blocked, skip intro
+			// Autoplay blocked (e.g. Brave) — keep overlay visible so the
+			// user can tap to play. The fallback timeout will dismiss it
+			// if they don't interact.
+			autoplayBlocked.value = true
 		}
 	})
 })
@@ -102,18 +121,32 @@ onUnmounted(() => {
 						<div
 							v-if="showIntro"
 							class="fixed inset-0 bg-[#D0D0D0] z-50 flex items-center justify-center"
+							:class="autoplayBlocked && 'cursor-pointer'"
+							@click="autoplayBlocked && handleIntroTap()"
 						>
-							<video
-								ref="videoRef"
-								src="https://assets.talospioneers.com/intro.webm"
-								autoplay
-								muted
-								playsinline
-								preload="auto"
-								class="size-128"
-								@ended="dismissIntro"
-								@error="dismissIntro"
-							/>
+							<div class="relative">
+								<video
+									ref="videoRef"
+									:src="introSrc"
+									autoplay
+									muted
+									playsinline
+									preload="auto"
+									class="size-128 pointer-events-none"
+									@ended="dismissIntro"
+									@error="dismissIntro"
+								/>
+								<Transition name="fade">
+									<div
+										v-if="autoplayBlocked"
+										class="absolute inset-0 flex items-center justify-center"
+									>
+										<div class="size-16 rounded-full bg-black/40 flex items-center justify-center">
+											<IconsPlayIcon class="size-8 text-white ml-1" />
+										</div>
+									</div>
+								</Transition>
+							</div>
 						</div>
 					</Transition>
 					<Toaster />
