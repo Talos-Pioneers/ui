@@ -56,9 +56,9 @@ const perPageOptions = [
 		<!-- Per Page Selector (hidden on mobile) -->
 		<div v-if="showPerPageSelector" class="hidden md:flex items-center gap-2">
 			<label class="text-sm text-muted-foreground whitespace-nowrap">Show per page</label>
-			<Select v-model="perPage">
+			<Select :model-value="String(perPage)" @update:model-value="(val: any) => perPage = Number(val)">
 				<SelectTrigger class="w-[80px]">
-					{{ perPage }}
+					<SelectValue :placeholder="String(perPage)" />
 				</SelectTrigger>
 				<SelectContent>
 					<SelectItem v-for="option in perPageOptions" :key="option.value" :value="option.value">

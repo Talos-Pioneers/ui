@@ -187,7 +187,7 @@ const handleRegionClick = (regionValue: string) => {
 }
 
 const handleServerRegionChange = (value: any) => {
-	if (!value || value === 'any') {
+	if (!value) {
 		emit('clear-filter', 'server_region')
 	} else {
 		emit('update:filter', 'server_region', value)
