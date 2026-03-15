@@ -436,6 +436,12 @@ body {
 		filter: invert(1);
 		opacity: 0.06;
 	}
+	/* Dark mode: CSS filter to invert the light throbber instead of loading
+	   a separate dark lottie file (saves ~2 MB). brightness + contrast tuned
+	   to match the designer's Throbber_Dark.lottie output. */
+	[data-theme="dark"] .lottie-throbber {
+		filter: invert(1) brightness(1.05) contrast(0.9);
+	}
 	/* Auth modals: responsive tile sizing within small container,
 	   fade waves out where the gradient transitions to cyan */
 	.wave-bg.login-modal-bg::before,

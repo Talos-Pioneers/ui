@@ -282,7 +282,7 @@ const statusOptions = [
 						v-if="loading"
 						class="flex items-center justify-center py-12"
 					>
-						<div class="size-64">
+						<div class="size-64 lottie-throbber">
 							<Lottie name="throbber" />
 						</div>
 					</div>
