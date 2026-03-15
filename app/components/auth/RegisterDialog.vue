@@ -26,6 +26,7 @@ watch(() => route.path, () => {
 
 <style>
 .login-dialog [data-slot="dialog-close"] {
+  background-color: var(--login-close-bg);
   border-color: var(--login-close-border);
   opacity: 1;
 }

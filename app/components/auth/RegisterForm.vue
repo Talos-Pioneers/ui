@@ -85,7 +85,7 @@ const handleOpenLogin = () => {
 							</div>
 							<Input
 								v-model="form.fields.username"
-								class="pl-10 border-0 border-b border-(--login-input-border) rounded-none bg-white placeholder:text-(--login-input-placeholder)"
+								class="pl-10 border-0 border-b border-(--login-input-border) rounded-none bg-(--login-input-bg) placeholder:text-(--login-input-placeholder)"
 								type="text"
 								:placeholder="
 									t('auth.register.usernamePlaceholder')
@@ -103,7 +103,7 @@ const handleOpenLogin = () => {
 							</div>
 							<Input
 								v-model="form.fields.email"
-								class="pl-10 border-0 border-b border-(--login-input-border) rounded-none bg-white placeholder:text-(--login-input-placeholder)"
+								class="pl-10 border-0 border-b border-(--login-input-border) rounded-none bg-(--login-input-bg) placeholder:text-(--login-input-placeholder)"
 								type="email"
 								:placeholder="t('auth.register.emailPlaceholder')"
 							/>
@@ -150,32 +150,26 @@ const handleOpenLogin = () => {
 				<!-- Social Login Buttons -->
 				<div class="flex flex-col gap-3">
 					<Button
-						class="bg-transparent border-(--login-social-border)!"
+						class="bg-transparent text-(--login-social-text) hover:text-(--login-social-hover) border-2 border-(--login-social-border) hover:border-(--login-social-hover)"
 						as="a"
 						:href="googleUrl"
-						variant="outline"
+						variant="ghost"
 						rounded="none"
 						:with-wave="false"
 					>
-						<GoogleIcon class="text-(--login-social-icon)" />
-						<span
-							class="text-(--login-social-text) font-medium"
-							>{{ t('auth.common.googleRegister') }}</span
-						>
+						<GoogleIcon />
+						<span class="font-medium">{{ t('auth.common.googleRegister') }}</span>
 					</Button>
 					<Button
-						class="bg-transparent border-(--login-social-border)!"
+						class="bg-transparent text-(--login-social-text) hover:text-(--login-social-hover) border-2 border-(--login-social-border) hover:border-(--login-social-hover)"
 						as="a"
 						:href="discordUrl"
-						variant="outline"
+						variant="ghost"
 						rounded="none"
 						:with-wave="false"
 					>
-						<DiscordIcon class="text-(--login-social-icon)" />
-						<span
-							class="text-(--login-social-text) font-medium"
-							>{{ t('auth.common.discordRegister') }}</span
-						>
+						<DiscordIcon />
+						<span class="font-medium">{{ t('auth.common.discordRegister') }}</span>
 					</Button>
 				</div>
 			</div>

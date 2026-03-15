@@ -48,6 +48,7 @@
 	--login-title: oklch(0.2727 0 0);                      /* #272727 CoolGray/90 */
 	--login-bracket: oklch(0.6600 0 0);                    /* #929292 CoolGray/50 */
 	--login-caption: oklch(0.7444 0 0);                    /* #ACACAC CoolGray/40 */
+	--login-input-bg: oklch(1 0 0);                        /* #FFFFFF White */
 	--login-input-border: oklch(0.8452 0 0);               /* #CCCCCC CoolGray/30 */
 	--login-input-placeholder: oklch(0.5693 0 0);          /* #777777 CoolGray/60 */
 	--login-link: oklch(0.2727 0 0);                       /* #272727 CoolGray/90 */
@@ -55,8 +56,11 @@
 	--login-social-border: oklch(0.4748 0 0);              /* #5C5C5C CoolGray/70 */
 	--login-social-text: oklch(0.4748 0 0);                /* #5C5C5C CoolGray/70 */
 	--login-social-icon: oklch(0.4748 0 0);                /* #5C5C5C CoolGray/70 */
+	--login-social-hover: oklch(0.3211 0 0);               /* #333333 CoolGray/80 darken on hover */
+	--login-close-bg: oklch(1 0 0);                        /* #FFFFFF White */
 	--login-close-border: oklch(0.6600 0 0);               /* #929292 CoolGray/50 */
 	--login-close-icon: oklch(0.5693 0 0);                 /* #777777 CoolGray/60 */
+	--login-card-bg: oklch(0.9692 0 0);                    /* #F2F2F2 matches --muted light */
 	--nav-link: oklch(0.5693 0 0);                        /* #777777 CoolGray/60 */
 	--nav-link-active: oklch(0.3665 0 0);                 /* #444444 CoolGray/80 */
 	--nav-underline: oklch(0 0 0);                        /* #000000 Black */
@@ -175,6 +179,22 @@ html[lang='ja'] {
 	--nav-link: oklch(0.8452 0 0);                 /* #CCCCCC CoolGray/30 */
 	--nav-link-active: oklch(0.9051 0.1546 194.2590); /* #00FFFE Primary/60 */
 	--nav-underline: oklch(0.9051 0.1546 194.2590);   /* #00FFFE Primary/60 */
+	--login-title: oklch(0.9134 0 0);              /* #E3E3E3 CoolGray/20 */
+	--login-bracket: oklch(0.6600 0 0);            /* #929292 CoolGray/50 (same as light) */
+	--login-caption: oklch(0.6600 0 0);            /* #929292 CoolGray/50 */
+	--login-input-bg: oklch(0.3710 0 0);           /* #454545 */
+	--login-input-border: oklch(0.6600 0 0);       /* #929292 CoolGray/50 */
+	--login-input-placeholder: oklch(0.5693 0 0);  /* #777777 CoolGray/60 (same as light) */
+	--login-link: oklch(0.9134 0 0);               /* #E3E3E3 CoolGray/20 */
+	--login-divider: oklch(0.7444 0 0);            /* #ACACAC CoolGray/40 (same as light) */
+	--login-social-border: oklch(0.2308 0 0);      /* #1D1D1D CoolGray/100 */
+	--login-social-text: oklch(0.2308 0 0);        /* #1D1D1D CoolGray/100 */
+	--login-social-icon: oklch(0.2308 0 0);        /* #1D1D1D CoolGray/100 */
+	--login-social-hover: oklch(0.4748 0 0);       /* #5C5C5C CoolGray/70 lighten on hover */
+	--login-close-bg: oklch(0.4071 0 0);           /* #4D4D4D */
+	--login-close-border: oklch(0.5693 0 0);       /* #777777 CoolGray/60 */
+	--login-close-icon: oklch(0.6600 0 0);         /* #929292 CoolGray/50 */
+	--login-card-bg: oklch(0.3264 0 0);            /* #353535 */
 	--wave-bg: oklch(0.2727 0 0);              /* #272727 CoolGray/90 per Figma */
 	--muted: oklch(0.4748 0 0);                    /* #5C5C5C CoolGray/70 */
 	--muted-foreground: oklch(0.8452 0 0);         /* #CCCCCC CoolGray/30 */
@@ -361,7 +381,7 @@ body {
 	.login-modal-bg {
 		background:
 			linear-gradient(180deg, transparent 55%, oklch(0.9054 0.1546 194.7689 / 0.9) 90%),
-			linear-gradient(180deg, var(--muted) 55%, var(--primary) 90%);
+			linear-gradient(180deg, var(--login-card-bg) 55%, var(--primary) 90%);
 	}
 
 	.wave-bg {
@@ -402,10 +422,13 @@ body {
 		filter: invert(1);
 		opacity: 0.06;
 	}
-	/* Auth modals: responsive tile sizing within small container */
+	/* Auth modals: responsive tile sizing within small container,
+	   fade waves out where the gradient transitions to cyan */
 	.wave-bg.login-modal-bg::before,
 	.wave-bg.login-modal-bg::after {
 		background-size: 50%;
+		-webkit-mask-image: linear-gradient(to bottom, black 62%, transparent 80%);
+		mask-image: linear-gradient(to bottom, black 62%, transparent 80%);
 	}
 	.wave-bg.login-modal-bg::after {
 		background-position: 50% 50%;
