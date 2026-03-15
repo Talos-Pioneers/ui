@@ -424,5 +424,7 @@
 	"pages.collections.edit.successPublic": "收藏已更新并成功公开发布！",
 	"pages.collections.edit.successPrivate": "私有收藏更新成功！",
 	"pages.collections.edit.errorValidation": "请修复验证错误。",
-	"pages.collections.edit.errorFailed": "更新收藏失败。请重试。"
+	"pages.collections.edit.errorFailed": "更新收藏失败。请重试。",
+	"theme.label": "主题",
+	"theme.toggle": "切换主题"
 }

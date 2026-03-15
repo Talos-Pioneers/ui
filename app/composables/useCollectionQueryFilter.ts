@@ -124,11 +124,15 @@ export const useCollectionQueryFilter = async (
 		}
 	})
 
-	// Update route query when pagination changes
-	watch([currentPage, perPage], () => {
-		useRouter().replace({
-			query: activeQuery.value,
-		})
+	// Sync URL query with active filters, sort, and pagination.
+	// Skip the first trigger to prevent router.replace() during initial setup,
+	// which causes a race condition with scroll behavior on navigation.
+	let urlSyncEnabled = false
+	nextTick(() => { urlSyncEnabled = true })
+
+	watch(activeQuery, (query) => {
+		if (!urlSyncEnabled) return
+		useRouter().replace({ query })
 	})
 
 	return {

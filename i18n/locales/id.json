@@ -425,5 +425,7 @@
 	"pages.collections.edit.successPublic": "Koleksi berhasil diperbarui dan dipublikasikan sebagai publik!",
 	"pages.collections.edit.successPrivate": "Koleksi pribadi berhasil diperbarui!",
 	"pages.collections.edit.errorValidation": "Mohon perbaiki kesalahan validasi.",
-	"pages.collections.edit.errorFailed": "Gagal memperbarui koleksi. Silakan coba lagi."
+	"pages.collections.edit.errorFailed": "Gagal memperbarui koleksi. Silakan coba lagi.",
+	"theme.label": "Tema",
+	"theme.toggle": "Alihkan tema"
 }

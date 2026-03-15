@@ -8,6 +8,10 @@ import DiscordIcon from '~/components/icons/DiscordIcon.vue'
 import { FieldError } from '../ui/field'
 import * as Sentry from '@sentry/nuxt'
 
+const props = defineProps<{
+	onSwitchToLogin?: () => void
+}>()
+
 const config = useSanctumConfig()
 const { locale, t } = useI18n()
 const { close } = useRegisterModal()
@@ -42,8 +46,12 @@ const submit = () => {
 }
 
 const handleOpenLogin = () => {
-	close()
-	openLogin()
+	if (props.onSwitchToLogin) {
+		props.onSwitchToLogin()
+	} else {
+		close()
+		openLogin()
+	}
 }
 </script>
 
@@ -55,76 +63,80 @@ const handleOpenLogin = () => {
 				<!-- Title Section -->
 				<div class="text-center mb-6">
 					<h1
-						class="text-[2rem] h-8 font-secondary flex justify-center items-center gap-5 font-[1000] text-cool-gray-90 mb-2"
+						class="text-[2rem] h-8 font-secondary flex justify-center items-center gap-5 font-[1000] text-(--login-title) mb-2"
 					>
-						<span class="text-cool-gray-40 font-sans">[</span>
+						<span class="text-(--login-bracket) font-sans">[</span>
 						{{ t('auth.register.title') }}
-						<span class="text-cool-gray-40 font-sans">]</span>
+						<span class="text-(--login-bracket) font-sans">]</span>
 					</h1>
 					<!-- Placeholder for special font glyphs -->
-					<div class="text-sm text-cool-gray-40 font-sarkaz">
+					<div class="text-xl leading-none text-(--login-caption) font-sarkaz tracking-[1px] uppercase">
 						<!-- Special font glyphs will be rendered here -->
 						<span>{{ t('auth.register.title') }}</span>
 					</div>
 				</div>
 
-				<!-- Username Input -->
-				<div class="mb-4">
-					<div class="relative">
-						<div class="absolute left-3 top-1/2 -translate-y-1/2">
-							<UserIcon />
+				<form @submit.prevent="submit">
+					<!-- Username Input -->
+					<div class="mb-4">
+						<div class="relative">
+							<div class="absolute left-3 top-1/2 -translate-y-1/2 text-(--login-input-placeholder)">
+								<UserIcon />
+							</div>
+							<Input
+								v-model="form.fields.username"
+								class="pl-10 border-0 border-b border-(--login-input-border) rounded-none bg-white placeholder:text-(--login-input-placeholder)"
+								type="text"
+								:placeholder="
+									t('auth.register.usernamePlaceholder')
+								"
+							/>
 						</div>
-						<Input
-							v-model="form.fields.username"
-							class="pl-10"
-							type="text"
-							:placeholder="
-								t('auth.register.usernamePlaceholder')
-							"
-						/>
 						<FieldError :errors="form.errors.username" />
 					</div>
-				</div>
 
-				<!-- Email Input -->
-				<div class="mb-4">
-					<div class="relative">
-						<div class="absolute left-3 top-1/2 -translate-y-1/2">
-							<MailIcon />
+					<!-- Email Input -->
+					<div class="mb-4">
+						<div class="relative">
+							<div class="absolute left-3 top-1/2 -translate-y-1/2 text-(--login-input-placeholder)">
+								<MailIcon />
+							</div>
+							<Input
+								v-model="form.fields.email"
+								class="pl-10 border-0 border-b border-(--login-input-border) rounded-none bg-white placeholder:text-(--login-input-placeholder)"
+								type="email"
+								:placeholder="t('auth.register.emailPlaceholder')"
+							/>
 						</div>
-						<Input
-							v-model="form.fields.email"
-							class="pl-10"
-							type="email"
-							:placeholder="t('auth.register.emailPlaceholder')"
-						/>
 						<FieldError :errors="form.errors.email" />
 					</div>
-				</div>
 
-				<!-- Primary Register Button -->
-				<form class="mb-4" @submit.prevent="submit">
-					<Button
-						type="submit"
-						class="w-full"
-						variant="default"
-						rounded="base"
-					>
-						{{ t('auth.register.submit') }}
-					</Button>
+					<!-- Primary Register Button -->
+					<div class="mb-4">
+						<Button
+							type="submit"
+							class="w-full"
+							variant="default"
+							rounded="none"
+						>
+							{{ t('auth.register.submit') }}
+						</Button>
+					</div>
 				</form>
 
 				<!-- Links Section -->
 				<div class="flex justify-between mb-4 text-sm">
 					<button
-						class="text-[#1b1b18] dark:text-[#EDEDEC] hover:underline"
+						class="text-(--login-link) hover:underline"
 						@click="handleOpenLogin"
 					>
 						{{ t('auth.common.loginLink') }}
 					</button>
 					<NuxtLinkLocale
 						to="/privacy-policy"
-						class="text-[#1b1b18] dark:text-[#EDEDEC] hover:underline"
+						class="text-(--login-link) hover:underline"
+						:target="props.onSwitchToLogin ? '_blank' : undefined"
+						@click="!props.onSwitchToLogin && close()"
 					>
 						{{ t('auth.common.privacyPolicy') }}
 					</NuxtLinkLocale>
@@ -132,36 +144,36 @@ const handleOpenLogin = () => {
 
 				<!-- Divider -->
 				<div
-					class="border-t border-[#e3e3e0] dark:border-[#3E3E3A] mb-4"
+					class="border-t border-(--login-divider) mb-4"
 				/>
 
 				<!-- Social Login Buttons -->
 				<div class="flex flex-col gap-3">
 					<Button
-						class="bg-transparent"
+						class="bg-transparent border-(--login-social-border)!"
 						as="a"
 						:href="googleUrl"
 						variant="outline"
-						rounded="base"
+						rounded="none"
 						:with-wave="false"
 					>
-						<GoogleIcon />
+						<GoogleIcon class="text-(--login-social-icon)" />
 						<span
-							class="text-[#1b1b18] dark:text-[#EDEDEC] font-medium"
+							class="text-(--login-social-text) font-medium"
 							>{{ t('auth.common.googleRegister') }}</span
 						>
 					</Button>
 					<Button
-						class="bg-transparent"
+						class="bg-transparent border-(--login-social-border)!"
 						as="a"
 						:href="discordUrl"
 						variant="outline"
-						rounded="base"
+						rounded="none"
 						:with-wave="false"
 					>
-						<DiscordIcon />
+						<DiscordIcon class="text-(--login-social-icon)" />
 						<span
-							class="text-[#1b1b18] dark:text-[#EDEDEC] font-medium"
+							class="text-(--login-social-text) font-medium"
 							>{{ t('auth.common.discordRegister') }}</span
 						>
 					</Button>
@@ -173,15 +185,15 @@ const handleOpenLogin = () => {
 				<!-- Title Section -->
 				<div class="text-center mb-6 flex flex-col">
 					<h1
-						class="text-[2rem] h-8 font-secondary flex justify-center items-center gap-5 font-[1000] leading-8 text-cool-gray-90 mb-2"
+						class="text-[2rem] h-8 font-secondary flex justify-center items-center gap-5 font-[1000] leading-8 text-(--login-title) mb-2"
 					>
-						<span class="text-cool-gray-40 font-sans">[</span>
+						<span class="text-(--login-bracket) font-sans">[</span>
 						{{ t('auth.register.successTitle') }}
-						<span class="text-cool-gray-40 font-sans">]</span>
+						<span class="text-(--login-bracket) font-sans">]</span>
 					</h1>
 					<!-- Placeholder for special font glyphs -->
 					<div
-						class="text-sm text-cool-gray-40 font-sarkaz mt-3 md:mt-0"
+						class="text-xl leading-none text-(--login-caption) font-sarkaz tracking-[1px] uppercase mt-3 md:mt-0"
 					>
 						<!-- Special font glyphs will be rendered here -->
 						<span>{{ t('auth.register.successTitle') }}</span>
@@ -190,10 +202,10 @@ const handleOpenLogin = () => {
 
 				<!-- Success Message -->
 				<div class="mb-6">
-					<p class="text-cool-gray-90 dark:text-[#EDEDEC] mb-4">
+					<p class="text-foreground mb-4">
 						{{ t('auth.register.successMessage') }}
 					</p>
-					<p class="text-sm text-cool-gray-60 dark:text-cool-gray-40">
+					<p class="text-sm text-muted-foreground">
 						{{ t('auth.register.instructions') }}
 					</p>
 				</div>
@@ -202,7 +214,7 @@ const handleOpenLogin = () => {
 				<Button
 					class="w-full"
 					variant="default"
-					rounded="base"
+					rounded="none"
 					@click="close()"
 				>
 					{{ t('auth.common.registerLink') }}

@@ -425,5 +425,7 @@
 	"pages.collections.edit.successPublic": "Collection updated and published as public successfully!",
 	"pages.collections.edit.successPrivate": "Private collection updated successfully!",
 	"pages.collections.edit.errorValidation": "Please fix the validation errors.",
-	"pages.collections.edit.errorFailed": "Failed to update collection. Please try again."
+	"pages.collections.edit.errorFailed": "Failed to update collection. Please try again.",
+	"theme.label": "Theme",
+	"theme.toggle": "Toggle theme"
 }

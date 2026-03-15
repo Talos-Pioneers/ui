@@ -74,7 +74,7 @@ const handleSubmit = async () => {
                 <Label for="email">{{ t('components.auth.profileEdit.email.label') }}</Label>
                 <input id="email" type="email" :value="profile.email" disabled :placeholder="t('components.auth.profileEdit.email.placeholder')"
                     class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 h-12 md:text-sm" />
-                <p class="text-xs text-cool-gray-60">{{ t('components.auth.profileEdit.email.cannotChange') }}</p>
+                <p class="text-xs text-muted-foreground">{{ t('components.auth.profileEdit.email.cannotChange') }}</p>
             </div>
 
             <!-- Success Message -->

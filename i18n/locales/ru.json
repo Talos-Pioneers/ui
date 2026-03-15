@@ -425,5 +425,7 @@
 	"pages.collections.edit.successPublic": "Коллекция успешно обновлена и опубликована как публичная!",
 	"pages.collections.edit.successPrivate": "Приватная коллекция успешно обновлена!",
 	"pages.collections.edit.errorValidation": "Пожалуйста, исправьте ошибки валидации.",
-	"pages.collections.edit.errorFailed": "Не удалось обновить коллекцию. Пожалуйста, попробуйте еще раз."
+	"pages.collections.edit.errorFailed": "Не удалось обновить коллекцию. Пожалуйста, попробуйте еще раз.",
+	"theme.label": "Тема",
+	"theme.toggle": "Переключить тему"
 }

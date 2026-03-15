@@ -425,5 +425,7 @@
 	"pages.collections.edit.successPublic": "Sammlung aktualisiert und erfolgreich öffentlich veröffentlicht!",
 	"pages.collections.edit.successPrivate": "Private Sammlung erfolgreich aktualisiert!",
 	"pages.collections.edit.errorValidation": "Bitte beheben Sie die Validierungsfehler.",
-	"pages.collections.edit.errorFailed": "Sammlung konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
+	"pages.collections.edit.errorFailed": "Sammlung konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.",
+	"theme.label": "Thema",
+	"theme.toggle": "Thema umschalten"
 }

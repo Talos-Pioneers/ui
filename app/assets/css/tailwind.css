@@ -1,39 +1,87 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-@custom-variant dark (&:is(.dark *));
-:root {
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+@custom-variant navd (&:where([data-nav-state="desktop"], [data-nav-state="desktop"] *));
+
+:root,
+[data-theme="light"] {
+	color-scheme: light;
 	--background: oklch(1 0 0);
-	--foreground: oklch(0.251 0.0095 219.8651);
+	--foreground: oklch(0.251 0 0);                    /* ~#1D1D1D CoolGray/95 */
 	--card: oklch(1 0 0);
-	--card-foreground: oklch(0.251 0.0095 219.8651);
+	--card-foreground: oklch(0.251 0 0);
 	--popover: oklch(1 0 0);
-	--popover-foreground: oklch(0.251 0.0095 219.8651);
+	--popover-foreground: oklch(0.251 0 0);
 	--primary: oklch(0.9054 0.1546 194.7689);
-	--primary-foreground: hsla(0, 0%, 27%, 1);
-	--secondary: oklch(0.9692 0.0034 247.8583);
-	--secondary-foreground: oklch(0.251 0.0095 219.8651);
-	--muted: oklch(0.9692 0.0034 247.8583);
-	--muted-foreground: oklch(0.5669 0.0199 229.2575);
-	--accent: oklch(0.9692 0.0034 247.8583);
-	--accent-foreground: oklch(0.251 0.0095 219.8651);
+	--primary-hover: oklch(0.8554 0.1546 194.7689);        /* -0.05 lightness for hover */
+	--primary-foreground: oklch(0.2308 0 0);               /* #1D1D1D CoolGray/100 */
+	--secondary: oklch(0.9692 0 0);
+	--secondary-foreground: oklch(0.4748 0 0);              /* #5C5C5C CoolGray/70 */
+	--lang-switcher-icon: oklch(0.4748 0 0);               /* #5C5C5C CoolGray/70 */
+	--lang-switcher-text: oklch(0.3665 0 0);               /* #444444 CoolGray/80 */
+	--lang-switcher-checkmark: oklch(0.3665 0 0);          /* #444444 CoolGray/80 */
+	--lang-switcher-divider: oklch(0.7444 0 0);            /* #ACACAC CoolGray/40 */
+	--sign-in-icon: oklch(0.2308 0 0);                    /* #1D1D1D CoolGray/100 */
+	--sign-in-divider: oklch(0.6600 0 0);                 /* #929292 CoolGray/50 */
+	--sign-in-text: oklch(0.3665 0 0);                    /* #444444 CoolGray/80 */
+	--sign-in-outline: oklch(0.3665 0 0);                 /* #444444 CoolGray/80 */
+	--sign-in-bg: oklch(0.9051 0.1546 194.2590);          /* #00FFFE Primary/60 */
+	--burger-icon: oklch(0.2308 0 0);                     /* #1D1D1D CoolGray/100 */
+	--burger-outline: oklch(0.3665 0 0);                  /* #444444 CoolGray/80 */
+	--burger-bg: oklch(0.9051 0.1546 194.2590);           /* #00FFFE Primary/60 */
+	--create-btn-icon: oklch(0.2308 0 0);                 /* #1D1D1D CoolGray/100 */
+	--create-btn-text: oklch(0.3665 0 0);                 /* #444444 CoolGray/80 */
+	--create-btn-outline: oklch(0.3665 0 0);              /* #444444 CoolGray/80 */
+	--create-btn-bg: oklch(0.9051 0.1546 194.2590);       /* #00FFFE Primary/60 */
+	--hero-btn-icon: oklch(0.2308 0 0);                   /* #1D1D1D CoolGray/100 */
+	--hero-btn-text: oklch(0.2308 0 0);                   /* #1D1D1D CoolGray/100 */
+	--hero-btn-chevron: oklch(0.7444 0 0);                /* #ACACAC CoolGray/40 */
+	--about-btn-bg: oklch(0.957 0 0);                     /* #EFEFEF */
+	--about-btn-icon: oklch(0.4748 0 0);                  /* #5C5C5C CoolGray/70 */
+	--about-btn-text: oklch(0.4748 0 0);                  /* #5C5C5C CoolGray/70 */
+	--about-btn-chevron: oklch(0.7444 0 0);               /* #ACACAC CoolGray/40 */
+	--profile-btn-icon: oklch(0.2308 0 0);                /* #1D1D1D CoolGray/100 */
+	--profile-btn-outline: oklch(0.3665 0 0);             /* #444444 CoolGray/80 */
+	--profile-btn-bg: oklch(0.9051 0.1546 194.2590);      /* #00FFFE Primary/60 */
+	--logo: oklch(0.2308 0 0);                             /* #1D1D1D CoolGray/100 */
+	--login-title: oklch(0.2727 0 0);                      /* #272727 CoolGray/90 */
+	--login-bracket: oklch(0.6600 0 0);                    /* #929292 CoolGray/50 */
+	--login-caption: oklch(0.7444 0 0);                    /* #ACACAC CoolGray/40 */
+	--login-input-border: oklch(0.8452 0 0);               /* #CCCCCC CoolGray/30 */
+	--login-input-placeholder: oklch(0.5693 0 0);          /* #777777 CoolGray/60 */
+	--login-link: oklch(0.2727 0 0);                       /* #272727 CoolGray/90 */
+	--login-divider: oklch(0.7444 0 0);                    /* #ACACAC CoolGray/40 */
+	--login-social-border: oklch(0.4748 0 0);              /* #5C5C5C CoolGray/70 */
+	--login-social-text: oklch(0.4748 0 0);                /* #5C5C5C CoolGray/70 */
+	--login-social-icon: oklch(0.4748 0 0);                /* #5C5C5C CoolGray/70 */
+	--login-close-border: oklch(0.6600 0 0);               /* #929292 CoolGray/50 */
+	--login-close-icon: oklch(0.5693 0 0);                 /* #777777 CoolGray/60 */
+	--nav-link: oklch(0.5693 0 0);                        /* #777777 CoolGray/60 */
+	--nav-link-active: oklch(0.3665 0 0);                 /* #444444 CoolGray/80 */
+	--nav-underline: oklch(0 0 0);                        /* #000000 Black */
+	--wave-bg: oklch(0.940 0 0);                             /* #EAEAEA per Figma */
+	--muted: oklch(0.9692 0 0);                              /* ~#F2F2F2 CoolGray/15 (neutralized) */
+	--muted-foreground: oklch(0.5693 0 0);                  /* #777777 CoolGray/60 */
+	--accent: oklch(0.9692 0 0);                             /* ~#F2F2F2 (neutralized) */
+	--accent-foreground: oklch(0.251 0 0);                   /* ~CoolGray/95 */
 	--destructive: oklch(0.6358 0.2088 25.4126);
 	--destructive-foreground: oklch(1 0 0);
-	--border: oklch(0.9257 0.0126 255.5081);
-	--input: oklch(0.9257 0.0126 255.5081);
+	--border: oklch(0.9134 0 0);                             /* #E3E3E3 CoolGray/20 */
+	--input: oklch(0.9257 0 0);                              /* ~#E5E5E5 CoolGray/20 (neutralized) */
 	--ring: oklch(0.7147 0.1211 194.7836);
 	--chart-1: oklch(0.7147 0.1211 194.7836);
-	--chart-2: oklch(0.251 0.0095 219.8651);
-	--chart-3: oklch(0.9692 0.0034 247.8583);
-	--chart-4: oklch(0.5669 0.0199 229.2575);
+	--chart-2: oklch(0.251 0 0);
+	--chart-3: oklch(0.9692 0 0);
+	--chart-4: oklch(0.5669 0 0);
 	--chart-5: oklch(0.6358 0.2088 25.4126);
 	--sidebar: oklch(1 0 0);
-	--sidebar-foreground: oklch(0.251 0.0095 219.8651);
+	--sidebar-foreground: oklch(0.251 0 0);
 	--sidebar-primary: oklch(0.7147 0.1211 194.7836);
 	--sidebar-primary-foreground: oklch(1 0 0);
-	--sidebar-accent: oklch(0.9692 0.0034 247.8583);
-	--sidebar-accent-foreground: oklch(0.251 0.0095 219.8651);
-	--sidebar-border: oklch(0.9257 0.0126 255.5081);
+	--sidebar-accent: oklch(0.9692 0 0);
+	--sidebar-accent-foreground: oklch(0.251 0 0);
+	--sidebar-border: oklch(0.9257 0 0);
 	--sidebar-ring: oklch(0.7147 0.1211 194.7836);
 	--font-sans: 'HarmonyOS_Sans', sans-serif;
 	--font-secondary: 'DM Sans', sans-serif;
@@ -83,45 +131,73 @@ html[lang='ja'] {
 	--font-sans: 'Noto Sans JP', 'HarmonyOS_Sans', sans-serif;
 }
 
-.dark {
-	--background: oklch(0.251 0.0095 219.8651);
-	--foreground: oklch(1 0 0);
-	--card: oklch(0.3032 0.0132 229.4039);
-	--card-foreground: oklch(1 0 0);
-	--popover: oklch(0.3032 0.0132 229.4039);
-	--popover-foreground: oklch(1 0 0);
-	--primary: oklch(0.7147 0.1211 194.7836);
-	--primary-foreground: oklch(1 0 0);
-	--secondary: oklch(0.3741 0.0178 224.9693);
-	--secondary-foreground: oklch(1 0 0);
-	--muted: oklch(0.3741 0.0178 224.9693);
-	--muted-foreground: oklch(0.6851 0.0164 229.0806);
-	--accent: oklch(0.3741 0.0178 224.9693);
-	--accent-foreground: oklch(1 0 0);
+[data-theme="dark"] {
+	color-scheme: dark;
+	/* Figma CoolGray neutral grays — zero chroma */
+	--background: oklch(0.2727 0 0);              /* #272727 CoolGray/90 */
+	--foreground: oklch(1 0 0);                    /* #FFFFFF CoolGray/10 */
+	--card: oklch(0.3211 0 0);                     /* #333333 */
+	--card-foreground: oklch(1 0 0);               /* #FFFFFF CoolGray/10 */
+	--popover: oklch(0.3211 0 0);                  /* #333333 */
+	--popover-foreground: oklch(1 0 0);            /* #FFFFFF CoolGray/10 */
+	--primary: oklch(0.9051 0.1546 194.2590);      /* #00FFFE Primary/60 — same as light */
+	--primary-hover: oklch(0.9500 0.1200 194.2590); /* lightened cyan for hover */
+	--primary-foreground: oklch(0.2308 0 0);       /* #1D1D1D CoolGray/100 — dark text on cyan */
+	--secondary: oklch(0.4748 0 0);                /* #5C5C5C CoolGray/70 */
+	--secondary-foreground: oklch(0.7444 0 0);     /* #ACACAC CoolGray/40 */
+	--lang-switcher-icon: oklch(0.7444 0 0);       /* #ACACAC CoolGray/40 */
+	--lang-switcher-text: oklch(0.8452 0 0);       /* #CCCCCC CoolGray/30 */
+	--lang-switcher-checkmark: oklch(0.8452 0 0);  /* #CCCCCC CoolGray/30 */
+	--lang-switcher-divider: oklch(0.7444 0 0);    /* #ACACAC CoolGray/40 */
+	--sign-in-icon: oklch(0.2308 0 0);             /* #1D1D1D CoolGray/100 */
+	--sign-in-divider: oklch(0.6600 0 0);          /* #929292 CoolGray/50 */
+	--sign-in-text: oklch(0.3665 0 0);             /* #444444 CoolGray/80 */
+	--sign-in-outline: oklch(0.3665 0 0);          /* #444444 CoolGray/80 */
+	--sign-in-bg: oklch(0.9051 0.1546 194.2590);   /* #00FFFE Primary/60 */
+	--burger-icon: oklch(0.2308 0 0);              /* #1D1D1D CoolGray/100 */
+	--burger-outline: oklch(0.3665 0 0);           /* #444444 CoolGray/80 */
+	--burger-bg: oklch(0.9051 0.1546 194.2590);    /* #00FFFE Primary/60 */
+	--create-btn-icon: oklch(0.2308 0 0);          /* #1D1D1D CoolGray/100 */
+	--create-btn-text: oklch(0.3665 0 0);          /* #444444 CoolGray/80 */
+	--create-btn-outline: oklch(0.3665 0 0);       /* #444444 CoolGray/80 */
+	--create-btn-bg: oklch(0.9051 0.1546 194.2590); /* #00FFFE Primary/60 */
+	--hero-btn-icon: oklch(0.2308 0 0);            /* #1D1D1D CoolGray/100 */
+	--hero-btn-text: oklch(0.2308 0 0);            /* #1D1D1D CoolGray/100 */
+	--hero-btn-chevron: oklch(0.7444 0 0);         /* #ACACAC CoolGray/40 */
+	--about-btn-bg: oklch(0.4748 0 0);             /* #525252 CoolGray/70 */
+	--about-btn-icon: oklch(1 0 0);                /* #FFFFFF CoolGray/10 */
+	--about-btn-text: oklch(1 0 0);                /* #FFFFFF CoolGray/10 */
+	--about-btn-chevron: oklch(0.7444 0 0);        /* #ACACAC CoolGray/40 */
+	--profile-btn-icon: oklch(0.2308 0 0);         /* #1D1D1D CoolGray/100 */
+	--profile-btn-outline: oklch(0.3665 0 0);      /* #444444 CoolGray/80 */
+	--profile-btn-bg: oklch(0.9051 0.1546 194.2590); /* #00FFFE Primary/60 */
+	--logo: oklch(1 0 0);                          /* #FFFFFF CoolGray/10 */
+	--nav-link: oklch(0.8452 0 0);                 /* #CCCCCC CoolGray/30 */
+	--nav-link-active: oklch(0.9051 0.1546 194.2590); /* #00FFFE Primary/60 */
+	--nav-underline: oklch(0.9051 0.1546 194.2590);   /* #00FFFE Primary/60 */
+	--wave-bg: oklch(0.2727 0 0);              /* #272727 CoolGray/90 per Figma */
+	--muted: oklch(0.4748 0 0);                    /* #5C5C5C CoolGray/70 */
+	--muted-foreground: oklch(0.8452 0 0);         /* #CCCCCC CoolGray/30 */
+	--accent: oklch(0.4748 0 0);                   /* #5C5C5C CoolGray/70 */
+	--accent-foreground: oklch(1 0 0);             /* #FFFFFF CoolGray/10 */
 	--destructive: oklch(0.6358 0.2088 25.4126);
 	--destructive-foreground: oklch(1 0 0);
-	--border: oklch(0.4222 0.0193 227.4184);
-	--input: oklch(0.4222 0.0193 227.4184);
-	--ring: oklch(0.7147 0.1211 194.7836);
-	--chart-1: oklch(0.7147 0.1211 194.7836);
+	--border: oklch(0.7444 0 0);                   /* #ACACAC CoolGray/40 */
+	--input: oklch(0.5693 0 0);                    /* #777777 CoolGray/60 */
+	--ring: oklch(0.9051 0.1546 194.2590);         /* #00FFFE Primary/60 */
+	--chart-1: oklch(0.9051 0.1546 194.2590);      /* #00FFFE Primary/60 */
 	--chart-2: oklch(1 0 0);
-	--chart-3: oklch(0.3741 0.0178 224.9693);
-	--chart-4: oklch(0.6851 0.0164 229.0806);
+	--chart-3: oklch(0.4748 0 0);                  /* #5C5C5C CoolGray/70 */
+	--chart-4: oklch(0.6600 0 0);                  /* #929292 CoolGray/50 */
 	--chart-5: oklch(0.6358 0.2088 25.4126);
-	--sidebar: oklch(0.3032 0.0132 229.4039);
-	--sidebar-foreground: oklch(1 0 0);
-	--sidebar-primary: oklch(0.7147 0.1211 194.7836);
-	--sidebar-primary-foreground: oklch(1 0 0);
-	--sidebar-accent: oklch(0.3741 0.0178 224.9693);
-	--sidebar-accent-foreground: oklch(1 0 0);
-	--sidebar-border: oklch(0.4222 0.0193 227.4184);
-	--sidebar-ring: oklch(0.7147 0.1211 194.7836);
-	--font-sans: 'HarmonyOS_Sans', sans-serif;
-	--font-secondary: 'DM Sans', sans-serif;
-	--font-sarkaz: 'EndfieldByButan', sans-serif;
-	--font-serif: serif;
-	--font-mono: monospace;
-	--radius: 0rem;
+	--sidebar: oklch(0.3211 0 0);                  /* #333333 */
+	--sidebar-foreground: oklch(1 0 0);            /* #FFFFFF CoolGray/10 */
+	--sidebar-primary: oklch(0.9051 0.1546 194.2590); /* #00FFFE Primary/60 */
+	--sidebar-primary-foreground: oklch(0.2308 0 0);  /* #1D1D1D CoolGray/100 */
+	--sidebar-accent: oklch(0.4748 0 0);           /* #5C5C5C CoolGray/70 */
+	--sidebar-accent-foreground: oklch(1 0 0);     /* #FFFFFF CoolGray/10 */
+	--sidebar-border: oklch(0.7444 0 0);           /* #ACACAC CoolGray/40 */
+	--sidebar-ring: oklch(0.9051 0.1546 194.2590); /* #00FFFE Primary/60 */
 	--shadow-x: 0rem;
 	--shadow-y: 0.125rem;
 	--shadow-blur: 0px;
@@ -156,6 +232,7 @@ html[lang='ja'] {
 	--color-popover: var(--popover);
 	--color-popover-foreground: var(--popover-foreground);
 	--color-primary: var(--primary);
+	--color-primary-hover: var(--primary-hover);
 	--color-primary-foreground: var(--primary-foreground);
 	--color-secondary: var(--secondary);
 	--color-secondary-foreground: var(--secondary-foreground);
@@ -181,6 +258,12 @@ html[lang='ja'] {
 	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
 	--color-sidebar-border: var(--sidebar-border);
 	--color-sidebar-ring: var(--sidebar-ring);
+
+	--color-nav-link: var(--nav-link);
+	--color-nav-link-active: var(--nav-link-active);
+	--color-nav-underline: var(--nav-underline);
+
+	--breakpoint-nav: 850px;
 
 	--font-sans: var(--font-sans);
 	--font-secondary: var(--font-secondary);
@@ -235,20 +318,97 @@ body {
 	body {
 		@apply bg-background text-foreground;
 	}
+	button:not(:disabled),
+	[role="button"]:not(:disabled) {
+		cursor: pointer;
+	}
+
+	/* Theme transition — targets body and key layout elements that set their own
+	   background/border. Only background-color and border-color to avoid logo/icon
+	   flash from color inheritance.
+	   Applied via JS class, removed after timeout so it never fires on page load. */
+	html.theme-transition body,
+	html.theme-transition main,
+	html.theme-transition aside,
+	html.theme-transition footer,
+	html.theme-transition section,
+	html.theme-transition nav,
+	html.theme-transition [class*="bg-card"],
+	html.theme-transition [class*="bg-background"],
+	html.theme-transition [class*="bg-muted"],
+	html.theme-transition [class*="bg-popover"],
+	html.theme-transition [class*="bg-accent"],
+	html.theme-transition [class*="bg-secondary"],
+	html.theme-transition [class*="border-border"] {
+		transition: background-color 0.15s ease, border-color 0.15s ease;
+	}
+
+	/* Header gets color transition for the currentColor SVG logo.
+	   Scoped to header only to avoid expensive page-wide color repaints. */
+	html.theme-transition header {
+		transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+	}
+
+	/* Footer and main text can safely transition color. */
+	html.theme-transition footer,
+	html.theme-transition footer *,
+	html.theme-transition main,
+	html.theme-transition main [class*="text-muted"],
+	html.theme-transition main [class*="text-foreground"] {
+		transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+	}
+
+	.login-modal-bg {
+		background:
+			linear-gradient(180deg, transparent 55%, oklch(0.9054 0.1546 194.7689 / 0.9) 90%),
+			linear-gradient(180deg, var(--muted) 55%, var(--primary) 90%);
+	}
+
 	.wave-bg {
 		@apply relative;
 	}
-	.wave-bg::before {
-		z-index: 0;
+	#main-hero + .wave-bg {
+		min-height: 100dvh;
+	}
+	/* Dual-layer wave pattern: two offset copies hide tile seams.
+	   Layer A (::before) tiles normally, layer B (::after) is offset
+	   by half a tile so its seams fall in the middle of layer A's
+	   intact tiles. Both at reduced opacity blend together. */
+	.wave-bg::before,
+	.wave-bg::after {
 		content: '';
 		position: absolute;
 		top: 0;
 		left: 0;
 		width: 100%;
 		height: 100%;
-		opacity: 0.2;
 		background-image: url('@/assets/img/wave-bg.svg');
+		background-size: 400px;
 		pointer-events: none;
+	}
+	.wave-bg::before {
+		z-index: 0;
+		opacity: 0.25;
+	}
+	.wave-bg::after {
+		z-index: 0;
+		background-position: 200px 200px;
+		opacity: 0.25;
+	}
+	/* Dark mode: invert white waves to dark, reduce opacity to match
+	   light mode's visual weight (~5 luminance delta per layer) */
+	[data-theme="dark"] .wave-bg::before,
+	[data-theme="dark"] .wave-bg::after {
+		filter: invert(1);
+		opacity: 0.06;
+	}
+	/* Auth modals: responsive tile sizing within small container */
+	.wave-bg.login-modal-bg::before,
+	.wave-bg.login-modal-bg::after {
+		background-size: 50%;
+	}
+	.wave-bg.login-modal-bg::after {
+		background-position: 50% 50%;
 	}
 	.wave-bg > * {
 		position: relative;

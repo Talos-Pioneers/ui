@@ -425,5 +425,7 @@
 	"pages.collections.edit.successPublic": "อัปเดตและเผยแพร่คอลเลกชันต่อสาธารณะเรียบร้อยแล้ว!",
 	"pages.collections.edit.successPrivate": "อัปเดตคอลเลกชันส่วนตัวเรียบร้อยแล้ว!",
 	"pages.collections.edit.errorValidation": "โปรดแก้ไขข้อผิดพลาดในการตรวจสอบ",
-	"pages.collections.edit.errorFailed": "อัปเดตคอลเลกชันไม่สำเร็จ โปรดลองอีกครั้ง"
+	"pages.collections.edit.errorFailed": "อัปเดตคอลเลกชันไม่สำเร็จ โปรดลองอีกครั้ง",
+	"theme.label": "ธีม",
+	"theme.toggle": "สลับธีม"
 }

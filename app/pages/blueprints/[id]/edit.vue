@@ -474,11 +474,11 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 </script>
 
 <template>
-	<div class="wave-bg bg-cool-gray-10 before:bg-size-[400px] min-h-screen">
+	<div class="wave-bg bg-(--wave-bg) min-h-screen">
 		<div class="container mx-auto px-4 py-6">
 			<div class="max-w-4xl mx-auto">
 				<div
-					class="bg-white dark:bg-cool-gray-95 rounded-lg border border-cool-gray-20 dark:border-cool-gray-80 p-6 space-y-6"
+					class="bg-card rounded-lg border border-border p-6 space-y-6"
 				>
 					<h1 class="font-bold text-3xl">
 						{{ t('pages.blueprints.edit.title') }}
@@ -519,7 +519,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 								<Label>{{
 									t('pages.blueprints.create.images')
 								}}</Label>
-								<span class="text-sm text-cool-gray-50">
+								<span class="text-sm text-muted-foreground">
 									{{ imageItems.length }}/{{ MAX_IMAGES }}
 								</span>
 							</div>
@@ -531,7 +531,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 									:class="[
 										isDragging
 											? 'border-primary bg-primary/5'
-											: 'border-cool-gray-30 dark:border-cool-gray-70 hover:border-primary',
+											: 'border-border hover:border-primary',
 									]"
 									@click="fileInputRef?.click()"
 									@dragenter="handleDragEnter"
@@ -545,7 +545,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 											:class="[
 												isDragging
 													? 'text-primary'
-													: 'text-cool-gray-50',
+													: 'text-muted-foreground',
 											]"
 										/>
 										<p
@@ -553,7 +553,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 											:class="[
 												isDragging
 													? 'text-primary'
-													: 'text-cool-gray-60',
+													: 'text-muted-foreground',
 											]"
 										>
 											{{
@@ -584,7 +584,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 										<div
 											v-for="(item, index) in imageItems"
 											:key="item.id"
-											class="relative group aspect-square rounded-lg overflow-hidden border border-cool-gray-20 dark:border-cool-gray-80"
+											class="relative group aspect-square rounded-lg overflow-hidden border border-border"
 										>
 											<img
 												:src="item.preview"
@@ -600,7 +600,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 													@mousedown.stop
 												>
 													<GripVertical
-														class="size-4 text-cool-gray-90"
+														class="size-4 text-foreground"
 													/>
 												</button>
 												<button
@@ -609,7 +609,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 													@click="removeImage(item.id)"
 												>
 													<X
-														class="size-4 text-cool-gray-90"
+														class="size-4 text-foreground"
 													/>
 												</button>
 											</div>
@@ -634,7 +634,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 									:class="[
 										isDragging
 											? 'border-primary bg-primary/5'
-											: 'border-cool-gray-30 dark:border-cool-gray-70 hover:border-primary',
+											: 'border-border hover:border-primary',
 									]"
 									@click="fileInputRef?.click()"
 									@dragenter="handleDragEnter"
@@ -648,7 +648,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 											:class="[
 												isDragging
 													? 'text-primary'
-													: 'text-cool-gray-50',
+													: 'text-muted-foreground',
 											]"
 										/>
 										<p
@@ -656,7 +656,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 											:class="[
 												isDragging
 													? 'text-primary'
-													: 'text-cool-gray-60',
+													: 'text-muted-foreground',
 											]"
 										>
 											{{
@@ -677,7 +677,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 									@change="handleFileSelect"
 								/>
 
-								<p class="text-xs text-cool-gray-60">
+								<p class="text-xs text-muted-foreground">
 									{{
 										t(
 											'pages.blueprints.create.thumbnailHelper'
@@ -799,7 +799,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 								:aria-invalid="!!form.errors.partner_url"
 								@change="form.validate('partner_url')"
 							/>
-							<p class="text-xs text-cool-gray-60">
+							<p class="text-xs text-muted-foreground">
 								{{
 									t('pages.blueprints.create.partnerUrlHelper')
 								}}
