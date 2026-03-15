@@ -169,7 +169,8 @@ export function useImageGallery(options: UseImageGalleryOptions) {
 	 */
 	const ALLOWED_IMAGE_HOSTNAMES = [
 		'assets.warfarin.wiki',
-		'cdn.talospioneers.com', // Add your actual CDN domain(s)
+		'assets.talospioneers.com',
+		'cdn.talospioneers.com',
 		'localhost', // For local development
 	]
 
