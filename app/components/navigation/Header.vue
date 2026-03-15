@@ -256,13 +256,13 @@ const navigationItems = [
 							</NuxtLinkLocale>
 						</SheetTitle>
 					</SheetHeader>
-					<div class="flex flex-col gap-4 px-4">
+					<div class="flex flex-col px-4 -mt-2">
 						<NuxtLinkLocale
 							v-for="item in navigationItems"
 							:key="item.to"
 							:to="item.to"
-							active-class="text-nav-link-active h-full"
-							class="text-nav-link hover:text-nav-link-active h-full flex items-center"
+							active-class="text-nav-link-active"
+							class="text-nav-link hover:text-nav-link-active flex items-center py-2"
 							@click="mobileMenuOpen = false"
 						>
 							{{ t(item.label) }}
@@ -279,7 +279,7 @@ const navigationItems = [
 							</p>
 							<NuxtLinkLocale
 								active-class="text-nav-link-active"
-								class="text-nav-link hover:text-nav-link-active flex items-center gap-2"
+								class="text-nav-link hover:text-nav-link-active flex items-center gap-2 py-2"
 								to="/blueprints/create"
 								@click="mobileMenuOpen = false"
 							>
@@ -294,7 +294,7 @@ const navigationItems = [
 							</NuxtLinkLocale>
 							<NuxtLinkLocale
 								active-class="text-nav-link-active"
-								class="text-nav-link hover:text-nav-link-active flex items-center gap-2"
+								class="text-nav-link hover:text-nav-link-active flex items-center gap-2 py-2"
 								to="/collections/create"
 								@click="mobileMenuOpen = false"
 							>
