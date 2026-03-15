@@ -18,7 +18,6 @@ export type QueryFiltersConfig = {
 }
 
 export function useQueryFilters<T extends QueryFiltersConfig>(config: T) {
-	const router = useRouter()
 	const route = useRoute()
 
 	const filters = ref<Record<string, any>>({})
@@ -118,26 +117,10 @@ export function useQueryFilters<T extends QueryFiltersConfig>(config: T) {
 
 		return query
 	})
-	// update the nuxt router query params when the query changes
-	watch(
-		filters,
-		() => {
-			router.replace({
-				query: computedQuery.value,
-			})
-		},
-		{ deep: true }
-	)
-	watch(sort, () => {
-		router.replace({
-			query: computedQuery.value,
-		})
-	})
-	watch(sortDirection, () => {
-		router.replace({
-			query: computedQuery.value,
-		})
-	})
+	// URL sync is handled by the consuming composable (useBlueprintQueryFilter /
+	// useCollectionQueryFilter) via a single watcher on activeQuery. This avoids
+	// redundant router.replace() calls during initial setup that race with scroll
+	// behavior on page navigation.
 
 	const buildFiltersFromQuery = (query: Record<string, string>) => {
 		for (const [key, value] of Object.entries(query)) {
