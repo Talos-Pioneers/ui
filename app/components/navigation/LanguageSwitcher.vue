@@ -20,13 +20,13 @@ const handleLocaleChange = (code: string) => {
 <template>
     <SelectRoot :model-value="locale" @update:model-value="handleLocaleChange">
         <SelectTrigger as-child>
-            <Button variant="secondary" class="group nav:min-w-40 nav:px-4.5 nav:justify-between" size="responsive-icon">
-                <LanguageIcon class="h-5 block nav:hidden text-(--lang-switcher-icon)" />
-                <span class="items-center gap-2.5 hidden nav:flex">
+            <Button variant="secondary" class="group navd:min-w-40 navd:px-4.5 navd:justify-between" size="responsive-icon">
+                <LanguageIcon class="h-5 block navd:hidden text-(--lang-switcher-icon)" />
+                <span class="items-center gap-2.5 hidden navd:flex">
                     <LanguageIcon class="h-5 text-(--lang-switcher-icon)" />
                     <span class="h-3.5 w-px bg-(--lang-switcher-divider)"></span>
                 </span>
-                <span class="items-center hidden nav:flex">
+                <span class="items-center hidden navd:flex">
                     <span class="text-(--lang-switcher-text)">{{ currentLocale?.name ?? currentLocale?.code }}</span>
                     <ChevronIcon class="w-4.5 h-4.5 mt-0.5 text-(--lang-switcher-icon) transition-transform duration-150 group-data-[state=open]:rotate-180" />
                 </span>

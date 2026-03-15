@@ -18,11 +18,11 @@ const currentIcon = computed(() => {
 })
 </script>
 <template>
-	<div class="hidden nav:inline-flex">
+	<div class="hidden navd:inline-flex">
 		<Button
 			variant="secondary"
 			size="responsive-icon"
-			class="nav:w-11.5"
+			class="navd:w-11.5"
 			:aria-label="t('theme.toggle')"
 			@click="toggleTheme"
 		>

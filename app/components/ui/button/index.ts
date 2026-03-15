@@ -30,7 +30,7 @@ export const buttonVariants = cva(
 				'icon-sm': 'size-8',
 				'icon-lg': 'size-10',
 				'responsive-icon':
-					'size-10 nav:h-11.5 nav:w-auto nav:px-4 nav:py-2 nav:has-[>svg]:px-3',
+					'size-10 navd:h-11.5 navd:w-auto navd:px-4 navd:py-2 navd:has-[>svg]:px-3',
 			},
 			rounded: {
 				default:

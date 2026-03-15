@@ -31,6 +31,14 @@ const router = useRouter()
 const route = useRoute()
 const mobileMenuOpen = ref(false)
 
+// Dynamic nav collapse (replaces fixed nav: breakpoint)
+const { headerRef, navMeasureRef, isCollapsed } = useNavCollapse()
+
+// Auto-close mobile menu when nav expands to desktop
+watch(isCollapsed, (collapsed) => {
+	if (!collapsed) mobileMenuOpen.value = false
+})
+
 // Sliding underline indicator
 const navRef = ref<HTMLElement | null>(null)
 const navListRef = ref<HTMLElement | null>(null)
@@ -56,7 +64,7 @@ const navLinkActiveClass = computed(() =>
 const updateUnderline = () => {
 	if (!navRef.value || !navListRef.value) return
 	const navRect = navRef.value.getBoundingClientRect()
-	// Skip if nav is hidden (mobile breakpoint)
+	// Skip if nav is hidden (collapsed)
 	if (navRect.width === 0) return
 
 	const idx = activeNavIndex.value
@@ -118,15 +126,25 @@ const navigationItems = [
 </script>
 <template>
 	<header
+		ref="headerRef"
 		class="sticky top-0 z-40 bg-background flex items-center h-16.5 px-7.5 border-b border-border"
 	>
+		<!-- Hidden measurement element: always in DOM for measuring nav text width -->
+		<div
+			ref="navMeasureRef"
+			class="absolute invisible pointer-events-none flex items-center gap-7.5"
+			aria-hidden="true"
+		>
+			<span v-for="item in navigationItems" :key="item.to">{{ t(item.label) }}</span>
+		</div>
+
 		<div>
 			<NuxtLinkLocale to="/" class="text-(--logo)" data-scroll-top>
-				<Logo class="hidden nav:block" />
-				<LogoMobileIcon class="block nav:hidden" />
+				<Logo class="hidden navd:block" />
+				<LogoMobileIcon class="block navd:hidden" />
 			</NuxtLinkLocale>
 		</div>
-		<nav ref="navRef" class="hidden nav:block ml-7.5 h-full relative">
+		<nav ref="navRef" class="hidden navd:block ml-7.5 h-full relative">
 			<ul ref="navListRef" class="flex items-center gap-7.5 h-full">
 				<li
 					v-for="item in navigationItems"
@@ -159,7 +177,7 @@ const navigationItems = [
 					<DropdownMenuTrigger as-child>
 						<Button
 							variant="default"
-							class="hidden nav:flex min-w-40 px-4.5 justify-between bg-(--create-btn-bg) before:border-(--create-btn-outline)"
+							class="hidden navd:flex min-w-40 px-4.5 justify-between bg-(--create-btn-bg) before:border-(--create-btn-outline)"
 						>
 							<span class="flex items-center gap-2.5">
 								<AddBlueprintIcon class="h-5 text-(--create-btn-icon)" />
@@ -200,7 +218,7 @@ const navigationItems = [
 
 				<DropdownMenu :modal="false">
 					<DropdownMenuTrigger as-child>
-						<Button variant="default" size="icon-lg" class="nav:size-11.5 bg-(--profile-btn-bg) before:border-(--profile-btn-outline)">
+						<Button variant="default" size="icon-lg" class="navd:size-11.5 bg-(--profile-btn-bg) before:border-(--profile-btn-outline)">
 							<UserIcon class="h-5 text-(--profile-btn-icon)" />
 						</Button>
 					</DropdownMenuTrigger>
@@ -244,7 +262,7 @@ const navigationItems = [
 			</template>
 			<Sheet v-model:open="mobileMenuOpen">
 				<SheetTrigger as-child>
-					<Button variant="default" size="icon-lg" class="nav:hidden bg-(--burger-bg) before:border-(--burger-outline)">
+					<Button variant="default" size="icon-lg" class="navd:hidden bg-(--burger-bg) before:border-(--burger-outline)">
 						<MenuIcon class="w-4.5 h-4 text-(--burger-icon)" />
 					</Button>
 				</SheetTrigger>

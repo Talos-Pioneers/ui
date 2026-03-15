@@ -2,6 +2,7 @@
 @import 'tw-animate-css';
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+@custom-variant navd (&:where([data-nav-state="desktop"], [data-nav-state="desktop"] *));
 
 :root,
 [data-theme="light"] {

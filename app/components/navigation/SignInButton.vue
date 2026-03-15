@@ -8,7 +8,7 @@ const { open } = useLoginModal()
 </script>
 <template>
 	<Button
-		class="min-w-40 px-4.5 justify-between hidden nav:flex bg-(--sign-in-bg) before:border-(--sign-in-outline)"
+		class="min-w-40 px-4.5 justify-between hidden navd:flex bg-(--sign-in-bg) before:border-(--sign-in-outline)"
 		variant="default"
 		@click="open"
 	>
@@ -19,7 +19,7 @@ const { open } = useLoginModal()
 		<span class="text-(--sign-in-text)">{{ t('components.navigation.header.signIn') }}</span>
 	</Button>
 	<Button
-		class="nav:hidden"
+		class="navd:hidden"
 		variant="secondary"
 		size="icon-lg"
 		@click="open"
