@@ -442,6 +442,12 @@ body {
 	[data-theme="dark"] .lottie-throbber {
 		filter: invert(1) brightness(1.05) contrast(0.9);
 	}
+	/* Dark mode: invert the intro animation overlay (background + video)
+	   using the same CSS filter approach as the lottie throbber.
+	   brightness + contrast tuned to match Loading_Dark.webm output. */
+	[data-theme="dark"] .intro-overlay {
+		filter: invert(1) brightness(1.05) contrast(1.1);
+	}
 	/* Auth modals: responsive tile sizing within small container,
 	   fade waves out where the gradient transitions to cyan */
 	.wave-bg.login-modal-bg::before,

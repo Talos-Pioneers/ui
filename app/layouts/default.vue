@@ -22,14 +22,7 @@ useHead(() => ({
 // Intro animation config
 const INTRO_VERSION = 'v1' // Bump to force re-show after intro changes
 const INTRO_TIMEOUT_MS = 10000
-const INTRO_VIDEOS: Record<string, string> = {
-	light: 'https://assets.talospioneers.com/intro.webm',
-	dark: 'https://assets.talospioneers.com/intro.webm', // TODO: replace with dark mode variant
-}
-const introSrc = computed(() => {
-	const video = INTRO_VIDEOS[resolved.value ?? 'light'] ?? INTRO_VIDEOS.light
-	return `${video}#t=2.9`
-})
+const INTRO_VIDEO = 'https://assets.talospioneers.com/intro.webm#t=2.9'
 
 // Cookie expires at midnight (rolling calendar day)
 const getSecondsUntilMidnight = (): number => {
@@ -120,14 +113,14 @@ onUnmounted(() => {
 					<Transition name="fade">
 						<div
 							v-if="showIntro"
-							class="fixed inset-0 bg-[#D0D0D0] z-50 flex items-center justify-center"
+							class="intro-overlay fixed inset-0 bg-[#D0D0D0] z-50 flex items-center justify-center"
 							:class="autoplayBlocked && 'cursor-pointer'"
 							@click="autoplayBlocked && handleIntroTap()"
 						>
 							<div class="relative">
 								<video
 									ref="videoRef"
-									:src="introSrc"
+									:src="INTRO_VIDEO"
 									autoplay
 									muted
 									playsinline
