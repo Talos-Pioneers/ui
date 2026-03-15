@@ -70,7 +70,7 @@ const filteredOptions = computed(() =>
 				v-model="modelValue"
 				delimiter=""
 				:with-pattern="props.withPattern"
-				class="px-3 py-2 min-h-10.5 dark:bg-input/30 dark:hover:bg-input/50 [&_svg:not([class*='text-'])]:text-muted-foreground"
+				class="px-3 py-2 min-h-10.5 [&_svg:not([class*='text-'])]:text-muted-foreground"
 			>
 				<template v-if="props.displayTags">
 					<TagsInputItem
@@ -98,8 +98,8 @@ const filteredOptions = computed(() =>
 					/>
 				</ComboboxInput>
 
-				<ComboboxTrigger class="order-last self-center ml-auto shrink-0" tabindex="-1">
-					<ChevronDown class="size-4 opacity-50" />
+				<ComboboxTrigger class="group order-last self-center ml-auto shrink-0" tabindex="-1">
+					<ChevronDown class="size-4 opacity-50 transition-transform duration-150 group-data-[state=open]:rotate-180" />
 				</ComboboxTrigger>
 			</TagsInput>
 		</ComboboxAnchor>
