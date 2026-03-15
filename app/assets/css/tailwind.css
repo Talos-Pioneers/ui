@@ -37,6 +37,10 @@
 	--hero-btn-icon: oklch(0.2308 0 0);                   /* #1D1D1D CoolGray/100 */
 	--hero-btn-text: oklch(0.2308 0 0);                   /* #1D1D1D CoolGray/100 */
 	--hero-btn-chevron: oklch(0.7444 0 0);                /* #ACACAC CoolGray/40 */
+	--about-btn-bg: oklch(0.957 0 0);                     /* #EFEFEF */
+	--about-btn-icon: oklch(0.4748 0 0);                  /* #5C5C5C CoolGray/70 */
+	--about-btn-text: oklch(0.4748 0 0);                  /* #5C5C5C CoolGray/70 */
+	--about-btn-chevron: oklch(0.7444 0 0);               /* #ACACAC CoolGray/40 */
 	--profile-btn-icon: oklch(0.2308 0 0);                /* #1D1D1D CoolGray/100 */
 	--profile-btn-outline: oklch(0.3665 0 0);             /* #444444 CoolGray/80 */
 	--profile-btn-bg: oklch(0.9051 0.1546 194.2590);      /* #00FFFE Primary/60 */
@@ -159,6 +163,10 @@ html[lang='ja'] {
 	--hero-btn-icon: oklch(0.2308 0 0);            /* #1D1D1D CoolGray/100 */
 	--hero-btn-text: oklch(0.2308 0 0);            /* #1D1D1D CoolGray/100 */
 	--hero-btn-chevron: oklch(0.7444 0 0);         /* #ACACAC CoolGray/40 */
+	--about-btn-bg: oklch(0.4748 0 0);             /* #525252 CoolGray/70 */
+	--about-btn-icon: oklch(1 0 0);                /* #FFFFFF CoolGray/10 */
+	--about-btn-text: oklch(1 0 0);                /* #FFFFFF CoolGray/10 */
+	--about-btn-chevron: oklch(0.7444 0 0);        /* #ACACAC CoolGray/40 */
 	--profile-btn-icon: oklch(0.2308 0 0);         /* #1D1D1D CoolGray/100 */
 	--profile-btn-outline: oklch(0.3665 0 0);      /* #444444 CoolGray/80 */
 	--profile-btn-bg: oklch(0.9051 0.1546 194.2590); /* #00FFFE Primary/60 */

@@ -101,30 +101,21 @@ onMounted(() => {
 				</Button>
 				<Button
 					as-child
-					class="flex-1 sm:flex-none sm:min-w-56 justify-between border-none items-center"
+					class="flex-1 sm:flex-none sm:min-w-56 justify-between border-none items-center bg-(--about-btn-bg)"
 					variant="outline"
 					size="responsive-lg"
 					rounded="base"
 				>
 					<NuxtLinkLocale to="/about">
-						<InfoIcon class="size-4 sm:size-6" />
-						<span class="flex gap-3 items-center text-muted-foreground">
+						<InfoIcon class="size-4 sm:size-6 text-(--about-btn-icon)" />
+						<span
+							class="flex gap-3 items-center text-(--about-btn-text)"
+						>
 							<span
-								class="text-muted-foreground text-sm sm:text-xl leading-none"
+								class="leading-none text-sm sm:text-xl tracking-[0.5px]"
 								>{{ t('mainBanner.about') }}</span
 							>
-							<svg
-								width="8"
-								height="12"
-								viewBox="0 0 8 12"
-								fill="none"
-								class="fill-muted-foreground"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									d="M0 10.59L4.58 6L0 1.41L1.41 0L7.41 6L1.41 12L0 10.59Z"
-								/>
-							</svg>
+							<ChevronRightIcon class="w-2 h-3 text-(--about-btn-chevron)" />
 						</span>
 					</NuxtLinkLocale>
 				</Button>
