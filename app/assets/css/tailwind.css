@@ -442,11 +442,13 @@ body {
 		opacity: 0.06;
 	}
 	/* Dark mode: tone down the white input-pattern.png on dark backgrounds.
-	   blend-mode soft-light mixes the white pattern into the bg color subtly. */
+	   blend-mode soft-light mixes the white pattern into the bg color subtly.
+	   bg-color at 30% opacity gives all patterned inputs the same tint. */
 	[data-theme="dark"] [data-slot="input"],
 	[data-theme="dark"] [data-slot="select-trigger"],
 	[data-theme="dark"] [data-slot="tags-input"] {
 		background-blend-mode: soft-light;
+		background-color: oklch(0.5693 0 0 / 0.3);
 	}
 	/* Dark mode: CSS filter to invert the light throbber instead of loading
 	   a separate dark lottie file (saves ~2 MB). brightness + contrast tuned
