@@ -31,7 +31,7 @@ onMounted(() => {
 	<div
 		id="main-hero"
 		ref="parallaxContainer"
-		class="relative block w-full h-[600px] md:h-[42rem] overflow-hidden border-b border-border"
+		class="relative block w-full h-[600px] md:h-[42rem] overflow-hidden"
 	>
 		<!-- Parallax background layer -->
 		<div

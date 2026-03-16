@@ -67,6 +67,9 @@
 	--nav-link: oklch(0.5693 0 0);                        /* #777777 CoolGray/60 */
 	--nav-link-active: oklch(0.3665 0 0);                 /* #444444 CoolGray/80 */
 	--nav-underline: oklch(0 0 0);                        /* #000000 Black */
+	--profile-banner-bg: oklch(0.2727 0 0);                   /* #272727 CoolGray/90 — bold on white */
+	--profile-banner-text: oklch(1 0 0);                      /* #FFFFFF */
+	--profile-banner-muted: oklch(1 0 0 / 0.8);              /* white/80 */
 	--region-label: oklch(0.4748 0 0);                        /* #5C5C5C CoolGray/70 */
 	--region-box-bg: oklch(0.9953 0 0);                      /* #FDFDFD near-white */
 	--region-box-border: oklch(0.8452 0 0);                  /* #CCCCCC CoolGray/30 */
@@ -205,6 +208,9 @@ html[lang='ja'] {
 	--page-social-text: oklch(0.7444 0 0);         /* #ACACAC CoolGray/40 — visible on dark bg */
 	--page-social-border: oklch(0.7444 0 0);
 	--page-social-hover: oklch(0.8452 0 0);        /* #CCCCCC CoolGray/30 — lighten on hover */
+	--profile-banner-bg: oklch(0.3211 0 0);    /* #333333 elevated above bg */
+	--profile-banner-text: oklch(1 0 0);       /* #FFFFFF */
+	--profile-banner-muted: oklch(1 0 0 / 0.7); /* white/70 — slightly more muted on lighter banner */
 	--region-label: oklch(0.8452 0 0);         /* #CCCCCC CoolGray/30 */
 	--region-box-bg: oklch(0.3211 0 0);        /* #333333 sidebar */
 	--region-box-border: oklch(0.5693 0 0);    /* #777777 CoolGray/60 */
@@ -297,6 +303,9 @@ html[lang='ja'] {
 	--color-nav-link: var(--nav-link);
 	--color-nav-link-active: var(--nav-link-active);
 	--color-nav-underline: var(--nav-underline);
+	--color-profile-banner-bg: var(--profile-banner-bg);
+	--color-profile-banner-text: var(--profile-banner-text);
+	--color-profile-banner-muted: var(--profile-banner-muted);
 	--color-region-label: var(--region-label);
 	--color-region-box-bg: var(--region-box-bg);
 	--color-region-box-border: var(--region-box-border);
