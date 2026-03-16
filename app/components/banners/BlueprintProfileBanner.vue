@@ -5,7 +5,7 @@ const { t } = useI18n()
 </script>
 
 <template>
-	<div class="relative block w-full h-48 md:h-64 bg-cool-gray-90">
+	<div class="relative block w-full h-48 md:h-64 bg-cool-gray-90 border-b border-border">
 		<div
 			class="relative z-10 container mx-auto px-4 py-6 flex flex-col h-full justify-center"
 		>
