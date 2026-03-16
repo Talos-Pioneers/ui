@@ -477,25 +477,29 @@ const unifiedFilterModel = computed({
 								<button
 									v-for="region in regionOptions"
 									:key="region.value"
-									:class="[
-										'flex-1 flex flex-col items-center justify-center gap-2 p-3 rounded border transition-colors',
-										filters.region === region.value
-											? 'bg-primary border-primary text-foreground'
-											: 'bg-sidebar border-sidebar-border hover:bg-sidebar-accent',
-									]"
+									class="flex-1 flex flex-col items-center justify-center gap-[11px] transition-colors"
 									@click="handleRegionClick(region.value)"
 								>
-									<component
-										:is="region.icon"
-										class="w-6 h-6"
+									<div
 										:class="[
+											'w-full h-[70px] flex items-center justify-center rounded transition-colors',
 											filters.region === region.value
-												? 'text-foreground'
-												: 'text-muted-foreground',
+												? 'bg-primary'
+												: 'bg-region-box-bg border border-region-box-border hover:opacity-80',
 										]"
-									/>
+									>
+										<component
+											:is="region.icon"
+											class="w-14"
+											:class="[
+												filters.region === region.value
+													? 'text-[#1D1D1D]'
+													: 'text-[#CCCCCC]',
+											]"
+										/>
+									</div>
 									<span
-										class="text-xs text-muted-foreground font-medium"
+										class="text-sm text-region-label"
 										>{{ t(`region.${region.value}`) }}</span
 									>
 								</button>
