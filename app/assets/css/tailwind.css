@@ -135,7 +135,7 @@ html[lang='zh-TW'] {
 }
 
 html[lang='ja'] {
-	--font-sans: 'Noto Sans JP', 'HarmonyOS_Sans', sans-serif;
+	--font-sans: 'HarmonyOS_Sans', 'Noto Sans JP', 'HarmonyOS_Sans_SC', sans-serif;
 }
 
 [data-theme="dark"] {
