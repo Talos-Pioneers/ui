@@ -618,7 +618,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 													@mousedown.stop
 												>
 													<GripVertical
-														class="size-4 text-foreground"
+														class="size-4 text-gray-800"
 													/>
 												</button>
 												<button
@@ -627,7 +627,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 													@click="showLightbox(index)"
 												>
 													<ZoomIn
-														class="size-4 text-foreground"
+														class="size-4 text-gray-800"
 													/>
 												</button>
 												<button
@@ -636,7 +636,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 													@click="removeImage(item.id)"
 												>
 													<X
-														class="size-4 text-foreground"
+														class="size-4 text-gray-800"
 													/>
 												</button>
 											</div>
