@@ -460,11 +460,11 @@ const unifiedFilterModel = computed({
 		>
 			<SidebarContent>
 				<SidebarGroup>
-					<SidebarGroupLabel>{{
+					<SidebarGroupLabel class="border-b border-sidebar-divider pb-2 mb-1">{{
 						t('components.blueprints.list.filters.label')
 					}}</SidebarGroupLabel>
 					<SidebarGroupContent>
-						<div class="px-2 py-3 space-y-2">
+						<div class="px-2 py-3 space-y-2 border-b border-sidebar-divider">
 							<label
 								class="text-xs font-medium text-sidebar-foreground/70 mb-2 block"
 								>{{
@@ -516,7 +516,7 @@ const unifiedFilterModel = computed({
 										group as keyof typeof groupedTags
 									].length > 0
 								"
-								class="px-2 py-3 space-y-2"
+								class="px-2 py-3 space-y-2 border-b border-sidebar-divider"
 							>
 								<label
 									class="text-xs font-medium text-sidebar-foreground/70 mb-2 block"
@@ -548,7 +548,7 @@ const unifiedFilterModel = computed({
 							</div>
 						</template>
 
-						<div class="px-2 py-3 space-y-2">
+						<div class="px-2 py-3 space-y-2 border-b border-sidebar-divider">
 							<label
 								class="text-xs font-medium text-sidebar-foreground/70 mb-2 block"
 								>{{
@@ -575,7 +575,7 @@ const unifiedFilterModel = computed({
 							/>
 						</div>
 
-						<div class="px-2 py-3 space-y-2">
+						<div class="px-2 py-3 space-y-2 border-b border-sidebar-divider">
 							<label
 								class="text-xs font-medium text-sidebar-foreground/70 mb-2 block"
 								>{{
@@ -602,7 +602,7 @@ const unifiedFilterModel = computed({
 							/>
 						</div>
 
-						<div class="px-2 py-3 space-y-2">
+						<div class="px-2 py-3 space-y-2 border-b border-sidebar-divider">
 							<label
 								class="text-xs font-medium text-sidebar-foreground/70 mb-2 block"
 								>{{
@@ -629,7 +629,7 @@ const unifiedFilterModel = computed({
 							/>
 						</div>
 
-						<div class="px-2 py-3 space-y-2">
+						<div class="px-2 py-3 space-y-2 border-b border-sidebar-divider">
 							<label
 								class="flex items-center gap-2 cursor-pointer hover:bg-sidebar-accent/50 rounded px-2 py-1.5 transition-colors"
 							>
