@@ -45,13 +45,13 @@ const emit = defineEmits<{
 }>()
 
 const { copy, copied } = useClipboard()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const sanctumClient = useSanctumClient()
 const { isAuthenticated } = useSanctumAuth()
 const dropdownOpen = ref(false)
 const shareCopied = ref(false)
 const handleShareLink = async () => {
-	const url = `${window.location.origin}/blueprints/${props.blueprint.id}`
+	const url = `${window.location.origin}/${locale.value}/blueprints/${props.blueprint.id}`
 	await copy(url)
 	shareCopied.value = true
 	toast.success(t('components.blueprints.card.shareLinkCopied'))
@@ -229,7 +229,7 @@ const handleRemoveFromCollection = async () => {
 							variant="outline"
 							rounded="base"
 							size="sm"
-							class="w-full bg-[#FFFA00] hover:bg-[#FFFA00]/70 justify-between before:hidden"
+							class="w-full bg-[#FFFA00] hover:bg-[#FFFA00]/70 justify-between before:hidden text-[#1D1D1D] border-[#FFFA00]"
 						>
 							<img
 								src="/enkanetwork.svg"
@@ -334,19 +334,19 @@ const handleRemoveFromCollection = async () => {
 			</div>
 
 			<!-- Region and Actions -->
-			<div class="flex items-center justify-between">
-				<div class="flex items-center gap-2">
+			<div class="flex items-center justify-between gap-1">
+				<div class="flex items-center gap-2 min-w-0">
 					<button
 						v-if="blueprint.server_region"
 						type="button"
-						class="group/server-region flex items-center gap-1.5 text-sm font-medium text-muted-foreground cursor-pointer transition-colors"
+						class="group/server-region flex items-center gap-1.5 text-sm font-medium text-muted-foreground cursor-pointer transition-colors min-w-0"
 						@click="handleServerRegionClick"
 					>
 						<ServerRegionIcon
-							class="w-5 h-5 group-hover/server-region:text-foreground transition-colors"
+							class="w-5 h-5 shrink-0 group-hover/server-region:text-foreground transition-colors"
 						/>
 						<span
-							class="group-hover/server-region:text-foreground group-hover/server-region:underline transition-colors"
+							class="truncate group-hover/server-region:text-foreground group-hover/server-region:underline transition-colors"
 							>{{
 								t(`serverRegion.${blueprint.server_region}`)
 							}}</span
@@ -354,12 +354,12 @@ const handleRemoveFromCollection = async () => {
 					</button>
 					<button
 						type="button"
-						class="group/region flex items-center gap-1.5 text-sm font-medium text-muted-foreground cursor-pointer transition-colors"
+						class="group/region flex items-center gap-1.5 text-sm font-medium text-muted-foreground cursor-pointer transition-colors min-w-0"
 						@click="handleRegionClick"
 					>
-						<RegionIcon class="w-5 h-5" />
+						<RegionIcon class="w-5 h-5 shrink-0" />
 						<span
-							class="group-hover/region:text-foreground group-hover/region:underline transition-colors"
+							class="truncate group-hover/region:text-foreground group-hover/region:underline transition-colors"
 							>{{
 								blueprint.region
 									? regionOptions.find(
@@ -370,7 +370,7 @@ const handleRemoveFromCollection = async () => {
 						>
 					</button>
 				</div>
-				<div class="flex items-center gap-1">
+				<div class="flex items-center gap-1 shrink-0">
 					<AddToCollection
 						v-if="isAuthenticated"
 						:blueprint="blueprint"

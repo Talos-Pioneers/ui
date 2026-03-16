@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { BlueprintCollection } from '~/models/blueprintCollection'
+import { useClipboard } from '@vueuse/core'
 import ClockIcon from '../icons/ClockIcon.vue'
 import VerticalElipsis from '../icons/VerticalElipsis.vue'
 import {
@@ -10,7 +11,9 @@ import {
 } from '~/components/ui/dropdown-menu'
 import ReportButton from '~/components/ReportButton.vue'
 import { Button } from '../ui/button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 import DeleteCollectionDialog from './DeleteCollectionDialog.vue'
+import { toast } from 'vue-sonner'
 
 const props = defineProps<{
 	collection: BlueprintCollection
@@ -21,9 +24,20 @@ const emit = defineEmits<{
 	deleted: []
 }>()
 
-const { t } = useI18n()
+const { copy } = useClipboard()
+const { t, locale } = useI18n()
 const { isAuthenticated } = useSanctumAuth()
 const dropdownOpen = ref(false)
+const shareCopied = ref(false)
+const handleShareLink = async () => {
+	const url = `${window.location.origin}/${locale.value}/collections/${props.collection.id}`
+	await copy(url)
+	shareCopied.value = true
+	toast.success(t('components.blueprints.card.shareLinkCopied'))
+	setTimeout(() => {
+		shareCopied.value = false
+	}, 1500)
+}
 
 const handleAuthorClick = () => {
 	if (props.collection.creator) {
@@ -146,12 +160,41 @@ const blueprintsCount = computed(() => {
 					</div>
 				</div>
 				<div class="flex items-center gap-1">
+					<Tooltip>
+						<TooltipTrigger as-child>
+							<Button
+								class="rounded-lg"
+								size="icon-sm"
+								variant="ghost"
+								rounded="base"
+								:with-wave="false"
+								@click="handleShareLink"
+							>
+								<IconsCheckmarkIcon
+									v-if="shareCopied"
+									class="size-4 text-primary"
+								/>
+								<IconsShareIcon
+									v-else
+									class="size-4"
+								/>
+							</Button>
+						</TooltipTrigger>
+						<TooltipContent>
+							{{ shareCopied
+								? t('components.blueprints.card.shareLinkCopied')
+								: t('components.blueprints.card.shareTooltip')
+							}}
+						</TooltipContent>
+					</Tooltip>
 					<DropdownMenu v-model:open="dropdownOpen">
 						<DropdownMenuTrigger as-child>
 							<Button
 								class="before:border-none rounded-lg"
 								size="icon-sm"
 								variant="ghost"
+								rounded="base"
+								:with-wave="false"
 							>
 								<VerticalElipsis class="size-7.5" />
 							</Button>

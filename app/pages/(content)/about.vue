@@ -217,7 +217,7 @@ const friends = [
 							:href="feedbackUrl"
 							target="_blank"
 							rel="noopener noreferrer"
-							class="inline-flex items-center gap-2 text-foreground hover:text-foreground hover:underline transition-colors"
+							class="inline-flex items-center gap-2 text-prose-link underline hover:opacity-80 transition-colors"
 						>
 							{{ $t('pages.about.feedbackButton') }}
 							<svg
@@ -277,7 +277,7 @@ const friends = [
 								<a
 									:href="friend.url"
 									target="_blank"
-									class="text-foreground hover:text-foreground underline transition-colors"
+									class="text-prose-link hover:opacity-80 underline transition-colors"
 								>
 									{{ friend.name }}
 								</a>

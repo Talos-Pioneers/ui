@@ -729,13 +729,13 @@ const unifiedFilterModel = computed({
 		</Sidebar>
 
 		<!-- Main Content -->
-		<div class="flex flex-col w-full">
+		<div class="flex flex-col w-full min-w-0">
 			<!-- Banner Section -->
 			<slot name="banner" />
 
 			<!-- Content Area -->
 			<div class="wave-bg bg-(--wave-bg)">
-				<div class="container mx-auto px-4 py-6">
+				<div class="w-full px-4 py-6">
 					<!-- Controls Bar -->
 					<div class="flex flex-col gap-4 mb-8">
 						<Button
