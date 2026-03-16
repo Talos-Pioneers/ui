@@ -25,7 +25,7 @@ const { t } = useI18n()
 				>
 					<NuxtLinkLocale to="/blueprints/create">
 						<svg
-							class="size-6"
+							class="size-6 text-(--hero-btn-icon)"
 							width="24"
 							height="24"
 							viewBox="0 0 24 24"
@@ -41,7 +41,7 @@ const { t } = useI18n()
 							/>
 						</svg>
 						<span
-							class="flex gap-3 text-sm sm:text-xl items-center text-foreground"
+							class="flex gap-3 text-sm sm:text-xl items-center text-(--hero-btn-text)"
 						>
 							<span>{{
 								t(
@@ -53,7 +53,7 @@ const { t } = useI18n()
 								height="12"
 								viewBox="0 0 8 12"
 								fill="none"
-								class="fill-muted-foreground"
+								class="fill-(--hero-btn-chevron)"
 								xmlns="http://www.w3.org/2000/svg"
 							>
 								<path
