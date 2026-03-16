@@ -67,7 +67,7 @@ const {
 	status: blueprintStatus,
 	error: blueprintError,
 	refresh: refreshBlueprint,
-} = useLazySanctumFetch<BlueprintResponse>(
+} = await useLazySanctumFetch<BlueprintResponse>(
 	() => `/api/v1/blueprints/${blueprintId.value}`
 )
 
@@ -203,7 +203,7 @@ const {
 	status: commentsStatus,
 	error: commentsError,
 	refresh: refreshComments,
-} = useLazySanctumFetch<CommentListResponse>(
+} = await useLazySanctumFetch<CommentListResponse>(
 	() => `/api/v1/blueprints/${blueprintId.value}/comments`,
 	() => ({
 		method: 'get',
@@ -580,9 +580,11 @@ const handleBlueprintDeleted = () => {
 		<div class="container mx-auto px-4">
 			<div
 				v-if="isBlueprintLoading"
-				class="py-20 text-center text-muted-foreground"
+				class="flex items-center justify-center py-12"
 			>
-				{{ t('pages.blueprints.detail.loading') }}
+				<div class="size-64 lottie-throbber">
+					<Lottie name="throbber" />
+				</div>
 			</div>
 
 			<div v-else-if="blueprintLoadError" class="py-20 text-center">

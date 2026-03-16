@@ -56,35 +56,33 @@ type Schema = {
 	height: number | null
 }
 
-// Fetch blueprint data
+// Fetch blueprint data (lazy to avoid blocking navigation via Suspense)
 const {
 	data: blueprintResponse,
 	status: blueprintStatus,
 	error: blueprintError,
-} = await useSanctumFetch<{ data: Blueprint }>(
+} = await useLazySanctumFetch<{ data: Blueprint }>(
 	() => `/api/v1/blueprints/${blueprintId.value}`
 )
 
 const blueprint = computed(() => blueprintResponse.value?.data ?? null)
 
 watchEffect(() => {
-	if (blueprintStatus.value == 'success' && !blueprint.value) {
-		throw createError({
-			statusCode: 404,
-			statusMessage: t('pages.blueprints.edit.notFound'),
-		})
-	}
 	if (blueprintError.value) {
 		throw createError({
 			statusCode: blueprintError.value.statusCode,
 			statusMessage: blueprintError.value.statusMessage,
 		})
 	}
-	if (!blueprint.value) {
+	if (blueprintStatus.value === 'success' && !blueprint.value) {
 		throw createError({
 			statusCode: 404,
 			statusMessage: t('pages.blueprints.edit.notFound'),
 		})
+	}
+	// Data still loading (lazy fetch) — skip head setup, template shows loading state
+	if (!blueprint.value) {
+		return
 	}
 	useHead({
 		title: t('pages.blueprints.edit.titleTemplate', {
@@ -118,13 +116,13 @@ const form = usePrecognitionForm<Schema>(
 )
 
 // Fetch facilities, items, and tags (lazy to avoid blocking navigation via Suspense)
-const { data: facilitiesData } = useLazySanctumFetch<{ data: Facility[] }>(
+const { data: facilitiesData } = await useLazySanctumFetch<{ data: Facility[] }>(
 	'/api/v1/facilities'
 )
-const { data: itemsData } = useLazySanctumFetch<{ data: Item[] }>(
+const { data: itemsData } = await useLazySanctumFetch<{ data: Item[] }>(
 	'/api/v1/items'
 )
-const { data: tagsData } = useLazySanctumFetch<{ data: Tag[] }>(
+const { data: tagsData } = await useLazySanctumFetch<{ data: Tag[] }>(
 	'/api/v1/tags'
 )
 
@@ -487,7 +485,16 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 <template>
 	<div class="wave-bg bg-(--wave-bg) min-h-screen">
 		<div class="container mx-auto px-4 py-6">
-			<div class="max-w-4xl mx-auto">
+			<div
+				v-if="blueprintStatus === 'pending'"
+				class="flex items-center justify-center py-12"
+			>
+				<div class="size-64 lottie-throbber">
+					<Lottie name="throbber" />
+				</div>
+			</div>
+
+			<div v-else class="max-w-4xl mx-auto">
 				<div
 					class="bg-card rounded-lg border border-border p-6 space-y-6"
 				>

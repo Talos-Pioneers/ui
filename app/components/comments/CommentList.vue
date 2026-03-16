@@ -22,8 +22,10 @@ const emit = defineEmits<{
 
 <template>
 	<div class="space-y-4">
-		<div v-if="loading" class="text-center text-sm text-muted-foreground py-6">
-			{{ t('components.comments.list.loading') }}
+		<div v-if="loading" class="flex items-center justify-center py-6">
+			<div class="size-64 lottie-throbber">
+				<Lottie name="throbber" />
+			</div>
 		</div>
 
 		<div v-else-if="error" class="flex flex-col items-center gap-3 py-6 text-center">
