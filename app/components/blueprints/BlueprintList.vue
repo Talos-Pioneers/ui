@@ -253,6 +253,7 @@ interface UnifiedFilterOption {
 	value: string // Prefixed identifier like "region:valley_iv", "tag:123", etc.
 	label: string
 	icon?: string | null
+	category: string // Display label for the category badge
 	filterKey: string // The filter key to update: 'region', 'tags.id', 'facility', 'item_input', 'item_output'
 	originalValue: string // The actual value to use in the filter
 }
@@ -266,6 +267,7 @@ const unifiedFilterOptions = computed<UnifiedFilterOption[]>(() => {
 			value: `region:${region.value}`,
 			label: region.label,
 			icon: null,
+			category: t('components.blueprints.list.filters.region'),
 			filterKey: 'region',
 			originalValue: region.value,
 		})
@@ -277,6 +279,7 @@ const unifiedFilterOptions = computed<UnifiedFilterOption[]>(() => {
 			value: `tag:${tag.id}`,
 			label: tag.name,
 			icon: null,
+			category: t('components.blueprints.list.filters.tags'),
 			filterKey: 'tags.id',
 			originalValue: String(tag.id),
 		})
@@ -288,6 +291,7 @@ const unifiedFilterOptions = computed<UnifiedFilterOption[]>(() => {
 			value: `facility:${facility.slug}`,
 			label: facility.name,
 			icon: facility.icon,
+			category: t('components.blueprints.list.filters.facilitiesUsed'),
 			filterKey: 'facility',
 			originalValue: facility.slug,
 		})
@@ -299,6 +303,7 @@ const unifiedFilterOptions = computed<UnifiedFilterOption[]>(() => {
 			value: `item_input:${item.slug}`,
 			label: item.name,
 			icon: item.icon,
+			category: t('components.blueprints.list.filters.inputProducts'),
 			filterKey: 'item_input',
 			originalValue: item.slug,
 		})
@@ -310,6 +315,7 @@ const unifiedFilterOptions = computed<UnifiedFilterOption[]>(() => {
 			value: `item_output:${item.slug}`,
 			label: item.name,
 			icon: item.icon,
+			category: t('components.blueprints.list.filters.outputProducts'),
 			filterKey: 'item_output',
 			originalValue: item.slug,
 		})
@@ -758,6 +764,7 @@ const unifiedFilterModel = computed({
 										value: opt.value,
 										label: opt.label,
 										icon: opt.icon,
+										category: opt.category,
 									}))
 								"
 								:placeholder="

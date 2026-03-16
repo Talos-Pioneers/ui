@@ -29,6 +29,7 @@ interface SearchableOption {
 	value: string
 	label: string
 	icon?: string | null
+	category?: string
 }
 
 const props = withDefaults(
@@ -54,7 +55,11 @@ const modelValue = defineModel<string[]>({ default: [] })
 const filteredOptions = computed(() =>
 	query.value === ''
 		? props.options
-		: props.options.filter((option) => contains(option.label, query.value))
+		: props.options.filter(
+				(option) =>
+					contains(option.label, query.value) ||
+					(option.category && contains(option.category, query.value))
+			)
 )
 </script>
 <template>
@@ -144,8 +149,14 @@ const filteredOptions = computed(() =>
 								:alt="option.label"
 								class="size-6 object-contain rounded-sm"
 							/>
-							<span>
+							<span class="truncate">
 								{{ option.label }}
+							</span>
+							<span
+								v-if="option.category"
+								class="shrink-0 text-[10px] leading-none px-1.5 py-0.5 rounded bg-muted text-muted-foreground"
+							>
+								{{ option.category }}
 							</span>
 							<ComboboxItemIndicator
 								class="ml-auto inline-flex items-center justify-center"
