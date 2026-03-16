@@ -45,13 +45,13 @@ const emit = defineEmits<{
 }>()
 
 const { copy, copied } = useClipboard()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const sanctumClient = useSanctumClient()
 const { isAuthenticated } = useSanctumAuth()
 const dropdownOpen = ref(false)
 const shareCopied = ref(false)
 const handleShareLink = async () => {
-	const url = `${window.location.origin}/blueprints/${props.blueprint.id}`
+	const url = `${window.location.origin}/${locale.value}/blueprints/${props.blueprint.id}`
 	await copy(url)
 	shareCopied.value = true
 	toast.success(t('components.blueprints.card.shareLinkCopied'))
