@@ -28,6 +28,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
 	<TagsInputRoot
 		v-slot="slotProps"
 		v-bind="forwarded"
+		data-slot="tags-input"
 		:class="
 			cn(
 				'flex flex-wrap gap-2 items-center rounded-md border border-input bg-background px-2 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none',

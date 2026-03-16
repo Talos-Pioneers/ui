@@ -441,6 +441,13 @@ body {
 		filter: invert(1);
 		opacity: 0.06;
 	}
+	/* Dark mode: tone down the white input-pattern.png on dark backgrounds.
+	   blend-mode soft-light mixes the white pattern into the bg color subtly. */
+	[data-theme="dark"] [data-slot="input"],
+	[data-theme="dark"] [data-slot="select-trigger"],
+	[data-theme="dark"] [data-slot="tags-input"] {
+		background-blend-mode: soft-light;
+	}
 	/* Dark mode: CSS filter to invert the light throbber instead of loading
 	   a separate dark lottie file (saves ~2 MB). brightness + contrast tuned
 	   to match the designer's Throbber_Dark.lottie output. */
