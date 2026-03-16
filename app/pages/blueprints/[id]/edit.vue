@@ -117,14 +117,14 @@ const form = usePrecognitionForm<Schema>(
 	}
 )
 
-// Fetch facilities, items, and tags
-const { data: facilitiesData } = await useSanctumFetch<{ data: Facility[] }>(
+// Fetch facilities, items, and tags (lazy to avoid blocking navigation via Suspense)
+const { data: facilitiesData } = useLazySanctumFetch<{ data: Facility[] }>(
 	'/api/v1/facilities'
 )
-const { data: itemsData } = await useSanctumFetch<{ data: Item[] }>(
+const { data: itemsData } = useLazySanctumFetch<{ data: Item[] }>(
 	'/api/v1/items'
 )
-const { data: tagsData } = await useSanctumFetch<{ data: Tag[] }>(
+const { data: tagsData } = useLazySanctumFetch<{ data: Tag[] }>(
 	'/api/v1/tags'
 )
 

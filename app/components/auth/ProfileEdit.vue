@@ -26,7 +26,7 @@ const form = usePrecognitionForm<Schema>('put', '/api/v1/profile', {
 });
 
 const state = form.fields;
-const { data, status, error, refresh } = await useSanctumFetch<ProfileResponse>('/api/v1/profile');
+const { data, status, error, refresh } = useLazySanctumFetch<ProfileResponse>('/api/v1/profile');
 const profile = computed(() => data.value?.user ?? null);
 watchEffect(() => {
     if (status.value === 'success') {

@@ -67,7 +67,7 @@ const {
 	status: blueprintStatus,
 	error: blueprintError,
 	refresh: refreshBlueprint,
-} = await useSanctumFetch<BlueprintResponse>(
+} = useLazySanctumFetch<BlueprintResponse>(
 	() => `/api/v1/blueprints/${blueprintId.value}`
 )
 
@@ -131,11 +131,9 @@ watchEffect(() => {
 			statusMessage: blueprintError.value.statusMessage,
 		})
 	}
+	// Data still loading (lazy fetch) — skip SEO setup, template shows loading state
 	if (!blueprint.value) {
-		throw createError({
-			statusCode: 404,
-			statusMessage: t('pages.blueprints.detail.notFound'),
-		})
+		return
 	}
 
 	const siteName = t('pages.blueprints.detail.siteName')
@@ -205,7 +203,7 @@ const {
 	status: commentsStatus,
 	error: commentsError,
 	refresh: refreshComments,
-} = await useSanctumFetch<CommentListResponse>(
+} = useLazySanctumFetch<CommentListResponse>(
 	() => `/api/v1/blueprints/${blueprintId.value}/comments`,
 	() => ({
 		method: 'get',
