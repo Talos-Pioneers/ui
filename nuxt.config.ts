@@ -82,6 +82,7 @@ export default defineNuxtConfig({
 		'@sentry/nuxt/module',
 		'@nuxt/eslint',
 		'nuxt-lottie',
+		'nuxt-easy-lightbox',
 		'@nuxt/scripts',
 	],
 

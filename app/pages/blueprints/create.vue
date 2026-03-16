@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Plus, X, GripVertical } from 'lucide-vue-next'
+import { Plus, X, GripVertical, ZoomIn } from 'lucide-vue-next'
 import { Input } from '~/components/ui/input'
 import { Button } from '~/components/ui/button'
 import { Label } from '~/components/ui/label'
@@ -144,6 +144,17 @@ const {
 	removeImage,
 	onImageReorder,
 } = gallery
+
+// Lightbox state for image preview
+const lightboxVisible = ref(false)
+const lightboxIndex = ref(0)
+const lightboxImgs = computed(() =>
+	imageItems.value.map((item) => item.preview)
+)
+const showLightbox = (index: number) => {
+	lightboxIndex.value = index
+	lightboxVisible.value = true
+}
 
 // Sync slugs to IDs and update form fields before submission
 const syncFormFields = () => {
@@ -468,6 +479,15 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 												<button
 													type="button"
 													class="p-2 bg-white/90 rounded hover:bg-white transition-colors"
+													@click="showLightbox(index)"
+												>
+													<ZoomIn
+														class="size-4 text-foreground"
+													/>
+												</button>
+												<button
+													type="button"
+													class="p-2 bg-white/90 rounded hover:bg-white transition-colors"
 													@click="removeImage(item.id)"
 												>
 													<X
@@ -537,6 +557,13 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 									multiple
 									class="hidden"
 									@change="handleFileSelect"
+								/>
+
+								<VueEasyLightbox
+									:visible="lightboxVisible"
+									:imgs="lightboxImgs"
+									:index="lightboxIndex"
+									@hide="lightboxVisible = false"
 								/>
 
 								<p class="text-xs text-muted-foreground">

@@ -307,6 +307,17 @@ const galleryDisplayItems = computed(() => {
 		},
 	]
 })
+
+// Lightbox state for image preview
+const lightboxVisible = ref(false)
+const lightboxIndex = ref(0)
+const lightboxImgs = computed(() =>
+	galleryDisplayItems.value.map((img) => img.url || img.thumbnail)
+)
+const showLightbox = (index: number) => {
+	lightboxIndex.value = index
+	lightboxVisible.value = true
+}
 const formattedCreatedAt = computed(() =>
 	blueprint.value ? useFormatDate(blueprint.value.created_at) : ''
 )
@@ -601,7 +612,7 @@ const handleBlueprintDeleted = () => {
 							class="relative rounded-lg overflow-hidden border border-border bg-card"
 						>
 							<Carousel
-								class="relative"
+								class="relative group/carousel"
 								@init-api="handleCarouselInit"
 							>
 								<CarouselContent>
@@ -614,17 +625,32 @@ const handleBlueprintDeleted = () => {
 										<img
 											:src="image.url || image.thumbnail"
 											:alt="image.name"
-											class="w-full aspect-video object-center object-contain"
+											class="w-full aspect-video object-center object-contain cursor-zoom-in"
+											@click="showLightbox(index)"
 										/>
 									</CarouselItem>
 								</CarouselContent>
 								<CarouselPrevious
-									class="absolute left-4 top-1/2 -translate-y-1/2"
+									v-if="galleryDisplayItems.length > 1"
+									class="absolute left-4 top-1/2 -translate-y-1/2 opacity-0 group-hover/carousel:opacity-100 transition-opacity duration-200"
 								/>
 								<CarouselNext
-									class="absolute right-4 top-1/2 -translate-y-1/2"
+									v-if="galleryDisplayItems.length > 1"
+									class="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover/carousel:opacity-100 transition-opacity duration-200"
 								/>
+								<div
+									v-if="galleryDisplayItems.length > 1"
+									class="absolute bottom-3 right-3 bg-black/60 text-white text-xs px-2.5 py-1 rounded-full"
+								>
+									{{ activeSlide + 1 }}/{{ galleryDisplayItems.length }}
+								</div>
 							</Carousel>
+						<VueEasyLightbox
+							:visible="lightboxVisible"
+							:imgs="lightboxImgs"
+							:index="lightboxIndex"
+							@hide="lightboxVisible = false"
+						/>
 						</div>
 						<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
 							<button
