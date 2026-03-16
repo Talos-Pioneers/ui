@@ -427,5 +427,8 @@
 	"pages.collections.edit.errorValidation": "Veuillez corriger les erreurs de validation.",
 	"pages.collections.edit.errorFailed": "Échec de la mise à jour de la collection. Veuillez réessayer.",
 	"theme.label": "Thème",
-	"theme.toggle": "Basculer le thème"
+	"theme.toggle": "Basculer le thème",
+	"components.blueprints.list.pagination.showPerPage": "Afficher par page",
+	"components.blueprints.card.shareLinkCopied": "Lien copié !",
+	"components.blueprints.card.shareTooltip": "Partager"
 }

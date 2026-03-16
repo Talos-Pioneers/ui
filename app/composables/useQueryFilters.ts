@@ -64,6 +64,7 @@ export function useQueryFilters<T extends QueryFiltersConfig>(config: T) {
 			return (
 				value !== null &&
 				value !== '' &&
+				value !== 'any' &&
 				(Array.isArray(value) ? value.length > 0 : true)
 			)
 		})
@@ -100,6 +101,7 @@ export function useQueryFilters<T extends QueryFiltersConfig>(config: T) {
 				filterConfig &&
 				value !== null &&
 				value !== '' &&
+				value !== 'any' &&
 				(Array.isArray(value) ? value.length > 0 : true)
 			) {
 				if (filterConfig.type === 'array') {

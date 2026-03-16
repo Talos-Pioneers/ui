@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Plus, X, GripVertical } from 'lucide-vue-next'
+import { Plus, X, GripVertical, ZoomIn } from 'lucide-vue-next'
 import { Input } from '~/components/ui/input'
 import { Button } from '~/components/ui/button'
 import { Label } from '~/components/ui/label'
@@ -71,14 +71,14 @@ const form = usePrecognitionForm<Schema>('post', '/api/v1/blueprints', {
 	height: null,
 })
 
-// Fetch facilities, items, and tags
-const { data: facilitiesData } = await useSanctumFetch<{ data: Facility[] }>(
+// Fetch facilities, items, and tags (lazy to avoid blocking navigation via Suspense)
+const { data: facilitiesData } = await useLazySanctumFetch<{ data: Facility[] }>(
 	'/api/v1/facilities'
 )
-const { data: itemsData } = await useSanctumFetch<{ data: Item[] }>(
+const { data: itemsData } = await useLazySanctumFetch<{ data: Item[] }>(
 	'/api/v1/items'
 )
-const { data: tagsData } = await useSanctumFetch<{ data: Tag[] }>(
+const { data: tagsData } = await useLazySanctumFetch<{ data: Tag[] }>(
 	'/api/v1/tags'
 )
 
@@ -144,6 +144,17 @@ const {
 	removeImage,
 	onImageReorder,
 } = gallery
+
+// Lightbox state for image preview
+const lightboxVisible = ref(false)
+const lightboxIndex = ref(0)
+const lightboxImgs = computed(() =>
+	imageItems.value.map((item) => item.preview)
+)
+const showLightbox = (index: number) => {
+	lightboxIndex.value = index
+	lightboxVisible.value = true
+}
 
 // Sync slugs to IDs and update form fields before submission
 const syncFormFields = () => {
@@ -462,7 +473,16 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 													@mousedown.stop
 												>
 													<GripVertical
-														class="size-4 text-foreground"
+														class="size-4 text-gray-800"
+													/>
+												</button>
+												<button
+													type="button"
+													class="p-2 bg-white/90 rounded hover:bg-white transition-colors"
+													@click="showLightbox(index)"
+												>
+													<ZoomIn
+														class="size-4 text-gray-800"
 													/>
 												</button>
 												<button
@@ -471,7 +491,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 													@click="removeImage(item.id)"
 												>
 													<X
-														class="size-4 text-foreground"
+														class="size-4 text-gray-800"
 													/>
 												</button>
 											</div>
@@ -537,6 +557,13 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 									multiple
 									class="hidden"
 									@change="handleFileSelect"
+								/>
+
+								<VueEasyLightbox
+									:visible="lightboxVisible"
+									:imgs="lightboxImgs"
+									:index="lightboxIndex"
+									@hide="lightboxVisible = false"
 								/>
 
 								<p class="text-xs text-muted-foreground">

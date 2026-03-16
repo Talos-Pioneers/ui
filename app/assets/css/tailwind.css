@@ -48,6 +48,7 @@
 	--login-title: oklch(0.2727 0 0);                      /* #272727 CoolGray/90 */
 	--login-bracket: oklch(0.6600 0 0);                    /* #929292 CoolGray/50 */
 	--login-caption: oklch(0.7444 0 0);                    /* #ACACAC CoolGray/40 */
+	--login-input-bg: oklch(1 0 0);                        /* #FFFFFF White */
 	--login-input-border: oklch(0.8452 0 0);               /* #CCCCCC CoolGray/30 */
 	--login-input-placeholder: oklch(0.5693 0 0);          /* #777777 CoolGray/60 */
 	--login-link: oklch(0.2727 0 0);                       /* #272727 CoolGray/90 */
@@ -55,11 +56,23 @@
 	--login-social-border: oklch(0.4748 0 0);              /* #5C5C5C CoolGray/70 */
 	--login-social-text: oklch(0.4748 0 0);                /* #5C5C5C CoolGray/70 */
 	--login-social-icon: oklch(0.4748 0 0);                /* #5C5C5C CoolGray/70 */
+	--login-social-hover: oklch(0.3211 0 0);               /* #333333 CoolGray/80 darken on hover */
+	--login-close-bg: oklch(1 0 0);                        /* #FFFFFF White */
 	--login-close-border: oklch(0.6600 0 0);               /* #929292 CoolGray/50 */
 	--login-close-icon: oklch(0.5693 0 0);                 /* #777777 CoolGray/60 */
+	--login-card-bg: oklch(0.9692 0 0);                    /* #F2F2F2 matches --muted light */
+	--page-social-text: oklch(0.4748 0 0);                 /* #5C5C5C CoolGray/70 — same as modal on white bg */
+	--page-social-border: oklch(0.4748 0 0);
+	--page-social-hover: oklch(0.3211 0 0);                /* #333333 CoolGray/80 — darken on hover */
 	--nav-link: oklch(0.5693 0 0);                        /* #777777 CoolGray/60 */
 	--nav-link-active: oklch(0.3665 0 0);                 /* #444444 CoolGray/80 */
 	--nav-underline: oklch(0 0 0);                        /* #000000 Black */
+	--profile-banner-bg: oklch(0.2727 0 0);                   /* #272727 CoolGray/90 — bold on white */
+	--profile-banner-text: oklch(1 0 0);                      /* #FFFFFF */
+	--profile-banner-muted: oklch(1 0 0 / 0.8);              /* white/80 */
+	--region-label: oklch(0.4748 0 0);                        /* #5C5C5C CoolGray/70 */
+	--region-box-bg: oklch(0.9953 0 0);                      /* #FDFDFD near-white */
+	--region-box-border: oklch(0.8452 0 0);                  /* #CCCCCC CoolGray/30 */
 	--wave-bg: oklch(0.940 0 0);                             /* #EAEAEA per Figma */
 	--muted: oklch(0.9692 0 0);                              /* ~#F2F2F2 CoolGray/15 (neutralized) */
 	--muted-foreground: oklch(0.5693 0 0);                  /* #777777 CoolGray/60 */
@@ -82,6 +95,7 @@
 	--sidebar-accent: oklch(0.9692 0 0);
 	--sidebar-accent-foreground: oklch(0.251 0 0);
 	--sidebar-border: oklch(0.9257 0 0);
+	--sidebar-divider: oklch(0.7444 0 0);                 /* #ACACAC CoolGray/40 */
 	--sidebar-ring: oklch(0.7147 0.1211 194.7836);
 	--font-sans: 'HarmonyOS_Sans', sans-serif;
 	--font-secondary: 'DM Sans', sans-serif;
@@ -128,7 +142,7 @@ html[lang='zh-TW'] {
 }
 
 html[lang='ja'] {
-	--font-sans: 'Noto Sans JP', 'HarmonyOS_Sans', sans-serif;
+	--font-sans: 'HarmonyOS_Sans', 'Noto Sans JP', 'HarmonyOS_Sans_SC', sans-serif;
 }
 
 [data-theme="dark"] {
@@ -175,6 +189,31 @@ html[lang='ja'] {
 	--nav-link: oklch(0.8452 0 0);                 /* #CCCCCC CoolGray/30 */
 	--nav-link-active: oklch(0.9051 0.1546 194.2590); /* #00FFFE Primary/60 */
 	--nav-underline: oklch(0.9051 0.1546 194.2590);   /* #00FFFE Primary/60 */
+	--login-title: oklch(0.9134 0 0);              /* #E3E3E3 CoolGray/20 */
+	--login-bracket: oklch(0.6600 0 0);            /* #929292 CoolGray/50 (same as light) */
+	--login-caption: oklch(0.6600 0 0);            /* #929292 CoolGray/50 */
+	--login-input-bg: oklch(0.3710 0 0);           /* #454545 */
+	--login-input-border: oklch(0.6600 0 0);       /* #929292 CoolGray/50 */
+	--login-input-placeholder: oklch(0.5693 0 0);  /* #777777 CoolGray/60 (same as light) */
+	--login-link: oklch(0.9134 0 0);               /* #E3E3E3 CoolGray/20 */
+	--login-divider: oklch(0.7444 0 0);            /* #ACACAC CoolGray/40 (same as light) */
+	--login-social-border: oklch(0.2308 0 0);      /* #1D1D1D CoolGray/100 */
+	--login-social-text: oklch(0.2308 0 0);        /* #1D1D1D CoolGray/100 */
+	--login-social-icon: oklch(0.2308 0 0);        /* #1D1D1D CoolGray/100 */
+	--login-social-hover: oklch(0.4748 0 0);       /* #5C5C5C CoolGray/70 lighten on hover */
+	--login-close-bg: oklch(0.4071 0 0);           /* #4D4D4D */
+	--login-close-border: oklch(0.5693 0 0);       /* #777777 CoolGray/60 */
+	--login-close-icon: oklch(0.6600 0 0);         /* #929292 CoolGray/50 */
+	--login-card-bg: oklch(0.3264 0 0);            /* #353535 */
+	--page-social-text: oklch(0.7444 0 0);         /* #ACACAC CoolGray/40 — visible on dark bg */
+	--page-social-border: oklch(0.7444 0 0);
+	--page-social-hover: oklch(0.8452 0 0);        /* #CCCCCC CoolGray/30 — lighten on hover */
+	--profile-banner-bg: oklch(0.3211 0 0);    /* #333333 elevated above bg */
+	--profile-banner-text: oklch(1 0 0);       /* #FFFFFF */
+	--profile-banner-muted: oklch(1 0 0 / 0.7); /* white/70 — slightly more muted on lighter banner */
+	--region-label: oklch(0.8452 0 0);         /* #CCCCCC CoolGray/30 */
+	--region-box-bg: oklch(0.3211 0 0);        /* #333333 sidebar */
+	--region-box-border: oklch(0.5693 0 0);    /* #777777 CoolGray/60 */
 	--wave-bg: oklch(0.2727 0 0);              /* #272727 CoolGray/90 per Figma */
 	--muted: oklch(0.4748 0 0);                    /* #5C5C5C CoolGray/70 */
 	--muted-foreground: oklch(0.8452 0 0);         /* #CCCCCC CoolGray/30 */
@@ -197,6 +236,7 @@ html[lang='ja'] {
 	--sidebar-accent: oklch(0.4748 0 0);           /* #5C5C5C CoolGray/70 */
 	--sidebar-accent-foreground: oklch(1 0 0);     /* #FFFFFF CoolGray/10 */
 	--sidebar-border: oklch(0.7444 0 0);           /* #ACACAC CoolGray/40 */
+	--sidebar-divider: oklch(0.5693 0 0);          /* #777777 CoolGray/60 */
 	--sidebar-ring: oklch(0.9051 0.1546 194.2590); /* #00FFFE Primary/60 */
 	--shadow-x: 0rem;
 	--shadow-y: 0.125rem;
@@ -257,11 +297,18 @@ html[lang='ja'] {
 	--color-sidebar-accent: var(--sidebar-accent);
 	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
 	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-divider: var(--sidebar-divider);
 	--color-sidebar-ring: var(--sidebar-ring);
 
 	--color-nav-link: var(--nav-link);
 	--color-nav-link-active: var(--nav-link-active);
 	--color-nav-underline: var(--nav-underline);
+	--color-profile-banner-bg: var(--profile-banner-bg);
+	--color-profile-banner-text: var(--profile-banner-text);
+	--color-profile-banner-muted: var(--profile-banner-muted);
+	--color-region-label: var(--region-label);
+	--color-region-box-bg: var(--region-box-bg);
+	--color-region-box-border: var(--region-box-border);
 
 	--breakpoint-nav: 850px;
 
@@ -361,7 +408,20 @@ body {
 	.login-modal-bg {
 		background:
 			linear-gradient(180deg, transparent 55%, oklch(0.9054 0.1546 194.7689 / 0.9) 90%),
-			linear-gradient(180deg, var(--muted) 55%, var(--primary) 90%);
+			linear-gradient(180deg, var(--login-card-bg) 55%, var(--primary) 90%);
+	}
+	.login-modal-bg:has([data-login-success]) {
+		background:
+			linear-gradient(180deg, transparent 62%, oklch(0.9054 0.1546 194.7689 / 0.9) 90%),
+			linear-gradient(180deg, var(--login-card-bg) 62%, var(--primary) 90%);
+	}
+
+	/* Login page context: override modal social tokens with page-specific
+	   values so buttons are visible on the plain page background */
+	.login-page {
+		--login-social-text: var(--page-social-text);
+		--login-social-border: var(--page-social-border);
+		--login-social-hover: var(--page-social-hover);
 	}
 
 	.wave-bg {
@@ -402,10 +462,34 @@ body {
 		filter: invert(1);
 		opacity: 0.06;
 	}
-	/* Auth modals: responsive tile sizing within small container */
+	/* Dark mode: tone down the white input-pattern.png on dark backgrounds.
+	   blend-mode soft-light mixes the white pattern into the bg color subtly.
+	   bg-color at 30% opacity gives all patterned inputs the same tint. */
+	[data-theme="dark"] [data-slot="input"],
+	[data-theme="dark"] [data-slot="select-trigger"],
+	[data-theme="dark"] [data-slot="tags-input"] {
+		background-blend-mode: soft-light;
+		background-color: oklch(0.5693 0 0 / 0.3);
+	}
+	/* Dark mode: CSS filter to invert the light throbber instead of loading
+	   a separate dark lottie file (saves ~2 MB). brightness + contrast tuned
+	   to match the designer's Throbber_Dark.lottie output. */
+	[data-theme="dark"] .lottie-throbber {
+		filter: invert(1) brightness(1.05) contrast(0.9);
+	}
+	/* Dark mode: invert the intro animation overlay (background + video)
+	   using the same CSS filter approach as the lottie throbber.
+	   brightness + contrast tuned to match Loading_Dark.webm output. */
+	[data-theme="dark"] .intro-overlay {
+		filter: invert(1) brightness(1.05) contrast(1.1);
+	}
+	/* Auth modals: responsive tile sizing within small container,
+	   fade waves out where the gradient transitions to cyan */
 	.wave-bg.login-modal-bg::before,
 	.wave-bg.login-modal-bg::after {
 		background-size: 50%;
+		-webkit-mask-image: linear-gradient(to bottom, black 62%, transparent 80%);
+		mask-image: linear-gradient(to bottom, black 62%, transparent 80%);
 	}
 	.wave-bg.login-modal-bg::after {
 		background-position: 50% 50%;

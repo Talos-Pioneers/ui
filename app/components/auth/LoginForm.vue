@@ -79,7 +79,7 @@ const handleRegisterClick = () => {
 							</div>
 							<Input
 								v-model="email"
-								class="pl-10 border-0 border-b border-(--login-input-border) rounded-none bg-white placeholder:text-(--login-input-placeholder)"
+								class="pl-10 border-0 border-b border-(--login-input-border) rounded-none bg-(--login-input-bg) placeholder:text-(--login-input-placeholder)"
 								type="email"
 								:placeholder="t('auth.login.emailPlaceholder')"
 							/>
@@ -126,38 +126,32 @@ const handleRegisterClick = () => {
 				<!-- Social Login Buttons -->
 				<div class="flex flex-col gap-3">
 					<Button
-						class="bg-transparent border-(--login-social-border)!"
+						class="bg-transparent hover:bg-transparent text-(--login-social-text) hover:text-(--login-social-hover) border-2 border-(--login-social-border) hover:border-(--login-social-hover)"
 						as="a"
 						:href="googleUrl"
-						variant="outline"
+						variant="ghost"
 						rounded="none"
 						:with-wave="false"
 					>
-						<GoogleIcon class="text-(--login-social-icon)" />
-						<span
-							class="text-(--login-social-text) font-medium"
-							>{{ t('auth.common.googleLogin') }}</span
-						>
+						<GoogleIcon />
+						<span class="font-medium">{{ t('auth.common.googleLogin') }}</span>
 					</Button>
 					<Button
-						class="bg-transparent border-(--login-social-border)!"
+						class="bg-transparent hover:bg-transparent text-(--login-social-text) hover:text-(--login-social-hover) border-2 border-(--login-social-border) hover:border-(--login-social-hover)"
 						as="a"
 						:href="discordUrl"
-						variant="outline"
+						variant="ghost"
 						rounded="none"
 						:with-wave="false"
 					>
-						<DiscordIcon class="text-(--login-social-icon)" />
-						<span
-							class="text-(--login-social-text) font-medium"
-							>{{ t('auth.common.discordLogin') }}</span
-						>
+						<DiscordIcon />
+						<span class="font-medium">{{ t('auth.common.discordLogin') }}</span>
 					</Button>
 				</div>
 			</div>
 
 			<!-- Success State -->
-			<div v-else key="success" class="text-center">
+			<div v-else key="success" class="text-center" data-login-success>
 				<!-- Title Section -->
 				<div class="text-center mb-6 flex flex-col">
 					<h1
@@ -178,24 +172,15 @@ const handleRegisterClick = () => {
 
 				<!-- Success Message -->
 				<div class="mb-6">
-					<p class="text-foreground mb-4">
+					<p class="text-(--login-title) mb-4">
 						{{ t('auth.login.successMessage') }}
 					</p>
-					<p class="text-sm text-muted-foreground">
+					<p class="text-sm text-(--login-link)">
 						{{ t('auth.login.instructions') }}
 					</p>
 				</div>
 
-				<!-- Close Button -->
-				<Button
-					class="w-full"
-					variant="default"
-					rounded="none"
-					@click="close()"
-				>
-					{{ t('auth.common.loginLink') }}
-				</Button>
-			</div>
+				</div>
 		</Transition>
 	</div>
 </template>

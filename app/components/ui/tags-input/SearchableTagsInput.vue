@@ -2,14 +2,14 @@
 import {
 	ComboboxAnchor,
 	ComboboxContent,
-	ComboboxGroup,
 	ComboboxInput,
 	ComboboxItem,
 	ComboboxItemIndicator,
-	ComboboxLabel,
+	ComboboxPortal,
 	ComboboxRoot,
 	ComboboxTrigger,
 	ComboboxViewport,
+	ComboboxVirtualizer,
 	useFilter,
 } from 'reka-ui'
 import {
@@ -21,7 +21,6 @@ import {
 } from '@/components/ui/tags-input'
 
 import { computed, ref, watch } from 'vue'
-import { Button } from '~/components/ui/button'
 import { ChevronDown } from 'lucide-vue-next'
 import { cn } from '~/lib/utils'
 import CheckmarkIcon from '~/components/icons/CheckmarkIcon.vue'
@@ -30,6 +29,7 @@ interface SearchableOption {
 	value: string
 	label: string
 	icon?: string | null
+	category?: string
 }
 
 const props = withDefaults(
@@ -55,7 +55,11 @@ const modelValue = defineModel<string[]>({ default: [] })
 const filteredOptions = computed(() =>
 	query.value === ''
 		? props.options
-		: props.options.filter((option) => contains(option.label, query.value))
+		: props.options.filter(
+				(option) =>
+					contains(option.label, query.value) ||
+					(option.category && contains(option.category, query.value))
+			)
 )
 </script>
 <template>
@@ -63,6 +67,7 @@ const filteredOptions = computed(() =>
 		v-model="modelValue"
 		multiple
 		ignore-filter
+		open-on-click
 		:class="cn('relative', props.class)"
 	>
 		<ComboboxAnchor>
@@ -70,6 +75,7 @@ const filteredOptions = computed(() =>
 				v-model="modelValue"
 				delimiter=""
 				:with-pattern="props.withPattern"
+				class="px-3 py-2 min-h-10.5 [&_svg:not([class*='text-'])]:text-muted-foreground"
 			>
 				<template v-if="props.displayTags">
 					<TagsInputItem
@@ -92,70 +98,75 @@ const filteredOptions = computed(() =>
 				<ComboboxInput v-model="query" as-child>
 					<TagsInputInput
 						:placeholder="placeholder ?? 'Search...'"
-						class="focus:outline-none flex-1 rounded !bg-transparent px-1"
+						class="focus:outline-none flex-1 bg-transparent px-0 placeholder:text-muted-foreground"
 						@keydown.enter.prevent
 					/>
 				</ComboboxInput>
 
-				<ComboboxTrigger as-child>
-					<Button
-						size="icon-sm"
-						variant="ghost"
-						class="order-last self-start ml-auto before:hidden"
-						type="button"
-					>
-						<ChevronDown class="size-3.5" />
-					</Button>
+				<ComboboxTrigger class="group order-last self-center ml-auto shrink-0" tabindex="-1">
+					<ChevronDown class="size-4 opacity-50 transition-transform duration-150 group-data-[state=open]:rotate-180" />
 				</ComboboxTrigger>
 			</TagsInput>
 		</ComboboxAnchor>
 
-		<ComboboxContent
-			class="absolute z-10 w-full max-w-[418px] bg-background rounded will-change-[opacity,transform] border-1 max-h-[300px] mt-2 py-1"
-			align-flip
-			prioritize-position
-		>
-			<ComboboxViewport
-				class="scroll-py-1 px-1 overflow-x-hidden overflow-y-scroll"
-				style="scrollbar-width: thin"
+		<ComboboxPortal>
+			<ComboboxContent
+				position="popper"
+				body-lock
+				disable-outside-pointer-events
+				class="z-50 w-[var(--reka-combobox-trigger-width)] bg-popover text-popover-foreground rounded-none border py-1 shadow-md overflow-hidden"
+				:side-offset="4"
 			>
-				<ComboboxGroup>
-					<ComboboxLabel
-						v-if="!filteredOptions?.length"
-						class="bg-background px-2 py-1.5 text-sm"
+				<ComboboxViewport
+					class="max-h-[300px] scroll-py-1 px-1 overflow-x-hidden overflow-y-auto"
+					style="scrollbar-width: thin"
+				>
+					<p
+						v-if="!filteredOptions.length"
+						class="px-2 py-1.5 text-sm text-muted-foreground"
 					>
 						No results
-					</ComboboxLabel>
-
-					<ComboboxItem
-						v-for="(option, index) in filteredOptions"
-						:key="index"
-						class="data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground [&_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
-						:value="option.value"
-						@select="
-							() => {
-								query = ''
-								// focusInput()
-							}
-						"
+					</p>
+					<ComboboxVirtualizer
+						v-else
+						v-slot="{ option }"
+						:options="filteredOptions"
+						:text-content="(opt: any) => opt.label"
+						:estimate-size="36"
 					>
-						<img
-							v-if="option.icon"
-							:src="option.icon"
-							:alt="option.label"
-							class="size-6 object-contain rounded-sm"
-						/>
-						<span>
-							{{ option.label }}
-						</span>
-						<ComboboxItemIndicator
-							class="ml-auto inline-flex items-center justify-center"
+						<ComboboxItem
+							class="w-full data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground [&_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+							:value="option.value"
+							@select="
+								() => {
+									query = ''
+								}
+							"
 						>
-							<CheckmarkIcon />
-						</ComboboxItemIndicator>
-					</ComboboxItem>
-				</ComboboxGroup>
-			</ComboboxViewport>
-		</ComboboxContent>
+							<img
+								v-if="option.icon"
+								:src="option.icon"
+								:alt="option.label"
+								class="size-6 object-contain rounded-sm"
+							/>
+							<span class="truncate">
+								{{ option.label }}
+							</span>
+							<span
+								v-if="option.category"
+								class="shrink-0 text-[10px] leading-none px-1.5 py-0.5 rounded bg-muted text-muted-foreground"
+							>
+								{{ option.category }}
+							</span>
+							<ComboboxItemIndicator
+								class="ml-auto inline-flex items-center justify-center"
+							>
+								<CheckmarkIcon />
+							</ComboboxItemIndicator>
+						</ComboboxItem>
+					</ComboboxVirtualizer>
+				</ComboboxViewport>
+			</ComboboxContent>
+		</ComboboxPortal>
 	</ComboboxRoot>
 </template>

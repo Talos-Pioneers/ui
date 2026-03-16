@@ -427,5 +427,8 @@
 	"pages.collections.edit.errorValidation": "Пожалуйста, исправьте ошибки валидации.",
 	"pages.collections.edit.errorFailed": "Не удалось обновить коллекцию. Пожалуйста, попробуйте еще раз.",
 	"theme.label": "Тема",
-	"theme.toggle": "Переключить тему"
+	"theme.toggle": "Переключить тему",
+	"components.blueprints.list.pagination.showPerPage": "Показать на странице",
+	"components.blueprints.card.shareLinkCopied": "Ссылка скопирована!",
+	"components.blueprints.card.shareTooltip": "Поделиться"
 }

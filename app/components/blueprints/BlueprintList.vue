@@ -187,7 +187,7 @@ const handleRegionClick = (regionValue: string) => {
 }
 
 const handleServerRegionChange = (value: any) => {
-	if (!value || value === 'any') {
+	if (!value) {
 		emit('clear-filter', 'server_region')
 	} else {
 		emit('update:filter', 'server_region', value)
@@ -245,13 +245,15 @@ const perPageModel = computed({
 	set: (value: number) => emit('update:per-page', value),
 })
 
-const { open: sidebarOpen, toggleSidebar } = useSidebar()
+const { open: sidebarOpen, isMobile, openMobile, toggleSidebar } = useSidebar()
+const isSidebarVisible = computed(() => isMobile.value ? openMobile.value : sidebarOpen.value)
 
 // Unified filter options - combines all filterable items
 interface UnifiedFilterOption {
 	value: string // Prefixed identifier like "region:valley_iv", "tag:123", etc.
 	label: string
 	icon?: string | null
+	category: string // Display label for the category badge
 	filterKey: string // The filter key to update: 'region', 'tags.id', 'facility', 'item_input', 'item_output'
 	originalValue: string // The actual value to use in the filter
 }
@@ -265,6 +267,7 @@ const unifiedFilterOptions = computed<UnifiedFilterOption[]>(() => {
 			value: `region:${region.value}`,
 			label: region.label,
 			icon: null,
+			category: t('components.blueprints.list.filters.region'),
 			filterKey: 'region',
 			originalValue: region.value,
 		})
@@ -276,6 +279,7 @@ const unifiedFilterOptions = computed<UnifiedFilterOption[]>(() => {
 			value: `tag:${tag.id}`,
 			label: tag.name,
 			icon: null,
+			category: t('components.blueprints.list.filters.tags'),
 			filterKey: 'tags.id',
 			originalValue: String(tag.id),
 		})
@@ -287,6 +291,7 @@ const unifiedFilterOptions = computed<UnifiedFilterOption[]>(() => {
 			value: `facility:${facility.slug}`,
 			label: facility.name,
 			icon: facility.icon,
+			category: t('components.blueprints.list.filters.facilitiesUsed'),
 			filterKey: 'facility',
 			originalValue: facility.slug,
 		})
@@ -298,6 +303,7 @@ const unifiedFilterOptions = computed<UnifiedFilterOption[]>(() => {
 			value: `item_input:${item.slug}`,
 			label: item.name,
 			icon: item.icon,
+			category: t('components.blueprints.list.filters.inputProducts'),
 			filterKey: 'item_input',
 			originalValue: item.slug,
 		})
@@ -309,6 +315,7 @@ const unifiedFilterOptions = computed<UnifiedFilterOption[]>(() => {
 			value: `item_output:${item.slug}`,
 			label: item.name,
 			icon: item.icon,
+			category: t('components.blueprints.list.filters.outputProducts'),
 			filterKey: 'item_output',
 			originalValue: item.slug,
 		})
@@ -453,11 +460,11 @@ const unifiedFilterModel = computed({
 		>
 			<SidebarContent>
 				<SidebarGroup>
-					<SidebarGroupLabel>{{
+					<SidebarGroupLabel class="border-b border-sidebar-divider pb-2 mb-1">{{
 						t('components.blueprints.list.filters.label')
 					}}</SidebarGroupLabel>
 					<SidebarGroupContent>
-						<div class="px-2 py-3 space-y-2">
+						<div class="px-2 py-3 space-y-2 border-b border-sidebar-divider">
 							<label
 								class="text-xs font-medium text-sidebar-foreground/70 mb-2 block"
 								>{{
@@ -470,25 +477,29 @@ const unifiedFilterModel = computed({
 								<button
 									v-for="region in regionOptions"
 									:key="region.value"
-									:class="[
-										'flex-1 flex flex-col items-center justify-center gap-2 p-3 rounded border transition-colors',
-										filters.region === region.value
-											? 'bg-primary border-primary text-foreground'
-											: 'bg-sidebar border-sidebar-border hover:bg-sidebar-accent',
-									]"
+									class="flex-1 flex flex-col items-center justify-center gap-[11px] transition-colors"
 									@click="handleRegionClick(region.value)"
 								>
-									<component
-										:is="region.icon"
-										class="w-6 h-6"
+									<div
 										:class="[
+											'w-full h-[70px] flex items-center justify-center rounded transition-colors',
 											filters.region === region.value
-												? 'text-foreground'
-												: 'text-muted-foreground',
+												? 'bg-primary'
+												: 'bg-region-box-bg border border-region-box-border hover:opacity-80',
 										]"
-									/>
+									>
+										<component
+											:is="region.icon"
+											class="w-14"
+											:class="[
+												filters.region === region.value
+													? 'text-[#1D1D1D]'
+													: 'text-[#CCCCCC]',
+											]"
+										/>
+									</div>
 									<span
-										class="text-xs text-muted-foreground font-medium"
+										class="text-sm text-region-label"
 										>{{ t(`region.${region.value}`) }}</span
 									>
 								</button>
@@ -505,7 +516,7 @@ const unifiedFilterModel = computed({
 										group as keyof typeof groupedTags
 									].length > 0
 								"
-								class="px-2 py-3 space-y-2"
+								class="px-2 py-3 space-y-2 border-b border-sidebar-divider"
 							>
 								<label
 									class="text-xs font-medium text-sidebar-foreground/70 mb-2 block"
@@ -537,7 +548,7 @@ const unifiedFilterModel = computed({
 							</div>
 						</template>
 
-						<div class="px-2 py-3 space-y-2">
+						<div class="px-2 py-3 space-y-2 border-b border-sidebar-divider">
 							<label
 								class="text-xs font-medium text-sidebar-foreground/70 mb-2 block"
 								>{{
@@ -564,7 +575,7 @@ const unifiedFilterModel = computed({
 							/>
 						</div>
 
-						<div class="px-2 py-3 space-y-2">
+						<div class="px-2 py-3 space-y-2 border-b border-sidebar-divider">
 							<label
 								class="text-xs font-medium text-sidebar-foreground/70 mb-2 block"
 								>{{
@@ -591,7 +602,7 @@ const unifiedFilterModel = computed({
 							/>
 						</div>
 
-						<div class="px-2 py-3 space-y-2">
+						<div class="px-2 py-3 space-y-2 border-b border-sidebar-divider">
 							<label
 								class="text-xs font-medium text-sidebar-foreground/70 mb-2 block"
 								>{{
@@ -618,7 +629,7 @@ const unifiedFilterModel = computed({
 							/>
 						</div>
 
-						<div class="px-2 py-3 space-y-2">
+						<div class="px-2 py-3 space-y-2 border-b border-sidebar-divider">
 							<label
 								class="flex items-center gap-2 cursor-pointer hover:bg-sidebar-accent/50 rounded px-2 py-1.5 transition-colors"
 							>
@@ -735,7 +746,7 @@ const unifiedFilterModel = computed({
 							@click="toggleSidebar"
 						>
 							{{
-								sidebarOpen
+								isSidebarVisible
 									? t(
 											'components.blueprints.list.filters.hide'
 										)
@@ -757,6 +768,7 @@ const unifiedFilterModel = computed({
 										value: opt.value,
 										label: opt.label,
 										icon: opt.icon,
+										category: opt.category,
 									}))
 								"
 								:placeholder="
@@ -877,9 +889,11 @@ const unifiedFilterModel = computed({
 									</SelectContent>
 								</Select>
 								<Button
-									class="rounded"
+									class="rounded-full border border-muted-foreground/30"
 									variant="ghost"
 									size="icon-sm"
+									rounded="base"
+									:with-wave="false"
 									:title="
 										isSortDescending
 											? t(
@@ -908,7 +922,7 @@ const unifiedFilterModel = computed({
 						v-if="loading"
 						class="flex items-center justify-center py-12"
 					>
-						<div class="size-64">
+						<div class="size-64 lottie-throbber">
 							<Lottie name="throbber" />
 						</div>
 					</div>

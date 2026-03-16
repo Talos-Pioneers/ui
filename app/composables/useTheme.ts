@@ -69,7 +69,7 @@ export function useTheme() {
 	if (import.meta.client) {
 		watch(osDefault, (val) => {
 			if (!themeCookie.value) preference.value = val
-		})
+		}, { immediate: true })
 	}
 
 	const resolved = computed<ThemeId | null>(() => {

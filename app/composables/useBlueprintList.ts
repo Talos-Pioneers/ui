@@ -119,14 +119,14 @@ export async function useBlueprintList(
 		});
 	});
 
-	// Fetch filter data
-	const { data: facilitiesData } = await useSanctumFetch<{ data: Facility[] }>(
+	// Fetch filter data (lazy to avoid blocking navigation via Suspense)
+	const { data: facilitiesData } = await useLazySanctumFetch<{ data: Facility[] }>(
 		"/api/v1/facilities"
 	);
-	const { data: itemsData } = await useSanctumFetch<{ data: Item[] }>(
+	const { data: itemsData } = await useLazySanctumFetch<{ data: Item[] }>(
 		"/api/v1/items"
 	);
-	const { data: tagsData } = await useSanctumFetch<{ data: Tag[] }>(
+	const { data: tagsData } = await useLazySanctumFetch<{ data: Tag[] }>(
 		"/api/v1/tags"
 	);
 

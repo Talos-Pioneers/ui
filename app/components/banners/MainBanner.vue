@@ -8,16 +8,8 @@ const { t } = useI18n()
 
 const { isAuthenticated } = useSanctumAuth()
 
-const backgroundImages = [
-	'https://assets.talospioneers.com/media/talos_pioneerbannerIllust_FENDMIN.webp',
-	'https://assets.talospioneers.com/media/talos_pioneerbannerIllust_MENDMIN.webp',
-]
-
-// SSR-safe random image selection using useState to prevent hydration mismatch
-// useState ensures the random value is computed once on server and rehydrated on client
-const randomBackgroundImage = useState('mainBannerImage', () =>
-	backgroundImages[Math.floor(Math.random() * backgroundImages.length)]
-)
+const { imageUrl, videoUrl, showVideo, shouldLoadVideo, videoRef, isResuming } =
+	useHeroMedia()
 
 // Parallax scroll effect - background moves at 30% of scroll speed
 // maxOffset prevents background from revealing edges at extreme scroll
@@ -41,23 +33,56 @@ onMounted(() => {
 		ref="parallaxContainer"
 		class="relative block w-full h-[600px] md:h-[42rem] overflow-hidden"
 	>
-		<!-- Parallax background layer with image -->
-		<!-- Using img tag with object-fit for better focal point control -->
+		<!-- Parallax background layer -->
 		<div
 			class="absolute inset-0 w-full h-[calc(100%+200px)] will-change-transform"
 			:style="{
 				transform: parallaxStyle.transform || 'translate3d(0, 0, 0)',
 			}"
 		>
+			<!-- Animated video (B variant) - loads in background, sits behind image -->
+			<video
+				v-if="shouldLoadVideo"
+				ref="videoRef"
+				class="absolute inset-0 z-[1] w-full h-full object-cover object-[80%] md:object-center 2xl:object-[center_35%] scale-125 -translate-y-[15%] md:scale-100 md:-translate-y-[10%]"
+				:class="[
+					showVideo ? 'opacity-100' : 'opacity-0',
+					isResuming ? '' : 'transition-opacity duration-500',
+				]"
+				muted
+				loop
+				playsinline
+				preload="auto"
+			>
+				<source :src="videoUrl" type="video/webm" />
+			</video>
+			<!-- Static image (A variant) - shown immediately, fades out when video is ready -->
 			<img
-				:src="randomBackgroundImage"
+				:src="imageUrl"
 				alt=""
-				class="w-full h-full object-cover object-[80%] md:object-center 2xl:object-[center_35%] scale-125 -translate-y-[15%] md:scale-100 md:-translate-y-[10%]"
+				class="absolute inset-0 z-[2] w-full h-full object-cover object-[80%] md:object-center 2xl:object-[center_35%] scale-125 -translate-y-[15%] md:scale-100 md:-translate-y-[10%]"
+				:class="[
+					showVideo ? 'opacity-0' : 'opacity-100',
+					isResuming ? '' : 'transition-opacity duration-500',
+				]"
 			/>
-			<!-- Gradient overlay -->
+			<!-- Gradient overlay (image) — lighter vignette for static content -->
 			<div
-				class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70"
+				class="absolute inset-0 z-[3] pointer-events-none"
+				:class="[
+					showVideo ? 'opacity-0' : 'opacity-100',
+					isResuming ? '' : 'transition-opacity duration-500',
+				]"
 				style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.7) 100%)"
+			/>
+			<!-- Gradient overlay (video) — stronger to compensate for brightness/motion -->
+			<div
+				class="absolute inset-0 z-[3] pointer-events-none"
+				:class="[
+					showVideo ? 'opacity-100' : 'opacity-0',
+					isResuming ? '' : 'transition-opacity duration-500',
+				]"
+				style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 0.45) 50%, rgba(0, 0, 0, 0.92) 100%)"
 			/>
 		</div>
 		<!-- Content layer (stays fixed) -->

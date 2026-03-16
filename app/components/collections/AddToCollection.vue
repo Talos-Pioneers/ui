@@ -13,6 +13,7 @@ import {
 	DialogTrigger,
 } from '../ui/dialog'
 import AddCollectionIcon from '../icons/AddCollectionIcon.vue'
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 
 const props = defineProps<{
 	blueprint: Blueprint
@@ -284,15 +285,24 @@ const toggleCreateForm = () => {
 
 <template>
 	<Dialog>
-		<DialogTrigger as-child>
-			<Button
-				class="before:border-none rounded-lg"
-				size="icon-sm"
-				variant="ghost"
-			>
-				<AddCollectionIcon class="size-7.5" />
-			</Button>
-		</DialogTrigger>
+		<Tooltip>
+			<TooltipTrigger as-child>
+				<DialogTrigger as-child>
+					<Button
+						class="rounded-lg"
+						size="icon-sm"
+						variant="ghost"
+						rounded="base"
+						:with-wave="false"
+					>
+						<AddCollectionIcon class="size-5.5" />
+					</Button>
+				</DialogTrigger>
+			</TooltipTrigger>
+			<TooltipContent>
+				{{ t('components.collections.addToCollection.title') }}
+			</TooltipContent>
+		</Tooltip>
 		<DialogContent class="max-w-md">
 			<DialogHeader>
 				<DialogTitle>
