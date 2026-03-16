@@ -427,5 +427,7 @@
 	"pages.collections.edit.errorFailed": "更新收藏失败。请重试。",
 	"theme.label": "主题",
 	"theme.toggle": "切换主题",
-	"components.blueprints.list.pagination.showPerPage": "每页显示"
+	"components.blueprints.list.pagination.showPerPage": "每页显示",
+	"components.blueprints.card.shareLinkCopied": "链接已复制！",
+	"components.blueprints.card.shareTooltip": "分享"
 }

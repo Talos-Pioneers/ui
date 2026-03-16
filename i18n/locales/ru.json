@@ -428,5 +428,7 @@
 	"pages.collections.edit.errorFailed": "Не удалось обновить коллекцию. Пожалуйста, попробуйте еще раз.",
 	"theme.label": "Тема",
 	"theme.toggle": "Переключить тему",
-	"components.blueprints.list.pagination.showPerPage": "Показать на странице"
+	"components.blueprints.list.pagination.showPerPage": "Показать на странице",
+	"components.blueprints.card.shareLinkCopied": "Ссылка скопирована!",
+	"components.blueprints.card.shareTooltip": "Поделиться"
 }

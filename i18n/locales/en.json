@@ -428,5 +428,7 @@
 	"pages.collections.edit.errorFailed": "Failed to update collection. Please try again.",
 	"theme.label": "Theme",
 	"theme.toggle": "Toggle theme",
-	"components.blueprints.list.pagination.showPerPage": "Show per page"
+	"components.blueprints.list.pagination.showPerPage": "Show per page",
+	"components.blueprints.card.shareLinkCopied": "Link copied!",
+	"components.blueprints.card.shareTooltip": "Share"
 }

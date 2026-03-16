@@ -6,6 +6,7 @@ import ClockIcon from '../icons/ClockIcon.vue'
 import CopyIcon from '../icons/CopyIcon.vue'
 import RegionIcon from '../icons/RegionIcon.vue'
 import VerticalElipsis from '../icons/VerticalElipsis.vue'
+import ShareIcon from '../icons/ShareIcon.vue'
 import CopiesIcon from '../icons/CopiesIcon.vue'
 import LikesIcon from '../icons/LikesIcon.vue'
 import CommentsIcon from '../icons/CommentsIcon.vue'
@@ -48,6 +49,16 @@ const { t } = useI18n()
 const sanctumClient = useSanctumClient()
 const { isAuthenticated } = useSanctumAuth()
 const dropdownOpen = ref(false)
+const shareCopied = ref(false)
+const handleShareLink = async () => {
+	const url = `${window.location.origin}/blueprints/${props.blueprint.id}`
+	await copy(url)
+	shareCopied.value = true
+	toast.success(t('components.blueprints.card.shareLinkCopied'))
+	setTimeout(() => {
+		shareCopied.value = false
+	}, 1500)
+}
 
 const previewImage = computed(() => {
 	return props.blueprint.gallery &&
@@ -364,6 +375,33 @@ const handleRemoveFromCollection = async () => {
 						v-if="isAuthenticated"
 						:blueprint="blueprint"
 					/>
+					<Tooltip>
+						<TooltipTrigger as-child>
+							<Button
+								class="rounded-lg"
+								size="icon-sm"
+								variant="ghost"
+								rounded="base"
+								:with-wave="false"
+								@click="handleShareLink"
+							>
+								<IconsCheckmarkIcon
+									v-if="shareCopied"
+									class="size-4 text-primary"
+								/>
+								<IconsShareIcon
+									v-else
+									class="size-4"
+								/>
+							</Button>
+						</TooltipTrigger>
+						<TooltipContent>
+							{{ shareCopied
+								? t('components.blueprints.card.shareLinkCopied')
+								: t('components.blueprints.card.shareTooltip')
+							}}
+						</TooltipContent>
+					</Tooltip>
 					<DropdownMenu v-model:open="dropdownOpen">
 						<DropdownMenuTrigger as-child>
 							<Button

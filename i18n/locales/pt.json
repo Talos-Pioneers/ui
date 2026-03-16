@@ -428,5 +428,7 @@
 	"pages.collections.edit.errorFailed": "Falha ao atualizar a coleção. Por favor, tente novamente.",
 	"theme.label": "Tema",
 	"theme.toggle": "Alternar tema",
-	"components.blueprints.list.pagination.showPerPage": "Mostrar por página"
+	"components.blueprints.list.pagination.showPerPage": "Mostrar por página",
+	"components.blueprints.card.shareLinkCopied": "Link copiado!",
+	"components.blueprints.card.shareTooltip": "Compartilhar"
 }

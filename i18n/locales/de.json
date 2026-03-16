@@ -428,5 +428,7 @@
 	"pages.collections.edit.errorFailed": "Sammlung konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.",
 	"theme.label": "Thema",
 	"theme.toggle": "Thema umschalten",
-	"components.blueprints.list.pagination.showPerPage": "Pro Seite anzeigen"
+	"components.blueprints.list.pagination.showPerPage": "Pro Seite anzeigen",
+	"components.blueprints.card.shareLinkCopied": "Link kopiert!",
+	"components.blueprints.card.shareTooltip": "Teilen"
 }

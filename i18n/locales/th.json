@@ -428,5 +428,7 @@
 	"pages.collections.edit.errorFailed": "อัปเดตคอลเลกชันไม่สำเร็จ โปรดลองอีกครั้ง",
 	"theme.label": "ธีม",
 	"theme.toggle": "สลับธีม",
-	"components.blueprints.list.pagination.showPerPage": "แสดงต่อหน้า"
+	"components.blueprints.list.pagination.showPerPage": "แสดงต่อหน้า",
+	"components.blueprints.card.shareLinkCopied": "คัดลอกลิงก์แล้ว!",
+	"components.blueprints.card.shareTooltip": "แชร์"
 }
