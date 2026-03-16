@@ -426,5 +426,6 @@
 	"pages.collections.edit.errorValidation": "请修复验证错误。",
 	"pages.collections.edit.errorFailed": "更新收藏失败。请重试。",
 	"theme.label": "主题",
-	"theme.toggle": "切换主题"
+	"theme.toggle": "切换主题",
+	"components.blueprints.list.pagination.showPerPage": "每页显示"
 }

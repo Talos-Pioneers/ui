@@ -427,5 +427,6 @@
 	"pages.collections.edit.errorValidation": "Por favor, corrija os erros de validação.",
 	"pages.collections.edit.errorFailed": "Falha ao atualizar a coleção. Por favor, tente novamente.",
 	"theme.label": "Tema",
-	"theme.toggle": "Alternar tema"
+	"theme.toggle": "Alternar tema",
+	"components.blueprints.list.pagination.showPerPage": "Mostrar por página"
 }

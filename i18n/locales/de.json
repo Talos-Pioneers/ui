@@ -427,5 +427,6 @@
 	"pages.collections.edit.errorValidation": "Bitte beheben Sie die Validierungsfehler.",
 	"pages.collections.edit.errorFailed": "Sammlung konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.",
 	"theme.label": "Thema",
-	"theme.toggle": "Thema umschalten"
+	"theme.toggle": "Thema umschalten",
+	"components.blueprints.list.pagination.showPerPage": "Pro Seite anzeigen"
 }

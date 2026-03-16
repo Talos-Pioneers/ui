@@ -427,5 +427,6 @@
 	"pages.collections.edit.errorValidation": "โปรดแก้ไขข้อผิดพลาดในการตรวจสอบ",
 	"pages.collections.edit.errorFailed": "อัปเดตคอลเลกชันไม่สำเร็จ โปรดลองอีกครั้ง",
 	"theme.label": "ธีม",
-	"theme.toggle": "สลับธีม"
+	"theme.toggle": "สลับธีม",
+	"components.blueprints.list.pagination.showPerPage": "แสดงต่อหน้า"
 }

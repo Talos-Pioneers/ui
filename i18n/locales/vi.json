@@ -427,5 +427,6 @@
 	"pages.collections.edit.errorValidation": "Vui lòng sửa các lỗi xác thực.",
 	"pages.collections.edit.errorFailed": "Không thể cập nhật bộ sưu tập. Vui lòng thử lại.",
 	"theme.label": "Chủ đề",
-	"theme.toggle": "Chuyển đổi chủ đề"
+	"theme.toggle": "Chuyển đổi chủ đề",
+	"components.blueprints.list.pagination.showPerPage": "Hiển thị mỗi trang"
 }

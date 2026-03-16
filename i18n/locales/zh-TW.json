@@ -426,5 +426,6 @@
 	"pages.collections.edit.errorValidation": "請修復驗證錯誤。",
 	"pages.collections.edit.errorFailed": "更新收藏失敗。請重試。",
 	"theme.label": "主題",
-	"theme.toggle": "切換主題"
+	"theme.toggle": "切換主題",
+	"components.blueprints.list.pagination.showPerPage": "每頁顯示"
 }

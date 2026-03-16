@@ -427,5 +427,6 @@
 	"pages.collections.edit.errorValidation": "バリデーションエラーを修正してください。",
 	"pages.collections.edit.errorFailed": "コレクションの更新に失敗しました。もう一度お試しください。",
 	"theme.label": "テーマ",
-	"theme.toggle": "テーマを切替"
+	"theme.toggle": "テーマを切替",
+	"components.blueprints.list.pagination.showPerPage": "ページごとの表示数"
 }
