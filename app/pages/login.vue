@@ -22,12 +22,12 @@ const mode = ref<'login' | 'register'>(
 			<LoginForm
 				v-if="mode === 'login'"
 				key="login"
-				:on-switch-to-register="() => mode = 'register'"
+				@switch-to-register="mode = 'register'"
 			/>
 			<RegisterForm
 				v-else
 				key="register"
-				:on-switch-to-login="() => mode = 'login'"
+				@switch-to-login="mode = 'login'"
 			/>
 		</Transition>
 	</div>

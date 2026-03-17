@@ -2,9 +2,16 @@
 import { Dialog, DialogContent } from '~/components/ui/dialog'
 import RegisterForm from './RegisterForm.vue'
 import { useRegisterModal } from '~/composables/useRegisterModal'
+import { useLoginModal } from '~/composables/useLoginModal'
 
 const { isOpen, close } = useRegisterModal()
+const { open: openLogin } = useLoginModal()
 const route = useRoute()
+
+const handleSwitchToLogin = () => {
+  close()
+  openLogin()
+}
 
 watch(() => route.path, () => {
   if (isOpen.value) close()
@@ -17,7 +24,7 @@ watch(() => route.path, () => {
             <div class="relative rounded-lg overflow-hidden">
                 <div
                     class="relative px-10 pb-8 pt-12 wave-bg login-modal-bg rounded-[0.5rem]">
-                    <RegisterForm />
+                    <RegisterForm @switch-to-login="handleSwitchToLogin" @navigate-away="close()" />
                 </div>
             </div>
         </DialogContent>

@@ -67,7 +67,7 @@ const {
 	status: blueprintStatus,
 	error: blueprintError,
 	refresh: refreshBlueprint,
-} = await useLazySanctumFetch<BlueprintResponse>(
+} = await useSanctumFetch<BlueprintResponse>(
 	() => `/api/v1/blueprints/${blueprintId.value}`
 )
 

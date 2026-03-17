@@ -106,7 +106,7 @@ export const useBlueprintQueryFilter = async (
 		status: blueprintsStatus,
 		error: blueprintsError,
 		refresh: blueprintsRefresh,
-	} = await useLazySanctumFetch<BlueprintListResponse>(
+	} = await useSanctumFetch<BlueprintListResponse>(
 		endpoint,
 		() => ({
 			method: 'get',

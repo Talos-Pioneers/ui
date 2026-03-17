@@ -39,71 +39,6 @@ watch(isCollapsed, (collapsed) => {
 	if (!collapsed) mobileMenuOpen.value = false
 })
 
-// Sliding underline indicator
-const navRef = ref<HTMLElement | null>(null)
-const navListRef = ref<HTMLElement | null>(null)
-const underlineStyle = ref({ left: '0px', width: '0px', opacity: '0' })
-const underlineReady = ref(false)
-const readyToAnimate = ref(false)
-
-// Compute active index from route path directly (no DOM class dependency)
-const activeNavIndex = computed(() => {
-	const path = route.path
-	if (path.includes('/collections')) return 1
-	if (path.includes('/blueprints') || path.endsWith('/') || path.match(/\/[a-z]{2}(-[A-Z]{2})?$/)) return 0
-	return -1
-})
-
-// SSR fallback: show static border until JS underline is positioned
-const navLinkActiveClass = computed(() =>
-	underlineReady.value
-		? 'text-nav-link-active'
-		: 'text-nav-link-active border-b-2 border-nav-underline',
-)
-
-const updateUnderline = () => {
-	if (!navRef.value || !navListRef.value) return
-	const navRect = navRef.value.getBoundingClientRect()
-	// Skip if nav is hidden (collapsed)
-	if (navRect.width === 0) return
-
-	const idx = activeNavIndex.value
-	if (idx === -1) {
-		underlineStyle.value.opacity = '0'
-		return
-	}
-
-	const li = navListRef.value.children[idx] as HTMLElement | undefined
-	if (!li) return
-	const liRect = li.getBoundingClientRect()
-	underlineStyle.value = {
-		left: `${liRect.left - navRect.left}px`,
-		width: `${liRect.width}px`,
-		opacity: '1',
-	}
-}
-
-watch(activeNavIndex, () => nextTick(updateUnderline))
-
-onMounted(() => {
-	nextTick(() => {
-		// Position underline instantly, then swap from static border to JS underline
-		updateUnderline()
-		underlineReady.value = true
-		// Enable slide transitions for subsequent route changes
-		requestAnimationFrame(() => {
-			readyToAnimate.value = true
-		})
-	})
-
-	// Re-measure on resize or when nav becomes visible (mobile → desktop)
-	if (navRef.value) {
-		const observer = new ResizeObserver(updateUnderline)
-		observer.observe(navRef.value)
-		onUnmounted(() => observer.disconnect())
-	}
-})
-
 const handleLogout = async () => {
 	try {
 		await logout()
@@ -144,15 +79,15 @@ const navigationItems = [
 				<LogoMobileIcon class="block navd:hidden" />
 			</NuxtLinkLocale>
 		</div>
-		<nav ref="navRef" class="hidden navd:block ml-7.5 h-full relative">
-			<ul ref="navListRef" class="flex items-center gap-7.5 h-full">
+		<nav class="hidden navd:block ml-7.5 h-full relative">
+			<ul class="flex items-center gap-7.5 h-full">
 				<li
 					v-for="item in navigationItems"
 					:key="item.to"
 					class="h-full flex items-center"
 				>
 					<NuxtLinkLocale
-						:active-class="navLinkActiveClass"
+						active-class="text-nav-link-active nav-link-active"
 						class="text-nav-link hover:text-nav-link-active h-full flex items-center"
 						:to="item.to"
 					>
@@ -160,11 +95,7 @@ const navigationItems = [
 					</NuxtLinkLocale>
 				</li>
 			</ul>
-			<span
-				class="absolute bottom-0 h-0.5 bg-nav-underline"
-				:class="{ 'transition-all duration-300 ease-in-out': readyToAnimate }"
-				:style="underlineStyle"
-			/>
+			<span class="nav-underline absolute bottom-0 h-0.5 bg-nav-underline" />
 		</nav>
 		<div class="ml-auto flex items-center gap-2">
 			<ThemeSelector />
@@ -338,3 +269,27 @@ const navigationItems = [
 		</div>
 	</header>
 </template>
+<style scoped>
+/*
+ * Sliding nav underline via CSS Anchor Positioning:
+ * The active NuxtLink registers itself as a CSS anchor (anchor-name).
+ * The underline <span> binds to that anchor (position-anchor) and
+ * stretches its left/right edges to match the anchor's bounds.
+ * Transition on all properties animates the slide between nav items.
+ * When no link is active, :has() hides the underline.
+ */
+.nav-link-active {
+	anchor-name: --active-nav;
+}
+
+.nav-underline {
+	position-anchor: --active-nav;
+	left: anchor(left);
+	right: anchor(right);
+	transition: left 0.3s ease-in-out, right 0.3s ease-in-out;
+}
+
+nav:not(:has(.nav-link-active)) .nav-underline {
+	opacity: 0;
+}
+</style>
