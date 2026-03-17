@@ -13,7 +13,7 @@ const route = useRoute()
 
 // Fetch collection data
 const { data: collectionData, error: collectionError } =
-	await useLazySanctumFetch<{ data: BlueprintCollection }>(
+	await useSanctumFetch<{ data: BlueprintCollection }>(
 		`/api/v1/collections/${route.params.id}`
 	)
 

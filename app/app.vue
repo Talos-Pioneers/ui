@@ -9,8 +9,8 @@ useHead({
 
 <template>
 	<ConfigProvider :use-id="useIdFunction">
+		<NuxtLoadingIndicator :throttle="50" color="var(--primary)" :height="2" />
 		<NuxtLayout>
-			<!-- <NuxtLoadingIndicator /> -->
 			<NuxtPage />
 		</NuxtLayout>
 	</ConfigProvider>

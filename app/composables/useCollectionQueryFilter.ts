@@ -86,7 +86,7 @@ export const useCollectionQueryFilter = async (
 		status: collectionsStatus,
 		error: collectionsError,
 		refresh: collectionsRefresh,
-	} = await useLazySanctumFetch<CollectionListResponse>(
+	} = await useSanctumFetch<CollectionListResponse>(
 		endpoint,
 		() => ({
 			method: 'get',
