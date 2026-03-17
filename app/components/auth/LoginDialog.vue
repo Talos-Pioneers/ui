@@ -1,21 +1,46 @@
 <script setup lang="ts">
 import { Dialog, DialogContent } from '~/components/ui/dialog'
 import LoginForm from './LoginForm.vue'
-import CloseIcon from '~/components/icons/CloseIcon.vue'
 import { useLoginModal } from '~/composables/useLoginModal'
-import buttonWaveImage from '@/assets/img/button-waves.png'
+import { useRegisterModal } from '~/composables/useRegisterModal'
 
 const { isOpen, close } = useLoginModal()
+const { open: openRegister } = useRegisterModal()
+const route = useRoute()
+
+const handleSwitchToRegister = () => {
+  close()
+  openRegister()
+}
+
+watch(() => route.path, () => {
+  if (isOpen.value) close()
+})
 </script>
 
 <template>
   <Dialog :open="isOpen" @update:open="(val) => !val && close()">
-    <DialogContent class="p-0 border-0 bg-transparent shadow-none max-w-md w-full">
+    <DialogContent class="login-dialog p-0 border-0 bg-transparent shadow-none max-w-md w-full">
       <div class="relative rounded-lg overflow-hidden">
-        <div class="relative p-8 pt-12 bg-linear-to-b wave-bg from-cool-gray-10 from-50% to-primary rounded-[0.5rem]">
-          <LoginForm />
+        <div class="relative px-10 pb-8 pt-12 wave-bg login-modal-bg rounded-[0.5rem]">
+          <LoginForm @switch-to-register="handleSwitchToRegister" @navigate-away="close()" />
         </div>
       </div>
     </DialogContent>
   </Dialog>
 </template>
+
+<style>
+.login-dialog [data-slot="dialog-close"] {
+  background-color: var(--login-close-bg);
+  border-color: var(--login-close-border);
+  opacity: 1;
+}
+.login-dialog [data-slot="dialog-close"]:hover {
+  opacity: 0.7;
+}
+.login-dialog [data-slot="dialog-close"] svg {
+  color: var(--login-close-icon);
+  stroke: var(--login-close-icon);
+}
+</style>

@@ -3,38 +3,38 @@ const { t } = useI18n()
 </script>
 
 <template>
-	<footer class="bg-white border-t border-cool-gray-20 py-8 px-7.5">
+	<footer class="bg-background border-t border-border py-8 px-7.5">
 		<div class="max-w-7xl mx-auto">
 			<nav
 				class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-7.5"
 			>
 				<NuxtLinkLocale
 					to="/about"
-					class="text-cool-gray-60 hover:text-cool-gray-80 transition-colors"
+					class="text-muted-foreground hover:text-foreground transition-colors"
 				>
 					{{ t('footer.about') }}
 				</NuxtLinkLocale>
 				<NuxtLinkLocale
 					to="/privacy-policy"
-					class="text-cool-gray-60 hover:text-cool-gray-80 transition-colors"
+					class="text-muted-foreground hover:text-foreground transition-colors"
 				>
 					{{ t('footer.privacyPolicy') }}
 				</NuxtLinkLocale>
 				<NuxtLinkLocale
 					to="/cookie-policy"
-					class="text-cool-gray-60 hover:text-cool-gray-80 transition-colors"
+					class="text-muted-foreground hover:text-foreground transition-colors"
 				>
 					{{ t('footer.cookiePolicy') }}
 				</NuxtLinkLocale>
 				<NuxtLinkLocale
 					to="/api-terms"
-					class="text-cool-gray-60 hover:text-cool-gray-80 transition-colors"
+					class="text-muted-foreground hover:text-foreground transition-colors"
 				>
 					{{ t('footer.apiTerms') }}
 				</NuxtLinkLocale>
 				<a
 					href="https://discord.gg/yuBpRqGzAh"
-					class="text-cool-gray-60 hover:text-cool-gray-80 transition-colors flex items-center gap-1"
+					class="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +51,7 @@ const { t } = useI18n()
 					Discord
 				</a>
 			</nav>
-			<p class="text-cool-gray-60 text-center text-sm mt-4">
+			<p class="text-muted-foreground text-center text-sm mt-4">
 				© 2026 Talos Pioneers. All rights reserved.
 			</p>
 		</div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Plus, X, GripVertical } from 'lucide-vue-next'
+import { Plus, X, GripVertical, ZoomIn } from 'lucide-vue-next'
 import { Input } from '~/components/ui/input'
 import { Button } from '~/components/ui/button'
 import { Label } from '~/components/ui/label'
@@ -56,35 +56,33 @@ type Schema = {
 	height: number | null
 }
 
-// Fetch blueprint data
+// Fetch blueprint data (lazy to avoid blocking navigation via Suspense)
 const {
 	data: blueprintResponse,
 	status: blueprintStatus,
 	error: blueprintError,
-} = await useSanctumFetch<{ data: Blueprint }>(
+} = await useLazySanctumFetch<{ data: Blueprint }>(
 	() => `/api/v1/blueprints/${blueprintId.value}`
 )
 
 const blueprint = computed(() => blueprintResponse.value?.data ?? null)
 
 watchEffect(() => {
-	if (blueprintStatus.value == 'success' && !blueprint.value) {
-		throw createError({
-			statusCode: 404,
-			statusMessage: t('pages.blueprints.edit.notFound'),
-		})
-	}
 	if (blueprintError.value) {
 		throw createError({
 			statusCode: blueprintError.value.statusCode,
 			statusMessage: blueprintError.value.statusMessage,
 		})
 	}
-	if (!blueprint.value) {
+	if (blueprintStatus.value === 'success' && !blueprint.value) {
 		throw createError({
 			statusCode: 404,
 			statusMessage: t('pages.blueprints.edit.notFound'),
 		})
+	}
+	// Data still loading (lazy fetch) — skip head setup, template shows loading state
+	if (!blueprint.value) {
+		return
 	}
 	useHead({
 		title: t('pages.blueprints.edit.titleTemplate', {
@@ -117,14 +115,14 @@ const form = usePrecognitionForm<Schema>(
 	}
 )
 
-// Fetch facilities, items, and tags
-const { data: facilitiesData } = await useSanctumFetch<{ data: Facility[] }>(
+// Fetch facilities, items, and tags (lazy to avoid blocking navigation via Suspense)
+const { data: facilitiesData } = await useLazySanctumFetch<{ data: Facility[] }>(
 	'/api/v1/facilities'
 )
-const { data: itemsData } = await useSanctumFetch<{ data: Item[] }>(
+const { data: itemsData } = await useLazySanctumFetch<{ data: Item[] }>(
 	'/api/v1/items'
 )
-const { data: tagsData } = await useSanctumFetch<{ data: Tag[] }>(
+const { data: tagsData } = await useLazySanctumFetch<{ data: Tag[] }>(
 	'/api/v1/tags'
 )
 
@@ -191,6 +189,17 @@ const {
 	onImageReorder,
 	initializeWithExisting,
 } = gallery
+
+// Lightbox state for image preview
+const lightboxVisible = ref(false)
+const lightboxIndex = ref(0)
+const lightboxImgs = computed(() =>
+	imageItems.value.map((item) => item.preview)
+)
+const showLightbox = (index: number) => {
+	lightboxIndex.value = index
+	lightboxVisible.value = true
+}
 
 // Initialize form data from blueprint (only once when blueprint loads)
 const isInitialized = ref(false)
@@ -474,11 +483,20 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 </script>
 
 <template>
-	<div class="wave-bg bg-cool-gray-10 before:bg-size-[400px] min-h-screen">
+	<div class="wave-bg bg-(--wave-bg) min-h-screen">
 		<div class="container mx-auto px-4 py-6">
-			<div class="max-w-4xl mx-auto">
+			<div
+				v-if="blueprintStatus === 'pending'"
+				class="flex items-center justify-center py-12"
+			>
+				<div class="size-64 lottie-throbber">
+					<Lottie name="throbber" />
+				</div>
+			</div>
+
+			<div v-else class="max-w-4xl mx-auto">
 				<div
-					class="bg-white dark:bg-cool-gray-95 rounded-lg border border-cool-gray-20 dark:border-cool-gray-80 p-6 space-y-6"
+					class="bg-card rounded-lg border border-border p-6 space-y-6"
 				>
 					<h1 class="font-bold text-3xl">
 						{{ t('pages.blueprints.edit.title') }}
@@ -519,7 +537,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 								<Label>{{
 									t('pages.blueprints.create.images')
 								}}</Label>
-								<span class="text-sm text-cool-gray-50">
+								<span class="text-sm text-muted-foreground">
 									{{ imageItems.length }}/{{ MAX_IMAGES }}
 								</span>
 							</div>
@@ -531,7 +549,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 									:class="[
 										isDragging
 											? 'border-primary bg-primary/5'
-											: 'border-cool-gray-30 dark:border-cool-gray-70 hover:border-primary',
+											: 'border-border hover:border-primary',
 									]"
 									@click="fileInputRef?.click()"
 									@dragenter="handleDragEnter"
@@ -545,7 +563,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 											:class="[
 												isDragging
 													? 'text-primary'
-													: 'text-cool-gray-50',
+													: 'text-muted-foreground',
 											]"
 										/>
 										<p
@@ -553,7 +571,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 											:class="[
 												isDragging
 													? 'text-primary'
-													: 'text-cool-gray-60',
+													: 'text-muted-foreground',
 											]"
 										>
 											{{
@@ -584,7 +602,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 										<div
 											v-for="(item, index) in imageItems"
 											:key="item.id"
-											class="relative group aspect-square rounded-lg overflow-hidden border border-cool-gray-20 dark:border-cool-gray-80"
+											class="relative group aspect-square rounded-lg overflow-hidden border border-border"
 										>
 											<img
 												:src="item.preview"
@@ -600,7 +618,16 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 													@mousedown.stop
 												>
 													<GripVertical
-														class="size-4 text-cool-gray-90"
+														class="size-4 text-gray-800"
+													/>
+												</button>
+												<button
+													type="button"
+													class="p-2 bg-white/90 rounded hover:bg-white transition-colors"
+													@click="showLightbox(index)"
+												>
+													<ZoomIn
+														class="size-4 text-gray-800"
 													/>
 												</button>
 												<button
@@ -609,7 +636,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 													@click="removeImage(item.id)"
 												>
 													<X
-														class="size-4 text-cool-gray-90"
+														class="size-4 text-gray-800"
 													/>
 												</button>
 											</div>
@@ -634,7 +661,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 									:class="[
 										isDragging
 											? 'border-primary bg-primary/5'
-											: 'border-cool-gray-30 dark:border-cool-gray-70 hover:border-primary',
+											: 'border-border hover:border-primary',
 									]"
 									@click="fileInputRef?.click()"
 									@dragenter="handleDragEnter"
@@ -648,7 +675,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 											:class="[
 												isDragging
 													? 'text-primary'
-													: 'text-cool-gray-50',
+													: 'text-muted-foreground',
 											]"
 										/>
 										<p
@@ -656,7 +683,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 											:class="[
 												isDragging
 													? 'text-primary'
-													: 'text-cool-gray-60',
+													: 'text-muted-foreground',
 											]"
 										>
 											{{
@@ -677,7 +704,14 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 									@change="handleFileSelect"
 								/>
 
-								<p class="text-xs text-cool-gray-60">
+								<VueEasyLightbox
+									:visible="lightboxVisible"
+									:imgs="lightboxImgs"
+									:index="lightboxIndex"
+									@hide="lightboxVisible = false"
+								/>
+
+								<p class="text-xs text-muted-foreground">
 									{{
 										t(
 											'pages.blueprints.create.thumbnailHelper'
@@ -799,7 +833,7 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 								:aria-invalid="!!form.errors.partner_url"
 								@change="form.validate('partner_url')"
 							/>
-							<p class="text-xs text-cool-gray-60">
+							<p class="text-xs text-muted-foreground">
 								{{
 									t('pages.blueprints.create.partnerUrlHelper')
 								}}

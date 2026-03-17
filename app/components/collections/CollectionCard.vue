@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { BlueprintCollection } from '~/models/blueprintCollection'
+import { useClipboard } from '@vueuse/core'
 import ClockIcon from '../icons/ClockIcon.vue'
 import VerticalElipsis from '../icons/VerticalElipsis.vue'
 import {
@@ -10,7 +11,9 @@ import {
 } from '~/components/ui/dropdown-menu'
 import ReportButton from '~/components/ReportButton.vue'
 import { Button } from '../ui/button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 import DeleteCollectionDialog from './DeleteCollectionDialog.vue'
+import { toast } from 'vue-sonner'
 
 const props = defineProps<{
 	collection: BlueprintCollection
@@ -21,9 +24,20 @@ const emit = defineEmits<{
 	deleted: []
 }>()
 
-const { t } = useI18n()
+const { copy } = useClipboard()
+const { t, locale } = useI18n()
 const { isAuthenticated } = useSanctumAuth()
 const dropdownOpen = ref(false)
+const shareCopied = ref(false)
+const handleShareLink = async () => {
+	const url = `${window.location.origin}/${locale.value}/collections/${props.collection.id}`
+	await copy(url)
+	shareCopied.value = true
+	toast.success(t('components.blueprints.card.shareLinkCopied'))
+	setTimeout(() => {
+		shareCopied.value = false
+	}, 1500)
+}
 
 const handleAuthorClick = () => {
 	if (props.collection.creator) {
@@ -52,11 +66,11 @@ const blueprintsCount = computed(() => {
 
 <template>
 	<div
-		class="group rounded-b-[8px] border-cool-gray-20 border bg-white hover:border-cool-gray-40 transition-colors overflow-hidden"
+		class="group rounded-b-[8px] border-border border bg-card hover:border-muted-foreground transition-colors overflow-hidden"
 	>
 		<!-- Content Section -->
 		<div
-			class="p-4 flex flex-col gap-3 bg-white dark:bg-cool-gray-90 rounded-b-lg h-full"
+			class="p-4 flex flex-col gap-3 bg-card rounded-b-lg h-full"
 		>
 			<!-- Title and Author -->
 			<div class="pb-3">
@@ -65,12 +79,12 @@ const blueprintsCount = computed(() => {
 					class="flex items-center gap-2"
 				>
 					<h2
-						class="text-xl font-bold leading-6 text-cool-gray-90 mb-2 line-clamp-2"
+						class="text-xl font-bold leading-6 text-foreground mb-2 line-clamp-2"
 					>
 						{{ collection.title }}
 					</h2>
 					<span
-						class="text-xs px-1.5 py-0.5 mb-2 inline-block rounded border border-cool-gray-30 dark:border-cool-gray-70 text-cool-gray-70 dark:text-cool-gray-40"
+						class="text-xs px-1.5 py-0.5 mb-2 inline-block rounded border border-border text-muted-foreground"
 					>
 						{{
 							collection.status === 'draft'
@@ -86,21 +100,21 @@ const blueprintsCount = computed(() => {
 				<div class="flex items-center justify-between gap-2 h-4">
 					<button
 						v-if="collection.creator"
-						class="group/author text-xs text-cool-gray-70 cursor-pointer transition-colors overflow-hidden text-nowrap text-ellipsis flex items-center h-4"
+						class="group/author text-xs text-muted-foreground cursor-pointer transition-colors overflow-hidden text-nowrap text-ellipsis flex items-center h-4"
 						@click="handleAuthorClick"
 					>
 						<span class="leading-0">by&nbsp;</span
 						><span
-							class="leading-0 group-hover/author:text-cool-gray-100 group-hover/author:underline transition-colors"
+							class="leading-0 group-hover/author:text-foreground group-hover/author:underline transition-colors"
 							>{{ collection.creator.name }}</span
 						>
 					</button>
-					<p v-else class="text-xs leading-0 text-cool-gray-70">
+					<p v-else class="text-xs leading-0 text-muted-foreground">
 						{{ t('components.collections.card.author.anonymous') }}
 					</p>
 
 					<div
-						class="flex items-center gap-1.5 text-[10px] text-cool-gray-60 ml-auto text-nowrap flex-none"
+						class="flex items-center gap-1.5 text-[10px] text-muted-foreground ml-auto text-nowrap flex-none"
 					>
 						<div class="flex items-center gap-1">
 							<ClockIcon class="w-3 h-3" />
@@ -115,7 +129,7 @@ const blueprintsCount = computed(() => {
 			<!-- Description -->
 			<p
 				v-if="collection.description"
-				class="text-sm text-cool-gray-70 line-clamp-2"
+				class="text-sm text-muted-foreground line-clamp-2"
 			>
 				{{ collection.description }}
 			</p>
@@ -124,18 +138,18 @@ const blueprintsCount = computed(() => {
 			<div class="flex items-center justify-between mt-auto">
 				<div class="flex items-center gap-2">
 					<span
-						class="px-2 py-1 text-sm border border-cool-gray-30 group-hover/tags:border-cool-gray-100 transition-colors"
+						class="px-2 py-1 text-sm border border-border group-hover/tags:border-foreground transition-colors"
 					>
 						{{ t('components.collections.card.tagLabel') }}
 					</span>
 					<div
-						class="flex items-center gap-4 text-sm text-cool-gray-80"
+						class="flex items-center gap-4 text-sm text-foreground"
 					>
 						<div class="flex items-center gap-1.5">
 							<span>{{
 								useFormatCompactNumber(blueprintsCount)
 							}}</span>
-							<span class="text-cool-gray-60">{{
+							<span class="text-muted-foreground">{{
 								blueprintsCount === 1
 									? t('components.collections.card.blueprint')
 									: t(
@@ -146,12 +160,41 @@ const blueprintsCount = computed(() => {
 					</div>
 				</div>
 				<div class="flex items-center gap-1">
+					<Tooltip>
+						<TooltipTrigger as-child>
+							<Button
+								class="rounded-lg"
+								size="icon-sm"
+								variant="ghost"
+								rounded="base"
+								:with-wave="false"
+								@click="handleShareLink"
+							>
+								<IconsCheckmarkIcon
+									v-if="shareCopied"
+									class="size-4 text-primary"
+								/>
+								<IconsShareIcon
+									v-else
+									class="size-4"
+								/>
+							</Button>
+						</TooltipTrigger>
+						<TooltipContent>
+							{{ shareCopied
+								? t('components.blueprints.card.shareLinkCopied')
+								: t('components.blueprints.card.shareTooltip')
+							}}
+						</TooltipContent>
+					</Tooltip>
 					<DropdownMenu v-model:open="dropdownOpen">
 						<DropdownMenuTrigger as-child>
 							<Button
 								class="before:border-none rounded-lg"
 								size="icon-sm"
 								variant="ghost"
+								rounded="base"
+								:with-wave="false"
 							>
 								<VerticalElipsis class="size-7.5" />
 							</Button>

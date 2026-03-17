@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { Button } from '~/components/ui/button'
-import { useLoginModal } from '~/composables/useLoginModal'
 import Logo from '../icons/Logo.vue'
-import LoginIcon from '../icons/LoginIcon.vue'
 import LanguageSwitcher from './LanguageSwitcher.vue'
+import SignInButton from './SignInButton.vue'
+import ThemeSelector from './ThemeSelector.vue'
+import ThemeSelectorInline from './ThemeSelectorInline.vue'
 import LogoMobileIcon from '../icons/LogoMobileIcon.vue'
 import UserIcon from '../icons/UserIcon.vue'
 import AddBlueprintIcon from '../icons/AddBlueprintIcon.vue'
 import AddCollectionIcon from '../icons/AddCollectionIcon.vue'
-import { Menu, Plus } from 'lucide-vue-next'
+import MenuIcon from '../icons/MenuIcon.vue'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -26,9 +27,17 @@ import {
 
 const { t } = useI18n()
 const { isAuthenticated, logout } = useSanctumAuth()
-const { open } = useLoginModal()
 const router = useRouter()
+const route = useRoute()
 const mobileMenuOpen = ref(false)
+
+// Dynamic nav collapse (replaces fixed nav: breakpoint)
+const { headerRef, navMeasureRef, isCollapsed } = useNavCollapse()
+
+// Auto-close mobile menu when nav expands to desktop
+watch(isCollapsed, (collapsed) => {
+	if (!collapsed) mobileMenuOpen.value = false
+})
 
 const handleLogout = async () => {
 	try {
@@ -52,15 +61,25 @@ const navigationItems = [
 </script>
 <template>
 	<header
-		class="sticky top-0 z-40 bg-white flex items-center h-16.5 px-7.5 border-b border-cool-gray-20"
+		ref="headerRef"
+		class="sticky top-0 z-40 bg-background flex items-center h-16.5 px-7.5 border-b border-border"
 	>
+		<!-- Hidden measurement element: always in DOM for measuring nav text width -->
+		<div
+			ref="navMeasureRef"
+			class="absolute invisible pointer-events-none flex items-center gap-7.5"
+			aria-hidden="true"
+		>
+			<span v-for="item in navigationItems" :key="item.to">{{ t(item.label) }}</span>
+		</div>
+
 		<div>
-			<NuxtLinkLocale to="/">
-				<Logo class="hidden md:block" />
-				<LogoMobileIcon class="block md:hidden" />
+			<NuxtLinkLocale to="/" class="text-(--logo)" data-scroll-top>
+				<Logo class="hidden navd:block" />
+				<LogoMobileIcon class="block navd:hidden" />
 			</NuxtLinkLocale>
 		</div>
-		<nav class="hidden md:block ml-7.5 h-full">
+		<nav class="hidden navd:block ml-7.5 h-full relative">
 			<ul class="flex items-center gap-7.5 h-full">
 				<li
 					v-for="item in navigationItems"
@@ -68,50 +87,37 @@ const navigationItems = [
 					class="h-full flex items-center"
 				>
 					<NuxtLinkLocale
-						active-class="text-cool-gray-80 border-b-2 h-full border-black"
-						class="text-cool-gray-60 hover:text-cool-gray-80 h-full flex items-center"
+						active-class="text-nav-link-active nav-link-active"
+						class="text-nav-link hover:text-nav-link-active h-full flex items-center"
 						:to="item.to"
 					>
 						{{ t(item.label) }}
 					</NuxtLinkLocale>
 				</li>
 			</ul>
+			<span class="nav-underline absolute bottom-0 h-0.5 bg-nav-underline" />
 		</nav>
 		<div class="ml-auto flex items-center gap-2">
+			<ThemeSelector />
 			<LanguageSwitcher />
 			<template v-if="!isAuthenticated">
-				<Button
-					class="min-w-40 px-4.5 justify-between hidden md:flex"
-					variant="default"
-					@click="open"
-				>
-					<span class="flex items-center gap-2.5">
-						<LoginIcon class="h-5" />
-						<span class="h-3.5 w-px bg-cool-gray-50" />
-					</span>
-					{{ t('components.navigation.header.signIn') }}
-				</Button>
-				<Button
-					class="md:hidden"
-					variant="default"
-					size="icon-lg"
-					@click="open"
-				>
-					<LoginIcon class="h-5" />
-				</Button>
+				<SignInButton v-if="!route.path.includes('/login')" />
 			</template>
 			<template v-else>
-				<DropdownMenu>
+				<DropdownMenu :modal="false">
 					<DropdownMenuTrigger as-child>
 						<Button
 							variant="default"
-							class="hidden md:flex items-center gap-2 mr-2"
+							class="hidden navd:flex min-w-40 px-4.5 justify-between bg-(--create-btn-bg) before:border-(--create-btn-outline)"
 						>
-							<Plus class="h-4 w-4" />
-							{{ t('components.navigation.header.nav.create') }}
+							<span class="flex items-center gap-2.5">
+								<AddBlueprintIcon class="h-5 text-(--create-btn-icon)" />
+								<span class="h-3.5 w-px bg-(--create-btn-outline)"></span>
+							</span>
+							<span class="text-(--create-btn-text)">{{ t('components.navigation.header.nav.create') }}</span>
 						</Button>
 					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
+					<DropdownMenuContent align="end" class="min-w-[var(--reka-dropdown-menu-trigger-width)]">
 						<DropdownMenuItem as-child>
 							<NuxtLinkLocale
 								to="/blueprints/create"
@@ -141,13 +147,13 @@ const navigationItems = [
 					</DropdownMenuContent>
 				</DropdownMenu>
 
-				<DropdownMenu>
+				<DropdownMenu :modal="false">
 					<DropdownMenuTrigger as-child>
-						<Button variant="default" size="icon-lg">
-							<UserIcon class="h-5 text-cool-gray-100" />
+						<Button variant="default" size="icon-lg" class="navd:size-11.5 bg-(--profile-btn-bg) before:border-(--profile-btn-outline)">
+							<UserIcon class="h-5 text-(--profile-btn-icon)" />
 						</Button>
 					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
+					<DropdownMenuContent align="end" class="min-w-[var(--reka-dropdown-menu-trigger-width)]">
 						<DropdownMenuItem as-child>
 							<NuxtLinkLocale to="/profile">
 								{{
@@ -187,44 +193,48 @@ const navigationItems = [
 			</template>
 			<Sheet v-model:open="mobileMenuOpen">
 				<SheetTrigger as-child>
-					<Button variant="ghost" size="icon" class="md:hidden ml-2">
-						<Menu class="h-6 w-6" />
+					<Button variant="default" size="icon-lg" class="navd:hidden bg-(--burger-bg) before:border-(--burger-outline)">
+						<MenuIcon class="w-4.5 h-4 text-(--burger-icon)" />
 					</Button>
 				</SheetTrigger>
 				<SheetContent side="right">
 					<SheetHeader>
-						<SheetTitle class="text-left">
-							<Logo />
+						<SheetTitle class="text-left text-(--logo)">
+							<NuxtLinkLocale to="/" data-scroll-top class="inline-block" @click="mobileMenuOpen = false">
+								<Logo />
+							</NuxtLinkLocale>
 						</SheetTitle>
 					</SheetHeader>
-					<div class="flex flex-col gap-4 px-4">
+					<div class="flex flex-col px-4 -mt-2">
 						<NuxtLinkLocale
 							v-for="item in navigationItems"
 							:key="item.to"
 							:to="item.to"
-							active-class="text-cool-gray-80 h-full"
-							class="text-cool-gray-60 hover:text-cool-gray-80 h-full flex items-center"
+							active-class="text-nav-link-active"
+							class="text-nav-link hover:text-nav-link-active flex items-center py-2"
 							@click="mobileMenuOpen = false"
 						>
 							{{ t(item.label) }}
 						</NuxtLinkLocale>
 
 						<template v-if="isAuthenticated">
-							<div class="h-px bg-cool-gray-20 my-2" />
+							<div class="h-px bg-border my-2" />
 							<p
-								class="text-sm text-cool-gray-60 font-medium mb-2"
+								class="text-sm text-muted-foreground font-medium mb-2"
 							>
 								{{
 									t('components.navigation.header.nav.create')
 								}}
 							</p>
 							<NuxtLinkLocale
-								active-class="text-cool-gray-80 border-b-2 h-full border-black"
-								class="text-cool-gray-60 hover:text-cool-gray-80 h-full flex items-center gap-2"
+								active-class="text-nav-link-active"
+								class="text-nav-link hover:text-nav-link-active flex items-center gap-2 py-2"
 								to="/blueprints/create"
 								@click="mobileMenuOpen = false"
 							>
-								<AddBlueprintIcon class="size-5" />
+								<span class="w-6 flex items-center shrink-0">
+									<AddBlueprintIcon class="size-5" />
+								</span>
 								{{
 									t(
 										'components.navigation.header.nav.createBlueprint'
@@ -232,12 +242,14 @@ const navigationItems = [
 								}}
 							</NuxtLinkLocale>
 							<NuxtLinkLocale
-								active-class="text-cool-gray-80 border-b-2 h-full border-black"
-								class="text-cool-gray-60 hover:text-cool-gray-80 h-full flex items-center gap-2"
+								active-class="text-nav-link-active"
+								class="text-nav-link hover:text-nav-link-active flex items-center gap-2 py-2"
 								to="/collections/create"
 								@click="mobileMenuOpen = false"
 							>
-								<AddCollectionIcon class="size-6" />
+								<span class="w-6 flex items-center shrink-0">
+									<AddCollectionIcon class="size-5" />
+								</span>
 								{{
 									t(
 										'components.navigation.header.nav.createCollection'
@@ -245,9 +257,39 @@ const navigationItems = [
 								}}
 							</NuxtLinkLocale>
 						</template>
+
+						<div class="h-px bg-border my-2" />
+						<p class="text-sm text-muted-foreground font-medium mb-2">
+							{{ t('theme.label') }}
+						</p>
+						<ThemeSelectorInline />
 					</div>
 				</SheetContent>
 			</Sheet>
 		</div>
 	</header>
 </template>
+<style scoped>
+/*
+ * Sliding nav underline via CSS Anchor Positioning:
+ * The active NuxtLink registers itself as a CSS anchor (anchor-name).
+ * The underline <span> binds to that anchor (position-anchor) and
+ * stretches its left/right edges to match the anchor's bounds.
+ * Transition on all properties animates the slide between nav items.
+ * When no link is active, :has() hides the underline.
+ */
+.nav-link-active {
+	anchor-name: --active-nav;
+}
+
+.nav-underline {
+	position-anchor: --active-nav;
+	left: anchor(left);
+	right: anchor(right);
+	transition: left 0.3s ease-in-out, right 0.3s ease-in-out;
+}
+
+nav:not(:has(.nav-link-active)) .nav-underline {
+	opacity: 0;
+}
+</style>

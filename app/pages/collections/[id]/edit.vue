@@ -24,35 +24,33 @@ type Schema = {
 	is_anonymous: boolean
 }
 
-// Fetch collection data
+// Fetch collection data (lazy to avoid blocking navigation via Suspense)
 const {
 	data: collectionResponse,
 	status: collectionStatus,
 	error: collectionError,
-} = await useSanctumFetch<{ data: BlueprintCollection }>(
+} = await useLazySanctumFetch<{ data: BlueprintCollection }>(
 	() => `/api/v1/collections/${collectionId.value}`
 )
 
 const collection = computed(() => collectionResponse.value?.data ?? null)
 
 watchEffect(() => {
-	if (collectionStatus.value == 'success' && !collection.value) {
-		throw createError({
-			statusCode: 404,
-			statusMessage: t('pages.collections.edit.notFound'),
-		})
-	}
 	if (collectionError.value) {
 		throw createError({
 			statusCode: collectionError.value.statusCode,
 			statusMessage: collectionError.value.statusMessage,
 		})
 	}
-	if (!collection.value) {
+	if (collectionStatus.value === 'success' && !collection.value) {
 		throw createError({
 			statusCode: 404,
 			statusMessage: t('pages.collections.edit.notFound'),
 		})
+	}
+	// Data still loading (lazy fetch) — skip head setup, template shows loading state
+	if (!collection.value) {
+		return
 	}
 	useHead({
 		title: t('pages.collections.edit.titleTemplate', {
@@ -168,11 +166,20 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 </script>
 
 <template>
-	<div class="wave-bg bg-cool-gray-10 before:bg-size-[400px] min-h-screen">
+	<div class="wave-bg bg-(--wave-bg) min-h-screen">
 		<div class="container mx-auto px-4 py-6">
-			<div class="max-w-4xl mx-auto">
+			<div
+				v-if="collectionStatus === 'pending'"
+				class="flex items-center justify-center py-12"
+			>
+				<div class="size-64 lottie-throbber">
+					<Lottie name="throbber" />
+				</div>
+			</div>
+
+			<div v-else class="max-w-4xl mx-auto">
 				<div
-					class="bg-white dark:bg-cool-gray-95 rounded-lg border border-cool-gray-20 dark:border-cool-gray-80 p-6 space-y-6"
+					class="bg-card rounded-lg border border-border p-6 space-y-6"
 				>
 					<h1 class="font-bold text-3xl">
 						{{ t('pages.collections.edit.title') }}

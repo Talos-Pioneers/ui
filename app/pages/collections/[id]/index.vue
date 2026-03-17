@@ -13,7 +13,7 @@ const route = useRoute()
 
 // Fetch collection data
 const { data: collectionData, error: collectionError } =
-	await useLazySanctumFetch<{ data: BlueprintCollection }>(
+	await useSanctumFetch<{ data: BlueprintCollection }>(
 		`/api/v1/collections/${route.params.id}`
 	)
 
@@ -304,7 +304,7 @@ if (collectionError.value && collectionError.value.statusCode === 404) {
 			v-if="!collection && !collectionError"
 			class="flex items-center justify-center min-h-screen"
 		>
-			<div class="size-64">
+			<div class="size-64 lottie-throbber">
 				<Lottie name="throbber" />
 			</div>
 		</div>

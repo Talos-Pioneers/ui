@@ -20,15 +20,15 @@ const formattedDate = computed(() => useFormatDate(props.comment.created_at));
 </script>
 
 <template>
-	<div class="rounded-xl border border-cool-gray-20 dark:border-cool-gray-80 bg-white dark:bg-cool-gray-95 p-4 space-y-3">
+	<div class="rounded-xl border border-border bg-card p-4 space-y-3">
 		<div class="flex items-start justify-between gap-4">
 			<div>
-				<p class="text-sm font-semibold text-cool-gray-95 dark:text-white">
+				<p class="text-sm font-semibold text-foreground">
 					@{{ displayName }}
 				</p>
-				<p class="text-xs text-cool-gray-60">
+				<p class="text-xs text-muted-foreground">
 					{{ formattedDate }}
-					<span v-if="comment.is_edited" class="ml-2 text-cool-gray-50 italic">{{ t('components.comments.item.edited') }}</span>
+					<span v-if="comment.is_edited" class="ml-2 text-muted-foreground italic">{{ t('components.comments.item.edited') }}</span>
 				</p>
 			</div>
 			<div v-if="canManage" class="flex items-center gap-2">
@@ -42,7 +42,7 @@ const formattedDate = computed(() => useFormatDate(props.comment.created_at));
 				</Button>
 			</div>
 		</div>
-		<p class="text-sm leading-relaxed text-cool-gray-80 dark:text-cool-gray-10 whitespace-pre-line">
+		<p class="text-sm leading-relaxed text-foreground whitespace-pre-line">
 			{{ comment.comment }}
 		</p>
 	</div>

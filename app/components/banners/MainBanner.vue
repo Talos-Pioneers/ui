@@ -3,20 +3,13 @@ import { Button } from '~/components/ui/button'
 import BannerDivider from './BannerDivider.vue'
 import InfoIcon from '../icons/InfoIcon.vue'
 import AddBlueprintIcon from '../icons/AddBlueprintIcon.vue'
+import ChevronRightIcon from '../icons/ChevronRightIcon.vue'
 const { t } = useI18n()
 
 const { isAuthenticated } = useSanctumAuth()
 
-const backgroundImages = [
-	'https://assets.talospioneers.com/media/talos_pioneerbannerIllust_FENDMIN.webp',
-	'https://assets.talospioneers.com/media/talos_pioneerbannerIllust_MENDMIN.webp',
-]
-
-// SSR-safe random image selection using useState to prevent hydration mismatch
-// useState ensures the random value is computed once on server and rehydrated on client
-const randomBackgroundImage = useState('mainBannerImage', () =>
-	backgroundImages[Math.floor(Math.random() * backgroundImages.length)]
-)
+const { imageUrl, videoUrl, showVideo, shouldLoadVideo, videoRef, isResuming } =
+	useHeroMedia()
 
 // Parallax scroll effect - background moves at 30% of scroll speed
 // maxOffset prevents background from revealing edges at extreme scroll
@@ -36,26 +29,60 @@ onMounted(() => {
 </script>
 <template>
 	<div
+		id="main-hero"
 		ref="parallaxContainer"
 		class="relative block w-full h-[600px] md:h-[42rem] overflow-hidden"
 	>
-		<!-- Parallax background layer with image -->
-		<!-- Using img tag with object-fit for better focal point control -->
+		<!-- Parallax background layer -->
 		<div
 			class="absolute inset-0 w-full h-[calc(100%+200px)] will-change-transform"
 			:style="{
 				transform: parallaxStyle.transform || 'translate3d(0, 0, 0)',
 			}"
 		>
+			<!-- Animated video (B variant) - loads in background, sits behind image -->
+			<video
+				v-if="shouldLoadVideo"
+				ref="videoRef"
+				class="absolute inset-0 z-[1] w-full h-full object-cover object-[80%] md:object-center 2xl:object-[center_35%] scale-125 -translate-y-[15%] md:scale-100 md:-translate-y-[10%]"
+				:class="[
+					showVideo ? 'opacity-100' : 'opacity-0',
+					isResuming ? '' : 'transition-opacity duration-500',
+				]"
+				muted
+				loop
+				playsinline
+				preload="auto"
+			>
+				<source :src="videoUrl" type="video/webm" />
+			</video>
+			<!-- Static image (A variant) - shown immediately, fades out when video is ready -->
 			<img
-				:src="randomBackgroundImage"
+				:src="imageUrl"
 				alt=""
-				class="w-full h-full object-cover object-[80%] md:object-center 2xl:object-[center_35%] scale-125 -translate-y-[15%] md:scale-100 md:-translate-y-[10%]"
+				class="absolute inset-0 z-[2] w-full h-full object-cover object-[80%] md:object-center 2xl:object-[center_35%] scale-125 -translate-y-[15%] md:scale-100 md:-translate-y-[10%]"
+				:class="[
+					showVideo ? 'opacity-0' : 'opacity-100',
+					isResuming ? '' : 'transition-opacity duration-500',
+				]"
 			/>
-			<!-- Gradient overlay -->
+			<!-- Gradient overlay (image) — lighter vignette for static content -->
 			<div
-				class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70"
+				class="absolute inset-0 z-[3] pointer-events-none"
+				:class="[
+					showVideo ? 'opacity-0' : 'opacity-100',
+					isResuming ? '' : 'transition-opacity duration-500',
+				]"
 				style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.7) 100%)"
+			/>
+			<!-- Gradient overlay (video) — stronger to compensate for brightness/motion -->
+			<div
+				class="absolute inset-0 z-[3] pointer-events-none"
+				:class="[
+					showVideo ? 'opacity-100' : 'opacity-0',
+					isResuming ? '' : 'transition-opacity duration-500',
+				]"
+				style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 0.45) 50%, rgba(0, 0, 0, 0.92) 100%)"
 			/>
 		</div>
 		<!-- Content layer (stays fixed) -->
@@ -84,56 +111,36 @@ onMounted(() => {
 						:to="isAuthenticated ? '/blueprints/create' : '/login'"
 					>
 						<AddBlueprintIcon
-							class="size-4 sm:size-6 text-cool-gray-100"
+							class="size-4 sm:size-6 text-(--hero-btn-icon)"
 						/>
 						<span
-							class="flex gap-3 items-center text-cool-gray-100"
+							class="flex gap-3 items-center text-(--hero-btn-text)"
 						>
 							<span
-								class="leading-none text-sm sm:text-xl text-cool-gray-100"
+								class="leading-none text-sm sm:text-xl tracking-[0.5px]"
 								>{{ t('mainBanner.createBlueprint') }}</span
 							>
-							<svg
-								width="8"
-								height="12"
-								viewBox="0 0 8 12"
-								fill="none"
-								class="fill-cool-gray-40"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									d="M0 10.59L4.58 6L0 1.41L1.41 0L7.41 6L1.41 12L0 10.59Z"
-								/>
-							</svg>
+							<ChevronRightIcon class="w-2 h-3 text-(--hero-btn-chevron)" />
 						</span>
 					</NuxtLinkLocale>
 				</Button>
 				<Button
 					as-child
-					class="flex-1 sm:flex-none sm:min-w-56 justify-between border-none items-center"
+					class="flex-1 sm:flex-none sm:min-w-56 justify-between border-none items-center bg-(--about-btn-bg)"
 					variant="outline"
 					size="responsive-lg"
 					rounded="base"
 				>
 					<NuxtLinkLocale to="/about">
-						<InfoIcon class="size-4 sm:size-6" />
-						<span class="flex gap-3 items-center text-cool-gray-70">
+						<InfoIcon class="size-4 sm:size-6 text-(--about-btn-icon)" />
+						<span
+							class="flex gap-3 items-center text-(--about-btn-text)"
+						>
 							<span
-								class="text-cool-gray-70 text-sm sm:text-xl leading-none"
+								class="leading-none text-sm sm:text-xl tracking-[0.5px]"
 								>{{ t('mainBanner.about') }}</span
 							>
-							<svg
-								width="8"
-								height="12"
-								viewBox="0 0 8 12"
-								fill="none"
-								class="fill-cool-gray-40"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									d="M0 10.59L4.58 6L0 1.41L1.41 0L7.41 6L1.41 12L0 10.59Z"
-								/>
-							</svg>
+							<ChevronRightIcon class="w-2 h-3 text-(--about-btn-chevron)" />
 						</span>
 					</NuxtLinkLocale>
 				</Button>

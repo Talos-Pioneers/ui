@@ -13,6 +13,7 @@ import {
 	DialogTrigger,
 } from '../ui/dialog'
 import AddCollectionIcon from '../icons/AddCollectionIcon.vue'
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 
 const props = defineProps<{
 	blueprint: Blueprint
@@ -284,15 +285,24 @@ const toggleCreateForm = () => {
 
 <template>
 	<Dialog>
-		<DialogTrigger as-child>
-			<Button
-				class="before:border-none rounded-lg"
-				size="icon-sm"
-				variant="ghost"
-			>
-				<AddCollectionIcon class="size-7.5" />
-			</Button>
-		</DialogTrigger>
+		<Tooltip>
+			<TooltipTrigger as-child>
+				<DialogTrigger as-child>
+					<Button
+						class="rounded-lg"
+						size="icon-sm"
+						variant="ghost"
+						rounded="base"
+						:with-wave="false"
+					>
+						<AddCollectionIcon class="size-5.5" />
+					</Button>
+				</DialogTrigger>
+			</TooltipTrigger>
+			<TooltipContent>
+				{{ t('components.collections.addToCollection.title') }}
+			</TooltipContent>
+		</Tooltip>
 		<DialogContent class="max-w-md">
 			<DialogHeader>
 				<DialogTitle>
@@ -306,7 +316,7 @@ const toggleCreateForm = () => {
 					v-if="collectionsStatus === 'pending'"
 					class="text-center py-8"
 				>
-					<p class="text-sm text-cool-gray-60">
+					<p class="text-sm text-muted-foreground">
 						{{
 							t('components.collections.addToCollection.loading')
 						}}
@@ -318,18 +328,18 @@ const toggleCreateForm = () => {
 					<div
 						v-for="collection in collections"
 						:key="collection.id"
-						class="flex items-center justify-between p-3 rounded-lg border border-cool-gray-30 dark:border-cool-gray-70 hover:bg-cool-gray-10 dark:hover:bg-cool-gray-90 transition-colors"
+						class="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-muted transition-colors"
 					>
 						<div class="flex items-center gap-3 flex-1">
 							<div class="flex-1 min-w-0">
 								<div class="flex items-center gap-2">
 									<p
-										class="text-sm font-medium text-cool-gray-95 dark:text-white truncate"
+										class="text-sm font-medium text-foreground truncate"
 									>
 										{{ collection.title }}
 									</p>
 									<span
-										class="text-xs px-1.5 py-0.5 rounded border border-cool-gray-30 dark:border-cool-gray-70 text-cool-gray-70 dark:text-cool-gray-40"
+										class="text-xs px-1.5 py-0.5 rounded border border-border text-muted-foreground"
 									>
 										{{
 											collection.status === 'draft'
@@ -342,7 +352,7 @@ const toggleCreateForm = () => {
 										}}
 									</span>
 								</div>
-								<p class="text-xs text-cool-gray-60">
+								<p class="text-xs text-muted-foreground">
 									{{
 										t(
 											(collection.blueprints_count ??
@@ -425,14 +435,14 @@ const toggleCreateForm = () => {
 					"
 					class="text-center py-8"
 				>
-					<p class="text-sm text-cool-gray-60">
+					<p class="text-sm text-muted-foreground">
 						{{ t('components.collections.addToCollection.empty') }}
 					</p>
 				</div>
 
 				<!-- Create new collection form -->
 				<div
-					class="space-y-3 pt-4 border-t border-cool-gray-30 dark:border-cool-gray-70"
+					class="space-y-3 pt-4 border-t border-border"
 				>
 					<Button
 						v-if="!showCreateForm"

@@ -149,13 +149,13 @@ const statusOptions = [
 <template>
 	<div class="flex w-full">
 		<!-- Main Content -->
-		<div class="flex flex-col w-full">
+		<div class="flex flex-col w-full min-w-0">
 			<!-- Banner Section -->
 			<slot name="banner" />
 
 			<!-- Content Area -->
-			<div class="wave-bg bg-cool-gray-10 before:bg-size-[400px]">
-				<div class="container mx-auto px-4 py-6">
+			<div class="wave-bg bg-(--wave-bg)">
+				<div class="w-full px-4 py-6">
 					<!-- Controls Bar -->
 					<div class="flex flex-col gap-4 mb-8">
 						<div
@@ -168,7 +168,7 @@ const statusOptions = [
 								<button
 									v-for="tag in activeFilterTags"
 									:key="tag.value"
-									class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cool-gray-20 dark:bg-cool-gray-80 text-cool-gray-90 dark:text-cool-gray-10 text-sm hover:bg-cool-gray-30 dark:hover:bg-cool-gray-70 transition-colors"
+									class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted text-foreground text-sm hover:bg-muted/80 transition-colors"
 									@click="
 										handleClearTag(tag.filterKey, tag.value)
 									"
@@ -234,9 +234,11 @@ const statusOptions = [
 									</SelectContent>
 								</Select>
 								<Button
-									class="rounded"
+									class="rounded-full border border-muted-foreground/30"
 									variant="ghost"
 									size="icon-sm"
+									rounded="base"
+									:with-wave="false"
 									:title="
 										isSortDescending
 											? t(
@@ -282,7 +284,7 @@ const statusOptions = [
 						v-if="loading"
 						class="flex items-center justify-center py-12"
 					>
-						<div class="size-64">
+						<div class="size-64 lottie-throbber">
 							<Lottie name="throbber" />
 						</div>
 					</div>

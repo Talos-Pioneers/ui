@@ -119,7 +119,7 @@ const handleModalClose = () => {
 			<button
 				type="button"
 				:disabled="isReporting"
-				class="w-full text-left px-2 py-1.5 text-sm hover:bg-cool-gray-20 dark:hover:bg-cool-gray-80 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+				class="w-full text-left px-2 py-1.5 text-sm hover:bg-muted rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 			>
 				<span v-if="isReporting">{{
 					t('reportButton.reporting')
@@ -143,7 +143,7 @@ const handleModalClose = () => {
 						:maxlength="maxReasonLength"
 						rows="4"
 						:placeholder="t('reportButton.reasonPlaceholder')"
-						class="w-full rounded-xl border border-cool-gray-30 dark:border-cool-gray-70 bg-white dark:bg-cool-gray-95 px-4 py-3 text-sm text-cool-gray-95 dark:text-white placeholder:text-cool-gray-50 focus:border-primary outline-none transition disabled:opacity-70 disabled:cursor-not-allowed"
+						class="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary outline-none transition disabled:opacity-70 disabled:cursor-not-allowed"
 						:disabled="isReporting"
 						:aria-invalid="!!reportForm.errors.reason"
 					/>
@@ -152,7 +152,7 @@ const handleModalClose = () => {
 				</div>
 
 				<div
-					class="flex items-center justify-end text-xs text-cool-gray-60"
+					class="flex items-center justify-end text-xs text-muted-foreground"
 				>
 					<span
 						>{{ remainingCharacters }}
