@@ -8,14 +8,13 @@ import DiscordIcon from '~/components/icons/DiscordIcon.vue'
 import { FieldError } from '../ui/field'
 import * as Sentry from '@sentry/nuxt'
 
-const props = defineProps<{
-	onSwitchToLogin?: () => void
+const emit = defineEmits<{
+	switchToLogin: []
+	navigateAway: []
 }>()
 
 const config = useSanctumConfig()
 const { locale, t } = useI18n()
-const { close } = useRegisterModal()
-const { open: openLogin } = useLoginModal()
 
 const googleUrl = `${config.baseUrl}/auth/google/redirect?locale=${locale.value}`
 const discordUrl = `${config.baseUrl}/auth/discord/redirect?locale=${locale.value}`
@@ -36,7 +35,7 @@ const isSubmitted = ref(false)
 
 const submit = () => {
 	form.submit()
-		.then((response) => {
+		.then(() => {
 			isSubmitted.value = true
 		})
 		.catch((error) => {
@@ -45,14 +44,6 @@ const submit = () => {
 		})
 }
 
-const handleOpenLogin = () => {
-	if (props.onSwitchToLogin) {
-		props.onSwitchToLogin()
-	} else {
-		close()
-		openLogin()
-	}
-}
 </script>
 
 <template>
@@ -128,15 +119,15 @@ const handleOpenLogin = () => {
 				<div class="flex justify-between mb-4 text-sm">
 					<button
 						class="text-(--login-link) hover:underline"
-						@click="handleOpenLogin"
+						@click="emit('switchToLogin')"
 					>
 						{{ t('auth.common.loginLink') }}
 					</button>
 					<NuxtLinkLocale
 						to="/privacy-policy"
+						target="_blank"
 						class="text-(--login-link) hover:underline"
-						:target="props.onSwitchToLogin ? '_blank' : undefined"
-						@click="!props.onSwitchToLogin && close()"
+						@click="emit('navigateAway')"
 					>
 						{{ t('auth.common.privacyPolicy') }}
 					</NuxtLinkLocale>
@@ -203,16 +194,6 @@ const handleOpenLogin = () => {
 						{{ t('auth.register.instructions') }}
 					</p>
 				</div>
-
-				<!-- Close Button -->
-				<Button
-					class="w-full"
-					variant="default"
-					rounded="none"
-					@click="close()"
-				>
-					{{ t('auth.common.registerLink') }}
-				</Button>
 			</div>
 		</Transition>
 	</div>

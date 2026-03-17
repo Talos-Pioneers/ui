@@ -7,15 +7,14 @@ import DiscordIcon from '~/components/icons/DiscordIcon.vue'
 import { FieldError } from '../ui/field'
 import * as Sentry from '@sentry/nuxt'
 
-const props = defineProps<{
-	onSwitchToRegister?: () => void
+const emit = defineEmits<{
+	switchToRegister: []
+	navigateAway: []
 }>()
 
 const email = ref('')
 const config = useSanctumConfig()
 const { locale, t } = useI18n()
-const { close } = useLoginModal()
-const { open: openRegister } = useRegisterModal()
 
 const googleUrl = `${config.baseUrl}/auth/google/redirect?locale=${locale.value}`
 const discordUrl = `${config.baseUrl}/auth/discord/redirect?locale=${locale.value}`
@@ -39,14 +38,6 @@ const submit = async () => {
 	}
 }
 
-const handleRegisterClick = () => {
-	if (props.onSwitchToRegister) {
-		props.onSwitchToRegister()
-	} else {
-		close()
-		openRegister()
-	}
-}
 </script>
 
 <template>
@@ -104,15 +95,15 @@ const handleRegisterClick = () => {
 				<div class="flex justify-between mb-4 text-sm">
 					<button
 						class="text-(--login-link) hover:underline"
-						@click="handleRegisterClick"
+						@click="emit('switchToRegister')"
 					>
 						{{ t('auth.common.registerLink') }}
 					</button>
 					<NuxtLinkLocale
 						to="/privacy-policy"
+						target="_blank"
 						class="text-(--login-link) hover:underline"
-						:target="props.onSwitchToRegister ? '_blank' : undefined"
-						@click="!props.onSwitchToRegister && close()"
+						@click="emit('navigateAway')"
 					>
 						{{ t('auth.common.privacyPolicy') }}
 					</NuxtLinkLocale>
