@@ -80,6 +80,7 @@ const {
 		width: { type: 'number' },
 		height: { type: 'number' },
 		hide_partner_url: { type: 'boolean' },
+		search: { type: 'string' },
 	},
 	sort: {
 		default: 'created_at',
@@ -137,6 +138,15 @@ const activeFilterTags = computed(() => {
 			filterTags.push({
 				filterKey: key,
 				label: version?.label ?? String(value),
+				value: value,
+			})
+			return
+		}
+
+		if (key === 'search' && typeof value === 'string') {
+			filterTags.push({
+				filterKey: key,
+				label: `${t('components.blueprints.list.filters.searchChip')}: ${value}`,
 				value: value,
 			})
 			return
@@ -277,6 +287,7 @@ const handlePerPageUpdate = (perPageValue: number) => {
 			:active-filter-tags="activeFilterTags"
 			:current-page="currentPage"
 			:per-page="perPage"
+			:enable-search="false"
 			:loading="blueprintsStatus === 'pending'"
 			:error="blueprintsError"
 			:sort-options="sortOptions"

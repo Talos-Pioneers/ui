@@ -20,7 +20,7 @@ import {
 	TagsInputItemText,
 } from '@/components/ui/tags-input'
 
-import { computed, ref, watch } from 'vue'
+import { computed } from 'vue'
 import { ChevronDown } from 'lucide-vue-next'
 import { cn } from '~/lib/utils'
 import CheckmarkIcon from '~/components/icons/CheckmarkIcon.vue'
@@ -39,28 +39,40 @@ const props = withDefaults(
 		class?: string
 		displayTags?: boolean
 		withPattern?: boolean
+		clearQueryOnSelect?: boolean
 	}>(),
 	{
 		displayTags: true,
 		withPattern: false,
+		clearQueryOnSelect: true,
 	}
 )
 
 const { contains } = useFilter({ sensitivity: 'base' })
 
-const query = ref('')
+const query = defineModel<string>('query', { default: '' })
 
 const modelValue = defineModel<string[]>({ default: [] })
 
-const filteredOptions = computed(() =>
-	query.value === ''
+const filteredOptions = computed(() => {
+	const queryOption = {
+		value: 'search:' + query.value,
+		label: query.value,
+		icon: null,
+		category: 'Search',
+	}
+	return query.value === ''
 		? props.options
-		: props.options.filter(
-				(option) =>
-					contains(option.label, query.value) ||
-					(option.category && contains(option.category, query.value))
-			)
-)
+		: [
+				queryOption,
+				...props.options.filter(
+					(option) =>
+						contains(option.label, query.value) ||
+						(option.category &&
+							contains(option.category, query.value))
+				),
+			]
+})
 </script>
 <template>
 	<ComboboxRoot
@@ -103,8 +115,13 @@ const filteredOptions = computed(() =>
 					/>
 				</ComboboxInput>
 
-				<ComboboxTrigger class="group order-last self-center ml-auto shrink-0" tabindex="-1">
-					<ChevronDown class="size-4 opacity-50 transition-transform duration-150 group-data-[state=open]:rotate-180" />
+				<ComboboxTrigger
+					class="group order-last self-center ml-auto shrink-0"
+					tabindex="-1"
+				>
+					<ChevronDown
+						class="size-4 opacity-50 transition-transform duration-150 group-data-[state=open]:rotate-180"
+					/>
 				</ComboboxTrigger>
 			</TagsInput>
 		</ComboboxAnchor>
@@ -139,7 +156,9 @@ const filteredOptions = computed(() =>
 							:value="option.value"
 							@select="
 								() => {
-									query = ''
+									if (props.clearQueryOnSelect) {
+										query = ''
+									}
 								}
 							"
 						>

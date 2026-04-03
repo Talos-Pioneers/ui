@@ -109,6 +109,15 @@ const activeFilterTags = computed(() => {
 			return
 		}
 
+		if (key === 'search' && typeof value === 'string') {
+			filterTags.push({
+				filterKey: key,
+				label: `${t('components.blueprints.list.filters.searchChip')}: ${value}`,
+				value: value,
+			})
+			return
+		}
+
 		if (key === 'tags.id' && Array.isArray(value)) {
 			for (const item of value) {
 				const tag = tags.value.find((t) => t.id == item)

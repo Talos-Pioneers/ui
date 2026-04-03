@@ -52,6 +52,7 @@ export const useBlueprintQueryFilter = async (
 			width: { type: 'number' },
 			height: { type: 'number' },
 			hide_partner_url: { type: 'boolean' },
+			search: { type: 'string' },
 		},
 		sort: options?.sort ?? {
 			default: '-created_at',
