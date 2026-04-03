@@ -263,6 +263,7 @@
 	"components.blueprints.list.filters.isAnonymous": "Anonimo",
 	"components.blueprints.list.filters.hidePartnerUrl": "Nascondi progetti esterni",
 	"components.blueprints.list.filters.searchPlaceholder": "Cerca qualsiasi filtro...",
+	"components.blueprints.list.filters.searchChip": "Ricerca",
 	"components.blueprints.list.filters.clearAll": "Cancella tutto",
 	"components.blueprints.list.pagination.found": "{count} Progetti trovati",
 	"components.blueprints.list.pagination.sortBy": "Ordina per",
