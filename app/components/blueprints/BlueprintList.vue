@@ -792,6 +792,7 @@ const unifiedFilterModel = computed({
 								v-model="unifiedFilterModel"
 								:with-pattern="true"
 								:display-tags="false"
+								:with-search="true"
 								:options="
 									unifiedFilterOptions.map((opt) => ({
 										value: opt.value,

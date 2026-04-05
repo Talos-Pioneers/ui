@@ -40,11 +40,13 @@ const props = withDefaults(
 		displayTags?: boolean
 		withPattern?: boolean
 		clearQueryOnSelect?: boolean
+		withSearch?: boolean
 	}>(),
 	{
 		displayTags: true,
 		withPattern: false,
 		clearQueryOnSelect: true,
+		withSearch: false,
 	}
 )
 
@@ -64,7 +66,7 @@ const filteredOptions = computed(() => {
 	return query.value === ''
 		? props.options
 		: [
-				queryOption,
+				props.withSearch ? queryOption : null,
 				...props.options.filter(
 					(option) =>
 						contains(option.label, query.value) ||
