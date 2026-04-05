@@ -128,6 +128,15 @@ const activeFilterTags = computed(() => {
 			return
 		}
 
+		if (key === 'search' && typeof value === 'string') {
+			filterTags.push({
+				filterKey: key,
+				label: `${t('components.blueprints.list.filters.searchChip')}: ${value}`,
+				value: value,
+			})
+			return
+		}
+
 		if (key === 'tags.id' && Array.isArray(value)) {
 			for (const item of value) {
 				const tag = tags.value.find((t) => t.id == item)
@@ -334,6 +343,7 @@ if (collectionError.value && collectionError.value.statusCode === 404) {
 				:active-filter-tags="activeFilterTags"
 				:current-page="currentPage"
 				:per-page="perPage"
+				:enable-search="false"
 				:loading="blueprintsStatus === 'pending'"
 				:error="blueprintsError"
 				:collection-id="collection?.id"

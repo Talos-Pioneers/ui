@@ -262,6 +262,7 @@
 	"components.blueprints.list.filters.isAnonymous": "匿名",
 	"components.blueprints.list.filters.hidePartnerUrl": "隐藏外部蓝图",
 	"components.blueprints.list.filters.searchPlaceholder": "搜索任何筛选器…",
+	"components.blueprints.list.filters.searchChip": "搜索",
 	"components.blueprints.list.filters.clearAll": "清除全部",
 	"components.blueprints.list.pagination.found": "找到 {count} 个蓝图",
 	"components.blueprints.list.pagination.sortBy": "排序方式",

@@ -463,7 +463,7 @@ const submitComment = async () => {
 }
 
 const requestEditComment = (comment: Comment) => {
-	if (comment.user?.id !== user.value?.id) {
+	if (!comment.permissions.can_edit) {
 		return
 	}
 	editingCommentId.value = comment.id
@@ -642,15 +642,17 @@ const handleBlueprintDeleted = () => {
 									v-if="galleryDisplayItems.length > 1"
 									class="absolute bottom-3 right-3 bg-black/60 text-white text-xs px-2.5 py-1 rounded-full"
 								>
-									{{ activeSlide + 1 }}/{{ galleryDisplayItems.length }}
+									{{ activeSlide + 1 }}/{{
+										galleryDisplayItems.length
+									}}
 								</div>
 							</Carousel>
-						<VueEasyLightbox
-							:visible="lightboxVisible"
-							:imgs="lightboxImgs"
-							:index="lightboxIndex"
-							@hide="lightboxVisible = false"
-						/>
+							<VueEasyLightbox
+								:visible="lightboxVisible"
+								:imgs="lightboxImgs"
+								:index="lightboxIndex"
+								@hide="lightboxVisible = false"
+							/>
 						</div>
 						<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
 							<button
@@ -864,11 +866,7 @@ const handleBlueprintDeleted = () => {
 								alt="Enka Network"
 								class="size-4.5"
 							/>
-							{{
-								t(
-									'pages.blueprints.detail.viewOnEnkaNetwork'
-								)
-							}}
+							{{ t('pages.blueprints.detail.viewOnEnkaNetwork') }}
 						</Button>
 						<div>
 							<h3 class="text-lg font-semibold mb-2.5">

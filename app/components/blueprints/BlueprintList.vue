@@ -68,6 +68,7 @@ const props = withDefaults(
 		sortOptions?: Array<{ value: string; label: string }>
 		collectionId?: string
 		canEditCollection?: boolean
+		// enableSearch?: boolean
 	}>(),
 	{
 		showSidebar: true,
@@ -76,6 +77,7 @@ const props = withDefaults(
 		sortOptions: undefined,
 		collectionId: undefined,
 		canEditCollection: false,
+		enableSearch: true,
 	}
 )
 
@@ -246,7 +248,9 @@ const perPageModel = computed({
 })
 
 const { open: sidebarOpen, isMobile, openMobile, toggleSidebar } = useSidebar()
-const isSidebarVisible = computed(() => isMobile.value ? openMobile.value : sidebarOpen.value)
+const isSidebarVisible = computed(() =>
+	isMobile.value ? openMobile.value : sidebarOpen.value
+)
 
 // Unified filter options - combines all filterable items
 interface UnifiedFilterOption {
@@ -333,6 +337,10 @@ const unifiedSelectedItems = computed<string[]>(() => {
 		selected.push(`region:${props.filters.region}`)
 	}
 
+	if (props.filters.search) {
+		selected.push(`search:${props.filters.search}`)
+	}
+
 	// Add tags if selected
 	if (
 		Array.isArray(props.filters['tags.id']) &&
@@ -398,6 +406,8 @@ const parseUnifiedValue = (
 			return { filterKey: 'item_input', originalValue }
 		case 'item_output':
 			return { filterKey: 'item_output', originalValue }
+		case 'search':
+			return { filterKey: 'search', originalValue }
 		default:
 			return null
 	}
@@ -407,6 +417,7 @@ const parseUnifiedValue = (
 const unifiedFilterModel = computed({
 	get: () => unifiedSelectedItems.value,
 	set: (newValues: string[]) => {
+		console.log(newValues)
 		const oldValues = unifiedSelectedItems.value
 
 		// Find added items
@@ -421,6 +432,8 @@ const unifiedFilterModel = computed({
 
 			if (parsed.filterKey === 'region') {
 				// Region is a single value, replace existing
+				emit('update:filter', parsed.filterKey, parsed.originalValue)
+			} else if (parsed.filterKey === 'search') {
 				emit('update:filter', parsed.filterKey, parsed.originalValue)
 			} else {
 				// Array filters: add to existing array
@@ -460,11 +473,16 @@ const unifiedFilterModel = computed({
 		>
 			<SidebarContent>
 				<SidebarGroup>
-					<SidebarGroupLabel class="border-b border-sidebar-divider pb-2 mb-1">{{
-						t('components.blueprints.list.filters.label')
-					}}</SidebarGroupLabel>
+					<SidebarGroupLabel
+						class="border-b border-sidebar-divider pb-2 mb-1"
+						>{{
+							t('components.blueprints.list.filters.label')
+						}}</SidebarGroupLabel
+					>
 					<SidebarGroupContent>
-						<div class="px-2 py-3 space-y-2 border-b border-sidebar-divider">
+						<div
+							class="px-2 py-3 space-y-2 border-b border-sidebar-divider"
+						>
 							<label
 								class="text-xs font-medium text-sidebar-foreground/70 mb-2 block"
 								>{{
@@ -498,10 +516,9 @@ const unifiedFilterModel = computed({
 											]"
 										/>
 									</div>
-									<span
-										class="text-sm text-region-label"
-										>{{ t(`region.${region.value}`) }}</span
-									>
+									<span class="text-sm text-region-label">{{
+										t(`region.${region.value}`)
+									}}</span>
 								</button>
 							</div>
 						</div>
@@ -548,7 +565,9 @@ const unifiedFilterModel = computed({
 							</div>
 						</template>
 
-						<div class="px-2 py-3 space-y-2 border-b border-sidebar-divider">
+						<div
+							class="px-2 py-3 space-y-2 border-b border-sidebar-divider"
+						>
 							<label
 								class="text-xs font-medium text-sidebar-foreground/70 mb-2 block"
 								>{{
@@ -575,7 +594,9 @@ const unifiedFilterModel = computed({
 							/>
 						</div>
 
-						<div class="px-2 py-3 space-y-2 border-b border-sidebar-divider">
+						<div
+							class="px-2 py-3 space-y-2 border-b border-sidebar-divider"
+						>
 							<label
 								class="text-xs font-medium text-sidebar-foreground/70 mb-2 block"
 								>{{
@@ -602,7 +623,9 @@ const unifiedFilterModel = computed({
 							/>
 						</div>
 
-						<div class="px-2 py-3 space-y-2 border-b border-sidebar-divider">
+						<div
+							class="px-2 py-3 space-y-2 border-b border-sidebar-divider"
+						>
 							<label
 								class="text-xs font-medium text-sidebar-foreground/70 mb-2 block"
 								>{{
@@ -629,13 +652,17 @@ const unifiedFilterModel = computed({
 							/>
 						</div>
 
-						<div class="px-2 py-3 space-y-2 border-b border-sidebar-divider">
+						<div
+							class="px-2 py-3 space-y-2 border-b border-sidebar-divider"
+						>
 							<label
 								class="flex items-center gap-2 cursor-pointer hover:bg-sidebar-accent/50 rounded px-2 py-1.5 transition-colors"
 							>
 								<Checkbox
 									:checked="filters.is_anonymous === true"
-									@update:model-value="handleIsAnonymousChange"
+									@update:model-value="
+										handleIsAnonymousChange
+									"
 								/>
 								<span class="text-sm text-sidebar-foreground">{{
 									t(
@@ -649,7 +676,9 @@ const unifiedFilterModel = computed({
 							>
 								<Checkbox
 									:checked="filters.hide_partner_url === true"
-									@update:model-value="handleHidePartnerUrlChange"
+									@update:model-value="
+										handleHidePartnerUrlChange
+									"
 								/>
 								<span class="text-sm text-sidebar-foreground">{{
 									t(
@@ -822,7 +851,7 @@ const unifiedFilterModel = computed({
 							>
 								<button
 									v-for="tag in activeFilterTags"
-									:key="tag.value"
+									:key="`${tag.filterKey}-${String(tag.value)}`"
 									class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted text-foreground text-sm hover:bg-muted/80 transition-colors"
 									@click="
 										handleClearTag(tag.filterKey, tag.value)
@@ -953,7 +982,9 @@ const unifiedFilterModel = computed({
 							@filter-server-region="handleServerRegionFilter"
 							@filter-author="handleAuthorFilter"
 							@deleted="emit('blueprint-deleted')"
-							@removed-from-collection="emit('removed-from-collection')"
+							@removed-from-collection="
+								emit('removed-from-collection')
+							"
 						/>
 
 						<div

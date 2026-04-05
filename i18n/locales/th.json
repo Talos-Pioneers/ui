@@ -263,6 +263,7 @@
 	"components.blueprints.list.filters.isAnonymous": "ไม่ระบุชื่อ",
 	"components.blueprints.list.filters.hidePartnerUrl": "ซ่อนแบบแปลนภายนอก",
 	"components.blueprints.list.filters.searchPlaceholder": "ค้นหาตัวกรองใดๆ...",
+	"components.blueprints.list.filters.searchChip": "ค้นหา",
 	"components.blueprints.list.filters.clearAll": "ล้างทั้งหมด",
 	"components.blueprints.list.pagination.found": "พบแบบแปลน {count} รายการ",
 	"components.blueprints.list.pagination.sortBy": "เรียงตาม",

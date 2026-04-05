@@ -263,6 +263,7 @@
 	"components.blueprints.list.filters.isAnonymous": "Anonym",
 	"components.blueprints.list.filters.hidePartnerUrl": "Externe Baupläne ausblenden",
 	"components.blueprints.list.filters.searchPlaceholder": "Nach einem Filter suchen...",
+	"components.blueprints.list.filters.searchChip": "Suche",
 	"components.blueprints.list.filters.clearAll": "Alle löschen",
 	"components.blueprints.list.pagination.found": "{count} Blueprints gefunden",
 	"components.blueprints.list.pagination.sortBy": "Sortieren nach",

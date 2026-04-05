@@ -263,6 +263,7 @@
 	"components.blueprints.list.filters.isAnonymous": "Anonim",
 	"components.blueprints.list.filters.hidePartnerUrl": "Sembunyikan cetak biru eksternal",
 	"components.blueprints.list.filters.searchPlaceholder": "Cari filter apa pun...",
+	"components.blueprints.list.filters.searchChip": "Pencarian",
 	"components.blueprints.list.filters.clearAll": "Hapus Semua",
 	"components.blueprints.list.pagination.found": "{count} Cetak biru ditemukan",
 	"components.blueprints.list.pagination.sortBy": "Urutkan berdasarkan",
