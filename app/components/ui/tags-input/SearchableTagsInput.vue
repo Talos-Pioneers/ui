@@ -63,17 +63,18 @@ const filteredOptions = computed(() => {
 		icon: null,
 		category: 'Search',
 	}
-	return query.value === ''
-		? props.options
-		: [
-				props.withSearch ? queryOption : null,
-				...props.options.filter(
-					(option) =>
-						contains(option.label, query.value) ||
-						(option.category &&
-							contains(option.category, query.value))
-				),
-			]
+	if (query.value === '') {
+		return props.options
+	}
+	const filtered = props.options.filter(
+		(option) =>
+			contains(option.label, query.value) ||
+			(option.category && contains(option.category, query.value))
+	)
+	if (props.withSearch) {
+		return [queryOption, ...filtered]
+	}
+	return filtered
 })
 </script>
 <template>
