@@ -22,14 +22,14 @@ const facilities = computed(
 	() =>
 		facilitiesData.value?.data.map((f) => ({
 			...f,
-			icon: `https://assets.warfarin.wiki/v2/itemicon/${f.icon}.png`,
+			icon: `https://assets.warfarin.wiki/v4/itemicon/${f.icon}.png`,
 		})) ?? []
 )
 const items = computed(
 	() =>
 		itemsData.value?.data.map((i) => ({
 			...i,
-			icon: `https://assets.warfarin.wiki/v2/itemicon/${i.icon}.png`,
+			icon: `https://assets.warfarin.wiki/v4/itemicon/${i.icon}.png`,
 		})) ?? []
 )
 const tags = computed(() => tagsData.value?.data ?? [])
@@ -256,7 +256,8 @@ useHead({
 		},
 		{
 			property: 'keywords',
-			content: 'Arknights: Endfield, Endfield, Blueprints, AIC, Automated Industry Complex',
+			content:
+				'Arknights: Endfield, Endfield, Blueprints, AIC, Automated Industry Complex',
 		},
 		{
 			property: 'og:image',

@@ -72,9 +72,9 @@ const form = usePrecognitionForm<Schema>('post', '/api/v1/blueprints', {
 })
 
 // Fetch facilities, items, and tags (lazy to avoid blocking navigation via Suspense)
-const { data: facilitiesData } = await useLazySanctumFetch<{ data: Facility[] }>(
-	'/api/v1/facilities'
-)
+const { data: facilitiesData } = await useLazySanctumFetch<{
+	data: Facility[]
+}>('/api/v1/facilities')
 const { data: itemsData } = await useLazySanctumFetch<{ data: Item[] }>(
 	'/api/v1/items'
 )
@@ -91,7 +91,7 @@ const facilityOptions = computed(() =>
 	facilities.value.map((f) => ({
 		value: f.slug,
 		label: f.name,
-		icon: `https://assets.warfarin.wiki/v2/itemicon/${f.icon}.png`,
+		icon: `https://assets.warfarin.wiki/v4/itemicon/${f.icon}.png`,
 	}))
 )
 
@@ -99,7 +99,7 @@ const itemOptions = computed(() =>
 	items.value.map((i) => ({
 		value: i.slug,
 		label: i.name,
-		icon: `https://assets.warfarin.wiki/v2/itemicon/${i.icon}.png`,
+		icon: `https://assets.warfarin.wiki/v4/itemicon/${i.icon}.png`,
 	}))
 )
 
@@ -488,7 +488,9 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 												<button
 													type="button"
 													class="p-2 bg-white/90 rounded hover:bg-white transition-colors"
-													@click="removeImage(item.id)"
+													@click="
+														removeImage(item.id)
+													"
 												>
 													<X
 														class="size-4 text-gray-800"
@@ -511,7 +513,10 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 
 								<!-- Add More Images - Drag and Drop Area -->
 								<div
-									v-if="imageItems.length > 0 && imageItems.length < MAX_IMAGES"
+									v-if="
+										imageItems.length > 0 &&
+										imageItems.length < MAX_IMAGES
+									"
 									class="border-2 border-dashed rounded-lg p-6 flex items-center justify-center cursor-pointer transition-colors"
 									:class="[
 										isDragging
@@ -543,8 +548,12 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 										>
 											{{
 												isDragging
-													? t('pages.blueprints.create.dropHere')
-													: t('pages.blueprints.create.addMoreImages')
+													? t(
+															'pages.blueprints.create.dropHere'
+														)
+													: t(
+															'pages.blueprints.create.addMoreImages'
+														)
 											}}
 										</p>
 									</div>
@@ -690,7 +699,9 @@ const submit = async (status: 'draft' | 'published' = 'draft') => {
 							/>
 							<p class="text-xs text-muted-foreground">
 								{{
-									t('pages.blueprints.create.partnerUrlHelper')
+									t(
+										'pages.blueprints.create.partnerUrlHelper'
+									)
 								}}
 							</p>
 							<p

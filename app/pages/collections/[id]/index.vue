@@ -12,10 +12,9 @@ const { t } = useI18n()
 const route = useRoute()
 
 // Fetch collection data
-const { data: collectionData, error: collectionError } =
-	await useSanctumFetch<{ data: BlueprintCollection }>(
-		`/api/v1/collections/${route.params.id}`
-	)
+const { data: collectionData, error: collectionError } = await useSanctumFetch<{
+	data: BlueprintCollection
+}>(`/api/v1/collections/${route.params.id}`)
 
 const collection = computed(() => collectionData.value?.data)
 
@@ -34,14 +33,14 @@ const facilities = computed(
 	() =>
 		facilitiesData.value?.data.map((f) => ({
 			...f,
-			icon: `https://assets.warfarin.wiki/v2/itemicon/${f.icon}.png`,
+			icon: `https://assets.warfarin.wiki/v4/itemicon/${f.icon}.png`,
 		})) ?? []
 )
 const items = computed(
 	() =>
 		itemsData.value?.data.map((i) => ({
 			...i,
-			icon: `https://assets.warfarin.wiki/v2/itemicon/${i.icon}.png`,
+			icon: `https://assets.warfarin.wiki/v4/itemicon/${i.icon}.png`,
 		})) ?? []
 )
 const tags = computed(() => tagsData.value?.data ?? [])
